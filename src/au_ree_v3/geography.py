@@ -5,6 +5,7 @@ from dataclasses import asdict
 from datetime import datetime
 from hashlib import sha256
 import json
+import math
 from pathlib import Path
 import re
 import shutil
@@ -19,7 +20,10 @@ from .sources import ContentStore, IntegrityError, SCHEMA as SOURCE_MANIFEST, va
 
 
 SCHEMA = "wa-tenement-evidence-v1"
+INFRASTRUCTURE_SCHEMA = "infrastructure-evidence-compatibility-v1"
 ROLE = "LEGAL_TENEMENT_BOUNDARY"
+SITE_ROLES = {"OFFICIAL_MINE_POINT", "OFFICIAL_DEPOSIT_POINT"}
+INFRASTRUCTURE_LAYERS = {"I1": "ROAD", "I2": "RAIL", "I3": "POWER_GRID", "I4": "PORT"}
 _LAYER = "CurrentTenements"
 _LICENCE = re.compile(r"[A-Z]{1,3} \d{1,3}/\d{1,6}")
 
@@ -173,6 +177,139 @@ def inventory_tenements(bindings_path: Path, sources_path: Path, store: Path, ou
               "unbound_projects": spec["unbound_projects"], "unavailable": unavailable,
               "bindings_sha256": sha256(bindings_bytes).hexdigest(),
               "sources_sha256": sha256(manifest_bytes).hexdigest()}
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(canonical_json(result) + "\n", encoding="utf-8")
+    return result
+
+
+def infrastructure_site_compatibility(location: dict) -> dict:
+    """Assess a geographic feature's suitability as a mine or deposit origin."""
+    role = location.get("location_role")
+    geometry = location.get("geometry") or {}
+    locator = location.get("locator") or {}
+    temporal = location.get("temporal_decision") or {}
+    coordinates = geometry.get("coordinates")
+    point_coordinates = (
+        isinstance(coordinates, (tuple, list)) and len(coordinates) in {2, 3}
+        and all(type(value) in (int, float) and math.isfinite(value) for value in coordinates)
+    )
+    precision = (location.get("precision") or {}).get("positional_accuracy_m")
+    missing = [
+        name for name, present in (
+            ("location_role", role),
+            ("source_sha256", location.get("source_sha256")),
+            ("native_feature_id", locator.get("native_id")),
+            ("crs", location.get("crs")),
+            ("geometry", geometry.get("type")),
+            ("point_coordinates", point_coordinates),
+            ("eligible_temporal_decision", temporal.get("status") == "ELIGIBLE" and temporal.get("decision_id")
+             and temporal.get("source_sha256") == location.get("source_sha256")),
+            ("positional_precision", type(precision) in (int, float) and math.isfinite(precision) and precision >= 0),
+            ("verified_project_location_link", location.get("project_link")),
+        ) if not present
+    ]
+    incompatible = [
+        name for name, present in (
+            ("location_role", role and role not in SITE_ROLES),
+            ("geometry_type", geometry.get("type") not in {None, "Point"}),
+        ) if present
+    ]
+    if incompatible:
+        return {
+            "status": "NOT_COMPARABLE", "reason": "GEOGRAPHIC_ROLE_OR_TYPE_IS_NOT_A_MINE_OR_DEPOSIT_POINT",
+            "incompatible_dimensions": incompatible, "missing_dimensions": missing,
+        }
+    if missing:
+        return {
+            "status": "INSUFFICIENT_CONTEXT", "reason": "LOCATION_EVIDENCE_INCOMPLETE",
+            "incompatible_dimensions": [], "missing_dimensions": missing,
+        }
+    return {
+        "status": "SITE_CANDIDATE", "reason": "SITE_READY_FOR_OFFICIAL_SOURCE_AND_INFRASTRUCTURE_REVIEW",
+        "incompatible_dimensions": [], "missing_dimensions": [],
+    }
+
+
+def _check_tenement_feature(feature: dict, editions: dict, cutoff: str) -> dict:
+    digest = feature["source_sha256"]
+    project = feature["project_id"]
+    geometry = feature.get("geometry")
+    temporal = feature.get("temporal_decision") or {}
+    if feature["location_role"] != ROLE or not any(
+        entry["kind"] == "zip" and project in entry["project_ids"]
+        and entry["final_url"] == feature["source_url"]
+        for entry in editions.get(digest, ())
+    ):
+        raise IntegrityError("Tenement feature conflicts with its source role or Project linkage")
+    if feature["status"] == "VERIFIED_BOUNDARY":
+        if not (
+            feature["crs"] in {"EPSG:4283", "EPSG:7844"}
+            and geometry and geometry["type"] in {"Polygon", "MultiPolygon"}
+            and (feature.get("locator") or {}).get("native_id")
+            and feature["geometry_sha256"] == sha256(canonical_json(geometry).encode()).hexdigest()
+            and temporal.get("source_sha256") == digest and temporal.get("cutoff") == cutoff
+            and temporal.get("status") == "ELIGIBLE" and temporal.get("decision_id")
+        ):
+            raise IntegrityError("Verified tenement feature conflicts with its source or geometry evidence")
+    elif feature["status"] != "CANDIDATE":
+        raise IntegrityError("Unsupported tenement feature status")
+    return {
+        "source_sha256": digest, "licence": feature["licence"], "location_role": feature["location_role"],
+        "source_url": feature["source_url"], "feature_status": feature["status"],
+        "native_locator": feature.get("locator"), "crs": feature["crs"],
+        "geometry_type": geometry["type"] if geometry else None,
+        "geometry_sha256": feature.get("geometry_sha256"),
+        "temporal_decision_id": temporal.get("decision_id"), "precision": feature.get("precision"),
+        "site_compatibility": infrastructure_site_compatibility(feature),
+    }
+
+
+def evaluate_infrastructure_candidates(tenements_path: Path, sources_path: Path, out: Path) -> dict:
+    """Report I1–I4 evidence gaps on the fixed cohort and preserve legal geometry roles."""
+    tenements_path, sources_path, out = Path(tenements_path), Path(sources_path), Path(out)
+    tenements_bytes, sources_bytes = tenements_path.read_bytes(), sources_path.read_bytes()
+    inventory, manifest = json.loads(tenements_bytes), json.loads(sources_bytes)
+    sources_sha = sha256(sources_bytes).hexdigest()
+    if not (
+        inventory["schema"] == SCHEMA and manifest["schema"] == SOURCE_MANIFEST
+        and inventory["sources_sha256"] == sources_sha
+        and (inventory["cutoff"], inventory["timezone"]) == (manifest["cutoff"], manifest["timezone"])
+    ):
+        raise ValueError("Tenement inventory belongs to a different source manifest or research cutoff")
+    editions, features = defaultdict(list), defaultdict(list)
+    projects = {row["project_id"] for row in manifest["projects"]}
+    for edition in manifest["editions"]:
+        editions[edition["sha256"]].append(edition)
+    for feature in inventory["locations"]:
+        project = feature["project_id"]
+        if project not in projects:
+            raise IntegrityError("Tenement feature belongs to a Project outside the research cohort")
+        features[project].append(_check_tenement_feature(feature, editions, manifest["cutoff"]))
+    rows = []
+    for project in sorted(projects):
+        reviewed = features.get(project, [])
+        rows.append({
+            "project_id": project, "site_status": "INSUFFICIENT_CONTEXT",
+            "site_reason": "LEGAL_BOUNDARIES_CANNOT_LOCATE_MINE_OR_DEPOSIT" if reviewed
+            else inventory["unbound_projects"].get(project, "REPRESENTATIVE_MINE_OR_DEPOSIT_POINT_UNAVAILABLE"),
+            "geometry_evidence": reviewed,
+            "criteria": {
+                criterion: {
+                    "status": "INSUFFICIENT_CONTEXT", "value": None,
+                    "required_geometry": layer, "measure": "STRAIGHT_LINE_SPATIAL_PROXIMITY",
+                    "missing_dimensions": ["verified_native_site_point", f"verified_official_{layer.lower()}_geometry"],
+                } for criterion, layer in INFRASTRUCTURE_LAYERS.items()
+            },
+        })
+    result = {
+        "schema": INFRASTRUCTURE_SCHEMA, "status": "PASS" if inventory["status"] == "PASS" else "BLOCKED",
+        "cutoff": manifest["cutoff"], "timezone": manifest["timezone"], "sources_sha256": sources_sha,
+        "tenement_inventory_sha256": sha256(tenements_bytes).hexdigest(),
+        "project_count": len(rows), "legal_boundaries": sum(
+            feature["feature_status"] == "VERIFIED_BOUNDARY" for project in features.values() for feature in project
+        ),
+        "verified_mine_or_deposit_points": 0, "formal_indicators": 0, "project_criteria": rows,
+    }
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(canonical_json(result) + "\n", encoding="utf-8")
     return result
