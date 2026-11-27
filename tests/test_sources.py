@@ -66,7 +66,10 @@ class SourceCaptureTests(unittest.TestCase):
         self.assertEqual(new["temporal_decision"]["earliest_proven_public_date"], "2026-11-28")
         self.assertEqual(new["temporal_decision"]["status"], "ELIGIBLE")
         self.assertEqual(len(new["temporal_evidence"]), 2)
-        self.assertEqual(len(list((self.store.root / "objects").iterdir())), 3)
+        self.assertEqual(self.store.read(new["sha256"]), PDF_A)
+        first_integrity = json.loads((self.root / "first/source_manifest_integrity.json").read_bytes())
+        self.assertEqual(self.store.read(first_integrity["manifest_sha256"]),
+                         (self.root / "first/source_manifest.json").read_bytes())
 
     def test_taipei_date_and_both_explicit_offsets_survive(self):
         url = "https://publisher.test/report.pdf"

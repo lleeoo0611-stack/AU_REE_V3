@@ -362,6 +362,7 @@ def discover_sources(
     fetcher=fetch_public,
 ) -> dict:
     """Test reachability of publisher/official source locators for every registered project."""
+    started = perf_counter()
     profile, ids, seeds = _profile_inputs(profile_path)
     plans = _planned_seeds(ids, seeds, per_project_limit)
     out.mkdir(parents=True, exist_ok=True)
@@ -373,6 +374,7 @@ def discover_sources(
         "cutoff": profile.research_cutoff.isoformat(), "timezone": profile.timezone.key,
         "status": "PASS" if all(row["attempt_count"] for row in projects) else "BLOCKED",
         "strategy": "PROJECT_SCOPED_SEED_LOCATOR_CHECK",
+        "elapsed_seconds": perf_counter() - started,
         "event_statuses": dict(Counter(event["status"] for event in events)),
         "projects": projects, "events": events,
     }
@@ -509,7 +511,12 @@ def _write_manifest(profile, ids, events, editions, primary, replica, out, **met
         **metadata,
         "projects": projects, "events": events, "editions": editions,
     }
-    _write_json(out / "source_manifest.json", result)
+    manifest_path = out / "source_manifest.json"
+    _write_json(manifest_path, result)
+    manifest_digest = primary.put(manifest_path.read_bytes())
+    _write_json(out / "source_manifest_integrity.json", {
+        "manifest_sha256": manifest_digest, "object": f"objects/{manifest_digest}", "status": "EXACT_SHA",
+    })
     _csv(out / "project_source_inventory.csv", projects)
     _csv(out / "source_edition_crosswalk.csv", [{
         key: edition[key] for key in ("edition_id", "source_key", "project_ids", "url", "sha256", "version_status",
@@ -582,6 +589,7 @@ def combine_acquisition(
             editions.append(edition)
         if successful:
             raise IntegrityError("Acquisition contains a capture without a source edition")
+        primary.put(data)
     if not evidence_inputs:
         raise ValueError("Supply at least one acquisition manifest")
     return _write_manifest(profile, ids, events, editions, primary, replica, out,
