@@ -51,8 +51,8 @@ def _read_layer(payload, titles, expected_crs):
         path = Path(directory) / "tenements.zip"
         path.write_bytes(payload)
         result = subprocess.run(
-            ["ogrinfo", "-ro", "-json", "-features", "-geom", "YES", "-dialect", "OGRSQL", "-sql", query,
-             f"/vsizip/{{{path}}}/{_LAYER}.shp"], check=True, capture_output=True, timeout=60,
+            ["ogrinfo", "-ro", "-json", "-features", "-dialect", "OGRSQL", "-sql", query,
+             f"/vsizip/{path}/{_LAYER}.shp"], check=True, capture_output=True, timeout=60,
         )
     layer, = json.loads(result.stdout)["layers"]
     identity = layer["geometryFields"][0]["coordinateSystem"]["projjson"].get("id", {})
