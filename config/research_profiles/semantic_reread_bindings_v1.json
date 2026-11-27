@@ -1,0 +1,128 @@
+{
+  "schema": "semantic-resource-original-reread-design-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "barkly-vanadis-benmara-north-original-reread",
+      "partition": "DESIGN",
+      "project_id": "AU-ad64122c217f0dbfabc8",
+      "project_label": "Barkly Rare Earths Project",
+      "company": "Barkly Rare Earths Limited",
+      "report_family": "Barkly IPO prospectus and independent technical assessment",
+      "source_sha256": "d77611858d4cc78ae86f757c789364934345f5dcf0d28a42ac7674fb75fc632e",
+      "baseline_measurements": {
+        "physical_page": 32,
+        "table": "Table 1: Barkly REE Inferred Mineral Resource Estimate.",
+        "row_quote": "Total 40 2,100 690 710 34% 130 3 7 82,000",
+        "raw_values": {
+          "resource_ore_mass": {
+            "text": "40",
+            "unit": "Mt"
+          },
+          "resource_treo_grade": {
+            "text": "2,100",
+            "unit": "ppm"
+          },
+          "contained_treo": {
+            "text": "82,000",
+            "unit": "t"
+          }
+        }
+      },
+      "source_context": {
+        "scope": "Vanadis and Benmara North",
+        "jorc_categories": [
+          "INFERRED"
+        ],
+        "effective_date": "2025-11-17",
+        "cutoff": {
+          "grade": "430",
+          "unit": "ppm",
+          "species": "NdPr"
+        },
+        "treo_members": [
+          "La2O3",
+          "CeO2",
+          "Pr6O11",
+          "Nd2O3",
+          "Sm2O3",
+          "Eu2O3",
+          "Gd2O3",
+          "Tb4O7",
+          "Dy2O3",
+          "Ho2O3",
+          "Er2O3",
+          "Tm2O3",
+          "Yb2O3",
+          "Lu2O3",
+          "Y2O3"
+        ],
+        "material": "WHOLE_ORE",
+        "grade_denominator": "DRY_WHOLE_ORE"
+      },
+      "original_anchors": [
+        {
+          "field": "scope",
+          "physical_page": 123,
+          "quote": "This includes Vanadis and Benmara North."
+        },
+        {
+          "field": "effective_date",
+          "physical_page": 189,
+          "quote": "Table 9-2: Barkly REE Inferred Mineral Resources – effective 17 November 2025"
+        },
+        {
+          "field": "treo_members",
+          "physical_page": 189,
+          "quote": "TREO = La2O3 + CeO2 + Pr6O11 + Nd2O3 + Sm2O3 + Eu2O3 + Gd2O3 + Tb4O7 + Dy2O3 + Ho2O3 + Er2O3 + Tm2O3 + Yb2O3 + Lu2O3 + Y2O3."
+        },
+        {
+          "field": "chemical_cutoff",
+          "physical_page": 189,
+          "quote": "NdPr = Nd2O3 + Pr6O11"
+        },
+        {
+          "field": "cutoff",
+          "physical_page": 189,
+          "quote": "Reported above a 430-ppm NdPr cut-off, and within a preliminary optimised pit shell."
+        },
+        {
+          "field": "reporting_standard",
+          "physical_page": 189,
+          "quote": "Mineral Resources classified in accordance with the JORC Code (2012)."
+        },
+        {
+          "field": "rounding",
+          "physical_page": 189,
+          "quote": "Estimates are rounded to reflect the level of confidence in the Mineral Resource at the time of reporting. Differences may occur in totals due to rounding."
+        },
+        {
+          "field": "same_total",
+          "physical_page": 189,
+          "quote": "Total Inferred 40 2,100 690 710 34% 130 3 7 82,000"
+        },
+        {
+          "field": "four_magnet_oxide_grades",
+          "physical_page": 189,
+          "quote": "Total Inferred 40 560 130 20 6 60 2 3 2 0.4 0.3 40 110 20 900 200"
+        },
+        {
+          "field": "material_and_denominator",
+          "physical_page": 223,
+          "quote": "Tonnages were estimated on an in-situ dry weight basis, and moisture was not considered."
+        }
+      ],
+      "expectation": {
+        "context_recovery": [
+          "effective_date",
+          "treo_members"
+        ],
+        "formal_research_use": false,
+        "blockers": [
+          "UNAPPROVED_NDPR_CUTOFF",
+          "ROUNDING_PRECISION_UNSPECIFIED"
+        ]
+      }
+    }
+  ]
+}
