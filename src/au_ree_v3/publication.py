@@ -12,15 +12,18 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from collections.abc import Sequence
 from contextlib import contextmanager
+from dataclasses import asdict, dataclass
 from io import BytesIO
 from pathlib import Path, PurePosixPath
 from time import perf_counter
-from typing import Protocol
 
 from .contracts import canonical_json
 from .contracts.temporal import TEMPORAL_POLICY_VERSION
 from .research_environment import environment_lock
+from .replica import AuthenticatedRemoteReplica, ContentReplica
+from .sources import ContentStore
 
 RELEASE_SCHEMA = "v3-native-research-release-v1"
 SHA256 = re.compile(r"[0-9a-f]{64}")
@@ -30,13 +33,6 @@ INPUT_NAMES = {"profile": "profile.json", "bindings": "bindings.json", "sources"
 
 class ArchiveError(ValueError):
     """An immutable research artifact or release requirement failed validation."""
-
-
-class ContentReplica(Protocol):
-    root: Path
-
-    def read(self, sha256: str) -> bytes: ...
-    def put(self, payload: bytes) -> str: ...
 
 
 def _digest(payload: bytes) -> str:
@@ -95,16 +91,50 @@ def _availability(store: ContentReplica | None, sha256: str) -> dict:
     return {"status": "EXACT_SHA", "byte_count": len(payload)}
 
 
-def _independent(primary: ContentReplica, replica: ContentReplica | None, domain: str | None) -> bool:
-    if replica is None or not domain or not domain.strip():
-        return False
+@dataclass(frozen=True)
+class _ReplicaAccess:
+    readable: ContentReplica | None
+    independent: bool
+    attestation: dict
+
+
+def _local_filesystem_type(primary: ContentStore) -> str | None:
+    """Distinguish a local CAS from an untyped network or object-store mount."""
+    mounts = Path("/proc/self/mountinfo")
+    if not mounts.is_file():
+        return None
+    matches = []
+    root = primary.root.resolve()
+    for line in mounts.read_text(encoding="utf-8").splitlines():
+        mount, filesystem = line.split(" - ", 1)
+        mountpoint = Path(re.sub(r"\\([0-7]{3})", lambda match: chr(int(match[1], 8)), mount.split()[4]))
+        if root.is_relative_to(mountpoint):
+            matches.append((len(mountpoint.parts), filesystem.split()[0]))
+    return max(matches)[1] if matches else None
+
+
+def _replica_access(primary: ContentReplica, replica: ContentReplica | None) -> _ReplicaAccess:
+    if replica is None:
+        return _ReplicaAccess(None, False, {"status": "NOT_CONFIGURED"})
+    if not isinstance(replica, AuthenticatedRemoteReplica):
+        return _ReplicaAccess(replica, False, {"status": "LOCAL_COPY_ONLY"})
     try:
-        first, second = primary.root.resolve(strict=True), replica.root.resolve(strict=True)
-        if first.is_relative_to(second) or second.is_relative_to(first):
-            return False
-        return first.stat().st_dev != second.stat().st_dev
-    except OSError:
-        return False
+        evidence = replica.attest_remote()
+        if isinstance(primary, AuthenticatedRemoteReplica):
+            first = primary.attest_remote()
+            independent = first.failure_domain_sha256 != evidence.failure_domain_sha256 and (
+                first.provider != evidence.provider or first.region != evidence.region
+            )
+            basis = f"{first.provider}:{first.region}"
+        else:
+            basis = _local_filesystem_type(primary) if isinstance(primary, ContentStore) else None
+            independent = basis in {"apfs", "btrfs", "ext2", "ext3", "ext4", "overlay", "tmpfs", "xfs", "zfs"}
+    except (OSError, ValueError):
+        return _ReplicaAccess(None, False, {"status": "REMOTE_ATTESTATION_UNAVAILABLE"})
+    return _ReplicaAccess(
+        replica, independent,
+        {"status": "AUTHENTICATED_REMOTE", "primary_storage": basis, **asdict(evidence)},
+    )
 
 
 def verify_replicas(
@@ -112,29 +142,52 @@ def verify_replicas(
     *, replica_failure_domain: str | None = None,
 ) -> dict:
     """Read and hash every required object from each configured storage copy."""
-    independent = _independent(primary, replica, replica_failure_domain)
+    return _inventory(required_sha256, primary, _replica_access(primary, replica), replica_failure_domain)
+
+
+def _inventory(
+    required_sha256: set[str], primary: ContentReplica, access: _ReplicaAccess, label: str | None,
+    *, checked: Sequence[dict] = (),
+) -> dict:
+    by_sha = {item["sha256"]: item for item in checked}
     items = [
-        {"sha256": sha, "primary": _availability(primary, sha), "replica": _availability(replica, sha)}
+        by_sha.get(sha) or {
+            "sha256": sha, "primary": _availability(primary, sha), "replica": _availability(access.readable, sha),
+        }
         for sha in sorted(required_sha256)
     ]
     states = {item[location]["status"] for item in items for location in ("primary", "replica")}
     if "WRONG_SHA" in states:
         status, reason = "FAIL", "REPLICA_DIGEST_MISMATCH"
-    elif replica is None:
+    elif access.attestation["status"] == "REMOTE_ATTESTATION_UNAVAILABLE":
+        status, reason = "BLOCKED", "REPLICA_ATTESTATION_UNAVAILABLE"
+    elif access.readable is None:
         status, reason = "BLOCKED", "REPLICA_UNAVAILABLE"
     elif states - {"EXACT_SHA"}:
         status, reason = "BLOCKED", "REPLICA_READBACK_INCOMPLETE"
-    elif not independent:
+    elif not items or not access.independent:
         status, reason = "BLOCKED", "REPLICA_INDEPENDENCE_UNVERIFIED"
     else:
         status, reason = "PASS", "INDEPENDENT_READBACK_VERIFIED"
     return {
-        "status": status, "reason": reason, "distinct_failure_domain": independent,
-        "replica_failure_domain": replica_failure_domain, "required_objects": len(items),
+        "status": status, "reason": reason, "distinct_failure_domain": access.independent,
+        "replica_failure_domain": label, "replica_attestation": access.attestation, "required_objects": len(items),
         "primary_verified": sum(item["primary"]["status"] == "EXACT_SHA" for item in items),
         "replica_verified": sum(item["replica"]["status"] == "EXACT_SHA" for item in items),
         "objects": items,
     }
+
+
+def _copy_missing(contents: set[str], primary: ContentReplica, replica: ContentReplica | None) -> None:
+    if replica is None:
+        return
+    for sha256 in sorted(contents):
+        if _availability(replica, sha256)["status"] == "MISSING":
+            try:
+                _put(replica, _checked_read(primary, sha256))
+            except (OSError, ValueError):
+                # A missing or corrupt second copy is retained in the next inventory.
+                continue
 
 
 def _input_objects(source_manifest: dict, excluded_receipts: set[str]) -> set[str]:
@@ -258,17 +311,10 @@ def archive_release(
     environment = _put(primary, _encode(current_environment))
     build_receipt = _put(primary, (build / "build_receipt.json").read_bytes())
     contents = {*inputs.values(), *configuration.values(), *outputs.values(), *official_objects, code, environment, build_receipt}
-    if replica is not None:
-        for sha256 in sorted(contents):
-            existing = _availability(replica, sha256)
-            if existing["status"] == "MISSING":
-                try:
-                    _put(replica, _checked_read(primary, sha256))
-                except (OSError, ValueError):
-                    # The readback inventory records the unavailable or corrupt copy.
-                    pass
+    access = _replica_access(primary, replica)
+    _copy_missing(contents, primary, access.readable)
 
-    inventory = verify_replicas(contents, primary, replica, replica_failure_domain=replica_failure_domain)
+    inventory = _inventory(contents, primary, access, replica_failure_domain)
     manifest = {
         "schema": RELEASE_SCHEMA, "release_mode": "RESEARCH_CANDIDATE",
         "cutoff": profile_doc["research_cutoff"], "timezone": profile_doc["timezone"],
@@ -287,14 +333,10 @@ def archive_release(
     }
     payload = _encode(manifest)
     release_id = _put(primary, payload)
-    if replica is not None and _availability(replica, release_id)["status"] == "MISSING":
-        try:
-            _put(replica, payload)
-        except (OSError, ValueError):
-            pass
+    _copy_missing({release_id}, primary, access.readable)
     _write_once(_manifest_path(release_root, release_id), payload)
-    full_inventory = verify_replicas(
-        contents | {release_id}, primary, replica, replica_failure_domain=replica_failure_domain,
+    full_inventory = _inventory(
+        contents | {release_id}, primary, access, replica_failure_domain, checked=inventory["objects"],
     )
     return {
         "status": "PASS", "release_id": release_id,
@@ -302,6 +344,58 @@ def archive_release(
         "replica_inventory": full_inventory,
         "F5": full_inventory["status"] if full_inventory["status"] != "PASS" else "NOT_RUN",
     }
+
+
+def sync_release_replica(
+    *, release_root: Path, release_id: str, primary: ContentReplica, replica: ContentReplica | None,
+    out: Path, replica_failure_domain: str | None = None,
+) -> dict:
+    """Copy and read back an already sealed archive without creating a new release."""
+    manifest = load_release(release_root, release_id, primary)
+    required = set(manifest["required_object_sha256"]) | {release_id}
+    access = _replica_access(primary, replica)
+    _copy_missing(required, primary, access.readable)
+    inventory = _inventory(required, primary, access, replica_failure_domain)
+    receipt = {
+        "schema": "research-replica-verification-v1", "release_id": release_id,
+        "status": inventory["status"], "reason": inventory["reason"],
+        "F5": "NOT_RUN" if inventory["status"] == "PASS" else inventory["status"],
+        "replica_inventory": inventory,
+    }
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "replica_verification.json").write_bytes(_encode(receipt))
+    return receipt
+
+
+def restore_release_replica(
+    *, release_root: Path, release_id: str, replica: AuthenticatedRemoteReplica, destination: ContentStore, out: Path,
+) -> dict:
+    """Recover verified objects to a local store before invoking offline replay."""
+    access = _replica_access(destination, replica)
+    receipt = {
+        "schema": "research-replica-restoration-v1", "release_id": release_id,
+        "status": "BLOCKED", "reason": "REPLICA_ATTESTATION_UNAVAILABLE",
+        "replica_attestation": access.attestation,
+    }
+    if access.readable is not None:
+        try:
+            manifest = load_release(release_root, release_id, replica)
+            required = set(manifest["required_object_sha256"]) | {release_id}
+            _copy_missing(required, replica, destination)
+            inventory = _inventory(required, destination, access, None)
+            complete = inventory["primary_verified"] == inventory["replica_verified"] == len(required)
+            receipt.update(
+                status="PASS" if complete else inventory["status"],
+                reason="VERIFIED_LOCAL_RESTORE" if complete else inventory["reason"],
+                inventory=inventory,
+            )
+        except OSError:
+            receipt["reason"] = "REMOTE_RELEASE_UNAVAILABLE"
+        except ValueError:
+            receipt.update(status="FAIL", reason="REMOTE_RELEASE_DIGEST_OR_SCHEMA_MISMATCH")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "restoration_receipt.json").write_bytes(_encode(receipt))
+    return receipt
 
 
 def _extract_code(tar_data: bytes, target: Path) -> None:

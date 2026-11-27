@@ -12,7 +12,6 @@ from pathlib import Path
 from au_ree_v3.publication import (
     archive_release, load_release, publish_release, rehearse_rollback, replay_release, verify_replicas,
 )
-from au_ree_v3.fresh_research import build_research
 from au_ree_v3.registry import load_profile, load_registry
 from au_ree_v3.research_environment import environment_lock
 from au_ree_v3.sources import ContentStore, _projects
@@ -170,6 +169,8 @@ class PublicationTests(unittest.TestCase):
 )
 class NativeReleaseIntegrationTests(unittest.TestCase):
     def test_exact_issuer_pdfs_rebuild_from_archive_without_primary(self):
+        from au_ree_v3.fresh_research import build_research
+
         repository = Path(__file__).resolve().parents[1]
         settings = repository / "config" / "research_profiles"
         profile = settings / "au_ree_2026-11-28.json"

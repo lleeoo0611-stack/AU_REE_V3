@@ -1,0 +1,312 @@
+{
+  "schema": "research-responsibility-and-replica-audit-v1",
+  "basis_commit": "b6cdab87b2435f66ce295bdb3bbb48e4772edd5c",
+  "research_release_id": "d055f0726cff7bf783731bd3e698d3334a214fbcf593b8f934dfe089204a5a6b",
+  "scope": {
+    "science": "8 exact outputs from the same archived V3 code and original content, 6 selected Census cells",
+    "bench_cache_control": "runs alternated baseline then D; OS page-cache state uncontrolled",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.12.14"
+  },
+  "responsibility_audit": [
+    {
+      "modules": {
+        "application": {
+          "responsibility": "Reviewed historical resource replay with fixed V2 Oracle",
+          "outgoing_imports": [
+            "census",
+            "documents",
+            "observations",
+            "store"
+          ],
+          "incoming_imports": [
+            "cli"
+          ],
+          "branch_score": {
+            "function_count": 6,
+            "max": 39,
+            "p90": 39
+          },
+          "direct_test_imports": [
+            "tests/test_pipeline.py"
+          ]
+        },
+        "fresh_research": {
+          "responsibility": "Fresh profile orchestration and full research artifacts",
+          "outgoing_imports": [
+            "fresh_census",
+            "fresh_decision",
+            "fresh_observations",
+            "registry",
+            "research_environment",
+            "sources",
+            "store"
+          ],
+          "incoming_imports": [
+            "cli"
+          ],
+          "branch_score": {
+            "function_count": 7,
+            "max": 49,
+            "p90": 49
+          },
+          "direct_test_imports": [
+            "tests/test_fresh_research.py",
+            "tests/test_publication.py"
+          ]
+        }
+      },
+      "cli_entrypoints": [
+        "replay-resource",
+        "research build",
+        "research replay (archived code)"
+      ],
+      "shared_exact_AST_body_groups": {},
+      "disposition": "RETAIN_DISTINCT_ROLES",
+      "D_source_changes": []
+    },
+    {
+      "modules": {
+        "observations": {
+          "responsibility": "Resource evidence parsing primitives and legacy claim binding",
+          "outgoing_imports": [
+            "documents"
+          ],
+          "incoming_imports": [
+            "application",
+            "census",
+            "fresh_census",
+            "fresh_observations",
+            "resource_extraction"
+          ],
+          "branch_score": {
+            "function_count": 6,
+            "max": 20,
+            "p90": 20
+          },
+          "direct_test_imports": [
+            "tests/test_fresh_census.py",
+            "tests/test_pipeline.py"
+          ]
+        },
+        "fresh_observations": {
+          "responsibility": "Cross-source strategy admission and release-scoped extraction",
+          "outgoing_imports": [
+            "documents",
+            "observations",
+            "research_inputs",
+            "resource_extraction",
+            "sources",
+            "store"
+          ],
+          "incoming_imports": [
+            "cli",
+            "fresh_research"
+          ],
+          "branch_score": {
+            "function_count": 9,
+            "max": 67,
+            "p90": 67
+          },
+          "direct_test_imports": [
+            "tests/test_fresh_observations.py"
+          ]
+        }
+      },
+      "cli_entrypoints": [
+        "replay-resource",
+        "research extract",
+        "research build"
+      ],
+      "shared_exact_AST_body_groups": {},
+      "disposition": "RETAIN_DISTINCT_ROLES",
+      "D_source_changes": []
+    },
+    {
+      "modules": {
+        "census": {
+          "responsibility": "Historical Oracle projection and alternate resource rows",
+          "outgoing_imports": [
+            "observations",
+            "research_inputs"
+          ],
+          "incoming_imports": [
+            "application",
+            "fresh_census"
+          ],
+          "branch_score": {
+            "function_count": 2,
+            "max": 13,
+            "p90": 13
+          },
+          "direct_test_imports": []
+        },
+        "fresh_census": {
+          "responsibility": "Fixed 93×51 fresh projection and source/state verification",
+          "outgoing_imports": [
+            "census",
+            "observations",
+            "registry",
+            "research_inputs",
+            "store"
+          ],
+          "incoming_imports": [
+            "fresh_research"
+          ],
+          "branch_score": {
+            "function_count": 15,
+            "max": 17,
+            "p90": 16
+          },
+          "direct_test_imports": [
+            "tests/test_fresh_census.py"
+          ]
+        }
+      },
+      "cli_entrypoints": [
+        "replay-resource",
+        "research build"
+      ],
+      "shared_exact_AST_body_groups": {},
+      "disposition": "RETAIN_DISTINCT_ROLES",
+      "D_source_changes": []
+    },
+    {
+      "modules": {
+        "decision": {
+          "responsibility": "SAW, TOPSIS, PROMETHEE II and leave-one-out maths",
+          "outgoing_imports": [],
+          "incoming_imports": [
+            "fresh_decision"
+          ],
+          "branch_score": {
+            "function_count": 8,
+            "max": 16,
+            "p90": 16
+          },
+          "direct_test_imports": [
+            "tests/test_fresh_decision.py"
+          ]
+        },
+        "fresh_decision": {
+          "responsibility": "Pinned criteria, utility, complete-case cohorts and provenance",
+          "outgoing_imports": [
+            "decision",
+            "registry",
+            "research_inputs",
+            "store"
+          ],
+          "incoming_imports": [
+            "fresh_research"
+          ],
+          "branch_score": {
+            "function_count": 15,
+            "max": 30,
+            "p90": 16
+          },
+          "direct_test_imports": [
+            "tests/test_fresh_decision.py"
+          ]
+        }
+      },
+      "cli_entrypoints": [
+        "research build"
+      ],
+      "shared_exact_AST_body_groups": {},
+      "disposition": "RETAIN_DISTINCT_ROLES",
+      "D_source_changes": []
+    }
+  ],
+  "dynamic_edges": {
+    "publication._OFFLINE_BUILD": [
+      "fresh_research.build_research"
+    ]
+  },
+  "ci_reference_checks": {
+    ".github/workflows/migration.yml": [
+      "test_pipeline.py",
+      "test_fresh_observations.py",
+      "test_publication.py"
+    ]
+  },
+  "duplicate_definition": {
+    "method": "Phase 10 AST body fingerprint; excludes leading docstring",
+    "minimum_ast_nodes": 16,
+    "paired_function_changes": "No D implementation changes in the eight audited modules"
+  },
+  "cold_same_scope": {
+    "baseline": {
+      "seconds": [
+        4.680770014999325,
+        4.1616628069996295,
+        3.9500827570000183
+      ],
+      "median_seconds": 4.1616628069996295,
+      "python_rss_kib": [
+        59356,
+        58360,
+        58484
+      ],
+      "median_python_rss_kib": 58484
+    },
+    "candidate": {
+      "seconds": [
+        3.584795342999314,
+        5.097806321999997,
+        4.775832237999566
+      ],
+      "median_seconds": 4.775832237999566,
+      "python_rss_kib": [
+        58580,
+        58576,
+        58588
+      ],
+      "median_python_rss_kib": 58580
+    }
+  },
+  "archive_same_scope": {
+    "baseline": {
+      "primary_verified": 268,
+      "replica_verified": 268,
+      "primary_read_calls": 803,
+      "replica_read_calls": 803,
+      "primary_bytes_read": 1515204332,
+      "replica_bytes_read": 1515204332,
+      "elapsed_seconds": 6.8295857900002375,
+      "python_rss_kib": 59420,
+      "F5": "BLOCKED"
+    },
+    "candidate": {
+      "primary_verified": 268,
+      "replica_verified": 268,
+      "primary_read_calls": 537,
+      "replica_read_calls": 537,
+      "primary_bytes_read": 1010279706,
+      "replica_bytes_read": 1010193656,
+      "elapsed_seconds": 4.843391995000275,
+      "python_rss_kib": 59508,
+      "F5": "BLOCKED"
+    }
+  },
+  "verified_artifacts": 8,
+  "local_recheck": {
+    "primary_verified": 268,
+    "replica_verified": 268,
+    "F5": "BLOCKED",
+    "reason": "REPLICA_INDEPENDENCE_UNVERIFIED",
+    "corrupted_replica_status": "FAIL",
+    "corrupted_replica_reason": "REPLICA_DIGEST_MISMATCH",
+    "rollback": "PASS",
+    "formal_pointer_unchanged": true
+  },
+  "independent_remote_execution": "BLOCKED_NO_AUTHORIZED_REMOTE_CONFIGURATION",
+  "remote_performance": "UNMEASURED",
+  "same_scope_ci_cost_delta": "UNMEASURED",
+  "runtime_receipts": [
+    "work/research-yield/replica-audit/same_scope_replay_benchmark.json",
+    "work/research-yield/replica-audit/same_scope_archive_benchmark.json",
+    "work/research-yield/replica-audit/local-readback/replica_verification.json",
+    "work/research-yield/replica-audit/corrupt-readback/replica_verification.json",
+    "work/research-yield/replica-audit/rollback/rollback_receipt.json"
+  ]
+}
