@@ -1,0 +1,64 @@
+work_unit,change,path,reason
+A,修改,README.md,更新本組可執行指令與驗證輸出索引
+A,新增,config/research_profiles/au_ree_2026-11-28.json,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,config/research_profiles/census_columns_v1.json,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,config/research_profiles/project_registry_2026-11-28.json,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,config/research_profiles/source_seeds_2026-11-28.json,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,docs/research/capability_progress.csv,逐項更新新研究能力的實證範圍
+A,新增,docs/research/fresh_baseline.md,更新可查核的 F0–F5 狀態及前序收據
+A,新增,docs/research/project_source_inventory.csv,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,docs/research/registry_verification.json,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,docs/research/source_edition_crosswalk.csv,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,docs/research/source_readback_verification.json,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,docs/research/specification_v1_2.md,逐位元保存 v1.2 開發規格
+A,新增,docs/research/supplemental_source_locators.csv,固定研究母體、查詢入口或來源版次與讀回收據
+A,修改,src/au_ree_v3/cli.py,提供本組已實作的 CLI 入口
+A,新增,src/au_ree_v3/migration/project_registry.py,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,src/au_ree_v3/registry.py,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,src/au_ree_v3/sources.py,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,tests/test_project_registry.py,固定研究母體、查詢入口或來源版次與讀回收據
+A,新增,tests/test_sources.py,固定研究母體、查詢入口或來源版次與讀回收據
+B,修改,.github/workflows/migration.yml,執行受影響的固定原件驗證
+B,修改,README.md,更新本組可執行指令與驗證輸出索引
+B,新增,config/research_profiles/resource_bindings_v1.json,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,修改,docs/research/capability_progress.csv,逐項更新新研究能力的實證範圍
+B,修改,docs/research/fresh_baseline.md,更新可查核的 F0–F5 狀態及前序收據
+B,新增,docs/research/resource_admission.md,保存三種版面實際觀測／採納結果與測試收據
+B,修改,src/au_ree_v3/cli.py,提供本組已實作的 CLI 入口
+B,修改,src/au_ree_v3/documents.py,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,src/au_ree_v3/fresh_observations.py,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,src/au_ree_v3/resource_extraction.py,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,tests/fixtures/fresh_resource_v1/acquisition_manifest.json,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,tests/fixtures/fresh_resource_v1/captures/29b68c0bab8fb6e8054c35407658960fcef73802cf1739d88d3ba27dc5dbf7f4.json,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,tests/fixtures/fresh_resource_v1/captures/3bba027e86b4d930cf903aee0dc6560453cdfbfe6ecf70ddb30a4e5421afe2e7.json,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,tests/fixtures/fresh_resource_v1/captures/64c3ad75bc9aa1f122c258c0e21a5efb43bfa9a4e29e8f05a2fac722a8fe8463.json,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,tests/fixtures/fresh_resource_v1/expected.json,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,tests/test_document_views.py,三種 PDF 版面、共同證據定位或自動科學准入驗證
+B,新增,tests/test_fresh_observations.py,三種 PDF 版面、共同證據定位或自動科學准入驗證
+C,修改,README.md,更新本組可執行指令與驗證輸出索引
+C,修改,docs/research/capability_progress.csv,逐項更新新研究能力的實證範圍
+C,新增,docs/research/census_decision.md,保存完整格數、比較條件與 C 的測試收據
+C,修改,docs/research/fresh_baseline.md,更新可查核的 F0–F5 狀態及前序收據
+C,修改,docs/research/resource_admission.md,保存三種版面實際觀測／採納結果與測試收據
+C,修改,pyproject.toml,安裝時封裝固定決策政策
+C,修改,src/au_ree_v3/cli.py,提供本組已實作的 CLI 入口
+C,新增,src/au_ree_v3/decision.py,93×51 投影、受治理決策輸入或相依重建
+C,新增,src/au_ree_v3/fresh_census.py,93×51 投影、受治理決策輸入或相依重建
+C,新增,src/au_ree_v3/fresh_decision.py,93×51 投影、受治理決策輸入或相依重建
+C,新增,src/au_ree_v3/fresh_decision_policy_v1.json,93×51 投影、受治理決策輸入或相依重建
+C,新增,src/au_ree_v3/fresh_research.py,93×51 投影、受治理決策輸入或相依重建
+C,新增,src/au_ree_v3/research_environment.py,93×51 投影、受治理決策輸入或相依重建
+C,新增,tests/test_fresh_census.py,93×51 投影、受治理決策輸入或相依重建
+C,新增,tests/test_fresh_decision.py,93×51 投影、受治理決策輸入或相依重建
+C,新增,tests/test_fresh_research.py,93×51 投影、受治理決策輸入或相依重建
+D,修改,.github/workflows/migration.yml,執行受影響的固定原件驗證
+D,修改,README.md,更新本組可執行指令與驗證輸出索引
+D,修改,docs/research/capability_progress.csv,逐項更新新研究能力的實證範圍
+D,修改,docs/research/census_decision.md,保存完整格數、比較條件與 C 的測試收據
+D,修改,docs/research/fresh_baseline.md,更新可查核的 F0–F5 狀態及前序收據
+D,修改,src/au_ree_v3/cli.py,提供本組已實作的 CLI 入口
+D,新增,docs/research/native_replay_verification.json,保存固定程式、實際冷建、SHA 差異及回滾收據
+D,新增,docs/research/replay_publication.md,記錄 F4 的實際驗收及 F5 的副本阻礙
+D,新增,src/au_ree_v3/publication.py,不可變研究封存、離線冷建、副本讀回或指標回滾
+D,新增,tests/test_publication.py,不可變研究封存、離線冷建、副本讀回或指標回滾
+D,新增,docs/research/file_lifecycle.csv,逐檔登錄新增修改及理由

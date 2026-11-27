@@ -24,7 +24,7 @@ technical-disclosure,DEFERRED,Fresh acceptance pending,DEFERRED
 mcda,PARTIAL,Two governed R1 inputs; five panels explicitly insufficient,DEFERRED
 sensitivity-and-uncertainty,PARTIAL,Imported deterministic leave-out calculation; exercised by tests,DEFERRED
 study-experiments-and-ml,DEFERRED,Fresh acceptance pending,DEFERRED
-publication,DEFERRED,Fresh acceptance pending,DEFERRED
-historical-replay,DEFERRED,Fresh acceptance pending,BLOCKED
+publication,BLOCKED,Immutable archive and rollback exercised; independent replica unavailable,DEFERRED
+historical-replay,PARTIAL,V3 cold replay verified for six formal cells and eight output artifacts,BLOCKED
 derived-cache,DEFERRED,Fresh acceptance pending,DEFERRED
 engineering-audit,DEFERRED,Fresh acceptance pending,PARTIAL

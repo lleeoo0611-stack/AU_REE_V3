@@ -78,3 +78,21 @@ au-ree-v3 research build --profile "$PROFILE" \
 ```
 
 Census records the reason for each missing field. Decision panels report insufficient cohorts when governed inputs do not satisfy the locked criteria.
+
+Archive the build candidate and verify it offline. Supply a configured independent replica when performing eventual publication validation.
+
+```sh
+au-ree-v3 research archive --profile "$PROFILE" \
+  --bindings config/research_profiles/resource_bindings_v1.json \
+  --sources work/fresh/acquisition-final/source_manifest.json --build work/fresh/build \
+  --store work/fresh/source-store --out work/fresh/releases
+
+au-ree-v3 research replay --offline --release-id "$RELEASE_ID" \
+  --release-root work/fresh/releases --store work/fresh/source-store --out work/fresh/replay
+
+au-ree-v3 research rehearse-rollback --release-id "$RELEASE_ID" \
+  --previous-release-id "$PREVIOUS_RELEASE_ID" --release-root work/fresh/releases \
+  --store work/fresh/source-store --out work/fresh/rollback
+```
+
+`research verify` performs the same network-disabled rebuild as `research replay --offline`. Archive candidates and readback results are described in the [D report](docs/research/replay_publication.md).
