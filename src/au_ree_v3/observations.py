@@ -16,6 +16,12 @@ VARIABLES = {
     "contained_treo_kt": ("kt TREO", "‘000 tonnes"),
 }
 CATEGORY = "MEASURED_INDICATED_INFERRED_TOTAL"
+OXIDE_VARIABLES = {
+    "Pr6O11": "pr6o11_ppm",
+    "Nd2O3": "nd2o3_ppm",
+    "Dy2O3": "dy2o3_ppm",
+    "Tb4O7": "tb4o7_ppm",
+}
 
 
 def digest(value: object) -> str:

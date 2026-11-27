@@ -1,8 +1,7 @@
 """Extract and govern scoped observations from captured V3 source editions."""
 
 from collections import defaultdict
-from dataclasses import asdict, dataclass
-from datetime import datetime
+from dataclasses import asdict, dataclass, replace
 from decimal import Decimal
 from hashlib import sha256
 from itertools import chain
@@ -16,10 +15,10 @@ from .contracts import (
 )
 from .contracts.temporal import TEMPORAL_POLICY_VERSION, TemporalDecision, TemporalEvidence, evaluate_temporal
 from .documents import DocumentCache, DocumentError
-from .observations import CATEGORY, digest
+from .observations import digest
 from .research_inputs import checked_research_inputs
-from .resource_extraction import CANONICAL_UNITS, STRATEGIES, ResourceCell, ResourceStatement
-from .sources import ContentStore, IntegrityError, SCHEMA as ACQUISITION_SCHEMA, validate_capture_proof
+from .resource_extraction import STRATEGIES, ResourceCell, ResourceStatement
+from .sources import ContentStore, IntegrityError, SCHEMA as ACQUISITION_SCHEMA, validate_edition_proofs
 from .store import Store
 
 SCHEMA = "fresh-resource-extraction-v1"
@@ -70,30 +69,6 @@ def _project(binding: dict) -> Entity:
     return record
 
 
-def _proofs(content: ContentStore, edition: dict, timezone: ZoneInfo) -> tuple[TemporalEvidence, ...]:
-    supplied = edition["temporal_evidence"]
-    verified = {}
-    for claim in supplied:
-        proof = validate_capture_proof(content, claim["reference_sha256"], edition["sha256"], timezone)
-        receipt = json.loads(content.read(proof.reference_sha256))
-        if asdict(proof) != claim or receipt["requested_url"] != edition["url"]:
-            raise IntegrityError("Public proof differs from the exact edition and request")
-        verified[proof.reference_sha256] = proof, receipt
-    if not verified:
-        return ()
-    if edition["receipt_sha256"] not in verified:
-        raise IntegrityError("Current acquisition receipt is not pinned by the edition")
-    current_event = verified[edition["receipt_sha256"]][1]
-    if (current_event["project_ids"] != edition["project_ids"] or current_event["final_url"] != edition["final_url"]
-            or current_event["kind"] != edition["kind"]):
-        raise IntegrityError("Edition lineage disagrees with its current capture event")
-    current = current_event["acquired_at"]
-    first = min((item[1]["acquired_at"] for item in verified.values()), key=datetime.fromisoformat)
-    if edition["acquired_at"] != first or edition["reacquired_at"] != (current if current != first else None):
-        raise IntegrityError("Edition acquisition dates disagree with the immutable capture receipts")
-    return tuple(sorted((value[0] for value in verified.values()), key=lambda item: item.evidence_id))
-
-
 def _make_cell(
     cell: ResourceCell, statement: ResourceStatement, project: Entity, source: Source,
     scope: ResourceScope, statement_id: str, binding: dict, decision: TemporalDecision,
@@ -113,35 +88,42 @@ def _make_cell(
         project_id=project.entity_id, scope_id=scope.scope_id,
         source_key=source.source_key, source_sha=source.sha256,
         variable=cell.variable, raw_value=cell.token, raw_unit=cell.raw_unit,
-        material_basis="WHOLE_ORE", chemical_basis="TREO",
-        denominator_basis="WHOLE_ORE" if cell.variable == "grade" else None,
-        statement_id=statement_id, category=CATEGORY,
+        material_basis="WHOLE_ORE", chemical_basis=cell.chemical_basis or "TREO",
+        denominator_basis="WHOLE_ORE" if cell.variable == "grade" or cell.variable.endswith("_ppm") else None,
+        statement_id=statement_id, category=statement.category,
         effective_date=statement.effective_date, reported_publication_date=source.publication_date,
         status="REPORTED", transform_version=binding["strategy"], anchor_id=anchor.anchor_id,
         original_payload={
-            "reporting_standard": "JORC 2012", "resource_category": CATEGORY,
-            "cutoff_grade": statement.cutoff, "cutoff_unit": "%", "cutoff_analyte": "TREO",
+            "reporting_standard": "JORC 2012", "resource_category": statement.category,
+            "cutoff_grade": statement.cutoff, "cutoff_unit": statement.cutoff_unit, "cutoff_analyte": statement.cutoff_analyte,
             "date_basis": "EFFECTIVE_DATE_FROM_DOCUMENT" if statement.effective_date else "ISSUER_DISCLOSURE_WITH_EFFECTIVE_DATE_UNREPORTED",
             "statement_context": [{"physical_page": page, "quote": text} for page, text in statement.context],
+            **({"reported_chemical_label": statement.reported_chemical_label}
+               if statement.reported_chemical_label is not None else {}),
             "extraction_strategy": binding["strategy"],
             "normalization": {
                 "formula": "reported_value * factor",
-                "factor": "0.001" if cell.raw_unit == "t" else "1",
+                "factor": cell.factor,
                 "input_observation_ids": [observation_id],
             },
         },
     )
-    candidate_id = digest(["fresh-resource-normalization-v1", observation_id, cell.value, CANONICAL_UNITS[cell.variable]])
+    candidate_id = digest(["fresh-resource-normalization-v1", observation_id, cell.value, cell.normalized_unit])
     candidate = NormalizedObservation(
         candidate_id=candidate_id, observation_id=observation_id,
-        value=cell.value, unit=CANONICAL_UNITS[cell.variable], material_basis=raw.material_basis,
+        value=cell.value, unit=cell.normalized_unit, material_basis=raw.material_basis,
         chemical_basis=raw.chemical_basis, denominator_basis=raw.denominator_basis,
         transform_version="exact-reported-unit-conversion-v1",
     )
     outcome_by_date = {"ELIGIBLE": "VALIDATED", "CANDIDATE": "EVIDENCE_INSUFFICIENT",
                        "INELIGIBLE": "AFTER_CUTOFF", "CONFLICT": "SCIENTIFIC_CONFLICT"}
-    outcome = "SCIENTIFIC_CONFLICT" if cell.conflict else outcome_by_date[decision.status]
-    reason = cell.conflict or ("EXACT_SOURCE_AND_RESOURCE_EVIDENCE" if outcome == "VALIDATED" else decision.reason)
+    if cell.conflict:
+        outcome, reason = "SCIENTIFIC_CONFLICT", cell.conflict
+    elif cell.evidence_issue:
+        outcome, reason = "EVIDENCE_INSUFFICIENT", cell.evidence_issue
+    else:
+        outcome = outcome_by_date[decision.status]
+        reason = "EXACT_SOURCE_AND_RESOURCE_EVIDENCE" if outcome == "VALIDATED" else decision.reason
     comparable = outcome == "VALIDATED"
     validation = ValidatedObservation(
         validation_id=digest(["fresh-resource-validation-v1", candidate_id, rules_sha, decision.decision_id, outcome, reason]),
@@ -156,8 +138,9 @@ def _bound_statement(
     statement: ResourceStatement, project: Entity, source: Source, binding: dict, proofs,
     cutoff: str, rules_sha: str, reacquired_at: str | None,
 ) -> BoundStatement:
-    scope_id = digest(["fresh-resource-scope-v1", project.entity_id, statement.scope, CATEGORY,
-                       format(Decimal(statement.cutoff).normalize(), "f"), "%", "TREO", "WHOLE_ORE"])
+    scope_id = digest(["fresh-resource-scope-v1", project.entity_id, statement.scope, statement.category,
+                       format(Decimal(statement.cutoff).normalize(), "f"), statement.cutoff_unit,
+                       statement.cutoff_analyte, "WHOLE_ORE"])
     scope = ResourceScope(scope_id=scope_id, project_id=project.entity_id, name=statement.scope)
     statement_id = digest(["fresh-resource-statement-v1", scope_id, source.sha256,
                            statement.effective_date, source.publication_date])
@@ -251,7 +234,11 @@ def extract_sources(
     found = {binding["case_id"] for binding, _, _ in matches}
     pages_required = {}
     for binding, edition, _ in matches:
-        required = max(binding["page"], binding.get("details_page", 1))
+        required = max(
+            binding["page"], binding.get("details_page", 1), binding.get("summary_page", 1),
+            binding.get("composition_table", {}).get("page", 1),
+            *(item["page"] for item in binding.get("context", ())),
+        )
         pages_required[edition["sha256"]] = max(required, pages_required.get(edition["sha256"], 0))
     cases = [{
         "case_id": binding["case_id"], "project_id": binding["project"]["entity_id"],
@@ -266,7 +253,7 @@ def extract_sources(
         source = Source(
             source_key=edition["source_key"], url=edition["url"], sha256=edition["sha256"],
             kind=edition["kind"], source_version=edition["source_version"],
-            publication_date=binding["publication_date"], acquired_at=edition["acquired_at"],
+            publication_date=binding.get("publication_date"), acquired_at=edition["acquired_at"],
             original_path=f"objects/{edition['sha256']}",
         )
         case = {
@@ -286,7 +273,7 @@ def extract_sources(
             case.update(source_integrity="WRONG_SHA", outcome="SCIENTIFIC_CONFLICT", reason="SOURCE_OBJECT_HASH_MISMATCH")
             continue
         try:
-            proofs = _proofs(content, edition, timezone)
+            proofs = validate_edition_proofs(content, edition, timezone)
         except (OSError, ValueError, KeyError, TypeError):
             proofs = ()
         case["proof_status"] = "EXACT_CAPTURE_PROOF" if proofs else "UNVERIFIED_CAPTURE_PROOF"
@@ -312,6 +299,20 @@ def extract_sources(
                              "INSUFFICIENT_EVIDENCE" if error.outcome == "EVIDENCE_INSUFFICIENT" else "NOT_EVALUATED")
             case.update(outcome=error.outcome, reason=str(error), scientific_comparability=compatibility)
             continue
+        if binding.get("composition_table"):
+            from .composition_extraction import classified_total_oxides
+
+            enriched = []
+            for item in decoded:
+                try:
+                    components = classified_total_oxides(documents[source.sha256].pages, binding, item)
+                except DocumentError as error:
+                    case["composition_extraction"] = {"outcome": error.outcome, "reason": str(error)}
+                    components = ()
+                if components:
+                    case["composition_extraction"] = {"outcome": "EXTRACTED", "count": len(components)}
+                enriched.append(replace(item, measurements=item.measurements + components))
+            decoded = tuple(enriched)
         parsed = [
             _bound_statement(item, project, source, binding, proofs, cutoff, rules_sha, edition["reacquired_at"])
             for item in decoded
@@ -320,10 +321,11 @@ def extract_sources(
         case.update(
             outcome="EXTRACTED",
             reason="DECLARED_RESOURCE_STATEMENTS_BOUND",
-            scientific_comparability=("MIXED" if any(
-                cell.validation.reason.startswith("CONFLICTING_")
-                for item in parsed for cell in item.measurements
-            ) else "COMPATIBLE"),
+            scientific_comparability=(
+                "MIXED" if any(cell.conflict for item in decoded for cell in item.measurements)
+                else "INSUFFICIENT_EVIDENCE" if any(cell.evidence_issue for item in decoded for cell in item.measurements)
+                else "COMPATIBLE"
+            ),
             scope_ids=[item.scope.scope_id for item in parsed],
             observation_decisions=[item.decision.to_dict() for item in parsed],
             observation_ids=[m.raw.observation_id for item in parsed for m in item.measurements],
@@ -405,7 +407,8 @@ def extract_sources(
         if case["outcome"] == "EXTRACTED" and case["proof_status"] == "EXACT_CAPTURE_PROOF"
     }
     result["verified_source_mode_count"] = len(verified_modes)
-    result["status"] = "PASS" if verified_modes == set(STRATEGIES) and selected else "BLOCKED"
+    required_modes = {binding["strategy"] for binding in spec["bindings"] if not binding.get("optional")}
+    result["status"] = "PASS" if required_modes <= verified_modes and selected else "BLOCKED"
     for case in cases:
         ids = case.get("observation_ids", [])
         case["selected_count"] = sum(identifier in selected for identifier in ids)

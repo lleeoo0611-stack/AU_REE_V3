@@ -39,13 +39,14 @@ def pdf_parser_version() -> str:
         raise DocumentError("CODE_ERROR", "PDF_PARSER_UNAVAILABLE") from error
 
 
-def pdf_pages(content: bytes, last_page: int) -> tuple[str, ...]:
+def pdf_pages(content: bytes, last_page: int | None) -> tuple[str, ...]:
     """Use Poppler native positioned text, preserving one-based page offsets."""
     if not content.startswith(b"%PDF-"):
         raise DocumentError("SCIENTIFIC_CONFLICT", "PDF_SIGNATURE_MISSING")
+    extent = ["-f", "1", "-l", str(last_page)] if last_page is not None else []
     try:
         result = subprocess.run(
-            ["pdftotext", "-f", "1", "-l", str(last_page), "-layout", "-enc", "UTF-8", "-", "-"],
+            ["pdftotext", *extent, "-layout", "-enc", "UTF-8", "-", "-"],
             input=content, capture_output=True, check=True, timeout=30,
         )
     except FileNotFoundError as error:
@@ -55,7 +56,7 @@ def pdf_pages(content: bytes, last_page: int) -> tuple[str, ...]:
     pages = result.stdout.decode("utf-8").split("\f")
     if pages[-1] == "":
         pages.pop()
-    if len(pages) < last_page:
+    if not pages or (last_page is not None and len(pages) < last_page):
         raise DocumentError("EVIDENCE_INSUFFICIENT", "PHYSICAL_PAGE_MISSING")
     return tuple(pages)
 
@@ -249,21 +250,26 @@ class DocumentCache:
 
     def __init__(self):
         self._pdf: dict[str, tuple[str, ...]] = {}
+        self._full_pdf: set[str] = set()
         self._html: dict[str, HTMLDocument] = {}
         self._csv: dict[str, CSVDocument] = {}
         self._ocr: dict[tuple[str, int, OCRRuntime], OCRPage] = {}
         self._pdf_runtime: str | None = None
         self._ocr_tools: tuple[str, str] | None = None
 
-    def pdf(self, content: bytes, source_sha256: str, last_page: int, *,
+    def pdf(self, content: bytes, source_sha256: str, last_page: int | None = None, *,
             ocr: OCRConfig | None = None) -> PDFDocument:
         _verified_content(content, source_sha256)
-        if type(last_page) is not int or last_page < 1:
+        if last_page is not None and (type(last_page) is not int or last_page < 1):
             raise ValueError("last_page must be a positive physical page number")
         native = self._pdf.get(source_sha256, ())
-        if len(native) < last_page:
+        if source_sha256 not in self._full_pdf and (last_page is None or len(native) < last_page):
             native = pdf_pages(content, last_page)
             self._pdf[source_sha256] = native
+            if last_page is None:
+                self._full_pdf.add(source_sha256)
+        if last_page is not None and last_page > len(native):
+            raise DocumentError("EVIDENCE_INSUFFICIENT", "PHYSICAL_PAGE_MISSING")
         if self._pdf_runtime is None:
             self._pdf_runtime = pdf_parser_version()
         pages = native[:last_page]

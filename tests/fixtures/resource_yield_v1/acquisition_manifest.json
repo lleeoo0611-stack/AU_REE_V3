@@ -1,0 +1,388 @@
+{
+  "schema": "fresh-source-manifest-v1",
+  "profile_id": "au-ree-2026-11-28",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "acquisition_parent_sha256": "aa3ffa0ff4cb5a10e2cf19778e088c3e5721dc2a3bace3b7832f1e86a9f1b915",
+  "editions": [
+    {
+      "acquired_at": "2026-11-27T21:28:33.622225+00:00",
+      "available_date": null,
+      "bytes": 1658279,
+      "edition_id": "a7f7ce7b0bd0e0081ade9c3eb90d664d6b89c38d66e06eac5b397fe20b3a9ab3",
+      "event_acquired_at": "2026-11-27T21:28:33.622225+00:00",
+      "final_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384",
+      "historical_reference_sha256": [
+        "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-0098e17a63e7c05c213f"
+      ],
+      "publication_date": null,
+      "publisher": null,
+      "reacquired_at": null,
+      "receipt_sha256": "feaf8bc0011eee1ee3c41b32b7d61feb9ffa817f5fbcd4ab73b1864630ebf839",
+      "same_url_predecessor_sha256": [],
+      "sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+      "source_changed": false,
+      "source_key": "seed-f09f74b43a7e20826fb9eda9",
+      "source_keys": [
+        "seed-f09f74b43a7e20826fb9eda9"
+      ],
+      "source_version": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T21:28:33.622225+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "da2eacea1431fa132657008fbfe3721b2c925ae1bb7dd96a775e7526b3437905",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+        ],
+        "matching_evidence_ids": [
+          "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:feaf8bc0011eee1ee3c41b32b7d61feb9ffa817f5fbcd4ab73b1864630ebf839",
+          "reference_sha256": "feaf8bc0011eee1ee3c41b32b7d61feb9ffa817f5fbcd4ab73b1864630ebf839",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864"
+        }
+      ],
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384",
+      "version_status": "EXACT_SHA_REUSED"
+    },
+    {
+      "acquired_at": "2026-11-27T21:28:36.308701+00:00",
+      "available_date": null,
+      "bytes": 1792199,
+      "edition_id": "e06f9ec5c46221d482caa216404a998a3d69921d463184328383db5b5bd85a7d",
+      "event_acquired_at": "2026-11-27T21:28:36.308701+00:00",
+      "final_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7763164.pdf?v=63957978608",
+      "historical_reference_sha256": [
+        "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-2a3a86a4d971e9f9838d",
+        "AU-908fd6f4461622e89548"
+      ],
+      "publication_date": null,
+      "publisher": null,
+      "reacquired_at": null,
+      "receipt_sha256": "3a7098f1ed36ca2debf8a3bffa18d11a8eb4f09450a827946bf413ce3bf8e754",
+      "same_url_predecessor_sha256": [],
+      "sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+      "source_changed": false,
+      "source_key": "seed-fa6915a2b1b494e356f2a3be",
+      "source_keys": [
+        "seed-fa6915a2b1b494e356f2a3be"
+      ],
+      "source_version": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T21:28:36.308701+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "5389177cb3b50bb4e2ccba59e2df013335a59a1411ede7c50e2594d01e243607",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "5617c7e5c5e141df580233aab1f5877396898c2dd6009e1597c1d1752bd8491a"
+        ],
+        "matching_evidence_ids": [
+          "5617c7e5c5e141df580233aab1f5877396898c2dd6009e1597c1d1752bd8491a"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:3a7098f1ed36ca2debf8a3bffa18d11a8eb4f09450a827946bf413ce3bf8e754",
+          "reference_sha256": "3a7098f1ed36ca2debf8a3bffa18d11a8eb4f09450a827946bf413ce3bf8e754",
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb"
+        }
+      ],
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7763164.pdf?v=63957978608",
+      "version_status": "EXACT_SHA_REUSED"
+    },
+    {
+      "acquired_at": "2026-11-27T21:28:46.622674+00:00",
+      "available_date": null,
+      "bytes": 8714952,
+      "edition_id": "e5af10de0611a63c097a0e9e1519d4db76b720be71652af43129a7a91d2458eb",
+      "event_acquired_at": "2026-11-27T21:28:46.622674+00:00",
+      "final_url": "https://announcements.asx.com.au/asxpdf/20251015/pdf/06qkvvhp20rxx2.pdf",
+      "historical_reference_sha256": [
+        "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-6d807eb7caec9db0f35e"
+      ],
+      "publication_date": null,
+      "publisher": "ASX",
+      "reacquired_at": null,
+      "receipt_sha256": "7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92",
+      "same_url_predecessor_sha256": [],
+      "sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "source_changed": false,
+      "source_key": "seed-50ec7babc2038894a2904191",
+      "source_keys": [
+        "seed-50ec7babc2038894a2904191"
+      ],
+      "source_version": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T21:28:46.622674+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "1c69d5fc2bf68ebec137c7a1c348f354504995f5c7624093231d8555a642e095",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "0277230140cbe2faee8bb9af07e7817636d628fb86d0bcf1c4d5b09145108944"
+        ],
+        "matching_evidence_ids": [
+          "0277230140cbe2faee8bb9af07e7817636d628fb86d0bcf1c4d5b09145108944"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92",
+          "reference_sha256": "7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92",
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0"
+        }
+      ],
+      "url": "https://announcements.asx.com.au/asxpdf/20251015/pdf/06qkvvhp20rxx2.pdf",
+      "version_status": "EXACT_SHA_REUSED"
+    },
+    {
+      "acquired_at": "2026-11-27T21:27:48.095113+00:00",
+      "available_date": null,
+      "bytes": 3021533,
+      "edition_id": "7913babca16da4ba684916dc2ae325902545868323949507bfe18b079a8d1072",
+      "event_acquired_at": "2026-11-27T21:27:48.095113+00:00",
+      "final_url": "https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf",
+      "historical_reference_sha256": [
+        "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-efff91a06cf344122d88"
+      ],
+      "publication_date": null,
+      "publisher": "Lynas Rare Earths",
+      "reacquired_at": null,
+      "receipt_sha256": "29b68c0bab8fb6e8054c35407658960fcef73802cf1739d88d3ba27dc5dbf7f4",
+      "same_url_predecessor_sha256": [],
+      "sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "source_changed": false,
+      "source_key": "mt_weld_2024",
+      "source_keys": [
+        "mt_weld_2024"
+      ],
+      "source_version": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T21:27:48.095113+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "8c684f67932745fff01194722b980e7677cf77ffffeee4a28ea6403e828ab594",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "34c5b638cd65ccb446fb129dae828a79aaffe2221cba4b77caa30e4ea130b066"
+        ],
+        "matching_evidence_ids": [
+          "34c5b638cd65ccb446fb129dae828a79aaffe2221cba4b77caa30e4ea130b066"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:29b68c0bab8fb6e8054c35407658960fcef73802cf1739d88d3ba27dc5dbf7f4",
+          "reference_sha256": "29b68c0bab8fb6e8054c35407658960fcef73802cf1739d88d3ba27dc5dbf7f4",
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503"
+        }
+      ],
+      "url": "https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf",
+      "version_status": "EXACT_SHA_REUSED"
+    },
+    {
+      "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+      "available_date": null,
+      "bytes": 2640515,
+      "edition_id": "60bac9375034f8cbca476f863699277f359bdc7e8be0fa27d61554e598c6812e",
+      "event_acquired_at": "2026-11-27T21:27:46.837574+00:00",
+      "final_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+      "historical_reference_sha256": [
+        "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-9bd8e5ed8408cd84d876"
+      ],
+      "publication_date": null,
+      "publisher": "Northern Minerals Ltd",
+      "reacquired_at": null,
+      "receipt_sha256": "3bba027e86b4d930cf903aee0dc6560453cdfbfe6ecf70ddb30a4e5421afe2e7",
+      "same_url_predecessor_sha256": [],
+      "sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+      "source_changed": false,
+      "source_key": "asx_document_02904920",
+      "source_keys": [
+        "asx_document_02904920"
+      ],
+      "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "8ce5ec897f609de7b82343b89911a8c12d4b6b7e0651e622edefeb0f73786c39",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+        ],
+        "matching_evidence_ids": [
+          "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:3bba027e86b4d930cf903aee0dc6560453cdfbfe6ecf70ddb30a4e5421afe2e7",
+          "reference_sha256": "3bba027e86b4d930cf903aee0dc6560453cdfbfe6ecf70ddb30a4e5421afe2e7",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0"
+        }
+      ],
+      "url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+      "version_status": "EXACT_SHA_REUSED"
+    },
+    {
+      "acquired_at": "2026-11-27T21:27:44.690077+00:00",
+      "available_date": null,
+      "bytes": 3278874,
+      "edition_id": "bb28ca957c49afa8cb995047278ad364f08ede0059e5124d11f11c65cd6fe49f",
+      "event_acquired_at": "2026-11-27T21:27:44.690077+00:00",
+      "final_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896",
+      "historical_reference_sha256": [
+        "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-8f3fe174a998d20ee4cf"
+      ],
+      "publication_date": null,
+      "publisher": "Dreadnought Resources",
+      "reacquired_at": null,
+      "receipt_sha256": "64c3ad75bc9aa1f122c258c0e21a5efb43bfa9a4e29e8f05a2fac722a8fe8463",
+      "same_url_predecessor_sha256": [],
+      "sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "source_changed": false,
+      "source_key": "mangaroon_mre2023",
+      "source_keys": [
+        "mangaroon_mre2023"
+      ],
+      "source_version": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T21:27:44.690077+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "e0dd54fdd4808fc64d004c73eff2eefbbd4156646f9a09c75f1aab5a6d82b890",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "b0470bfefc464c7b5807b07734119967119266c9f9e12ff27ede22b9c2e3b96b"
+        ],
+        "matching_evidence_ids": [
+          "b0470bfefc464c7b5807b07734119967119266c9f9e12ff27ede22b9c2e3b96b"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:64c3ad75bc9aa1f122c258c0e21a5efb43bfa9a4e29e8f05a2fac722a8fe8463",
+          "reference_sha256": "64c3ad75bc9aa1f122c258c0e21a5efb43bfa9a4e29e8f05a2fac722a8fe8463",
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5"
+        }
+      ],
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896",
+      "version_status": "EXACT_SHA_REUSED"
+    }
+  ]
+}

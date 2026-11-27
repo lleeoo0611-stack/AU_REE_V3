@@ -1,6 +1,6 @@
 """Native PDF strategies for whole-ore TREO Mineral Resource declarations."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 from decimal import Decimal, localcontext
 import re
@@ -23,14 +23,27 @@ class ResourceCell:
     column: str
     quote: str
     conflict: str | None = None
+    chemical_basis: str | None = None
+    evidence_issue: str | None = None
+
+    @property
+    def normalized_unit(self) -> str:
+        if self.variable.endswith("_ppm") or (self.variable == "grade" and self.raw_unit == "ppm"):
+            return "ppm"
+        return CANONICAL_UNITS[self.variable]
+
+    @property
+    def factor(self) -> str:
+        if self.raw_unit == "t":
+            return "0.000001" if self.variable == "ore_mt" else "0.001"
+        return "1"
 
     @property
     def value(self) -> str:
         value = exact_value(self.token)
-        if self.raw_unit == "t":
-            parts = value.as_tuple()
-            value = Decimal((parts.sign, parts.digits, parts.exponent - 3))
-        return format(value, "f")
+        shift = Decimal(self.factor).as_tuple().exponent
+        parts = value.as_tuple()
+        return format(Decimal((parts.sign, parts.digits, parts.exponent + shift)), "f")
 
 
 @dataclass(frozen=True)
@@ -41,6 +54,10 @@ class ResourceStatement:
     primary: bool
     measurements: tuple[ResourceCell, ...]
     context: tuple[tuple[int, str], ...] = ()
+    category: str = CATEGORY
+    cutoff_unit: str = "%"
+    cutoff_analyte: str = "TREO"
+    reported_chemical_label: str | None = None
 
 
 def _flatten(text: str) -> str:
@@ -67,10 +84,12 @@ def _check_estimate(cells: tuple[ResourceCell, ...]) -> None:
     ore, grade, contained = [Decimal(cell.value) for cell in cells]
     with localcontext() as context:
         context.prec = sum(len(value.as_tuple().digits) for value in (ore, grade, contained)) + 12
-        lower = (ore - half_width(ore)) * (grade - half_width(grade)) * 10
-        upper = (ore + half_width(ore)) * (grade + half_width(grade)) * 10
+        ppm = cells[1].normalized_unit == "ppm"
+        factor = Decimal("0.001") if ppm else Decimal(10)
+        lower = (ore - half_width(ore)) * (grade - half_width(grade)) * factor
+        upper = (ore + half_width(ore)) * (grade + half_width(grade)) * factor
         compatible = lower - half_width(contained) <= contained <= upper + half_width(contained)
-    if ore <= 0 or not 0 < grade <= 100 or not compatible:
+    if ore <= 0 or not 0 < grade <= (1_000_000 if ppm else 100) or not compatible:
         raise DocumentError("SCIENTIFIC_CONFLICT", "TONNAGE_GRADE_CONTAINED_MISMATCH")
 
 
@@ -213,8 +232,115 @@ def cutoff_series(pages: tuple[str, ...], binding: dict, publication_date: str) 
     return tuple(result)
 
 
+def _declared_context(pages: tuple[str, ...], binding: dict) -> tuple[tuple[int, str], ...]:
+    context = []
+    for item in binding["context"]:
+        actual = _flatten(pages[item["page"] - 1])
+        quote = _flatten(item["quote"])
+        if quote.casefold() not in actual.casefold():
+            raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_STATEMENT_CONTEXT_UNBOUND")
+        context.append((item["page"], quote))
+    declared = " ".join(quote for _, quote in context)
+    for key, reason in (("effective_date", "ESTIMATE_DATE_EVIDENCE_UNBOUND"),
+                        ("publication_date", "ISSUER_DISCLOSURE_DATE_UNBOUND")):
+        token = binding.get(key)
+        if token:
+            day_precision = len(token) == 10
+            estimate = date.fromisoformat(token if day_precision else token + "-01")
+            date_pattern = f"{estimate.day} {estimate:%B},? {estimate.year}" if day_precision else f"{estimate:%B %Y}"
+            if not re.search(rf"\b{date_pattern}\b", declared, re.I):
+                raise DocumentError("EVIDENCE_INSUFFICIENT", reason)
+    cutoff = binding["cutoff"]
+    reported_cutoff = re.search(NUMBER, cutoff["reported"])
+    if (cutoff["reported"].casefold() not in declared.casefold() or reported_cutoff is None
+            or exact_value(reported_cutoff[0]) != exact_value(cutoff["value"])
+            or cutoff["unit"].casefold() not in cutoff["reported"].casefold()):
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "CUTOFF_EVIDENCE_UNBOUND")
+    return tuple(context)
+
+
+def _chemical_holds(cells, binding):
+    if binding.get("requires_chemical_review"):
+        return tuple(replace(cell, evidence_issue="TREO_CHEMICAL_DEFINITION_UNBOUND") for cell in cells)
+    return cells
+
+
+def positioned_total(pages: tuple[str, ...], binding: dict, publication_date: str | None) -> tuple[ResourceStatement, ...]:
+    """Bind a fixed-column native total row to its scoped caption and original units."""
+    context = _declared_context(pages, binding)
+    page = binding["page"]
+    table = binding["table"]
+    raw_page = pages[page - 1]
+    caption = _unique(re.escape(table["caption"]), raw_page, "POSITIONED_TABLE_SCOPE_UNBOUND")
+    if "resource" not in caption[0].casefold() or re.search(r"ore reserve|exploration target", caption[0], re.I):
+        raise DocumentError("SCIENTIFIC_CONFLICT", "MINERAL_RESOURCE_SCOPE_REQUIRED")
+    relative = raw_page[caption.end():]
+    # Restrict the numeric join to the caption's table, excluding following
+    # reserve, prospect, and nested section tables on the physical page.
+    window = re.split(r"(?mi)^[ \t]*(?:Table|Figure) [0-9]+[:. ]", relative, maxsplit=1)[0]
+    row_label = table["row"]
+    column_count = table["column_count"]
+    numeric = r"(?P<tokens>" + NUMBER + (rf"[ \t]+{NUMBER}" * (column_count - 1)) + r")"
+    row = _unique(rf"(?m)^[ \t]*{re.escape(row_label)}[ \t]+{numeric}[ \t]*$", window, "POSITIONED_TOTAL_ROW_UNBOUND")
+    if _flatten(table["header"]).casefold() not in _flatten(window[:row.start()]).casefold():
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "POSITIONED_TABLE_UNITS_UNBOUND")
+    tokens = re.findall(NUMBER, row["tokens"])
+    cells = tuple(
+        ResourceCell(variable, tokens[column["index"]], column["unit"], page, table["caption"], row_label,
+                     column["column"], row[0].strip())
+        for variable, column in zip(VARIABLES, table["columns"], strict=True)
+    )
+    _check_estimate(cells)
+    cutoff = binding["cutoff"]
+    return (ResourceStatement(
+        binding["scope_name"], cutoff["value"], binding.get("effective_date"), True,
+        _chemical_holds(cells, binding), context,
+        binding["category"], cutoff["unit"], cutoff["analyte"], binding.get("reported_chemical_label"),
+    ),)
+
+
+def narrative_ppm_total(pages: tuple[str, ...], binding: dict, publication_date: str | None) -> tuple[ResourceStatement, ...]:
+    """Require exact ore tonnage and grade agreement between an issuer narrative and table."""
+    context = _declared_context(pages, binding)
+    page = binding["page"]
+    summary_page = binding["summary_page"]
+    text = _flatten(pages[summary_page - 1])
+    summary = _unique(
+        rf"{re.escape(binding['narrative_lead'])} ({NUMBER}) Mt grading ({NUMBER}) ppm "
+        rf"Total Rare Earth Oxides \(\"TREO\"\) for ({NUMBER}) tonnes of contained TREO\.",
+        text, "PPM_NARRATIVE_QUANTITIES_UNBOUND",
+    )
+    raw_page = pages[page - 1]
+    table = binding["table"]
+    heading = _unique(re.escape(table["caption"]), raw_page, "PPM_TABLE_CAPTION_UNBOUND")
+    window = raw_page[heading.end():]
+    if _flatten(table["header"]).casefold() not in _flatten(window).casefold():
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "PPM_TABLE_HEADER_UNBOUND")
+    row = _unique(
+        rf"(?m)^[ \t]*Total[ \t]+({NUMBER})[ \t]+({NUMBER})(?:[ \t]+{NUMBER}){{3}}[ \t]*$",
+        window.split("Notes on Mineral Resource Estimation", 1)[0], "PPM_RESOURCE_TOTAL_ROW_UNBOUND",
+    )
+    if tuple(map(exact_value, row.groups())) != tuple(exact_value(summary[i]) for i in (1, 2)):
+        raise DocumentError("SCIENTIFIC_CONFLICT", "NARRATIVE_AND_PPM_TOTAL_MISMATCH")
+    cells = (
+        ResourceCell("ore_mt", row[1], "Mt", page, heading[0], "Total", "Mt", row[0].strip()),
+        ResourceCell("grade", row[2], "ppm", page, heading[0], "Total", "TREO", row[0].strip()),
+        ResourceCell("contained_treo_kt", summary[3], "t", summary_page, "Issuer summary", "Maiden estimate",
+                     "Contained TREO", summary[0]),
+    )
+    _check_estimate(cells)
+    cutoff = binding["cutoff"]
+    return (ResourceStatement(
+        binding["scope_name"], cutoff["value"], binding.get("effective_date"), True,
+        _chemical_holds(cells, binding), context + ((summary_page, summary[0]),),
+        binding["category"], cutoff["unit"], cutoff["analyte"], binding.get("reported_chemical_label"),
+    ),)
+
+
 STRATEGIES = {
     "narrative-and-cited-table-v1": narrative_table,
     "classified-section-totals-v1": classified_sections,
     "cutoff-series-and-detail-tables-v1": cutoff_series,
+    "positioned-mineral-resource-total-v1": positioned_total,
+    "corroborated-ppm-narrative-total-v1": narrative_ppm_total,
 }

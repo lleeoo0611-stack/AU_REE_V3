@@ -119,6 +119,10 @@ jobs:
           get_fixture 'https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf' e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0
           get_fixture 'https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896' eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5
           AU_REE_FRESH_ASSETS="$directory" python -m unittest discover -s tests -p 'test_fresh_observations.py' -v
+          get_fixture 'https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384' 89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864
+          get_fixture 'https://announcements.asx.com.au/asxpdf/20251015/pdf/06qkvvhp20rxx2.pdf' 5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0
+          get_fixture 'https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7763164.pdf?v=63957978608' a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb
+          AU_REE_RESOURCE_YIELD_ASSETS="$directory" python -m unittest discover -s tests -p 'test_resource_yield.py' -v
       - name: Restore a fresh release from its verified local copy
         if: github.event_name == 'workflow_dispatch' && inputs.fresh_release
         run: |

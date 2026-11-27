@@ -43,6 +43,14 @@ def main(argv: list[str] | None = None) -> int:
     combine.add_argument("--out", type=Path, required=True)
     combine.add_argument("--store", type=Path, required=True)
     combine.add_argument("--replica", type=Path)
+    inventory = source_commands.add_parser("inventory", help="Inspect verified captured source content")
+    for argument in ("manifest", "store", "out"):
+        inventory.add_argument(f"--{argument}", type=Path, required=True)
+    inventory.add_argument("--profile", type=Path)
+    inventory.add_argument("--baseline-criteria", type=Path)
+    inventory.add_argument("--alternate-manifest", type=Path, action="append", default=[])
+    inventory.add_argument("--workers", type=int, default=2)
+    inventory.add_argument("--ocr-model", type=Path)
 
     research = commands.add_parser("research", help="Build and verify the fresh research profile")
     research_commands = research.add_subparsers(dest="operation", required=True)
@@ -140,6 +148,13 @@ def _replica_options(parser) -> None:
 def _run_sources(args) -> dict:
     from .sources import acquire_sources, combine_acquisition, discover_sources
 
+    if args.operation == "inventory":
+        from .source_inventory import inventory_sources
+
+        return inventory_sources(args.manifest, args.store, args.out, profile_path=args.profile,
+                                 baseline_criteria=args.baseline_criteria,
+                                 alternate_manifests=tuple(args.alternate_manifest), workers=args.workers,
+                                 ocr_model=args.ocr_model)
     if args.operation == "combine":
         return combine_acquisition(args.profile, args.manifest, args.out, store=args.store, replica=args.replica)
     limits = {"workers": args.workers, "timeout": args.timeout, "per_project_limit": args.per_project_limit}

@@ -1,0 +1,48 @@
+{
+  "measurements": {
+    "wudinna-maiden-estimate": {
+      "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+      "scope": "Wudinna REE Project Mineral Resource, Garford and Pidinga total",
+      "category": "INDICATED_INFERRED_TOTAL",
+      "effective_date": "2026-10-22",
+      "cutoff": ["200", "ppm", "TREO-CeO2"],
+      "selected": [
+        ["ore_mt", "150", "Mt", "150", "Mt", 3],
+        ["grade", "470", "ppm", "470", "ppm", 3],
+        ["contained_treo_kt", "70,400", "t", "70.400", "kt TREO", 1]
+      ]
+    },
+    "goschen-area-one-bulk-oxides": {
+      "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "scope": "Goschen Area 1 in-situ bulk Mineral Resource",
+      "category": "MEASURED_INDICATED_TOTAL",
+      "effective_date": "2025-10-15",
+      "cutoff": ["1", "%", "THM"],
+      "selected": [
+        ["ore_mt", "94,200,000", "t", "94.200000", "Mt", 12],
+        ["grade", "0.08", "%", "0.08", "%", 12],
+        ["contained_treo_kt", "74,000", "t", "74.000", "kt TREO", 12]
+      ]
+    },
+    "yangibana-annual-reaffirmed-resource": {
+      "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+      "scope": "Yangibana Project Total Mineral Resource 100% basis",
+      "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+      "effective_date": "2023-10",
+      "cutoff": ["0.24", "%", "TREO"],
+      "selected": [],
+      "held": [
+        ["ore_mt", "29.93", "Mt", "29.93", "Mt", 14],
+        ["grade", "0.93", "%", "0.93", "%", 14],
+        ["contained_treo_kt", "276,955", "t", "276.955", "kt TREO", 14]
+      ],
+      "reason": "TREO_CHEMICAL_DEFINITION_UNBOUND"
+    }
+  },
+  "wolverine_companion_oxide_values_ppm": {
+    "pr6o11_ppm": "60",
+    "nd2o3_ppm": "280",
+    "dy2o3_ppm": "840",
+    "tb4o7_ppm": "120"
+  }
+}
