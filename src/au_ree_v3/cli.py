@@ -11,6 +11,12 @@ EXIT_CODES = {"PASS": 0, "FAIL": 1, "BLOCKED": 2, "NOT_RUN": 3, "UNMEASURED": 4}
 def main(argv: list[str] | None = None) -> int:
     parser = ArgumentParser(prog="au-ree-v3")
     commands = parser.add_subparsers(dest="command", required=True)
+    replay = commands.add_parser("replay-resource", help="Replay a reviewed exact-source resource binding")
+    replay.add_argument("--bindings", type=Path, required=True)
+    replay.add_argument("--assets", type=Path, required=True)
+    replay.add_argument("--database", type=Path, required=True)
+    replay.add_argument("--out", type=Path, required=True)
+    replay.add_argument("--code-commit", required=True, help="Full commit SHA of the code used")
     migration = commands.add_parser("migration", help="Audit and verify fixed V2 references")
     operations = migration.add_subparsers(dest="operation", required=True)
     for name in ("audit", "build-golden", "verify-crosswalk", "verify-baseline"):
@@ -30,12 +36,17 @@ def main(argv: list[str] | None = None) -> int:
     oracle.add_argument("--out", type=Path, required=True)
     oracle.add_argument("--case-id", action="append", help="Limit the comparison to this case (repeatable)")
     args = parser.parse_args(argv)
+    operation = args.operation if args.command == "migration" else args.command
     try:
-        result = _run_migration(args)
+        if args.command == "replay-resource":
+            from .application import replay as replay_resource
+            result = replay_resource(args.bindings, args.assets, args.database, args.out, code_commit=args.code_commit)
+        else:
+            result = _run_migration(args)
     except (OSError, ValueError) as error:
-        print(f"{args.operation}: {error}", file=sys.stderr)
+        print(f"{operation}: {error}", file=sys.stderr)
         return 1
-    print(json.dumps({"operation": args.operation, "status": result["status"],
+    print(json.dumps({"operation": operation, "status": result["status"],
                       "receipt_directory": str(args.out)}, ensure_ascii=False))
     return EXIT_CODES[result["status"]]
 

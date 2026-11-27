@@ -13,7 +13,7 @@ import re
 import subprocess
 from urllib.parse import unquote
 
-from .audit_capabilities import CAPABILITIES, CAPABILITY_FIELDS, TOOL_CAPABILITIES
+from .audit_capabilities import CAPABILITIES, CAPABILITY_FIELDS, TOOL_CAPABILITIES, V3_VERIFICATIONS
 
 ENGINEERING_REF = "2af6f611e51eb4ac9dda73419d1afeba70d1307e"
 ENGINEERING_TREE = "8ac9cc5713e0d3437f956aed8efb84ef6ae1b5f5"
@@ -381,12 +381,11 @@ def _matrix(entries, discovered, used_by):
         tests = {user for path in paths for user in used_by[path] if user.startswith("tests/")}
         tests.update(path for path in paths if path.startswith("tests/"))
         paths = tuple(path for path in paths if not path.startswith("tests/"))
+        implementation, fixtures, verification = V3_VERIFICATIONS.get(cap_id, ("", "", ""))
         rows.append(dict(zip(CAPABILITY_FIELDS, (
             cap_id, domain, purpose, " | ".join([*(f"au-ree-v2 {c}" for c in commands), *paths]),
             " | ".join(sorted(tests)), " | ".join(path for path in contracts if path in entries),
-            ENGINEERING_REF, v3, "audit inventory" if cap_id == "engineering-audit" else "",
-            decision, "", "python -m au_ree_v3 migration audit --v2-root V2 --out work/migration/audit"
-            if cap_id == "engineering-audit" else "", status, reason,
+            ENGINEERING_REF, v3, implementation, decision, fixtures, verification, status, reason,
             v3.split(" ")[0] if v3 else "", "Sources are fixed to the engineering ref",
         ))))
     unmapped = {f"{kind}:{entry}" for kind, values in discovered.items() for entry in values} - mapped

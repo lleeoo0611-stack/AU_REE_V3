@@ -28,3 +28,18 @@ au-ree-v3 migration compare-oracle --expected tests/golden/golden_expected.jsonl
 ```
 
 `verify-baseline` and `build-golden` accept optional `--assets`. Archive integrity and source availability have separate receipts. Comparison can be limited with a repeatable `--case-id`. Exit codes 0–4 correspond to `PASS`, `FAIL`, `BLOCKED`, `NOT_RUN`, and `UNMEASURED`. See the [acceptance checks](docs/migration/acceptance.md) for each gate’s evidence requirements.
+
+## Recompute the verified Mt Weld slice
+
+The current resource binding covers the 2024 Mt Weld statement and three resource fields at the 2026-11-13 cutoff. It requires Poppler `pdftotext` and the issuer PDF with the SHA-256 listed in the binding. The replay writes an experimental research release and evidence, a three-column Census projection, and Oracle-ready observations and cells.
+
+```sh
+au-ree-v3 replay-resource --bindings config/migration/mt_weld_resource_binding_v1.json \
+  --assets "$ASSET_LIBRARY" --database work/migration/mt-weld/store.sqlite \
+  --out work/migration/mt-weld --code-commit "$(git rev-parse HEAD)"
+
+AU_REE_REPLAY_ASSETS="$ASSET_LIBRARY" \
+  python -m unittest discover -s tests -p 'test_pipeline.py' -v
+```
+
+The integration suite uses named Golden cases for independent comparisons and includes two clean replays and source-error isolation.
