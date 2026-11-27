@@ -3,6 +3,7 @@
 from collections import Counter, defaultdict
 import csv
 from dataclasses import dataclass
+from decimal import Decimal, InvalidOperation
 from hashlib import sha256
 from io import StringIO
 import json
@@ -10,6 +11,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from .census import COLUMNS
+from .census_metadata import CensusMetadata, SHA256, coverage_report, metadata_projection, public_source_url
 from .comparability import census_quantity, resource_context, resource_observation_compatible
 from .contracts import ContractViolation, ResearchRelease, canonical_json
 from .registry import PROJECT_ID_COLUMN, load_census_columns, load_profile, load_registry
@@ -17,8 +19,9 @@ from .research_inputs import ResearchInput, checked_research_inputs
 from .store import Store
 
 SCHEMA = "fresh-census-v1"
+PROJECTION_SCHEMA = "fresh-census-v2"
 IDENTITY_COLUMN = PROJECT_ID_COLUMN
-STATUS_FIELDS = (
+STATUS_FIELDS_V1 = (
     "project_id", "column", "value", "value_state", "reason", "value_origin", "source_search_status",
     "registry_sha256", "release_id", "selection_id", "validation_id", "candidate_id", "observation_id",
     "raw_record_id", "source_key", "source_sha256", "source_url", "anchor_id", "locator", "physical_page",
@@ -26,6 +29,11 @@ STATUS_FIELDS = (
     "category", "raw_value", "raw_unit", "unit", "material_basis", "chemical_basis", "denominator_basis",
     "rules_sha256", "temporal_policy_version", "temporal_status", "temporal_decision_id", "temporal_evidence_ids",
     "comparable", "context_diagnostics",
+)
+STATUS_FIELDS = (*STATUS_FIELDS_V1,
+    "column_id", "data_role", "evidence_state", "projection_policy_version", "projection_policy_sha256",
+    "metadata_evidence", "precision", "lineage_id", "formula_id", "formula_sha256", "input_observation_ids",
+    "geometry_role",
 )
 PROJECTS = 93
 CENSUS_COLUMNS = 51
@@ -134,7 +142,7 @@ def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxe
 
 def _field_status(axes, project, column, searches, selected, decisions):
     source_status = searches.get(project, "STATUS_NOT_PROVIDED")
-    row = {field: "" for field in STATUS_FIELDS}
+    row = {field: "" for field in STATUS_FIELDS_V1}
     row.update(project_id=project, column=column, source_search_status=source_status, comparable="NO")
     if column == IDENTITY_COLUMN:
         row.update(
@@ -159,13 +167,78 @@ def _field_status(axes, project, column, searches, selected, decisions):
     return row
 
 
-def _rows(axes, searches, selected, decisions):
+_SOURCE_REASONS = {
+    "NOT_SEARCHED": "NOT_SEARCHED", "NO_SOURCE_FOUND": "NOT_FOUND_AFTER_SEARCH",
+    "SOURCE_OBJECT_UNAVAILABLE": "SOURCE_UNAVAILABLE", "SOURCE_LOOKUP_BLOCKED": "SOURCE_UNAVAILABLE",
+    "SOURCE_LOCATOR_REACHABLE": "SOURCE_LOCATOR_WITHOUT_VERIFIED_DOCUMENT",
+}
+
+
+def _unknown_reason(row, definition, metadata, has_resource):
+    column_id = definition["column_id"]
+    policy_method = definition["projection_method"]
+    if row["reason"] not in {"FRESH_COLUMN_INPUT_NOT_IMPLEMENTED", "NO_ACCEPTED_OBSERVATION"}:
+        return row["reason"]
+    if column_id == "asx_code":
+        return "LISTING_CODE_NOT_RECORDED_IN_SNAPSHOT"
+    if column_id == "unlisted_company":
+        return "CURRENT_LISTING_STATUS_NOT_ESTABLISHED"
+    if policy_method == "verified_site_point":
+        return "NO_VERIFIED_MINE_OR_DEPOSIT_POINT"
+    if policy_method == "verified_source_manifest":
+        if column_id == "source_name" and (row["project_id"], "有來源文件") in metadata.cells:
+            return "SOURCE_ATTRIBUTION_NOT_RECORDED"
+        return metadata.source_reasons.get(row["project_id"]) or _SOURCE_REASONS.get(
+            row["source_search_status"], "NO_VERIFIED_PROJECT_SOURCE",
+        )
+    source_reason = _SOURCE_REASONS.get(row["source_search_status"])
+    if source_reason:
+        return source_reason
+    if definition["display_group"] in {"resource", "oxide", "aggregate"} and not has_resource:
+        return "NO_SELECTED_MRE"
+    return "NO_APPROVED_SELECTION"
+
+
+def _enrich_cell(row, definition, metadata, has_resource):
+    row.update({field: "" for field in STATUS_FIELDS if field not in row})
+    row.update(
+        column_id=definition["column_id"], data_role=definition["data_role"],
+        projection_policy_version=metadata.policy.version, projection_policy_sha256=metadata.policy.sha256,
+    )
+    supplied = metadata.cells.get((row["project_id"], row["column"]))
+    if supplied is not None and metadata_projection(definition) and row["value_origin"] in {"", "IDENTITY"}:
+        row.update(supplied)
+    if row["value_origin"] == "FORMAL_SELECTION":
+        row["evidence_state"] = "FORMAL_DIRECT"
+        row["precision"] = canonical_json({
+            "mode": "EXACT_SOURCE_TOKEN", "token": row["raw_value"], "unit": row["raw_unit"],
+        })
+    if row["value_state"] == "PRESENT":
+        row["lineage_id"] = projected_lineage_id(row)
+    elif row["value_state"] == "UNKNOWN":
+        row["reason"] = _unknown_reason(row, definition, metadata, has_resource)
+        row["evidence_state"] = {
+            "SOURCE_UNAVAILABLE": "SOURCE_UNAVAILABLE", "NOT_SEARCHED": "NOT_SEARCHED",
+            "TEMPORAL_INELIGIBLE": "TEMPORAL_INELIGIBLE", "CONFLICTING_SELECTED_CONTEXT": "SCIENTIFIC_CONFLICT",
+            "SCIENTIFIC_CONFLICT": "SCIENTIFIC_CONFLICT",
+        }.get(row["reason"], "EVIDENCE_INSUFFICIENT")
+    return row
+
+
+def _rows(axes, searches, selected, decisions, metadata):
     census = []
     status = []
+    definitions = metadata.policy.by_name if metadata is not None else {}
+    resource_projects = {
+        project for (project, column), row in selected.items()
+        if column in COLUMNS.values() and row.get("value_origin") == "FORMAL_SELECTION"
+    }
     for project in axes.project_ids:
         cells = [
             _field_status(axes, project, column, searches, selected, decisions) for column in axes.columns
         ]
+        if metadata is not None:
+            cells = [_enrich_cell(row, definitions[row["column"]], metadata, project in resource_projects) for row in cells]
         census.append({row["column"]: row["value"] for row in cells})
         status.extend(cells)
     return census, status
@@ -190,15 +263,62 @@ def _read_csv(path, headings):
     return rows
 
 
-def _check_outputs(out, axes, expected_status):
+def projected_lineage_id(cell: dict) -> str:
+    fields = {key: "" if value is None else str(value) for key, value in cell.items() if key != "lineage_id"}
+    return sha256(canonical_json(fields).encode("utf-8")).hexdigest()
+
+
+def validate_projected_cell(cell, definition):
+    state, value = cell["value_state"], cell["value"]
+    if state not in {"PRESENT", "UNKNOWN", "NOT_APPLICABLE"} or not cell["evidence_state"]:
+        raise ValueError("Census projection requires both cell and evidence states")
+    if state == "NOT_APPLICABLE":
+        evidence = json.loads(cell["metadata_evidence"] or "{}")
+        if evidence.get("applicability") != "AFFIRMATIVELY_INAPPLICABLE":
+            raise ValueError("Census applicability requires affirmative evidence")
+    if state != "PRESENT":
+        return
+    if cell["lineage_id"] != projected_lineage_id(cell) or cell["column_id"] != definition["column_id"]:
+        raise ValueError("Census projection lacks column-level lineage")
+    kind = definition["data_type"]
+    if kind in {"decimal", "integer"}:
+        try:
+            number = Decimal(value)
+            if not number.is_finite() or (kind == "integer" and number != number.to_integral_value()):
+                raise ValueError("Census cell requires a finite number of its declared type")
+        except InvalidOperation as error:
+            raise ValueError("Census cell requires its declared numeric type") from error
+    elif kind == "boolean_text" and value not in {"是", "否"}:
+        raise ValueError("Census flag requires explicit yes or no")
+    elif kind == "https_url" and public_source_url(value) is None:
+        raise ValueError("Census URL is not a public HTTPS reference")
+    if definition["source_edition_required"] and not SHA256.fullmatch(cell["source_sha256"]):
+        raise ValueError("Census projection lacks an exact source edition")
+    if cell["evidence_state"] in {"FORMAL_DIRECT", "FORMAL_DERIVED"}:
+        if not cell["temporal_decision_id"] or cell["temporal_status"] != "ELIGIBLE":
+            raise ValueError("formal Census cell requires a temporal decision")
+        if cell["evidence_state"] == "FORMAL_DIRECT" and not all(
+            cell[key] for key in ("selection_id", "observation_id", "anchor_id")
+        ):
+            raise ValueError("direct Census cell requires formal selection lineage")
+        if cell["evidence_state"] == "FORMAL_DERIVED" and not all(
+            cell[key] for key in ("formula_id", "formula_sha256", "input_observation_ids", "precision")
+        ):
+            raise ValueError("derived Census cell requires pinned formula and input lineage")
+    elif not cell["metadata_evidence"]:
+        raise ValueError("display Census cell requires its bounded metadata evidence")
+
+
+def _check_outputs(out, axes, expected_status, metadata):
     data = _read_csv(out / "census.csv", axes.columns)
-    cells = _read_csv(out / "cell_status.csv", STATUS_FIELDS)
+    cells = _read_csv(out / "cell_status.csv", STATUS_FIELDS if metadata is not None else STATUS_FIELDS_V1)
     if tuple(row[IDENTITY_COLUMN] for row in data) != axes.project_ids:
         raise ValueError("Census project IDs or order do not match the registry")
     if len(cells) != len(expected_status) or len(cells) != PROJECTS * CENSUS_COLUMNS:
         raise ValueError("Census cell ledger size differs from the declared grid")
 
     actual_values = {(row[IDENTITY_COLUMN], col): row[col] for row in data for col in axes.columns}
+    definitions = metadata.policy.by_name if metadata is not None else {}
     for cell, expected in zip(cells, expected_status, strict=True):
         identity = cell["project_id"], cell["column"]
         if any(cell[key] != ("" if value is None else str(value)) for key, value in expected.items()):
@@ -210,27 +330,35 @@ def _check_outputs(out, axes, expected_status):
                 raise ValueError(f"Present cell has no value for {identity}")
         elif cell["value"] != "" or not cell["reason"]:
             raise ValueError(f"Census missing value lacks a reason or has a value for {identity}")
+        if metadata is not None:
+            validate_projected_cell(cell, definitions[cell["column"]])
     return cells
 
 
-def _prepared(profile, store, release_id, project_statuses):
+def _prepared(profile, store, release_id, project_statuses, metadata):
     axes = CensusAxes.load(Path(profile))
     searches = project_statuses or {}
     if not set(searches).issubset(axes.project_ids) or any(
         not isinstance(status, str) or not status.strip() for status in searches.values()
     ):
         raise ContractViolation("Census search statuses require registered projects and nonempty source states")
+    if metadata is not None and (
+        (metadata.profile_sha256, metadata.registry_sha256) != (axes.profile_sha, axes.registry_sha)
+        or tuple(metadata.policy.by_name) != axes.columns
+        or any(project not in axes.project_ids or column not in axes.columns for project, column in metadata.cells)
+    ):
+        raise ContractViolation("Census display metadata does not belong to the pinned axes")
     release_mode, selected, decisions = _selection_rows(store, release_id, axes)
-    return axes, release_mode, *_rows(axes, searches, selected, decisions)
+    return axes, release_mode, *_rows(axes, searches, selected, decisions, metadata)
 
 
-def _receipt(out, axes, release_id, release_mode, cells):
+def _receipt(out, axes, release_id, release_mode, cells, metadata):
     origins = Counter(row["value_origin"] for row in cells if row["value_state"] == "PRESENT")
     values_by_column = Counter(row["column"] for row in cells if row["value_origin"] == "FORMAL_SELECTION")
     states = Counter(row["value_state"] for row in cells)
     unknown = Counter(row["reason"] for row in cells if row["value_state"] == "UNKNOWN")
     source_statuses = Counter(row["source_search_status"] for row in cells if row["column"] == IDENTITY_COLUMN)
-    return {
+    receipt = {
         "schema_version": SCHEMA, "gate": "F3", "status": "PASS",
         "profile_id": axes.profile_id, "research_cutoff": axes.cutoff, "timezone": axes.timezone,
         "profile_sha256": axes.profile_sha,
@@ -245,20 +373,28 @@ def _receipt(out, axes, release_id, release_mode, cells):
         "unknown_reasons": dict(unknown), "project_source_search_statuses": dict(source_statuses),
         "outputs": {name: _sha(out / name) for name in ("census.csv", "cell_status.csv")},
     }
+    if metadata is not None:
+        receipt.update(
+            schema_version=PROJECTION_SCHEMA, projection_policy_version=metadata.policy.version,
+            projection_policy_sha256=metadata.policy.sha256, coverage=coverage_report(cells, metadata.policy),
+        )
+    return receipt
 
 
 def build_census(profile: Path, out: Path, *, store: Store | None = None,
-                 release_id: str | None = None, project_statuses: dict[str, str] | None = None) -> dict:
+                 release_id: str | None = None, project_statuses: dict[str, str] | None = None,
+                 metadata: CensusMetadata | None = None) -> dict:
     """Build the grid and verify its CSV values and state ledger before publishing a receipt."""
-    axes, release_mode, census, expected_status = _prepared(profile, store, release_id, project_statuses)
+    axes, release_mode, census, expected_status = _prepared(profile, store, release_id, project_statuses, metadata)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory(prefix=".census-", dir=out) as staging:
         staged = Path(staging)
         (staged / "census.csv").write_bytes(_csv_bytes(axes.columns, census))
-        (staged / "cell_status.csv").write_bytes(_csv_bytes(STATUS_FIELDS, expected_status))
-        cells = _check_outputs(staged, axes, expected_status)
-        receipt = _receipt(staged, axes, release_id, release_mode, cells)
+        fields = STATUS_FIELDS if metadata is not None else STATUS_FIELDS_V1
+        (staged / "cell_status.csv").write_bytes(_csv_bytes(fields, expected_status))
+        cells = _check_outputs(staged, axes, expected_status, metadata)
+        receipt = _receipt(staged, axes, release_id, release_mode, cells, metadata)
         (staged / "census_receipt.json").write_text(canonical_json(receipt) + "\n", encoding="utf-8")
         for filename in ("census.csv", "cell_status.csv", "census_receipt.json"):
             (staged / filename).replace(out / filename)
@@ -266,12 +402,13 @@ def build_census(profile: Path, out: Path, *, store: Store | None = None,
 
 
 def verify_census(profile: Path, out: Path, *, store: Store | None = None,
-                  release_id: str | None = None, project_statuses: dict[str, str] | None = None) -> dict:
+                  release_id: str | None = None, project_statuses: dict[str, str] | None = None,
+                  metadata: CensusMetadata | None = None) -> dict:
     """Re-resolve governed inputs and verify a previously emitted Census receipt."""
-    axes, release_mode, _, expected_status = _prepared(profile, store, release_id, project_statuses)
+    axes, release_mode, _, expected_status = _prepared(profile, store, release_id, project_statuses, metadata)
     out = Path(out)
-    cells = _check_outputs(out, axes, expected_status)
-    receipt = _receipt(out, axes, release_id, release_mode, cells)
+    cells = _check_outputs(out, axes, expected_status, metadata)
+    receipt = _receipt(out, axes, release_id, release_mode, cells, metadata)
     found = json.loads((out / "census_receipt.json").read_text(encoding="utf-8"))
     if found != receipt:
         raise ValueError("Census receipt fingerprint or profile does not match")

@@ -8,6 +8,7 @@ from collections import defaultdict
 from hashlib import sha256
 from pathlib import Path
 
+from .census_metadata import CensusMetadata, prepare_census_metadata
 from .contracts import canonical_json
 from .contracts.temporal import evaluate_temporal
 from .fresh_census import build_census
@@ -24,10 +25,6 @@ BUILD_SCHEMA = "fresh-research-build-v1"
 
 def _sha(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
-
-
-def _read_json(path: Path) -> dict:
-    return json.loads(path.read_bytes())
 
 
 def _json_value(value: object) -> object:
@@ -154,16 +151,21 @@ def verify_source_manifest(profile, source_manifest: dict, registry, content: Co
     }
 
 
-def _research_projections(profile: Path, out: Path, database: Path, observation_receipt: dict, statuses: dict):
+def _research_projections(
+    profile: Path, out: Path, database: Path, observation_receipt: dict, statuses: dict, metadata: CensusMetadata,
+):
     release_id = observation_receipt["release_id"]
     if release_id is None:
         return (
-            build_census(profile, out / "census", project_statuses=statuses),
+            build_census(profile, out / "census", project_statuses=statuses, metadata=metadata),
             build_decision(profile, out / "decision"),
         )
     with Store(database, trusted_temporal_evidence_ids=observation_receipt["trusted_temporal_evidence_ids"]) as store:
         return (
-            build_census(profile, out / "census", store=store, release_id=release_id, project_statuses=statuses),
+            build_census(
+                profile, out / "census", store=store, release_id=release_id,
+                project_statuses=statuses, metadata=metadata,
+            ),
             build_decision(profile, out / "decision", store=store, release_id=release_id),
         )
 
@@ -182,8 +184,11 @@ def build_research(
     columns = load_census_columns(settings.census_columns_path)
     if len(registry.projects) != settings.project_count or len(columns) != settings.census_column_count:
         raise ValueError("profile cohort or columns disagree with their pinned contracts")
-    source_manifest = _read_json(sources)
+    source_bytes = sources.read_bytes()
+    source_sha = sha256(source_bytes).hexdigest()
+    source_manifest = json.loads(source_bytes)
     source_receipt = verify_source_manifest(settings, source_manifest, registry, ContentStore(assets))
+    metadata = prepare_census_metadata(profile, source_manifest, source_receipt, source_manifest_sha256=source_sha)
     extraction_sources = sources
     if source_receipt["failures"]:
         verified = set(source_receipt["verified_capture_sha256"])
@@ -194,15 +199,18 @@ def build_research(
         extraction_sources.write_text(canonical_json(subset) + "\n", encoding="utf-8")
     db = out / "observations" / "research.sqlite"
     extraction = extract_sources(bindings, extraction_sources, assets, db, out / "observations", code_commit=code_commit)
-    census, decision = _research_projections(profile, out, db, extraction, source_receipt["project_statuses"])
+    if _sha(sources) != source_sha:
+        raise ValueError("source manifest changed during research build")
+    census, decision = _research_projections(profile, out, db, extraction, source_receipt["project_statuses"], metadata)
     artifact_hashes = {name: _sha(out / name) for name in ARTIFACTS}
     result = {
         "schema": BUILD_SCHEMA, "profile_id": settings.profile_id, "research_cutoff": settings.research_cutoff.isoformat(),
         "code_commit": code_commit, "project_registry_hash": registry.sha256,
         "census_columns_sha256": _sha(settings.census_columns_path),
+        "census_projection_policy_sha256": metadata.policy.sha256,
         "evidence_policy_version": "public-response-capture-v1", "parser_version": extraction["parser"],
         "database_schema": SCHEMA_VERSION, "selection_rules_hash": extraction["rules_sha256"],
-        "input_artifacts": {"profile": _sha(profile), "bindings": _sha(bindings), "sources": _sha(sources)},
+        "input_artifacts": {"profile": _sha(profile), "bindings": _sha(bindings), "sources": source_sha},
         "environment": environment_lock(), "scientific_artifacts": artifact_hashes,
         "gates": {"F0": "PASS", "F1": source_receipt["status"], "F2": extraction["status"], "F3": census["status"]},
         "scientific_output_count": census["formal_scientific_cells"],

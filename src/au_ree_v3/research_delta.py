@@ -12,16 +12,20 @@ from pathlib import Path
 import re
 
 from .census import COLUMNS
+from .census_metadata import METADATA_ORIGINS, coverage_report, load_projection_policy, metadata_projection
 from .comparability import census_quantity
 from .contracts import canonical_json
 from .decision import leave_one_out, rank_panel
+from .fresh_census import PROJECTION_SCHEMA, STATUS_FIELDS, validate_projected_cell
 from .publication import ContentReplica, load_release
 from .registry import PROJECT_ID_COLUMN
 from .research_artifacts import ARTIFACTS
 
 SCHEMA = "research-delta-v1"
 _RECEIPT_FIELDS = {"release_id", "selection_id", "validation_id", "rules_sha256",
-                   "source_search_status", "context_diagnostics"}
+                   "source_search_status", "context_diagnostics", "column_id", "data_role", "evidence_state",
+                   "projection_policy_version", "projection_policy_sha256", "precision", "lineage_id",
+                   "metadata_evidence", "formula_id", "formula_sha256", "input_observation_ids", "geometry_role"}
 _SCIENCE_FIELDS = {"value", "unit", "raw_value", "raw_unit"}
 _LINEAGE_KEYS = {"release_id", "selection_id", "validation_id", "observation_id",
                  "source_sha256", "scope_id", "anchor_id"}
@@ -134,9 +138,27 @@ def _same_census_quantity(cell, observation) -> bool:
     )
 
 
+def _check_display_metadata(cell, definition, receipt):
+    origin = cell["value_origin"]
+    if origin not in METADATA_ORIGINS or not metadata_projection(definition) or cell["evidence_state"] != "DESCRIPTIVE_ONLY":
+        raise ValueError("Census display value lacks an allowed metadata projection")
+    evidence = _object(cell["metadata_evidence"].encode("utf-8"), "metadata_evidence")
+    if evidence.get("display_only") is not True:
+        raise ValueError("Census display value lacks a bounded evidence role")
+    if origin == "SOURCE_EVIDENCE":
+        if (evidence.get("source_manifest_sha256") != receipt["input_artifacts"]["sources"]
+            or evidence.get("source_sha256") != cell["source_sha256"]
+            or evidence.get("temporal_decision_id") != cell["temporal_decision_id"]
+            or evidence.get("scope") != "PROJECT_REFERENCE_ONLY" or cell["temporal_status"] != "ELIGIBLE"
+            or not _DIGEST.fullmatch(cell["temporal_decision_id"]) or not json.loads(cell["temporal_evidence_ids"])):
+            raise ValueError("Census source metadata lacks an eligible project-level source")
+    elif cell["registry_sha256"] != receipt["project_registry_hash"] or evidence.get("registry_sha256") != cell["registry_sha256"]:
+        raise ValueError("Census display value does not reference the pinned Registry")
+
+
 def _census(artifacts, receipt, observations):
     columns, table = _csv(artifacts["census/census.csv"], "census.csv")
-    _, cells = _csv(artifacts["census/cell_status.csv"], "cell_status.csv")
+    fields, cells = _csv(artifacts["census/cell_status.csv"], "cell_status.csv")
     census_receipt = _object(artifacts["census/census_receipt.json"], "census_receipt.json")
     if census_receipt["outputs"] != {
         name: receipt["scientific_artifacts"]["census/" + name] for name in ("census.csv", "cell_status.csv")
@@ -151,6 +173,17 @@ def _census(artifacts, receipt, observations):
     projects = tuple(row[PROJECT_ID_COLUMN] for row in table)
     if (len(projects), len(columns), len(cells)) != (93, 51, 4743) or len(set(projects)) != 93:
         raise ValueError("Expected the exact 93 Project by 51 column Census grid")
+    policy = None
+    if census_receipt["schema_version"] == PROJECTION_SCHEMA:
+        policy = load_projection_policy(columns)
+        if (fields != STATUS_FIELDS or receipt.get("census_projection_policy_sha256") != policy.sha256
+            or census_receipt.get("projection_policy_sha256") != policy.sha256
+            or census_receipt.get("projection_policy_version") != policy.version
+            or census_receipt.get("coverage") != coverage_report(cells, policy)):
+            raise ValueError("Census projection or coverage differs from the pinned column policy")
+    elif "census_projection_policy_sha256" in receipt:
+        raise ValueError("Census projection is missing its versioned ledger")
+    definitions = policy.by_name if policy else {}
     tabular = {(row[PROJECT_ID_COLUMN], column): row[column] for row in table for column in columns}
     result = {}
     formal = 0
@@ -161,14 +194,24 @@ def _census(artifacts, receipt, observations):
         state, origin = cell["value_state"], cell["value_origin"]
         if state not in {"PRESENT", "UNKNOWN", "NOT_APPLICABLE"} or (state == "PRESENT") != bool(cell["value"]):
             raise ValueError(f"Invalid Census value state: {key}")
+        if policy:
+            definition = definitions[key[1]]
+            if (cell["column_id"] != definition["column_id"] or cell["data_role"] != definition["data_role"]
+                or cell["projection_policy_sha256"] != policy.sha256
+                or cell["projection_policy_version"] != policy.version):
+                raise ValueError(f"Census ledger column role differs from its policy: {key}")
+            validate_projected_cell(cell, definition)
         if key[1] == PROJECT_ID_COLUMN:
             if origin != "IDENTITY" or cell["value"] != key[0] or cell["registry_sha256"] != receipt["project_registry_hash"]:
                 raise ValueError(f"Registry identity differs from its pinned Census key: {key}")
+        elif state == "PRESENT" and policy and origin in METADATA_ORIGINS:
+            _check_display_metadata(cell, definition, receipt)
         elif state == "PRESENT":
             observation = observations.get(cell["observation_id"])
             _check_observation(cell, observation, key[0], receipt["observation_release_id"])
             if (
                 census_receipt["release_mode"] != "FORMAL" or origin != "FORMAL_SELECTION"
+                or (policy and cell["evidence_state"] != "FORMAL_DIRECT")
                 or cell["temporal_status"] != "ELIGIBLE"
                 or not _DIGEST.fullmatch(cell["temporal_decision_id"])
                 or not json.loads(cell["temporal_evidence_ids"])
@@ -313,6 +356,8 @@ def _census_delta(baseline, current):
                 kind = "FORMAL_ADDED"
             elif formal_before and not formal_after:
                 kind = "FORMAL_RETURNED"
+            elif not formal_before and not formal_after and before["value"] != after["value"]:
+                kind = "DISPLAY_VALUE_CHANGED"
             elif set(changed) & _SCIENCE_FIELDS:
                 kind = "VALUE_OR_PRECISION_CHANGED"
             elif set(changed) & {"value_state", "value_origin"}:

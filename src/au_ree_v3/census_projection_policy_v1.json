@@ -1,0 +1,1831 @@
+{
+  "schema_version": "census-projection-policy-v1",
+  "projection_policy_version": "census-projection-v1",
+  "cohort_country": {
+    "display": "澳洲",
+    "native": "Australia",
+    "rule": "AU_FIXED_RESEARCH_COHORT"
+  },
+  "state_labels": {
+    "西澳大利亞州": "Western Australia",
+    "北領地": "Northern Territory",
+    "維多利亞州": "Victoria",
+    "南澳大利亞州": "South Australia",
+    "昆士蘭州": "Queensland",
+    "新南威爾斯州": "New South Wales",
+    "塔斯馬尼亞州": "Tasmania",
+    "澳洲首都領地": "Australian Capital Territory"
+  },
+  "columns": [
+    {
+      "column_id": "project_id",
+      "display_name": "專案ID",
+      "display_name_en": "Project ID",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "REGISTRY_IDENTITY",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "registry_snapshot",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "identity",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "developer",
+      "display_name": "開發商",
+      "display_name_en": "Developer (registry snapshot)",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "registry_snapshot",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "identity",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "unlisted_company",
+      "display_name": "未上市公司",
+      "display_name_en": "Unlisted company (verified status)",
+      "data_type": "boolean_text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "listing_status_review",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "identity",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "project_name",
+      "display_name": "專案名稱",
+      "display_name_en": "Project name",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "registry_snapshot",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "identity",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "location_zh",
+      "display_name": "所在地_中文",
+      "display_name_en": "Administrative location (Chinese)",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "registry_state_mapping",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "ADMINISTRATIVE_LEVEL_ONLY"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "location",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "location_en",
+      "display_name": "所在地_英文",
+      "display_name_en": "Administrative location (English)",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "registry_state_mapping",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "ADMINISTRATIVE_LEVEL_ONLY"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "location",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "country",
+      "display_name": "國家",
+      "display_name_en": "Country",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "profile_country_rule",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "ADMINISTRATIVE_LEVEL_ONLY"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "location",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "state",
+      "display_name": "州省地區",
+      "display_name_en": "State or territory",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "registry_snapshot",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "ADMINISTRATIVE_LEVEL_ONLY"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "location",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "latitude",
+      "display_name": "緯度",
+      "display_name_en": "Latitude",
+      "data_type": "decimal",
+      "display_unit": "decimal_degrees",
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "verified_site_point",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE",
+        "VERIFIED_MINE_OR_DEPOSIT_POINT",
+        "CRS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "location",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "longitude",
+      "display_name": "經度",
+      "display_name_en": "Longitude",
+      "data_type": "decimal",
+      "display_unit": "decimal_degrees",
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "verified_site_point",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE",
+        "VERIFIED_MINE_OR_DEPOSIT_POINT",
+        "CRS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "location",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "deposit_type_code",
+      "display_name": "礦床型態代碼",
+      "display_name_en": "Deposit type code",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "reviewed_geological_classification",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "geology",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "deposit_type",
+      "display_name": "礦床型態",
+      "display_name_en": "Deposit type",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "reviewed_geological_classification",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "geology",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "development_stage_code",
+      "display_name": "開發階段代碼",
+      "display_name_en": "Development stage code",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "approved_completed_stage",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "development",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "development_stage_category",
+      "display_name": "開發階段類別",
+      "display_name_en": "Development stage category",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "approved_completed_stage",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "development",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "development_stage",
+      "display_name": "開發階段",
+      "display_name_en": "Development stage",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "approved_completed_stage",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "development",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "ore_mt",
+      "display_name": "礦石蘊藏量_Mt",
+      "display_name_en": "Mineral resource ore (Mt)",
+      "data_type": "decimal",
+      "display_unit": "Mt",
+      "data_role": "FORMAL_OBSERVATION",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "governed_resource_selection",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "resource",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "R1"
+      ]
+    },
+    {
+      "column_id": "treo_grade_pct",
+      "display_name": "TREO品位_pct",
+      "display_name_en": "TREO grade (%)",
+      "data_type": "decimal",
+      "display_unit": "%",
+      "data_role": "FORMAL_OBSERVATION",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "governed_resource_selection",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "resource",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "R1"
+      ]
+    },
+    {
+      "column_id": "contained_treo_kt",
+      "display_name": "總TREO蘊藏量_kt",
+      "display_name_en": "Contained TREO (kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_OBSERVATION",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "governed_resource_selection",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "resource",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "R1"
+      ]
+    },
+    {
+      "column_id": "magnet_oxide_kt",
+      "display_name": "磁鐵稀土氧化物蘊藏量_kt",
+      "display_name_en": "Contained magnet oxides (kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_group_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "magnet_pct_of_treo",
+      "display_name": "磁鐵稀土佔TREO_pct",
+      "display_name_en": "Magnet oxides / TREO (%)",
+      "data_type": "decimal",
+      "display_unit": "%",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_same_statement_ratio",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "ndpr_kt",
+      "display_name": "NdPr蘊藏量_kt_需兩者皆公布",
+      "display_name_en": "NdPr oxides, both reported (kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_group_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "hree8_kt",
+      "display_name": "完整重稀土組合蘊藏量_kt_需8元素皆公布",
+      "display_name_en": "Eight heavy rare earth oxides (kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_group_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "forecast_treo_t_per_year",
+      "display_name": "預估年產TREO_t_per_year",
+      "display_name_en": "Forecast TREO production (t/year)",
+      "data_type": "decimal",
+      "display_unit": "t/year",
+      "data_role": "FORECAST",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "approved_production_forecast",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "FORECAST_DECLARATION_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "production",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "forecast_ndpr_t_per_year",
+      "display_name": "預估年產NdPr_t_per_year",
+      "display_name_en": "Forecast NdPr production (t/year)",
+      "data_type": "decimal",
+      "display_unit": "t/year",
+      "data_role": "FORECAST",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "approved_production_forecast",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "FORECAST_DECLARATION_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "production",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "product_output",
+      "display_name": "產品/產出",
+      "display_name_en": "Product and output",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "DESCRIPTIVE",
+      "source_priority": [
+        "PURPOSE_VERIFIED_SOURCE"
+      ],
+      "input_contract": "purpose-verified-observation-v1",
+      "projection_method": "reviewed_product_description",
+      "required_evidence": [
+        "SOURCE_EDITION",
+        "PURPOSE_SPECIFIC_ANCHOR",
+        "TEMPORAL_DECISION"
+      ],
+      "temporal_role": "PURPOSE_TIME_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PURPOSE_SCOPE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "production",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "has_treo_resource",
+      "display_name": "有TREO資源估計",
+      "display_name_en": "Has qualified TREO resource estimate",
+      "data_type": "boolean_text",
+      "display_unit": null,
+      "data_role": "EVIDENCE_REFERENCE",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "governed_resource_presence",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "resource",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "has_source_document",
+      "display_name": "有來源文件",
+      "display_name_en": "Has verified source file",
+      "data_type": "boolean_text",
+      "display_unit": null,
+      "data_role": "EVIDENCE_REFERENCE",
+      "source_priority": [
+        "VERIFIED_CAPTURE_AT_CUTOFF"
+      ],
+      "input_contract": "fresh-source-manifest-v1",
+      "projection_method": "verified_source_manifest",
+      "required_evidence": [
+        "EXACT_ORIGINAL_BYTES",
+        "CAPTURE_RECEIPT_SHA256",
+        "ELIGIBLE_TEMPORAL_DECISION"
+      ],
+      "temporal_role": "SOURCE_EDITION_PUBLIC_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PROJECT_SOURCE_REFERENCE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "evidence",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "source_name",
+      "display_name": "資料來源名稱",
+      "display_name_en": "Project source attribution",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "EVIDENCE_REFERENCE",
+      "source_priority": [
+        "VERIFIED_CAPTURE_AT_CUTOFF"
+      ],
+      "input_contract": "fresh-source-manifest-v1",
+      "projection_method": "verified_source_manifest",
+      "required_evidence": [
+        "EXACT_ORIGINAL_BYTES",
+        "CAPTURE_RECEIPT_SHA256",
+        "ELIGIBLE_TEMPORAL_DECISION"
+      ],
+      "temporal_role": "SOURCE_EDITION_PUBLIC_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PROJECT_SOURCE_REFERENCE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "evidence",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "source_url",
+      "display_name": "資料來源URL",
+      "display_name_en": "Project source URL",
+      "data_type": "https_url",
+      "display_unit": null,
+      "data_role": "EVIDENCE_REFERENCE",
+      "source_priority": [
+        "VERIFIED_CAPTURE_AT_CUTOFF"
+      ],
+      "input_contract": "fresh-source-manifest-v1",
+      "projection_method": "verified_source_manifest",
+      "required_evidence": [
+        "EXACT_ORIGINAL_BYTES",
+        "CAPTURE_RECEIPT_SHA256",
+        "ELIGIBLE_TEMPORAL_DECISION"
+      ],
+      "temporal_role": "SOURCE_EDITION_PUBLIC_AT_CUTOFF",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID",
+        "PROJECT_SOURCE_REFERENCE"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "evidence",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "reported_oxide_count",
+      "display_name": "已公布元素數_共15項",
+      "display_name_en": "Reported oxide members out of 15",
+      "data_type": "integer",
+      "display_unit": "count",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_member_count",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "WHOLE_NUMBER",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "reported_oxide_sum_kt",
+      "display_name": "已公布元素總和_kt",
+      "display_name_en": "Reported member oxide mass (kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_group_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "oxide_sum_over_treo",
+      "display_name": "元素總和/TREO",
+      "display_name_en": "Reported oxide mass / TREO",
+      "data_type": "decimal",
+      "display_unit": "ratio",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_same_statement_ratio",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "overview_note",
+      "display_name": "總說明",
+      "display_name_en": "Project metadata notes",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "DESCRIPTIVE",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "VERIFIED_SOURCE_MANIFEST"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "bounded_metadata_summary",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "evidence",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    },
+    {
+      "column_id": "has_four_magnet_oxides",
+      "display_name": "四項磁性元素皆公布",
+      "display_name_en": "All four magnet oxides reported",
+      "data_type": "boolean_text",
+      "display_unit": null,
+      "data_role": "EVIDENCE_REFERENCE",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_member_presence",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "recalculated_magnet_oxide_kt",
+      "display_name": "磁性元素重算值_NdPrTbDy_kt",
+      "display_name_en": "Recalculated NdPrTbDy oxide mass (kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_group_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "aggregate",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "la2o3_kt",
+      "display_name": "La2O3_氧化鑭_kt",
+      "display_name_en": "Lanthanum oxide (La2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "ceo2_kt",
+      "display_name": "CeO2_氧化鈰_kt",
+      "display_name_en": "Cerium oxide (CeO2, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "pr6o11_kt",
+      "display_name": "Pr6O11_氧化鐠_kt",
+      "display_name_en": "Praseodymium oxide (Pr6O11, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "nd2o3_kt",
+      "display_name": "Nd2O3_氧化釹_kt",
+      "display_name_en": "Neodymium oxide (Nd2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "sm2o3_kt",
+      "display_name": "Sm2O3_氧化釤_kt",
+      "display_name_en": "Samarium oxide (Sm2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "eu2o3_kt",
+      "display_name": "Eu2O3_氧化銪_kt",
+      "display_name_en": "Europium oxide (Eu2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "gd2o3_kt",
+      "display_name": "Gd2O3_氧化釓_kt",
+      "display_name_en": "Gadolinium oxide (Gd2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "tb4o7_kt",
+      "display_name": "Tb4O7_氧化鋱_kt",
+      "display_name_en": "Terbium oxide (Tb4O7, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "dy2o3_kt",
+      "display_name": "Dy2O3_氧化鏑_kt",
+      "display_name_en": "Dysprosium oxide (Dy2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "ho2o3_kt",
+      "display_name": "Ho2O3_氧化鈥_kt",
+      "display_name_en": "Holmium oxide (Ho2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "er2o3_kt",
+      "display_name": "Er2O3_氧化鉺_kt",
+      "display_name_en": "Erbium oxide (Er2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "tm2o3_kt",
+      "display_name": "Tm2O3_氧化銩_kt",
+      "display_name_en": "Thulium oxide (Tm2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "yb2o3_kt",
+      "display_name": "Yb2O3_氧化鐿_kt",
+      "display_name_en": "Ytterbium oxide (Yb2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "lu2o3_kt",
+      "display_name": "Lu2O3_氧化鎦_kt",
+      "display_name_en": "Lutetium oxide (Lu2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "y2o3_kt",
+      "display_name": "Y2O3_氧化釔_kt",
+      "display_name_en": "Yttrium oxide (Y2O3, kt)",
+      "data_type": "decimal",
+      "display_unit": "kt",
+      "data_role": "FORMAL_DERIVED",
+      "source_priority": [
+        "GOVERNED_STORE_SELECTION"
+      ],
+      "input_contract": "governed-research-input-v1",
+      "projection_method": "approved_oxide_mass",
+      "required_evidence": [
+        "OBSERVATION_AND_ANCHOR",
+        "SOURCE_EDITION",
+        "GOVERNED_SELECTION",
+        "PURPOSE_BASIS",
+        "VERSIONED_FORMULA",
+        "PRECISION",
+        "ALL_INPUT_OBSERVATION_IDS"
+      ],
+      "temporal_role": "HISTORICAL_MEASUREMENT_AT_CUTOFF",
+      "scope_requirements": [
+        "SAME_PROJECT_DEPOSIT_SCOPE_STATEMENT",
+        "SAME_EFFECTIVE_DATE_AND_CUTOFF",
+        "JORC_MATERIAL_AND_CHEMICAL_BASIS"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "oxide",
+      "display_precision": "SOURCE_OR_FORMULA",
+      "provenance_required": true,
+      "source_edition_required": true,
+      "mcda_use": false,
+      "criterion_links": [
+        "S1"
+      ]
+    },
+    {
+      "column_id": "asx_code",
+      "display_name": "ASX代碼",
+      "display_name_en": "ASX code (registry snapshot)",
+      "data_type": "text",
+      "display_unit": null,
+      "data_role": "VERIFIED_METADATA",
+      "source_priority": [
+        "REGISTRY_SNAPSHOT",
+        "PROFILE_POLICY"
+      ],
+      "input_contract": "project-registry-v1",
+      "projection_method": "registry_snapshot",
+      "required_evidence": [
+        "REGISTRY_SHA256",
+        "PINNED_NATIVE_FIELD_OR_PROFILE_RULE"
+      ],
+      "temporal_role": "PINNED_SNAPSHOT_DISPLAY",
+      "scope_requirements": [
+        "FIXED_PROJECT_ID"
+      ],
+      "null_policy": "UNKNOWN_WITH_REASON_NO_IMPUTATION",
+      "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+      "validation_rule": "TYPE_AND_PINNED_LINEAGE",
+      "display_group": "identity",
+      "display_precision": "EXACT_TEXT",
+      "provenance_required": true,
+      "source_edition_required": false,
+      "mcda_use": false,
+      "criterion_links": []
+    }
+  ]
+}
