@@ -1,0 +1,39 @@
+{
+  "evidence": [
+    {
+      "case_id": "mt-weld-resource",
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "observed": "Physical p2, reported estimate narrative and cited Table 1 Total. The narrative grade 4.12% has greater reported precision than the table's 4.1%.",
+      "selected": [
+        ["ore_mt", "106.6", "million tonnes", "106.6", "Mt", 2, "2.5", "2024-06-30"],
+        ["grade", "4.12", "%", "4.12", "%", 2, "2.5", "2024-06-30"],
+        ["contained_treo_kt", "4,389", "‘000 tonnes", "4389", "kt TREO", 2, "2.5", "2024-06-30"]
+      ]
+    },
+    {
+      "case_id": "wolverine-deposit-total",
+      "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+      "observed": "Physical p5, Table 2 Wolverine Total, 15 January 2025; its Open Pit and Underground subtotals are distinct scopes and ineligible for this selection.",
+      "selected": [
+        ["ore_mt", "7.3", "Mt", "7.3", "Mt", 5, "0.15", "2025-01-15"],
+        ["grade", "0.96", "%", "0.96", "%", 5, "0.15", "2025-01-15"],
+        ["contained_treo_kt", "70,500", "t", "70.500", "kt TREO", 5, "0.15", "2025-01-15"]
+      ],
+      "scoped_subtotals": {
+        "Open Pit Subtotal": ["0.9", "0.72", "6,500"],
+        "Underground Subtotal": ["6.4", "0.99", "64,000"]
+      }
+    },
+    {
+      "case_id": "yin-resource-cutoff-series",
+      "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "observed": "Physical p1 Table 1 and p11 Tables 4–6. Each cutoff shows agreeing reported ore tonnes and grade but different contained tonnes. The 30 November 2023 issuer disclosure provides a publication date and omits the estimate effective date.",
+      "selected": [],
+      "cutoffs": {
+        "0.20": {"ore_mt": "29.98", "grade": "1.04", "contained_treo_kt": ["311,800", "312,300"]},
+        "0.40": {"ore_mt": "21.06", "grade": "1.35", "contained_treo_kt": ["284,300", "283,800"]},
+        "1.00": {"ore_mt": "11.63", "grade": "1.93", "contained_treo_kt": ["224,400", "224,300"]}
+      }
+    }
+  ]
+}

@@ -102,3 +102,15 @@ jobs:
           printf '%s  %s\n' "$sha" "$directory/$sha" | sha256sum --check
           export AU_REE_REPLAY_ASSETS="$directory"
           python -m unittest discover -s tests -p 'test_pipeline.py' -v
+      - name: Verify the fresh resource layouts with exact source editions
+        run: |
+          directory="$RUNNER_TEMP/resource-fixture/assets"
+          get_fixture() {
+            url="$1"
+            sha="$2"
+            curl --fail --location --retry 2 --max-time 45 "$url" --output "$directory/$sha"
+            printf '%s  %s\n' "$sha" "$directory/$sha" | sha256sum --check
+          }
+          get_fixture 'https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf' e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0
+          get_fixture 'https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896' eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5
+          AU_REE_FRESH_ASSETS="$directory" python -m unittest discover -s tests -p 'test_fresh_observations.py' -v
