@@ -1,0 +1,198 @@
+{
+  "criteria": {
+    "C1": {
+      "code": "C1",
+      "direction": "MAX",
+      "domain": "Commercial",
+      "function": "linear",
+      "high": 4,
+      "low": 0,
+      "unit": "ordinal",
+      "variable": "financing_ord"
+    },
+    "D1": {
+      "code": "D1",
+      "direction": "MAX",
+      "domain": "Development",
+      "function": "linear",
+      "high": 6,
+      "low": 1,
+      "meaning": {
+        "1": "MRE",
+        "2": "Scoping",
+        "3": "PFS",
+        "4": "DFS",
+        "5": "Construction",
+        "6": "Production"
+      },
+      "unit": "ordinal",
+      "variable": "study_maturity_ord"
+    },
+    "I1": {
+      "code": "I1",
+      "direction": "MIN",
+      "domain": "Infrastructure",
+      "function": "linear",
+      "high": 200,
+      "interpretation": "Official geometry proximity; not access, capacity or connection cost",
+      "low": 0,
+      "unit": "km",
+      "variable": "road_distance_km"
+    },
+    "I2": {
+      "code": "I2",
+      "direction": "MIN",
+      "domain": "Infrastructure",
+      "function": "linear",
+      "high": 1000,
+      "interpretation": "Official geometry proximity; not access, capacity or connection cost",
+      "low": 0,
+      "unit": "km",
+      "variable": "rail_distance_km"
+    },
+    "I3": {
+      "code": "I3",
+      "direction": "MIN",
+      "domain": "Infrastructure",
+      "function": "linear",
+      "high": 500,
+      "interpretation": "Official geometry proximity; not access, capacity or connection cost",
+      "low": 0,
+      "unit": "km",
+      "variable": "power_distance_km"
+    },
+    "I4": {
+      "code": "I4",
+      "direction": "MIN",
+      "domain": "Infrastructure",
+      "function": "linear",
+      "high": 2000,
+      "low": 0,
+      "unit": "km",
+      "variable": "port_distance_km"
+    },
+    "R1": {
+      "code": "R1",
+      "direction": "MAX",
+      "domain": "Resource",
+      "function": "log1p",
+      "high": 5000,
+      "interpretation": "In-situ reported inventory; not recoverable product or success probability",
+      "low": 0,
+      "unit": "kt TREO",
+      "variable": "contained_treo_kt"
+    },
+    "S1": {
+      "code": "S1",
+      "direction": "MAX",
+      "domain": "Strategic",
+      "function": "linear",
+      "high": 100,
+      "low": 0,
+      "unit": "%",
+      "variable": "magnet_reo_share_pct"
+    },
+    "T1": {
+      "code": "T1",
+      "definition_version": "technical-disclosure-transparency-v1",
+      "direction": "MAX",
+      "domain": "Technical",
+      "function": "linear",
+      "high": 100,
+      "interpretation": "Technical Disclosure Transparency; fixed seven binary items; not technical capability, recovery performance or feasibility",
+      "low": 0,
+      "unit": "%",
+      "variable": "technical_disclosure_pct"
+    }
+  },
+  "minimum_cohort": 2,
+  "minimum_cohort_reference": "R/methods.R validate requires nrow(X)>=2",
+  "missing_policy": "COMPLETE_CASES_ONLY_NO_IMPUTATION",
+  "panels": {
+    "issuer_resource_composition": [
+      "R1",
+      "S1"
+    ],
+    "issuer_resource_infrastructure": [
+      "R1",
+      "I1",
+      "I2",
+      "I3",
+      "I4"
+    ],
+    "issuer_resource_study": [
+      "R1",
+      "D1"
+    ],
+    "resource_infrastructure_pilot": [
+      "R1",
+      "I4"
+    ],
+    "six_domain": [
+      "R1",
+      "S1",
+      "T1",
+      "D1",
+      "I4",
+      "C1"
+    ]
+  },
+  "policy_version": "fresh-decision-policy-v1",
+  "promethee_threshold": 0.2,
+  "s1_admission": {
+    "basis": [
+      "PrNdDyTb_REO_DIV_TREO"
+    ],
+    "domain": "Strategic",
+    "resource_scope": true,
+    "unit": "%",
+    "variables": [
+      "magnet_reo_share_pct"
+    ]
+  },
+  "scenarios": {
+    "development_assumption": {
+      "Commercial": 0.15,
+      "Development": 0.25,
+      "Infrastructure": 0.2,
+      "Resource": 0.1,
+      "Strategic": 0.1,
+      "Technical": 0.2
+    },
+    "resource_assumption": {
+      "Commercial": 0.05,
+      "Development": 0.1,
+      "Infrastructure": 0.1,
+      "Resource": 0.5,
+      "Strategic": 0.15,
+      "Technical": 0.1
+    },
+    "strategic_assumption": {
+      "Commercial": 0.1,
+      "Development": 0.1,
+      "Infrastructure": 0.1,
+      "Resource": 0.2,
+      "Strategic": 0.4,
+      "Technical": 0.1
+    }
+  },
+  "six_domain_disclosure_current_baseline": true,
+  "source_scope": "V3_GOVERNED_ISSUER_RESOURCE_SELECTIONS",
+  "v2_evidence_policy_version": "evidence-resolution-v15-peer-scope",
+  "v2_research_method_version": "research-v8-native-candidate-shared-draws",
+  "v2_rule_artifacts": {
+    "R/methods.R": "0f48cf30537ba0730fd8f82cc98b4d14ef75b1e57adf448b8d90251629d740ce",
+    "config/evidence_policy.json": "c86f8fe81c21a5147d82b633c1d54f310e979d07487fad0f02db5504d5130d80",
+    "config/research.json": "87acde6f0043bcd145f2189112b60bab572dfccd4e6071020adb7615e3dc369a",
+    "src/au_ree_v2/analysis.py": "fec5686bd00984349ae80049da6751a6171b9f4f720f60fb6a1097f63af7c4fe",
+    "src/au_ree_v2/evidence.py": "2abd8e703493ff8655d92f94290c331b83ae25a2d3b1eb5d387e63f0ac641ed8",
+    "src/au_ree_v2/mcda.py": "f61d0baa42927df003671f83d7449a7f6be5967446d9f683d1846c83059c1dab",
+    "src/au_ree_v2/selection.py": "38af832548085173258ce196bc58aa7f3d37532a52ddd66a424c6563f895c825"
+  },
+  "v2_rule_commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+  "v3_point_solver_pr": 4,
+  "v3_point_solver_ref": "b5015579933f73c2990718b1b9b2f47d9a04f2af",
+  "v3_point_solver_sha256": "20728a00e7036c73e7ee161f9353e15a2bef2d0ae0275443a2b5401df0866f3b",
+  "weight_calculation": "ordered-domain-fsum-v2",
+  "weight_status": "RESEARCHER_ASSUMPTIONS_NOT_ELICITED_EXPERT_PREFERENCES"
+}

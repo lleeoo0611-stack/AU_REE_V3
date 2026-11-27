@@ -67,3 +67,14 @@ au-ree-v3 research extract --bindings config/research_profiles/resource_bindings
   --database work/fresh/observations/research.sqlite --out work/fresh/observations \
   --code-commit "$(git rev-parse HEAD)"
 ```
+
+Build the 93×51 Census and the contemporaneous MCDA input assessment in a clean directory:
+
+```sh
+au-ree-v3 research build --profile "$PROFILE" \
+  --bindings config/research_profiles/resource_bindings_v1.json \
+  --sources work/fresh/acquisition-final/source_manifest.json --assets work/fresh/source-store \
+  --out work/fresh/build --code-commit "$(git rev-parse HEAD)"
+```
+
+Census records the reason for each missing field. Decision panels report insufficient cohorts when governed inputs do not satisfy the locked criteria.

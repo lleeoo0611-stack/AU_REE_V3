@@ -11,7 +11,7 @@
 | F0 | PASS | 分別核對封存選擇清冊、Census 身分欄及發布成員，保留 93 個 ID 和 51 個依序欄名。 |
 | F1 | PASS | 93 案皆有實際公開端點檢索，所有標記成功的來源均通過原始 bytes 回讀及共享時間門檻。 |
 | F2 | PASS | 三種真實資源 PDF 版面通過正反例與獨立核驗，6 筆選值。 [B 准入報告](resource_admission.md) |
-| F3 | NOT_RUN | 新 Census 屬 C。 |
+| F3 | PASS | 4,743 格逐格驗證，含 6 格新科學值。 [C 驗證報告](census_decision.md) |
 | F4 | NOT_RUN | 正式來源至結果的離線重建屬 D。 |
 | F5 | BLOCKED | 未配置獨立備份端，尚無正式發布。 |
 
