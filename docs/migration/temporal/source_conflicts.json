@@ -1,0 +1,232 @@
+{
+  "conflicts": [
+    {
+      "citation_eligibility": "CONFLICT",
+      "decision": {
+        "acquired_at": "2026-11-12T19:48:02.291012+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": "2026-11-13",
+        "cutoff": "2026-11-13",
+        "decision_id": "0ddf9753c6895ac5c033600f726125a6fd069660d88d35c0e3e7183e8cad10c0",
+        "earliest_proven_public_date": null,
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [],
+        "matching_evidence_ids": [],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION",
+        "reported_publication_date": null,
+        "source_sha256": "31a205168b6ae64719924940dfa50e4899cf625ca9f90167dbdd3c452d433953",
+        "status": "CONFLICT"
+      },
+      "raw_v2_dates": {
+        "available_date": "2026-11-13",
+        "historical_acquired_at": "2026-11-12T19:48:02.291012+00:00",
+        "publication_date": null
+      },
+      "source_key": "vic_minten_archived_20261112",
+      "source_sha256": "31a205168b6ae64719924940dfa50e4899cf625ca9f90167dbdd3c452d433953",
+      "temporal_evidence": [],
+      "use": "ARCHIVED_REFERENCE_ONLY"
+    },
+    {
+      "citation_eligibility": "CONFLICT",
+      "decision": {
+        "acquired_at": "2026-11-02T16:40:58.789768+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": "2026-11-03",
+        "cutoff": "2026-11-13",
+        "decision_id": "7f7e67a2765292c1f81d3f737efb0b0021092375e3a44b773859a8bfa4553c6d",
+        "earliest_proven_public_date": null,
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [],
+        "matching_evidence_ids": [],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION",
+        "reported_publication_date": null,
+        "source_sha256": "3cf1eb46a0069794a26d91431c3a0569c3292191df315c2536d3a873e2f1a9a2",
+        "status": "CONFLICT"
+      },
+      "raw_v2_dates": {
+        "available_date": "2026-11-03",
+        "historical_acquired_at": "2026-11-02T16:40:58.789768+00:00",
+        "publication_date": ""
+      },
+      "source_key": "ga_power",
+      "source_sha256": "3cf1eb46a0069794a26d91431c3a0569c3292191df315c2536d3a873e2f1a9a2",
+      "temporal_evidence": [],
+      "use": "ARCHIVED_REFERENCE_ONLY"
+    },
+    {
+      "citation_eligibility": "CONFLICT",
+      "decision": {
+        "acquired_at": "2026-11-02T16:40:58.714764+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": "2026-11-03",
+        "cutoff": "2026-11-13",
+        "decision_id": "f85e69283e3852c2d31d8ff049b56b0bd009a4e2cefab5a48dedd5dcd3b27ad2",
+        "earliest_proven_public_date": null,
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [],
+        "matching_evidence_ids": [],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": "2024-09-20",
+        "reacquired_at": null,
+        "reason": "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION",
+        "reported_publication_date": null,
+        "source_sha256": "59a905135b56269f05984a05b1717e0bcf8b902ad8222ddba1a0e6203aee3c95",
+        "status": "CONFLICT"
+      },
+      "raw_v2_dates": {
+        "available_date": "2026-11-03",
+        "historical_acquired_at": "2026-11-02T16:40:58.714764+00:00",
+        "publication_date": "2024-09-20"
+      },
+      "source_key": "mia_ar2024",
+      "source_sha256": "59a905135b56269f05984a05b1717e0bcf8b902ad8222ddba1a0e6203aee3c95",
+      "temporal_evidence": [],
+      "use": "ARCHIVED_REFERENCE_ONLY"
+    },
+    {
+      "citation_eligibility": "CONFLICT",
+      "decision": {
+        "acquired_at": "2026-11-12T19:48:02.291012+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": "2026-11-13",
+        "cutoff": "2026-11-13",
+        "decision_id": "6629aaa3a62f99531dfd74ba408ef86c4f070ad7fbf1b2834dec24f27adf5a50",
+        "earliest_proven_public_date": null,
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [],
+        "matching_evidence_ids": [],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION",
+        "reported_publication_date": null,
+        "source_sha256": "5ec027c7d83faf38f92922ba48e6050397bd24c148147afc76fc3d33a7ca6c4d",
+        "status": "CONFLICT"
+      },
+      "raw_v2_dates": {
+        "available_date": "2026-11-13",
+        "historical_acquired_at": "2026-11-12T19:48:02.291012+00:00",
+        "publication_date": null
+      },
+      "source_key": "vic_minten_archived_20261112",
+      "source_sha256": "5ec027c7d83faf38f92922ba48e6050397bd24c148147afc76fc3d33a7ca6c4d",
+      "temporal_evidence": [],
+      "use": "ARCHIVED_REFERENCE_ONLY"
+    },
+    {
+      "citation_eligibility": "CONFLICT",
+      "decision": {
+        "acquired_at": "2026-11-12T19:48:02.291012+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": "2026-11-13",
+        "cutoff": "2026-11-13",
+        "decision_id": "7308564054b7c046fa3c1eac2221ee6b794f70340b58a25f14859da3484b2ea8",
+        "earliest_proven_public_date": null,
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [],
+        "matching_evidence_ids": [],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION",
+        "reported_publication_date": null,
+        "source_sha256": "9e7bd9a53e83811a43f1a94fa3db7ffbe0aae1bed41ac2f9d59e67085bdd76f2",
+        "status": "CONFLICT"
+      },
+      "raw_v2_dates": {
+        "available_date": "2026-11-13",
+        "historical_acquired_at": "2026-11-12T19:48:02.291012+00:00",
+        "publication_date": null
+      },
+      "source_key": "vic_minten_archived_20261112",
+      "source_sha256": "9e7bd9a53e83811a43f1a94fa3db7ffbe0aae1bed41ac2f9d59e67085bdd76f2",
+      "temporal_evidence": [],
+      "use": "ARCHIVED_REFERENCE_ONLY"
+    },
+    {
+      "citation_eligibility": "CONFLICT",
+      "decision": {
+        "acquired_at": "2026-11-02T16:40:58.702003+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": "2026-11-03",
+        "cutoff": "2026-11-13",
+        "decision_id": "3843a6e61e0a5d155740f904a4e6c397491f4ffd8657e6617a1014a928dea5d3",
+        "earliest_proven_public_date": null,
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [],
+        "matching_evidence_ids": [],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": "2025-09",
+        "reacquired_at": null,
+        "reason": "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION",
+        "reported_publication_date": null,
+        "source_sha256": "d02c9266e500ee396195a299e15436f4faef5613c2a6393ea6493a6e7c7a5d6f",
+        "status": "CONFLICT"
+      },
+      "raw_v2_dates": {
+        "available_date": "2026-11-03",
+        "historical_acquired_at": "2026-11-02T16:40:58.702003+00:00",
+        "publication_date": "2025-09"
+      },
+      "source_key": "nolans_ar2025",
+      "source_sha256": "d02c9266e500ee396195a299e15436f4faef5613c2a6393ea6493a6e7c7a5d6f",
+      "temporal_evidence": [],
+      "use": "ARCHIVED_REFERENCE_ONLY"
+    },
+    {
+      "citation_eligibility": "CONFLICT",
+      "decision": {
+        "acquired_at": "2026-11-02T16:40:58.722644+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": "2026-11-03",
+        "cutoff": "2026-11-13",
+        "decision_id": "5ca69b3c34b3e16fa9798cccc9f09533d230a2b972c528009840172f6557bdbf",
+        "earliest_proven_public_date": null,
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [],
+        "matching_evidence_ids": [],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": "2025-07-31",
+        "reacquired_at": null,
+        "reason": "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION",
+        "reported_publication_date": null,
+        "source_sha256": "eb73f28443e453f9663f7957b0b9d3950d8734cf910543acc213d5ef6742a668",
+        "status": "CONFLICT"
+      },
+      "raw_v2_dates": {
+        "available_date": "2026-11-03",
+        "historical_acquired_at": "2026-11-02T16:40:58.722644+00:00",
+        "publication_date": "2025-07-31"
+      },
+      "source_key": "yttria_2025",
+      "source_sha256": "eb73f28443e453f9663f7957b0b9d3950d8734cf910543acc213d5ef6742a668",
+      "temporal_evidence": [],
+      "use": "ARCHIVED_REFERENCE_ONLY"
+    }
+  ],
+  "count": 7,
+  "cutoff": "2026-11-13",
+  "disposition": "UNRESOLVED_WITHIN_REVIEWED_SOURCE_RECEIPTS",
+  "scope": "FIXED_V2_PUBLIC_PDF_SNAPSHOT_LOCK"
+}

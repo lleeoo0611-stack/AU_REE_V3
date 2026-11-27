@@ -2,11 +2,9 @@
 
 import json
 
-from .contracts import (
-    AcceptedResearchValue, EvidenceAnchor, NormalizedObservation, ResearchRelease,
-    ResourceScope, Source, ValidatedObservation,
-)
+from .contracts import ResearchRelease
 from .observations import VARIABLES
+from .research_inputs import checked_research_inputs
 
 COLUMNS = {
     "ore_mt": "礦石蘊藏量_Mt",
@@ -20,15 +18,9 @@ def accepted_resource_rows(
 ) -> tuple[list[dict], list[dict], list[dict]]:
     selected = {}
     evidence = []
-    for accepted in store.records(AcceptedResearchValue):
-        if accepted.release_id != release.release_id:
-            continue
-        validation = store.get(ValidatedObservation, accepted.validation_id)
-        candidate = store.get(NormalizedObservation, validation.candidate_id)
-        raw = store.raw_for_candidate(candidate.candidate_id)
-        source = store.get(Source, (raw.source_key, raw.source_sha))
-        scope = store.get(ResourceScope, raw.scope_id)
-        anchor = store.get(EvidenceAnchor, raw.anchor_id)
+    for entry in checked_research_inputs(store, release, purpose="CENSUS"):
+        accepted, candidate, raw = entry.accepted, entry.candidate, entry.raw
+        source, scope, anchor = entry.source, entry.scope, entry.anchor
         width = json.loads(raw.original_payload)["legacy_claim"]["rounding_half_width"]
         # This projection represents the historical V2 table contract. Native
         # PDF tokens and parsed semantics remain in the separate evidence rows.
@@ -56,6 +48,7 @@ def accepted_resource_rows(
             "case_id": selected[raw.project_id, raw.variable]["case_id"],
             "raw": raw.to_dict(),
             "anchor": anchor.to_dict(),
+            "temporal_lineage": entry.lineage(),
         })
     observations = sorted(selected.values(), key=lambda item: item["case_id"])
     census = []

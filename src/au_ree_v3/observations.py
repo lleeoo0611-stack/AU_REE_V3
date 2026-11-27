@@ -43,8 +43,11 @@ def read_resource(pages: tuple[str, ...], binding: dict) -> ResourceEvidence:
     page = pages[binding["page"] - 1]
     lines = [line.strip() for line in page.splitlines()]
     text = " ".join(page.split())
-    public = date.fromisoformat(binding["source"]["publication_date"])
-    period = date.fromisoformat(binding["effective_date"])
+    try:
+        public = date.fromisoformat(binding["source"]["publication_date"])
+        period = date.fromisoformat(binding["effective_date"])
+    except (TypeError, ValueError) as error:
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_BINDING_REQUIRES_DAY_PRECISION") from error
     public_text = f"{public.day} {public:%B %Y}"
     effective_text = f"{period.day} {period:%B %Y}"
     release_lines = pages[0].strip().splitlines()

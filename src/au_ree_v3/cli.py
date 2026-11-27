@@ -30,6 +30,11 @@ def main(argv: list[str] | None = None) -> int:
                 "archived-census-2026-11-13", "phase22-2026-11-05",
             ))
 
+    temporal = operations.add_parser("audit-temporal", help="Audit Golden time evidence without changing expectations")
+    temporal.add_argument("--v2-root", type=Path, required=True)
+    temporal.add_argument("--expected", type=Path, required=True)
+    temporal.add_argument("--oracle-manifest", type=Path, required=True)
+    temporal.add_argument("--out", type=Path, required=True)
     oracle = operations.add_parser("compare-oracle")
     oracle.add_argument("--expected", type=Path, required=True)
     oracle.add_argument("--actual", type=Path, required=True)
@@ -65,6 +70,9 @@ def _run_migration(args) -> dict:
         case "verify-baseline":
             from .migration.baseline import verify_baseline
             return verify_baseline(args.v2_root, args.profile, args.out, args.assets)
+        case "audit-temporal":
+            from .migration.temporal_audit import audit_temporal
+            return audit_temporal(args.v2_root, args.expected, args.oracle_manifest, args.out)
         case "compare-oracle":
             from .migration.reference_oracle import compare_files
             return compare_files(args.expected, args.actual, args.out, case_ids=args.case_id)

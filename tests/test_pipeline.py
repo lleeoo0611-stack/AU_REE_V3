@@ -10,7 +10,10 @@ import unittest
 from unittest.mock import patch
 
 from au_ree_v3.application import replay
-from au_ree_v3.contracts import ContractViolation, RawObservation
+from au_ree_v3.contracts import (
+    AcceptedResearchValue, ContractViolation, RawObservation, ResearchRelease, Source, ValidatedObservation,
+)
+from au_ree_v3.contracts.temporal import TEMPORAL_POLICY_VERSION
 from au_ree_v3.migration.reference_oracle import compare_files
 from au_ree_v3.observations import digest
 from au_ree_v3.store import Store
@@ -89,6 +92,13 @@ class ResourcePipelineTests(unittest.TestCase):
             source_key=label, sha256=sha, source_version=sha, url=f"https://example.invalid/{label}.pdf",
         )
         original["legacy_claim_reference"] = {"synthetic": True, "path": "tests/test_pipeline.py"}
+        original["temporal_evidence"] = [{
+            "source_sha256": sha,
+            "kind": "ARCHIVED_PUBLIC_CAPTURE",
+            "public_on": "2024-08-05",
+            "reference": f"synthetic:{label}:reviewed-public-capture",
+            "reference_sha256": hashlib.sha256(f"synthetic-public-capture:{label}".encode()).hexdigest(),
+        }]
         original["project"].update(
             name="Fixture Rare Earth Project", native_id=label,
             entity_id="AU-" + digest(["project_registry_v1", label])[:20],
@@ -147,12 +157,108 @@ class ResourcePipelineTests(unittest.TestCase):
         self.assertEqual(result["cases"][0]["reason"], "STATEMENT_EVIDENCE_MISSING")
 
     def test_source_after_cutoff_cannot_be_selected(self):
-        date = self.binding("late")["source"]
-        date["available_date"] = "2026-11-14"
+        binding = self.binding("late", pages=[("14 November 2026", HEADER[1]), NARRATIVE + TABLE])
+        binding["source"].update(
+            publication_date="2026-11-14", available_date="2026-11-14", acquired_at="2026-11-14T11:56:00Z",
+        )
+        binding["temporal_evidence"][0]["public_on"] = "2026-11-14"
+        with patch("au_ree_v3.application.pdf_pages") as parse:
+            result = self.run_replay()
+        parse.assert_not_called()
+        self.assertEqual(result["observations"], 0, result)
+        self.assertEqual(result["source_pdf_count"], 1)
+        self.assertEqual(result["parsed_pdf_count"], 0)
+        decision = result["cases"][0]
+        self.assertEqual(decision["outcome"], "AFTER_CUTOFF")
+        self.assertEqual(decision["reason"], "PUBLICATION_AFTER_CUTOFF")
+        self.assertEqual(decision["source_integrity"], "EXACT_SHA")
+        self.assertEqual(decision["observed_sha256"], decision["source_sha256"])
+        self.assertEqual(decision["scientific_comparability"], "NOT_EVALUATED")
+
+    def test_postcutoff_reacquisition_of_public_edition_retains_selection(self):
+        binding = self.binding("exact")
+        first = self.run_replay()
+        binding["source"]["reacquired_at"] = "2026-11-25T16:00:00Z"
+        result = self.run_replay("reacquired")
+        self.assertEqual(first["status"], "PASS", first)
+        self.assertEqual(result["status"], "PASS", result)
+        self.assertNotEqual(first["release_id"], result["release_id"])
+        self.assertEqual(first["scientific_fingerprint"], result["scientific_fingerprint"])
+        self.assertEqual(result["temporal_policy_version"], TEMPORAL_POLICY_VERSION)
+        self.assertEqual(result["observations"], 3)
+        temporal = result["cases"][0]["observation_temporal"]
+        self.assertEqual(temporal["reacquired_at"], "2026-11-25T16:00:00Z")
+        self.assertEqual(temporal["reason"], "EXACT_EDITION_PUBLIC_BY_CUTOFF")
+        evidence = [json.loads(row) for row in (self.folder / "reacquired/v3-evidence.jsonl").read_text().splitlines()]
+        self.assertEqual(len(evidence), 3)
+        for row in evidence:
+            self.assertEqual(row["temporal_lineage"]["temporal_decision"]["decision_id"], temporal["decision_id"])
+        with Store(self.folder / "scratch.sqlite") as store:
+            sources = store.records(Source)
+            self.assertEqual(len(sources), 1)
+            self.assertIsNone(sources[0].reacquired_at)
+            for receipt, timestamp in ((first, None), (result, binding["source"]["reacquired_at"])):
+                release = store.get(ResearchRelease, receipt["release_id"])
+                accepted = store.accepted_for_release(release.release_id)
+                self.assertEqual(len(accepted), 3)
+                for value in accepted:
+                    trace = store.selection_temporal_trace(value, release)
+                    self.assertEqual(trace["reacquired_at"], timestamp)
+
+    def test_registry_selection_date_does_not_replace_exact_public_proof(self):
+        binding = self.binding("exact")
+        binding["source"].update(available_date="2026-11-14", availability_role="REGISTRY_SELECTION")
+        result = self.run_replay()
+        self.assertEqual(result["status"], "PASS", result)
+        decision = result["cases"][0]["observation_temporal"]
+        self.assertEqual(decision["available_date"], "2026-11-14")
+        self.assertEqual(decision["availability_role"], "REGISTRY_SELECTION")
+        self.assertEqual(decision["earliest_proven_public_date"], "2024-08-05")
+
+    def test_old_date_and_pre_cutoff_acquisition_do_not_establish_exact_public_proof(self):
+        missing = self.binding("unproven")
+        del missing["temporal_evidence"]
+        foreign = self.binding("wrong-edition-proof")
+        foreign["temporal_evidence"][0]["source_sha256"] = "f" * 64
         result = self.run_replay()
         self.assertEqual(result["observations"], 0, result)
-        self.assertEqual(result["cases"][0]["outcome"], "AFTER_CUTOFF")
-        self.assertEqual(result["cases"][0]["reason"], "SOURCE_AFTER_CUTOFF")
+        self.assertEqual(result["status"], "BLOCKED")
+        self.assertEqual(
+            {row["observation_temporal"]["reason"] for row in result["cases"]},
+            {"PUBLIC_EVIDENCE_MISSING", "NO_SAME_EDITION_PUBLIC_EVIDENCE"},
+        )
+        self.assertEqual({row["observation_temporal"]["status"] for row in result["cases"]}, {"CANDIDATE"})
+        with Store(self.folder / "scratch.sqlite") as store:
+            self.assertEqual(len(store.records(RawObservation)), 6)
+            self.assertEqual(len(store.records(ValidatedObservation)), 6)
+            self.assertEqual(store.records(AcceptedResearchValue), [])
+
+    def test_partial_effective_date_candidate_isolates_other_valid_sources(self):
+        self.binding("uncertain")["effective_date"] = "2026-11"
+        self.binding("exact")
+        result = self.run_replay()
+        self.assertEqual(result["status"], "BLOCKED", result)
+        self.assertEqual(result["observations"], 3)
+        uncertain = next(case for case in result["cases"] if case["case_id"] == "uncertain")
+        self.assertEqual(uncertain["observed_sha256"], uncertain["source_sha256"])
+        self.assertEqual(uncertain["observation_temporal"]["effective_date"], "2026-11")
+        self.assertEqual(uncertain["reason"], "HISTORICAL_DATE_PRECISION_SPANS_CUTOFF")
+
+    def test_unclassified_availability_conflict_is_not_treated_as_public_access(self):
+        for label, wrong in (("exact-conflict", False), ("wrong-conflict", True)):
+            self.binding(label, wrong_bytes=wrong)["source"]["available_date"] = "2026-11-14"
+        with patch("au_ree_v3.application.pdf_pages") as parse:
+            result = self.run_replay()
+        parse.assert_not_called()
+        self.assertEqual(result["observations"], 0, result)
+        self.assertEqual(
+            [case["source_integrity"] for case in result["cases"]], ["EXACT_SHA", "WRONG_SHA"],
+        )
+        for case in result["cases"]:
+            self.assertEqual(case["scientific_comparability"], "NOT_EVALUATED")
+            decision = case["observation_temporal"]
+            self.assertEqual(decision["status"], "CONFLICT")
+            self.assertEqual(decision["reason"], "UNCLASSIFIED_AVAILABILITY_AFTER_ACQUISITION")
 
     def test_wrong_material_or_basis_is_rejected(self):
         self.binding("material")["material_basis"] = "HEAVY_MINERAL"
@@ -186,7 +292,11 @@ class ResourcePipelineTests(unittest.TestCase):
         self.binding("chemistry")["chemical_basis"] = "TREO+Sc2O3"
         conflict_table = (*TABLE[:-2], TABLE[-2].replace("712", "912"), TABLE[-1])
         self.binding("conflict", pages=[HEADER, NARRATIVE + conflict_table])
-        self.binding("late")["source"]["available_date"] = "2026-11-14"
+        binding = self.binding("late", pages=[("14 November 2026", HEADER[1]), NARRATIVE + TABLE])
+        binding["source"].update(
+            publication_date="2026-11-14", available_date="2026-11-14", acquired_at="2026-11-14T11:56:00Z",
+        )
+        binding["temporal_evidence"][0]["public_on"] = "2026-11-14"
         left = self.binding("left")
         self.binding("right", deposit="Other")["project"] = left["project"]
         self.binding("material")["material_basis"] = "HEAVY_MINERAL"
@@ -200,7 +310,7 @@ class ResourcePipelineTests(unittest.TestCase):
         self.assertEqual(result["status"], "FAIL")
         self.assertEqual(result["observations"], 3)
         result = compare_files(
-            ROOT / "tests/golden/synthetic_pipeline_expected.jsonl",
+            ROOT / "tests/golden/synthetic_pipeline_expected_temporal_v1.jsonl",
             self.folder / "first/v3-oracle-rejections.jsonl", self.folder / "rejection-oracle",
         )
         self.assertEqual(result["status"], "PASS", result)
@@ -276,6 +386,10 @@ class ExactResourceReplayTests(unittest.TestCase):
                 result = replay(MANIFEST, assets, out / "observations.sqlite", out, code_commit=CODE)
                 self.assertEqual(result["status"], "PASS", result)
                 self.assertEqual(result["source_pdf_count"], 1)
+                temporal = result["cases"][0]["observation_temporal"]
+                self.assertEqual(temporal["earliest_proven_public_date"], "2026-11-02")
+                self.assertEqual(temporal["publication_date"], "2024-08-05")
+                self.assertEqual(temporal["reason"], "EXACT_EDITION_PUBLIC_BY_CUTOFF")
                 result = compare_files(reference, out / "v3-oracle-actual.jsonl", out / "oracle", case_ids=cases)
                 self.assertEqual(result["status"], "PASS", result)
                 self.assertEqual(result["verified_reference_count"], 6)
