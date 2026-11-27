@@ -13,7 +13,7 @@ def _tool_lock(name: str) -> dict | None:
     if not executable:
         return None
     path = Path(executable).resolve()
-    flag = "-v" if name == "pdftotext" else "--version"
+    flag = "-v" if name in {"pdftotext", "pdfimages"} else "--version"
     result = subprocess.run(
         [str(path), flag], check=True, capture_output=True, text=True, timeout=15,
     )
@@ -23,13 +23,14 @@ def _tool_lock(name: str) -> dict | None:
     }
 
 
-def environment_lock() -> dict:
+def environment_lock(*, include_pdf_images: bool = True) -> dict:
     """Identify the runtime and external tool files involved in scientific execution."""
+    tools = ("pdftotext", "tesseract", "pdfimages") if include_pdf_images else ("pdftotext", "tesseract")
     return {
         "python": platform.python_version(),
         "python_implementation": platform.python_implementation(),
         "sqlite": sqlite3.sqlite_version,
         "platform": platform.system(),
         "architecture": platform.machine(),
-        "tools": {name: _tool_lock(name) for name in ("pdftotext", "tesseract")},
+        "tools": {name: _tool_lock(name) for name in tools},
     }

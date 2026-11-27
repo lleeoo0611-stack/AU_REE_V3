@@ -22,7 +22,7 @@ def read_csv(path):
 
 
 def _seed_release(store, project_id, cutoff, *, mode="FORMAL", variants=(("grade", "0.0000", "estimate-a"),),
-                  category=CATEGORY, chemical_basis="TREO"):
+                  category=CATEGORY, chemical_basis="TREO", grade_unit="%"):
     project = replace(fixtures.PROJECT, entity_id=project_id)
     scope = replace(fixtures.SCOPE, project_id=project_id, deposit_id=None)
     proof = fixtures.TEMPORAL_EVIDENCE
@@ -33,7 +33,7 @@ def _seed_release(store, project_id, cutoff, *, mode="FORMAL", variants=(("grade
             deposit_id=None, variable=variable, material_basis="WHOLE_ORE", statement_id=statement,
             category=category, chemical_basis=chemical_basis,
             denominator_basis="WHOLE_ORE" if variable == "grade" else None,
-            raw_value=value, raw_unit="%" if variable == "grade" else "Mt",
+            raw_value=value, raw_unit=grade_unit if variable == "grade" else "Mt",
         )
         candidate = replace(
             fixtures.CANDIDATE, candidate_id=f"synthetic-candidate-{index}",
@@ -114,6 +114,25 @@ class FreshCensusTest(unittest.TestCase):
             result = build_census(PROFILE, Path(scratch), store=store, release_id=release.release_id)
             self.assertEqual(result["formal_scientific_cells"], 0)
             self.assertEqual(result["unknown_reasons"]["SELECTION_NOT_FORMAL"], 1)
+
+    def test_selected_grade_ppm_projects_to_decimal_percent_with_original_token(self):
+        proof = fixtures.TEMPORAL_EVIDENCE
+        with TemporaryDirectory() as scratch, Store(
+            ":memory:", trusted_temporal_evidence_ids=(proof.evidence_id,)
+        ) as store:
+            project = self.axes.project_ids[0]
+            out = Path(scratch)
+            release = _seed_release(
+                store, project, self.axes.cutoff, variants=(("grade", "470.0", "estimate-a"),),
+                grade_unit="ppm",
+            )
+            result = build_census(PROFILE, out, store=store, release_id=release.release_id)
+            self.assertEqual(result["formal_scientific_cells"], 1)
+            cell = next(row for row in read_csv(out / "cell_status.csv")
+                        if row["project_id"] == project and row["column"] == RESOURCE_HEADING)
+            self.assertEqual((cell["value"], cell["unit"]), ("0.04700", "%"))
+            self.assertEqual((cell["raw_value"], cell["raw_unit"]), ("470.0", "ppm"))
+            self.assertEqual(cell["reason"], "GOVERNED_SELECTION_EXACT_UNIT_CONVERSION")
 
     def test_incompatible_formal_statement_components_are_isolated(self):
         proof = fixtures.TEMPORAL_EVIDENCE

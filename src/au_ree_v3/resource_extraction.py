@@ -25,6 +25,7 @@ class ResourceCell:
     conflict: str | None = None
     chemical_basis: str | None = None
     evidence_issue: str | None = None
+    evidence_context: dict | None = None
 
     @property
     def normalized_unit(self) -> str:
@@ -265,6 +266,22 @@ def _chemical_holds(cells, binding):
     return cells
 
 
+def _positioned_oxide_columns(table, binding) -> None:
+    """Validate the mapped value columns before interpreting a table as TREO."""
+    labelled = {
+        "treo": ("treo", "treo"),
+        "% treo": ("% treo", "treo t"),
+        "in-situ treo + y2o3": ("in-situ treo + y2o3 grade", "in-situ treo + y2o3"),
+    }
+    label = _flatten(binding.get("reported_chemical_label") or "").casefold()
+    grade, amount = table["columns"][1:]
+    text = tuple(_flatten(column["column"]).casefold() for column in (grade, amount))
+    header = _flatten(table["header"]).casefold()
+    if (labelled.get(label) != text or any(column not in header for column in text)
+            or re.search(r"\btreo\s*(?:\+|and)\s*(?:sc2o3|scandium|sc)\b", header)):
+        raise DocumentError("SCIENTIFIC_CONFLICT", "NON_CANONICAL_TREO_VALUE_COLUMNS")
+
+
 def positioned_total(pages: tuple[str, ...], binding: dict, publication_date: str | None) -> tuple[ResourceStatement, ...]:
     """Bind a fixed-column native total row to its scoped caption and original units."""
     context = _declared_context(pages, binding)
@@ -284,6 +301,7 @@ def positioned_total(pages: tuple[str, ...], binding: dict, publication_date: st
     row = _unique(rf"(?m)^[ \t]*{re.escape(row_label)}[ \t]+{numeric}[ \t]*$", window, "POSITIONED_TOTAL_ROW_UNBOUND")
     if _flatten(table["header"]).casefold() not in _flatten(window[:row.start()]).casefold():
         raise DocumentError("EVIDENCE_INSUFFICIENT", "POSITIONED_TABLE_UNITS_UNBOUND")
+    _positioned_oxide_columns(table, binding)
     tokens = re.findall(NUMBER, row["tokens"])
     cells = tuple(
         ResourceCell(variable, tokens[column["index"]], column["unit"], page, table["caption"], row_label,

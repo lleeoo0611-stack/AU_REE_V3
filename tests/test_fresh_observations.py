@@ -26,7 +26,9 @@ class ResourceScopeSelectionTests(unittest.TestCase):
     @staticmethod
     def statement(scope, effective_date, value, *, primary=True):
         measurement = SimpleNamespace(
-            raw=SimpleNamespace(variable="ore_mt"), candidate=SimpleNamespace(value=value),
+            raw=SimpleNamespace(variable="ore_mt"), candidate=SimpleNamespace(
+                value=value, unit="Mt", chemical_basis="TREO", material_basis="WHOLE_ORE",
+            ),
             validation=SimpleNamespace(outcome="VALIDATED"),
         )
         return SimpleNamespace(
@@ -49,6 +51,7 @@ class ResourceScopeSelectionTests(unittest.TestCase):
         for second, reason in (
             (self.statement("different-cutoff", "2026-01-01", "2"), "CONFLICTING_RESEARCH_SCOPES"),
             (self.statement("whole", "2025-01-01", "2"), "CONFLICTING_SAME_DATE_ESTIMATES"),
+            (self.statement("whole", "2025-01", "2"), "ESTIMATE_ORDER_PRECISION_UNRESOLVED"),
         ):
             with self.subTest(reason=reason):
                 selection, reasons = _select([primary, second])

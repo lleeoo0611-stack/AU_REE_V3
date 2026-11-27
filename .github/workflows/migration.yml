@@ -123,6 +123,14 @@ jobs:
           get_fixture 'https://announcements.asx.com.au/asxpdf/20251015/pdf/06qkvvhp20rxx2.pdf' 5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0
           get_fixture 'https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7763164.pdf?v=63957978608' a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb
           AU_REE_RESOURCE_YIELD_ASSETS="$directory" python -m unittest discover -s tests -p 'test_resource_yield.py' -v
+          AU_REE_FRESH_ASSETS="$directory" python -m unittest discover -s tests -p 'test_composition_extraction.py' -v
+      - name: Verify native geographic feature evidence
+        run: |
+          if ! command -v ogrinfo || ! command -v ogr2ogr; then
+            sudo apt-get update
+            sudo apt-get install --yes gdal-bin
+          fi
+          python -m unittest discover -s tests -p 'test_geography.py' -v
       - name: Restore a fresh release from its verified local copy
         if: github.event_name == 'workflow_dispatch' && inputs.fresh_release
         run: |
