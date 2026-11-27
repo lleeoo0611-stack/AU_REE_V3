@@ -20,7 +20,8 @@ CAPABILITIES = (
         commands=("all", "bootstrap"),
         modules=("cli", "runtime", "security"),
         contracts=("README.md", "config/research.json", "requirements-constraints.txt"),
-        v3="application",
+        v3="application", status="PARTIAL",
+        reason="Exact-source resource replay verified; national build and other research stages pending",
     ),
     _capability(
         "source-discovery", "Sources", "Discover government, issuer and public-document candidates",
@@ -60,19 +61,22 @@ CAPABILITIES = (
         commands=("pdf-extract",),
         modules=("document_processing", "pdf_extract", "resource_table_layout", "technical_tables", "tabular"),
         contracts=("docs/phase9-document-pipeline.md", "data/ocr/eng.traineddata"),
-        v3="documents",
+        v3="documents", status="PARTIAL",
+        reason="Mt Weld native text and one resource table verified; broader layouts and OCR pending",
     ),
     _capability(
         "document-recognition", "Documents", "Recognize and retrieve scoped evidence from document text",
         commands=("recognize",), modules=("nlp", "resource_retrieval", "resource_discourse"),
         contracts=("docs/phase9-document-pipeline.md", "docs/phase11-deterministic-research.md"),
-        v3="documents",
+        v3="documents", status="PARTIAL",
+        reason="Mt Weld page binding verified; general extraction, NLP and retrieval pending",
     ),
     _capability(
         "observation-normalization", "Observations", "Preserve raw observations and normalize units and basis",
         modules=("observation_schema", "normalization", "observation_pipeline", "observation_incremental"),
         contracts=("config/ontology/observation_v1.json", "docs/unified-observation-pipeline.md"),
-        v3="observations",
+        v3="observations", status="PARTIAL",
+        reason="Mt Weld decimal/resource paths verified; additional native units and derived observations pending",
     ),
     _capability(
         "observation-storage", "Observations", "Persist canonical identities, source evidence and observation layers",
@@ -87,13 +91,15 @@ CAPABILITIES = (
         modules=("observation_validation", "evidence", "numeric_evidence", "evidence_model"),
         contracts=("config/evidence_policy.json", "config/pre_cutoff_evidence_events.json",
                    "docs/phase5-primary-evidence.md", "docs/phase7-evidence-integration.md"),
-        v3="observations",
+        v3="observations", status="PARTIAL",
+        reason="Selected and unselected Mt Weld evidence and synthetic rejections verified; wider source policies pending",
     ),
     _capability(
         "resource-estimates", "Resources", "Interpret JORC statements, categories, scopes, grades and cutoffs",
         modules=("resource_source", "resource_jorc", "resource_estimate", "resource_use", "resource_table_layout"),
         contracts=("config/summary_rules.json", "docs/unified-observation-pipeline.md"),
-        v3="observations",
+        v3="observations", status="PARTIAL",
+        reason="Mt Weld three-field statement verified; additional resource scopes and classifications pending",
     ),
     _capability(
         "resource-admission", "Resources", "Review scoped evidence and admit approved research values",
@@ -108,7 +114,8 @@ CAPABILITIES = (
         "formal-selection", "Selection", "Select evidence-linked values with versioned rules and candidate separation",
         modules=("selection", "selection_rules", "formal_cohort"),
         contracts=("config/formal_c1_review.json", "config/summary_rules.json", "docs/unified-observation-pipeline.md"),
-        v3="observations",
+        v3="observations", status="PARTIAL",
+        reason="Mt Weld scoped selection verified experimentally; selection families and formal release pending",
     ),
     _capability(
         "assay-derived-data", "Resources", "Handle assay evidence, material denominators and derived composition",
@@ -143,7 +150,8 @@ CAPABILITIES = (
         commands=("export-summary",), modules=("census", "census_policy", "census_audit"),
         contracts=("config/summary_rules.json", "config/project_summary_columns.json",
                    "results/ree-project-census/coverage-locked-20261125/census_release.json"),
-        v3="census",
+        v3="census", status="PARTIAL",
+        reason="Three Mt Weld cells verified; all-project projection pending",
     ),
     _capability(
         "census-quality", "Census", "Explain coverage denominators, cell gaps and quality changes",
@@ -214,7 +222,7 @@ CAPABILITIES = (
         "engineering-audit", "Engineering", "Inventory fixed modules, functions, duplicate candidates and CI evidence",
         contracts=("results/phase10-2026-11-27/phase10_module_audit.json",
                    "results/phase10-2026-11-27/repository_integration.json"),
-        v3="migration audit", status="PARTIAL", reason="V3 inventory exists. Equal-capability performance is unmeasured",
+        v3="migration audit", status="PARTIAL", reason="Inventory and matched Mt Weld output benchmark verified; CI and wider workloads unmeasured",
     ),
 )
 
@@ -269,3 +277,27 @@ TOOL_CAPABILITIES = {
     "verify_pre_cutoff_evidence": "evidence-validation",
     "weighting_counterexample": "sensitivity-and-uncertainty",
 }
+
+# Implementation, fixture and independently executable checks for migrated slices.
+V3_VERIFICATIONS = {
+    "engineering-audit": (
+        "Fixed-tree inventory and matched resource-path profiling",
+        "mt-weld-2024-resource-page-2",
+        "python -m au_ree_v3 migration audit --v2-root V2 --out work/migration/audit",
+    ),
+    "observation-storage": (
+        "Versioned evidence SQLite and V2 shadow adapter",
+        "mt-weld-2024-resource-page-2",
+        "python -m unittest discover -s tests -p test_v2_import.py -v",
+    ),
+}
+for capability_id in (
+    "pipeline-orchestration", "document-extraction", "document-recognition",
+    "observation-normalization", "evidence-validation", "resource-estimates",
+    "formal-selection", "census-projection",
+):
+    V3_VERIFICATIONS[capability_id] = (
+        "Reviewed native PDF resource path",
+        "mt-weld-2024-resource-page-2",
+        "AU_REE_REPLAY_ASSETS=ASSET_LIBRARY python -m unittest discover -s tests -p test_pipeline.py -v",
+    )
