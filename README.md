@@ -59,6 +59,8 @@ The [fresh baseline report](docs/research/fresh_baseline.md) records the F0–F5
 
 The [data yield and comparability report](docs/research/data_yield_comparability.md) records the next immutable candidate, exact-source deltas, the first complete composition panel, and replay commands.
 
+The [ontology, normalization and technical processing report](docs/research/ontology_normalization.md) records the evidence-bound shadow study, same-input ablations, and offline replay from the sealed study archive.
+
 The `sources combine` command verifies and merges recorded capture runs without another network request. Pass `--manifest` once per capture manifest, the same `--store`, and a new `--out` directory. It preserves original attempts and verifies the linked objects and temporal evidence.
 
 The exact-resource admission command uses the combined source inventory and the reviewed structure bindings. It rechecks capture proofs and serves only the eligible statements within those bindings.

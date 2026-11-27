@@ -1,0 +1,56 @@
+path,git_status,disposition,work_package,reason
+.github/workflows/migration.yml,M,MODIFY,A/C/Integration,Run checks on main and verify native evidence in PR CI.
+README.md,M,MODIFY,Integration,Link the research results and reproducibility receipt.
+config/research_profiles/au_ree_2026-11-28.json,-,KEEP,Reference,"Fixed study cutoff, registry inputs and Census profile."
+config/research_profiles/development_milestone_bindings_v1.json,A,ADD,D,"Freeze and verify exact-edition supporting evidence, report or candidate access."
+config/research_profiles/semantic_reread_bindings_v1.json,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+config/research_profiles/technical_bindings_v1.json,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+config/research_profiles/technical_holdout_bindings_v1.json,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+docs/research/capability_progress.csv,M,MODIFY,A/Integration,Document evidence-backed capability maturity.
+docs/research/data_yield_comparability_receipt.json,-,KEEP,Reference,Previous immutable release and formal science reference.
+docs/research/engineering_artifacts.json,A,ADD,Integration,Record reproducible measurements or connect project verification.
+docs/research/engineering_comparison.json,A,ADD,Integration,Record reproducible measurements or connect project verification.
+docs/research/geography_and_candidate_retrieval.md,A,ADD,D,"Freeze and verify exact-edition supporting evidence, report or candidate access."
+docs/research/ontology_engineering.md,A,ADD,Integration,Record reproducible measurements or connect project verification.
+docs/research/ontology_file_lifecycle.csv,A,ADD,Integration,Document each changed and selected preserved path.
+docs/research/ontology_gain_receipt.json,A,ADD,Integration,Record reproducible measurements or connect project verification.
+docs/research/ontology_normalization.md,A,ADD,Integration,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+docs/research/responsibility_review.json,A,ADD,Integration,Record reproducible measurements or connect project verification.
+docs/research/semantic_use_contract.md,A,ADD,Integration,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+docs/research/technical_engineering.json,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+docs/research/technical_t1_v2_pilot.md,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+pyproject.toml,M,MODIFY,A,Ship the versioned scientific vocabulary with the installed package.
+src/au_ree_v3/candidate_search.py,A,ADD,D,Index source text and candidate evidence locators in SQLite FTS5.
+src/au_ree_v3/cli.py,M,MODIFY,A/B/C/D,"Expose source, research, and geographic services through existing command groups."
+src/au_ree_v3/comparability.py,M,MODIFY,B,Extend the shared entry point with source-bound derived contained mass shadow assessment.
+src/au_ree_v3/contracts/__init__.py,M,MODIFY,A,Extend the existing scientific data contracts with assessment serialization.
+src/au_ree_v3/development.py,A,ADD,D,Verify dates and completion semantics for scoped milestones.
+src/au_ree_v3/fresh_decision_policy_v1.json,-,KEEP,Reference,Existing official T1 disclosure and approved formal panels.
+src/au_ree_v3/geography.py,M,MODIFY,D,Record location roles and evaluate I1–I4 prerequisites.
+src/au_ree_v3/normalization.py,A,ADD,B,"Preserve exact token, precision, provenance, and versioned conversions."
+src/au_ree_v3/semantic_research.py,A,ADD,B,Run controlled resource normalization and scientific ablations.
+src/au_ree_v3/semantic_vocabulary_v1.json,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+src/au_ree_v3/semantics.py,A,ADD,A/C,Provide one versioned use contract and enforce same-process context.
+src/au_ree_v3/store.py,M,MODIFY,A,Persist immutable assessments and verify their existing observation and evidence lineage.
+src/au_ree_v3/technical_processing.py,A,ADD,C,Anchor process measures and evaluate shadow T1a–T1d uses.
+tests/fixtures/semantic_resource_holdout_v1.json,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+tests/fixtures/technical_holdout_oracle_v1.json,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+tests/fixtures/technical_processing_oracle_v1.json,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+tests/fixtures/technical_semantic_synthetic_oracle_v1.json,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+tests/golden/,-,KEEP,Reference,Historical independent expectations and reference bytes.
+tests/test_candidate_search.py,A,ADD,D,"Freeze and verify exact-edition supporting evidence, report or candidate access."
+tests/test_development.py,A,ADD,D,"Freeze and verify exact-edition supporting evidence, report or candidate access."
+tests/test_infrastructure_compatibility.py,A,ADD,D,"Freeze and verify exact-edition supporting evidence, report or candidate access."
+tests/test_normalization.py,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+tests/test_semantic_release_verification.py,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+tests/test_semantic_research.py,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+tests/test_semantic_resource_holdout.py,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+tests/test_semantics.py,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+tests/test_store.py,M,MODIFY,Integration,Record reproducible measurements or connect project verification.
+tests/test_technical_processing.py,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+tools/engineering_benchmark.py,A,ADD,Integration,Record reproducible measurements or connect project verification.
+tools/evaluate_semantic_resource_holdout.py,A,ADD,A/B,"Version scientific vocabulary, exact rules, independent checks, or evidence receipts."
+tools/ontology_responsibility.py,A,ADD,Integration,Record reproducible measurements or connect project verification.
+tools/technical_benchmark.py,A,ADD,C,"Freeze revised process research bindings, evidence references, or independently fixed checks."
+tools/verify_semantic_release.py,A,ADD,Integration,Restore and fingerprint formal and shadow science from exact pinned artifacts.
+work/ontology-v1/release-verification/shadow-store/,-,ARCHIVE,Integration,"Seal new exact source proofs, code, policies, and shadow outputs in workspace CAS."
