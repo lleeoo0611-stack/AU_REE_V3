@@ -81,6 +81,11 @@ class DecimalNormalizationTests(unittest.TestCase):
         self.assertEqual(normalize("100.01", "%", "ppm").status, "SCIENTIFIC_CONFLICT")
         self.assertEqual(normalize("1,50", "ppm", "%").reason, "UNSUPPORTED_REPORTED_NUMBER_TOKEN")
         self.assertEqual(normalize("0.15", "%", "kt").status, "NOT_COMPARABLE")
+        self.assertEqual(normalize("100", "t", "kt TREO", ORE).reason,
+                         "UNIT_TREO_LABEL_REQUIRES_DEFINED_TREO_MASS")
+        oxide_mass = replace(CONTAINED, chemical_species=("Nd2O3",), treo_members=())
+        self.assertEqual(normalize("100", "t", "kt TREO", oxide_mass).status, "NOT_COMPARABLE")
+        self.assertEqual(normalize("100", "t", "kt", oxide_mass).status, "NORMALIZED")
 
     def test_same_units_do_not_establish_same_material_or_measurement(self):
         for change in (
@@ -104,7 +109,8 @@ class DecimalNormalizationTests(unittest.TestCase):
                 self.assertEqual(grade(target_context=replace(GRADE, treo_members=changed_members)).status,
                                  "NOT_COMPARABLE")
         self.assertEqual(grade(replace(GRADE, treo_members=())).status, "INSUFFICIENT_CONTEXT")
-        self.assertEqual(grade(replace(GRADE, denominator_basis=None)).reason, "MASS_DENOMINATOR_UNKNOWN")
+        for unknown in (None, "UNKNOWN"):
+            self.assertEqual(grade(replace(GRADE, denominator_basis=unknown)).reason, "MASS_DENOMINATOR_UNKNOWN")
         unresolved_group = replace(ELEMENT, chemical_species=())
         defined_group = replace(ELEMENT, chemical_species=("Nd2O3", "Pr6O11"))
         self.assertEqual(normalize("82", "ppm", "%", unresolved_group, target_context=defined_group).status,

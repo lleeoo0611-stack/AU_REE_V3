@@ -164,12 +164,18 @@ def normalize_measurement(
         return result("INSUFFICIENT_CONTEXT", "MEASUREMENT_UNIT_UNKNOWN")
     if required is None or source_dim != target_dim or source_dim != required:
         return result("NOT_COMPARABLE", "MEASUREMENT_DIMENSION_OR_QUANTITY_KIND_MISMATCH")
-    if required == "MASS_FRACTION" and not source_context.denominator_basis:
+    denominator = (source_context.denominator_basis or "").strip().upper()
+    if required == "MASS_FRACTION" and denominator in {"", "UNKNOWN", "NOT_DISCLOSED", "NOT_LOCATED"}:
         return result("INSUFFICIENT_CONTEXT", "MASS_DENOMINATOR_UNKNOWN")
     before, after = source_context.chemical_species, target_context.chemical_species
     members = source_context.treo_members
     if members and not set(members).issubset(KNOWN_OXIDE_SPECIES):
         return result("INSUFFICIENT_CONTEXT", "OXIDE_MEMBER_UNDEFINED")
+    if "kt TREO" in {source_unit, target_unit} and (
+        kind != "CONTAINED_OXIDE_MASS" or before not in {(), ("TREO",), members}
+        or after not in {(), ("TREO",), members}
+    ):
+        return result("NOT_COMPARABLE", "UNIT_TREO_LABEL_REQUIRES_DEFINED_TREO_MASS")
     known_species = (set(_WEIGHTS) - {"O"}) | KNOWN_OXIDE_SPECIES
     explicit_species = bool(before) and set(before).issubset(known_species)
     if kind != "ORE_MASS" and not members and not explicit_species:
