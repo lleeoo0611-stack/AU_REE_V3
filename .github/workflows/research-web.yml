@@ -1,0 +1,125 @@
+name: Research website
+
+on:
+  pull_request:
+    paths:
+      - "web/**"
+      - "src/au_ree_v3/*publication*.py"
+      - "src/au_ree_v3/web_release*.py"
+      - "tests/test_web*.py"
+      - ".github/workflows/research-web.yml"
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Website operation
+        type: choice
+        options: [verify_empty, deploy_formal, rollback_formal]
+        default: verify_empty
+      research_release_id:
+        description: Exact current F5-authorized research release
+        type: string
+        required: false
+      expected_web_release_id:
+        description: Expected current website release, blank for the first publication
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: research-web-${{ github.event_name == 'workflow_dispatch' && 'dispatch' || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - run: python -m unittest discover -s tests -p 'test_web*.py' -v
+      - name: Verify the public empty state
+        run: |
+          python -m au_ree_v3 research build-site --mode empty --out "$RUNNER_TEMP/empty-research-site"
+          python -m au_ree_v3 research verify-site --mode formal --site "$RUNNER_TEMP/empty-research-site" \
+            --out "$RUNNER_TEMP/empty-site-verification"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'verify_empty'
+        with:
+          name: research-site-empty-state
+          path: ${{ runner.temp }}/empty-research-site
+          retention-days: 7
+          if-no-files-found: error
+
+  deployment-authorization:
+    if: github.event_name == 'workflow_dispatch' && inputs.operation != 'verify_empty' && vars.AU_REE_WEB_DEPLOYMENT_AUTHORIZED != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - run: echo DEPLOYMENT_NOT_AUTHORIZED
+
+  stage-formal:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.operation != 'verify_empty' && vars.AU_REE_WEB_DEPLOYMENT_AUTHORIZED == 'true'
+    needs: verify
+    environment: research-web-publication
+    # The runner group must be restricted to this workflow on main.
+    runs-on:
+      group: au-ree-governed-publication
+      labels: linux
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src
+      OPERATION: ${{ inputs.operation }}
+      RELEASE_ID: ${{ inputs.research_release_id }}
+      EXPECTED_WEB_RELEASE_ID: ${{ inputs.expected_web_release_id }}
+      PUBLICATION_ROOT: ${{ vars.AU_REE_PUBLICATION_ROOT }}
+      CONTENT_STORE: ${{ vars.AU_REE_PUBLICATION_STORE }}
+      RELEASE_BUILDS: ${{ vars.AU_REE_PUBLICATION_BUILDS }}
+      FORMAL_SITE: ${{ vars.AU_REE_FORMAL_SITE }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify authorized research and freeze the complete site
+        run: |
+          [[ "$RELEASE_ID" =~ ^[a-f0-9]{64}$ ]]
+          [[ -d "$PUBLICATION_ROOT" && -d "$CONTENT_STORE" && -n "$FORMAL_SITE" ]]
+          if [[ "$OPERATION" == "rollback_formal" ]]; then
+            python -m au_ree_v3 research rollback-web --site "$FORMAL_SITE" --release-root "$PUBLICATION_ROOT" \
+              --store "$CONTENT_STORE" --release-id "$RELEASE_ID" --expected-current "$EXPECTED_WEB_RELEASE_ID" \
+              --out "$RUNNER_TEMP/site-rollback-verification"
+          else
+            [[ -d "$RELEASE_BUILDS/$RELEASE_ID" ]]
+            expected=()
+            if [[ -n "$EXPECTED_WEB_RELEASE_ID" ]]; then expected=(--expected-current "$EXPECTED_WEB_RELEASE_ID"); fi
+            python -m au_ree_v3 research build-site --mode formal --release-root "$PUBLICATION_ROOT" \
+              --store "$CONTENT_STORE" --release-id "$RELEASE_ID" "${expected[@]}" \
+              --profile "$RELEASE_BUILDS/$RELEASE_ID/profile.json" \
+              --research-build "$RELEASE_BUILDS/$RELEASE_ID/build" --out "$FORMAL_SITE"
+          fi
+          python -m au_ree_v3 research snapshot-site --site "$FORMAL_SITE" --release-root "$PUBLICATION_ROOT" \
+            --store "$CONTENT_STORE" --release-id "$RELEASE_ID" --out "$RUNNER_TEMP/published-research-site"
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: ${{ runner.temp }}/published-research-site
+
+  deploy-formal:
+    needs: stage-formal
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
