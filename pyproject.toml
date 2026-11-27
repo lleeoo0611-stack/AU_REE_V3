@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools==84.2.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "au-ree-v3"
+version = "0.1.0"
+description = "Reproducible Australian rare-earth research migration tools"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+au-ree-v3 = "au_ree_v3.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"au_ree_v3.migration" = ["baselines_v1.json"]
+
+[tool.setuptools.data-files]
+"share/au_ree_v3" = [
+    "config/migration/schema_crosswalk_v1.json",
+    "docs/migration/schema_crosswalk.csv",
+]
