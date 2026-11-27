@@ -1,0 +1,61 @@
+{
+  "schema": "fresh-resource-extraction-v1",
+  "profile_id": "au-ree-2026-11-28",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "bindings": [
+    {
+      "case_id": "mt-weld-resource",
+      "strategy": "narrative-and-cited-table-v1",
+      "source_key": "mt_weld_2024",
+      "approved_urls": ["https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf"],
+      "publication_date": "2024-08-05",
+      "effective_date": "2024-06-30",
+      "project": {
+        "entity_id": "AU-efff91a06cf344122d88",
+        "native_namespace": "project_registry_v1",
+        "native_id": "mt-weld",
+        "name": "Mt Weld Project"
+      },
+      "deposit_name": "Mt Weld",
+      "scope_name": "Mt Weld Mineral Resource",
+      "page": 2
+    },
+    {
+      "case_id": "wolverine-deposit-total",
+      "strategy": "classified-section-totals-v1",
+      "source_key": "asx_document_02904920",
+      "approved_urls": ["https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf"],
+      "publication_date": "2025-01-16",
+      "effective_date": "2025-01-15",
+      "project": {
+        "entity_id": "AU-9bd8e5ed8408cd84d876",
+        "native_namespace": "project_registry_v1",
+        "native_id": "browns-range",
+        "name": "Browns Range Project — Wolverine scope"
+      },
+      "deposit_name": "Wolverine",
+      "scope_name": "Wolverine Total Mineral Resource",
+      "section": "Total",
+      "page": 5
+    },
+    {
+      "case_id": "yin-resource-cutoff-series",
+      "strategy": "cutoff-series-and-detail-tables-v1",
+      "source_key": "mangaroon_mre2023",
+      "approved_urls": ["https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896"],
+      "publication_date": "2023-11-30",
+      "project": {
+        "entity_id": "AU-8f3fe174a998d20ee4cf",
+        "native_namespace": "WA_DMPE_REE_2026_PROJECT",
+        "native_id": "mangaroon",
+        "name": "Mangaroon Project — Yin resource scope"
+      },
+      "deposit_name": "Yin",
+      "scope_name": "Yin Ironstone Complex Mineral Resource",
+      "primary_cutoff": "0.20",
+      "page": 1,
+      "details_page": 11
+    }
+  ]
+}

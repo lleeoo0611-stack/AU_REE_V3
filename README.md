@@ -58,3 +58,12 @@ au-ree-v3 sources acquire --profile "$PROFILE" --store work/fresh/source-store -
 The [fresh baseline report](docs/research/fresh_baseline.md) records the F0–F5 gates and versioned outputs. Historical G0–G5 remain in the migration reports.
 
 The `sources combine` command verifies and merges recorded capture runs without another network request. Pass `--manifest` once per capture manifest, the same `--store`, and a new `--out` directory. It preserves original attempts and verifies the linked objects and temporal evidence.
+
+The exact-resource admission command uses the combined source inventory and the reviewed structure bindings. It rechecks capture proofs and serves only the eligible statements within those bindings.
+
+```sh
+au-ree-v3 research extract --bindings config/research_profiles/resource_bindings_v1.json \
+  --sources work/fresh/acquisition-final/source_manifest.json --assets work/fresh/source-store \
+  --database work/fresh/observations/research.sqlite --out work/fresh/observations \
+  --code-commit "$(git rev-parse HEAD)"
+```

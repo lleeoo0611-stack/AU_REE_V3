@@ -5,14 +5,14 @@ source-acquisition,PARTIAL,HTTPS acquisition of public editions and SHA verifica
 source-recovery,PARTIAL,Fresh content-addressed store and byte read-back,BLOCKED
 entity-resolution,PARTIAL,93 frozen project IDs and retained historical identity evidence,DEFERRED
 eligibility,DEFERRED,Fresh acceptance pending,DEFERRED
-document-extraction,DEFERRED,Fresh acceptance pending,PARTIAL
-document-recognition,DEFERRED,Fresh acceptance pending,PARTIAL
-observation-normalization,DEFERRED,Fresh acceptance pending,PARTIAL
-observation-storage,DEFERRED,Fresh acceptance pending,PARTIAL
-evidence-validation,DEFERRED,Fresh acceptance pending,PARTIAL
-resource-estimates,DEFERRED,Fresh acceptance pending,PARTIAL
-resource-admission,DEFERRED,Fresh acceptance pending,DEFERRED
-formal-selection,DEFERRED,Fresh acceptance pending,PARTIAL
+document-extraction,PARTIAL,Native exact PDF source and separately verified OCR/HTML/CSV views,PARTIAL
+document-recognition,PARTIAL,Three tested PDF structures with verified positive and rejection samples,PARTIAL
+observation-normalization,PARTIAL,Exact decimal resource tokens and material/chemical role checks,PARTIAL
+observation-storage,PARTIAL,Fresh immutable sources and governed SQLite resource observations,PARTIAL
+evidence-validation,PARTIAL,Fresh exact public capture proof and bound page/scope validation,PARTIAL
+resource-estimates,PARTIAL,Validated scoped Mt Weld and Wolverine totals plus Yin rejections,PARTIAL
+resource-admission,PARTIAL,Six governed values in the new profile,DEFERRED
+formal-selection,PARTIAL,Scope and effective date priorities with independent conflict tests,PARTIAL
 assay-derived-data,DEFERRED,Fresh acceptance pending,DEFERRED
 semantic-comparability,DEFERRED,Fresh acceptance pending,DEFERRED
 ontology-observation-research,DEFERRED,Fresh acceptance pending,DEFERRED

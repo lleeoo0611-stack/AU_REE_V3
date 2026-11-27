@@ -44,6 +44,16 @@ def main(argv: list[str] | None = None) -> int:
     combine.add_argument("--store", type=Path, required=True)
     combine.add_argument("--replica", type=Path)
 
+    research = commands.add_parser("research", help="Build and verify the fresh research profile")
+    research_commands = research.add_subparsers(dest="operation", required=True)
+    extract = research_commands.add_parser("extract", help="Extract and govern fresh resource observations")
+    extract.add_argument("--bindings", type=Path, required=True)
+    extract.add_argument("--sources", type=Path, required=True)
+    extract.add_argument("--assets", type=Path, required=True)
+    extract.add_argument("--database", type=Path, required=True)
+    extract.add_argument("--out", type=Path, required=True)
+    extract.add_argument("--code-commit", required=True)
+
     migration = commands.add_parser("migration", help="Audit and verify fixed V2 references")
     operations = migration.add_subparsers(dest="operation", required=True)
     for name in ("audit", "build-golden", "verify-crosswalk", "verify-baseline"):
@@ -78,6 +88,8 @@ def main(argv: list[str] | None = None) -> int:
             result = verify_reference(args.v2_root, args.profile, args.out)
         elif args.command == "sources":
             result = _run_sources(args)
+        elif args.command == "research":
+            result = _run_research(args)
         else:
             result = _run_migration(args)
     except (OSError, ValueError) as error:
@@ -99,6 +111,12 @@ def _run_sources(args) -> dict:
     if args.operation == "discover":
         return discover_sources(args.profile, args.out, **limits)
     return acquire_sources(args.profile, args.out, store=args.store, replica=args.replica, **limits)
+
+
+def _run_research(args) -> dict:
+    from .fresh_observations import extract_sources
+
+    return extract_sources(args.bindings, args.sources, args.assets, args.database, args.out, code_commit=args.code_commit)
 
 
 def _run_migration(args) -> dict:
