@@ -64,10 +64,9 @@ def main(argv: list[str] | None = None) -> int:
     for argument in ("profile", "bindings", "sources", "build", "store", "out"):
         archive.add_argument(f"--{argument}", type=Path, required=True)
     archive.add_argument("--repository", type=Path, default=Path.cwd())
-    archive.add_argument("--replica", type=Path)
-    archive.add_argument("--replica-failure-domain")
+    _replica_options(archive)
 
-    for operation in ("replay", "verify", "rehearse-rollback"):
+    for operation in ("replay", "verify", "rehearse-rollback", "replicate", "restore"):
         command = research_commands.add_parser(operation)
         command.add_argument("--release-root", type=Path, required=True)
         command.add_argument("--release-id", required=True)
@@ -77,6 +76,10 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--offline", action="store_true", required=True)
         if operation == "rehearse-rollback":
             command.add_argument("--previous-release-id", required=True)
+        if operation == "replicate":
+            _replica_options(command)
+        if operation == "restore":
+            command.add_argument("--replica-s3-config", type=Path, required=True)
 
     migration = commands.add_parser("migration", help="Audit and verify fixed V2 references")
     operations = migration.add_subparsers(dest="operation", required=True)
@@ -127,6 +130,13 @@ def main(argv: list[str] | None = None) -> int:
     return EXIT_CODES[result["status"]]
 
 
+def _replica_options(parser) -> None:
+    storage = parser.add_mutually_exclusive_group()
+    storage.add_argument("--replica", type=Path, help="Local copy for readback or rehearsal")
+    storage.add_argument("--replica-s3-config", type=Path, help="Authenticated remote replica configuration")
+    parser.add_argument("--replica-failure-domain", help="Optional receipt label for the replica")
+
+
 def _run_sources(args) -> dict:
     from .sources import acquire_sources, combine_acquisition, discover_sources
 
@@ -159,16 +169,29 @@ def _run_research(args) -> dict:
 
 
 def _run_publication(args) -> dict:
-    from .publication import archive_release, rehearse_rollback, replay_release
+    from .publication import archive_release, rehearse_rollback, replay_release, restore_release_replica, sync_release_replica
+    from .replica import S3Replica
     from .sources import ContentStore
 
     storage = ContentStore(args.store)
-    if args.operation == "archive":
-        replica = ContentStore(args.replica) if args.replica else None
+    if args.operation in {"archive", "replicate"}:
+        replica = ContentStore(args.replica) if args.replica else (
+            S3Replica.from_file(args.replica_s3_config) if args.replica_s3_config else None
+        )
+        if args.operation == "replicate":
+            return sync_release_replica(
+                release_root=args.release_root, release_id=args.release_id, primary=storage, replica=replica,
+                out=args.out, replica_failure_domain=args.replica_failure_domain,
+            )
         return archive_release(
             repository=args.repository, release_root=args.out, profile=args.profile, bindings=args.bindings,
             sources=args.sources, build=args.build, primary=storage, replica=replica,
             replica_failure_domain=args.replica_failure_domain,
+        )
+    if args.operation == "restore":
+        return restore_release_replica(
+            release_root=args.release_root, release_id=args.release_id,
+            replica=S3Replica.from_file(args.replica_s3_config), destination=storage, out=args.out,
         )
     if args.operation == "rehearse-rollback":
         return rehearse_rollback(
