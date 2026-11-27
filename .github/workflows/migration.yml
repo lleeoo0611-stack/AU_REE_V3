@@ -51,11 +51,16 @@ jobs:
             2af6f611e51eb4ac9dda73419d1afeba70d1307e \
             0dff6beb5aca52e565c37289e3ab295737e76942 \
             dcda87e81e1250d443f73c1984faaa7beaa19930
+      - name: Recover exact archived configuration
+        run: |
+          mkdir -p work/migration
+          python tools/recover_archive_configuration.py --v2-root "$RUNNER_TEMP/au-ree-v2" \
+            --out "$RUNNER_TEMP/archive-configuration" > work/migration/archive-configuration.json
       - name: Rehash both archived profiles
         run: |
           for profile in archived-census-2026-11-13 phase22-2026-11-05; do
             au-ree-v3 migration verify-baseline --v2-root "$RUNNER_TEMP/au-ree-v2" \
-              --profile "$profile" --out "work/migration/$profile"
+              --profile "$profile" --assets "$RUNNER_TEMP/archive-configuration" --out "work/migration/$profile"
             python - "$profile" <<'PY'
           import json
           import sys
@@ -65,6 +70,10 @@ jobs:
           print("Source availability", receipt["asset_inventory_counts"])
           PY
           done
+      - name: Verify frozen point and sensitivity results
+        run: |
+          au-ree-v3 migration verify-mcda --v2-root "$RUNNER_TEMP/au-ree-v2" --out work/migration/point-mcda
+          au-ree-v3 migration verify-sensitivity --v2-root "$RUNNER_TEMP/au-ree-v2" --out work/migration/leave-out
 
   resource-integration:
     name: Exact resource integration

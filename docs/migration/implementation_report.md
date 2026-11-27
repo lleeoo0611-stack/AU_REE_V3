@@ -87,3 +87,25 @@ python tools/benchmark_resource_replay.py --v2-root "$V2_ROOT" --v2-python "$V2_
 ```
 
 C added `src/au_ree_v3/{application,census,documents,observations}.py`, `tests/test_pipeline.py`, `tests/golden/synthetic_pipeline_expected.jsonl` and `tools/benchmark_resource_replay.py`. It modified the CLI, README, integration workflow, capability generator and matrix, this report, and the synthetic rejection catalog. No V3 files were merged, archived or removed. Pending capabilities include wider PDF/OCR and retrieval, entity resolution, GIS, ontology and ML, full Census and source-to-panel replay, and publication rollback.
+
+## D · Frozen decision components and archive recovery
+
+[C PR #3](https://github.com/lleeoo0611-stack/AU_REE_V3/pull/3) tested head `b5e859538b093092694399db69f56d360d37a61c` and merged as `d35a55916754fd1adb02d564d6fcb143a0b1b692`. [Actions run 46065612817](https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46065612817) passed static/unit in 14 seconds and exact PDF integration in 39 seconds of job elapsed time.
+
+### 2026-11-05 decision component
+
+V3 recomputed PROMETHEE II, SAW and fixed-anchor TOPSIS directly from 16 frozen historical matrices, criteria and scenario weights at `dcda87e81e1250d443f73c1984faaa7beaa19930`. Across 354 matrix cells and 553 scenario/project rows, all 1,659 score-and-rank pairs and 51 tie groups matched. Maximum absolute score error was `5.56e-16` against the declared `1e-8` tolerances. Deterministic criterion/domain removal matched all 2,457 ranks and rank changes, including 1,345 changes relative to the scenario baseline. Of 388 removal variants, 28 had no positive weight remaining and were omitted under the frozen rule.
+
+Point and removal computations took 0.013 s and 0.042 s of pure Python time. Including local Git reads and comparison they took 0.390 s and 0.508 s. Observed peak process RSS from comparable local re-runs was about 23,172 KiB and 29,900 KiB respectively. The R runtime, equivalent two-version performance, warm application cache and CI cost comparison for these components are unmeasured. These results reuse existing benefit scores. Added comparable Project–criterion values, new cohorts and new formal observations are zero in this component.
+
+All 538 required original fingerprints for the subset matched. G3 remains `NOT_RUN` for V3-generated cohorts, matrices, weights and keyed draws from those originals. The component uses the historical fixed-commit matrices, whose bytes differ in some cases from the later V2 fresh replay receipt. The later receipt keeps its own evidence scope.
+
+### 2026-11-13 archive
+
+The archived Census rehash remains `ARCHIVED_OUTPUT_VERIFIED`. The local source inventory reached 673/715 exact, 31 missing and 11 wrong editions. Three PDFs among the historical 19 missing assets were recovered by exact digest. The 42 currently unresolved assets directly link to 32 projects, 183 Census cells, 36 resource observations, 18 eligibility-gate rows and three shadow candidates. No direct MCDA criterion link was found. Indirect selection and panel impact remain unmeasured.
+
+All 13 release-listed configuration files were recovered against the independent archival digests. The fixed science commit contained the exact `research.json` bytes. The sealed `summary_rules.json` digest matched the same fixed Git blob with CRLF line endings. The receipt records both hashes and the byte-preserving JSON interpretation. The composite runtime configuration verification and source replay remain unexecuted. G4 is `BLOCKED` by original-source availability. G5 and the publication CI tier remain `NOT_RUN`.
+
+D adds `src/au_ree_v3/decision.py`, `src/au_ree_v3/migration/verify_decision.py`, `tests/test_decision.py`, `tools/recover_archive_configuration.py`, `tests/test_archive_configuration_recovery.py` and `docs/migration/archive_configuration_recovery.json`. It updates frozen verification, CLI, the capability matrix and its source, the workflow, README, the migration baseline test and this report. There are no V3 file consolidations, archives or removals in D. Run the decision commands in the [README](../../README.md). The local full suite with the frozen Mt Weld PDF passed 69 tests without skips.
+
+The next source-to-panel unit is to reproduce the subset's criterion resolution, weight inputs and panel membership from the verified 538 assets, then run the newly verified ranking boundary against those outputs. GIS, technical disclosure, ontology and ML remain listed in the capability matrix.
