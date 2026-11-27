@@ -1,0 +1,4865 @@
+{
+  "historical_reference": {
+    "artifact_commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+    "artifacts": {
+      "results/ree-project-census/coverage-locked-20261125/REE project census.csv": {
+        "git_blob_sha": "cf79a3d1f2db353dbe8fa895c0e1ada97d6ffb75",
+        "sha256": "a643607a1fe104e3cd7c6590fc4752e37a09902087000882430931aa69b25308"
+      },
+      "results/ree-project-census/coverage-locked-20261125/asset_manifest.json": {
+        "git_blob_sha": "73b01d4a04cc3abe69ad75785647a587ed24fbe8",
+        "sha256": "082c26b30b2616445b4eabeefd1bc08265740268b146ae34085ccc0a8374b8ae"
+      },
+      "results/ree-project-census/coverage-locked-20261125/census_identity_roles.csv": {
+        "git_blob_sha": "204b0059cd0fbce2cfca31430a372f115bd6446b",
+        "sha256": "34b50b1cf3d63dbb319906f9ebb528b1fe7f4b732dd8da8dec30e23f798a82d4"
+      },
+      "results/ree-project-census/coverage-locked-20261125/census_release.json": {
+        "git_blob_sha": "bb5ed1f59307f59e4cfe408b15d1aff96c2bb5d9",
+        "sha256": "9b10857fca27163b173ab4540aaa1f59898d270181b7b147b43a30ba4b52bcd6"
+      },
+      "results/ree-project-census/coverage-locked-20261125/census_selection.csv": {
+        "git_blob_sha": "b269d45a0fdbb78095adab3b3d2fb79f2ca76e69",
+        "sha256": "d8cb35a3b66e9cfd1862bb479178f6a82280dbd53c923fe46d163c07ef6bebec"
+      },
+      "results/ree-project-census/coverage-locked-20261125/field_provenance.csv": {
+        "git_blob_sha": "c9915469c67504acf0e6e23104aaa94dac7f96a5",
+        "sha256": "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d"
+      }
+    },
+    "historical_cutoff": "2026-11-13",
+    "historical_science_commit": "0dff6beb5aca52e565c37289e3ab295737e76942"
+  },
+  "schema_version": "source-seed-catalog-v1",
+  "seed_role": "HISTORICAL_SEARCH_POINTER_ONLY",
+  "seed_urls": [
+    {
+      "association_references": {
+        "AU-2a3a86a4d971e9f9838d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5fd9b7d443bb498f9d171bc5173d522f2038cbb0b686e9ff7020e87cc30a9c9e"
+      ],
+      "historical_source_keys": [
+        "has_hastings_scoping_20120905"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2a3a86a4d971e9f9838d": 2
+      },
+      "project_ids": [
+        "AU-2a3a86a4d971e9f9838d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-ca2977337ce6965edfa667ef",
+      "url": "https://announcements.asx.com.au/asxpdf/20120905/pdf/428j0z4l082xrz.pdf"
+    },
+    {
+      "association_references": {
+        "AU-fb4e914f86102baa414a": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "c9381dbbb4d0e5907e43a8c1827f85ca33629a8f7f2c9c3160ec0677491c0e10"
+      ],
+      "historical_source_keys": [
+        "wim150_issuer_products_20150325"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-fb4e914f86102baa414a": 2
+      },
+      "project_ids": [
+        "AU-fb4e914f86102baa414a"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-28e217632222f2c650635a21",
+      "url": "https://announcements.asx.com.au/asxpdf/20150325/pdf/42xhpt2gpbfsfs.pdf"
+    },
+    {
+      "association_references": {
+        "AU-fb4e914f86102baa414a": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "915ba8ed727c24113d27d9510c50bee05a03b080955df6d867a6ee5f22aa0f5e"
+      ],
+      "historical_source_keys": [
+        "wim150_20151030"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-fb4e914f86102baa414a": 1
+      },
+      "project_ids": [
+        "AU-fb4e914f86102baa414a"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-5642d3319c186ccd3e60460a",
+      "url": "https://announcements.asx.com.au/asxpdf/20151030/pdf/432lnhn1tgsl2l.pdf"
+    },
+    {
+      "association_references": {
+        "AU-1345edd8165c10930e94": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb"
+      ],
+      "historical_source_keys": [
+        "nolans_dfs2019_asx"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-1345edd8165c10930e94": 1
+      },
+      "project_ids": [
+        "AU-1345edd8165c10930e94"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-5493d117c52285abe679e105",
+      "url": "https://announcements.asx.com.au/asxpdf/20190207/pdf/442fgrbxqwrxdd.pdf"
+    },
+    {
+      "association_references": {
+        "AU-f46f6d53e7196650495d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "bdcab78f450659e5ca81305004f18be9c64b497472d8c462c27d3ae0078377e5"
+      ],
+      "historical_source_keys": [
+        "kalkaroo_ree2020"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-f46f6d53e7196650495d": 1
+      },
+      "project_ids": [
+        "AU-f46f6d53e7196650495d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-6cabccb507c040bd94474c73",
+      "url": "https://announcements.asx.com.au/asxpdf/20200219/pdf/44f780ww5n6tbj.pdf"
+    },
+    {
+      "association_references": {
+        "AU-f46f6d53e7196650495d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "b8e5372b6a4356ee9af94f05cf34708a04df54143b4b0c8b8b3886f7c8d3ea82"
+      ],
+      "historical_source_keys": [
+        "kalkaroo_interim_20220411"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-f46f6d53e7196650495d": 2
+      },
+      "project_ids": [
+        "AU-f46f6d53e7196650495d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-3dad650116d28226d8c10fe5",
+      "url": "https://announcements.asx.com.au/asxpdf/20220411/pdf/457xrc1d3g8nb2.pdf"
+    },
+    {
+      "association_references": {
+        "AU-0832169526bb5ec07626": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "c241e248affde53e8e1753ad9f880caa3b0c53eff8c16445134334cd55716fc9"
+      ],
+      "historical_source_keys": [
+        "itech_franklyn_ree_assays_20220729"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-0832169526bb5ec07626": 2
+      },
+      "project_ids": [
+        "AU-0832169526bb5ec07626"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-03b0a8462242715a07281fcb",
+      "url": "https://announcements.asx.com.au/asxpdf/20220729/pdf/45c9m44hzcdy91.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2af694147ae21c393820": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "a672dd1f460420a9912d9423a3b96e130b1dee110879f36df7c050946ced578a"
+      ],
+      "historical_source_keys": [
+        "igo_annual2022"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2af694147ae21c393820": 1
+      },
+      "project_ids": [
+        "AU-2af694147ae21c393820"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-5ea4f78e46fdf0f95951ce82",
+      "url": "https://announcements.asx.com.au/asxpdf/20220830/pdf/45dgch8z402y23.pdf"
+    },
+    {
+      "association_references": {
+        "AU-ee34781b030807146e64": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "6c05b1a7e173975bd520ec05efd6c3ba9f97157064cf779a7202441db564484b"
+      ],
+      "historical_source_keys": [
+        "mtm_ravensthorpe_20221003"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ee34781b030807146e64": 2
+      },
+      "project_ids": [
+        "AU-ee34781b030807146e64"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-89e8d78a9c045e48d6cae2d8",
+      "url": "https://announcements.asx.com.au/asxpdf/20221003/pdf/45ft3ygbp5ky10.pdf"
+    },
+    {
+      "association_references": {
+        "AU-c5e94422a89a23f82408": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "970f4ce20adef0002cf68cede290af0ddb58a07a35106adfea386c1578ee46ac"
+      ],
+      "historical_source_keys": [
+        "taruga_morgans_creek_ree_host_20221013"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-c5e94422a89a23f82408": 2
+      },
+      "project_ids": [
+        "AU-c5e94422a89a23f82408"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-29a96011deddbf67018e6223",
+      "url": "https://announcements.asx.com.au/asxpdf/20221013/pdf/45g78nglkzk924.pdf"
+    },
+    {
+      "association_references": {
+        "AU-70cc41e3a7106f983f73": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "e5e4bc19476428a86bc09b9999621e0d6a50bff4ce8668372fb32739e7281a0d"
+      ],
+      "historical_source_keys": [
+        "wcn_quarterly_lake_tay_20221031"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-70cc41e3a7106f983f73": 2
+      },
+      "project_ids": [
+        "AU-70cc41e3a7106f983f73"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-ef8d36e54b21caa679f60de9",
+      "url": "https://announcements.asx.com.au/asxpdf/20221031/pdf/45h1l6xvt9ngg4.pdf"
+    },
+    {
+      "association_references": {
+        "AU-cae6c11543b0da5f840d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "1106052fbb1564fdb0788a727239f4f5987f18dcbc6cab61789ef070148ed221"
+      ],
+      "historical_source_keys": [
+        "luni_discovery_20221116"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-cae6c11543b0da5f840d": 2
+      },
+      "project_ids": [
+        "AU-cae6c11543b0da5f840d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-4052c3552555133fd9edb3d8",
+      "url": "https://announcements.asx.com.au/asxpdf/20221116/pdf/45hn6hvm6w1qht.pdf"
+    },
+    {
+      "association_references": {
+        "AU-7c198d219aa1db3e291f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5ec06f3844f9d51d5515b47d06f15212ef6f4c2577556482a665e9916facbeb7"
+      ],
+      "historical_source_keys": [
+        "lyons_2022_rc_assay_definition"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-7c198d219aa1db3e291f": 2
+      },
+      "project_ids": [
+        "AU-7c198d219aa1db3e291f"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-49e8653dc6c00309947c0789",
+      "url": "https://announcements.asx.com.au/asxpdf/20221214/pdf/45jsglv2nldn6w.pdf"
+    },
+    {
+      "association_references": {
+        "AU-c5e94422a89a23f82408": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "855a5a164804247ff40a8640ae29cde536c5869b83d4faeccbbe40625751cfcc"
+      ],
+      "historical_source_keys": [
+        "taruga_mt_craig_20230131"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-c5e94422a89a23f82408": 3
+      },
+      "project_ids": [
+        "AU-c5e94422a89a23f82408"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-96e71322b6a1c61310ab0ed3",
+      "url": "https://announcements.asx.com.au/asxpdf/20230131/pdf/45l380cxztyd3v.pdf"
+    },
+    {
+      "association_references": {
+        "AU-3eaa906d8230334ef698": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "60013b7e72a45b1d0ae746e3424784e5aa3c01f677fb65fe4d73edf550969f7c"
+      ],
+      "historical_source_keys": [
+        "r17_primary_18"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3eaa906d8230334ef698": 2
+      },
+      "project_ids": [
+        "AU-3eaa906d8230334ef698"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-32ab78418b6022810a35bf1b",
+      "url": "https://announcements.asx.com.au/asxpdf/20230131/pdf/45l4p4vtpj7qtj.pdf"
+    },
+    {
+      "association_references": {
+        "AU-b50a5b57669586191c33": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "b8fa9ae2d9a218bd3f178671301b07dabb0ccb817aec99c20f4d85a936320eb7"
+      ],
+      "historical_source_keys": [
+        "wandagee20230131"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-b50a5b57669586191c33": 1
+      },
+      "project_ids": [
+        "AU-b50a5b57669586191c33"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-79d61920a63b13cc77a8f035",
+      "url": "https://announcements.asx.com.au/asxpdf/20230131/pdf/45l4qkhgm9jy0z.pdf"
+    },
+    {
+      "association_references": {
+        "AU-3a0020b6daf659f62138": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "66c73ea45aa00561067651fdadfa11b90b4c479222b3c546b56c055cd51b5b53"
+      ],
+      "historical_source_keys": [
+        "euston_annual2022_metadata"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3a0020b6daf659f62138": 1
+      },
+      "project_ids": [
+        "AU-3a0020b6daf659f62138"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-2ee53771bc9032c05114d315",
+      "url": "https://announcements.asx.com.au/asxpdf/20230221/pdf/45lt2cdc8f40hv.pdf"
+    },
+    {
+      "association_references": {
+        "AU-524c37fc04cf47bf8dca": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "94a57655d74ead667ce7adbbb0923b68b011641b9249992ff12a017c2e96252f"
+      ],
+      "historical_source_keys": [
+        "iluka_balranald_fid20230221"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-524c37fc04cf47bf8dca": 2
+      },
+      "project_ids": [
+        "AU-524c37fc04cf47bf8dca"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-4e085aa10f82ea2f975ebb2f",
+      "url": "https://announcements.asx.com.au/asxpdf/20230221/pdf/45lt9k5xy3ktnj.pdf"
+    },
+    {
+      "association_references": {
+        "AU-e50ba6a268ea89226495": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "a8d5bb873fb84f0884b3960b0eb48692843e3dbba55eb1eaaf8314924f635c4c"
+      ],
+      "historical_source_keys": [
+        "r6_identity_achilles_tambourah"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-e50ba6a268ea89226495": 1
+      },
+      "project_ids": [
+        "AU-e50ba6a268ea89226495"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8465a7f854f1dd1efe4d40b7",
+      "url": "https://announcements.asx.com.au/asxpdf/20230303/pdf/45m8ynbtjdrx2w.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d1394abdef4c8d971c78": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "37f08bb13d2089d6601f424c4fa8a76b85843b901bfeff7ac84e0f6012f56720"
+      ],
+      "historical_source_keys": [
+        "r6_identity_condingup"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d1394abdef4c8d971c78": 1
+      },
+      "project_ids": [
+        "AU-d1394abdef4c8d971c78"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-3c8c615aa7340a144b768220",
+      "url": "https://announcements.asx.com.au/asxpdf/20230314/pdf/45mmp2sy28f0ds.pdf"
+    },
+    {
+      "association_references": {
+        "AU-1c907e00c797bf8b3ce1": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "cc858a32432d4ba507b835fd56e7511af44ee098a25253a7de97e22df57ecfbb"
+      ],
+      "historical_source_keys": [
+        "od6_quarter20230427"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-1c907e00c797bf8b3ce1": 1
+      },
+      "project_ids": [
+        "AU-1c907e00c797bf8b3ce1"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-2aec82d44356c7a2db037c85",
+      "url": "https://announcements.asx.com.au/asxpdf/20230427/pdf/45p123qfz1mgyn.pdf"
+    },
+    {
+      "association_references": {
+        "AU-557f0c9ad81bf84bbb6d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-ee34781b030807146e64": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "c70e72f9257f4eef7f8c9254b5be1d29cafe019ce89d6c11766c3bc567254ae0"
+      ],
+      "historical_source_keys": [
+        "ravensthorpe20230428"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-557f0c9ad81bf84bbb6d": 1,
+        "AU-ee34781b030807146e64": 1
+      },
+      "project_ids": [
+        "AU-557f0c9ad81bf84bbb6d",
+        "AU-ee34781b030807146e64"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-7cab8c82f96e71b9119aaac8",
+      "url": "https://announcements.asx.com.au/asxpdf/20230428/pdf/45p5s75djkxgp7.pdf"
+    },
+    {
+      "association_references": {
+        "AU-9b667066e6eb66753005": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "e85d5345b06dc42448cee9fba03d0a667b8d698bc7b408521357edfb88e3c053"
+      ],
+      "historical_source_keys": [
+        "cummins_mre2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-9b667066e6eb66753005": 2
+      },
+      "project_ids": [
+        "AU-9b667066e6eb66753005"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-9b5721079677fe98cb0b3721",
+      "url": "https://announcements.asx.com.au/asxpdf/20230501/pdf/05p7grkh7l8j7v.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d1394abdef4c8d971c78": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "cd348c2df55c4677fb57be2d242201366d226574169903669208bd46133278c1"
+      ],
+      "historical_source_keys": [
+        "r17_primary_19"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d1394abdef4c8d971c78": 2
+      },
+      "project_ids": [
+        "AU-d1394abdef4c8d971c78"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-cd58d8c5affd826596e7f8d1",
+      "url": "https://announcements.asx.com.au/asxpdf/20230504/pdf/05pcd3mhsr7f4f.pdf"
+    },
+    {
+      "association_references": {
+        "AU-410159af7b79ea498ec2": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "7de6021ce23b5622e920f8a3169fe6252ea4ba24d7b616f19a1e90454ee4294c"
+      ],
+      "historical_source_keys": [
+        "cannie_mre20230516"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-410159af7b79ea498ec2": 1
+      },
+      "project_ids": [
+        "AU-410159af7b79ea498ec2"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-cb660f540e0685eb792e7558",
+      "url": "https://announcements.asx.com.au/asxpdf/20230516/pdf/05pqwkp4jszx7d.pdf"
+    },
+    {
+      "association_references": {
+        "AU-47d12ebe6b66df8e5936": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9d3798d57ca198cfd766a2cc83881427be0a3f9ee5e2dabe7b6028e48d544415"
+      ],
+      "historical_source_keys": [
+        "venture_greater_brothers_20230801"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-47d12ebe6b66df8e5936": 2
+      },
+      "project_ids": [
+        "AU-47d12ebe6b66df8e5936"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c10eac0822447bc9ff889605",
+      "url": "https://announcements.asx.com.au/asxpdf/20230801/pdf/05s6qkfvq8mc11.pdf"
+    },
+    {
+      "association_references": {
+        "AU-a8258e4989c7bd95b7af": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "0ae98cfd93d554b8d948267a50f9c821761fee97c5a230440055c06029fc9d63"
+      ],
+      "historical_source_keys": [
+        "tower_quarter2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-a8258e4989c7bd95b7af": 1
+      },
+      "project_ids": [
+        "AU-a8258e4989c7bd95b7af"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-686c0e0e1570b2e977b2a440",
+      "url": "https://announcements.asx.com.au/asxpdf/20230808/pdf/05sf46x92l83s0.pdf"
+    },
+    {
+      "association_references": {
+        "AU-68da41afe874c3bd66d4": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "d89d425f252770e5d8fa332f11331b93b21e03aea466545a45397351c91ec402"
+      ],
+      "historical_source_keys": [
+        "voyager_mapped_tenures_20230814"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-68da41afe874c3bd66d4": 2
+      },
+      "project_ids": [
+        "AU-68da41afe874c3bd66d4"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-767eb7331da6674338b9578a",
+      "url": "https://announcements.asx.com.au/asxpdf/20230814/pdf/05slg0w3mwj3kt.pdf"
+    },
+    {
+      "association_references": {
+        "AU-49b538453133bd968e8d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-9b667066e6eb66753005": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "1be3b74ad9667ee7777572ca73318d962e28596a9b7a0dbfe7f6dda3dee1ca07"
+      ],
+      "historical_source_keys": [
+        "cummins_scoping2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-49b538453133bd968e8d": 3,
+        "AU-9b667066e6eb66753005": 3
+      },
+      "project_ids": [
+        "AU-49b538453133bd968e8d",
+        "AU-9b667066e6eb66753005"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-1c077899446eaddb39a01054",
+      "url": "https://announcements.asx.com.au/asxpdf/20230822/pdf/05swq0gwm2w86n.pdf"
+    },
+    {
+      "association_references": {
+        "AU-6a5615e0ed95d955c2dd": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "24310293a028482c34bb289de1ddfb1ff05db1677385b9017593336fd131f08a"
+      ],
+      "historical_source_keys": [
+        "r6_identity_itech_eyre_peninsula"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-6a5615e0ed95d955c2dd": 1
+      },
+      "project_ids": [
+        "AU-6a5615e0ed95d955c2dd"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-178b598fa1347686c7d3d060",
+      "url": "https://announcements.asx.com.au/asxpdf/20230830/pdf/05t8tqxpqh6zr8.pdf"
+    },
+    {
+      "association_references": {
+        "AU-73549b8a9b1c6faf55eb": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "4c72f11eee2d90b26be20bd831496235a47bd8d8f2a8ae65d2d0fbb116abaddc"
+      ],
+      "historical_source_keys": [
+        "auto_identity_coburn"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-73549b8a9b1c6faf55eb": 1
+      },
+      "project_ids": [
+        "AU-73549b8a9b1c6faf55eb"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-20b3e41e760b0ab2eadc1219",
+      "url": "https://announcements.asx.com.au/asxpdf/20230906/pdf/05tkl2byt4wfmn.pdf"
+    },
+    {
+      "association_references": {
+        "AU-b50a5b57669586191c33": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "45ff30236b16929984e94eeb073cf9a22444f578d0c04c98b27c1a2d4d7a03e6"
+      ],
+      "historical_source_keys": [
+        "yari_wandagee_20230913"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-b50a5b57669586191c33": 2
+      },
+      "project_ids": [
+        "AU-b50a5b57669586191c33"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8faeeeadc91a9eb90e5af5eb",
+      "url": "https://announcements.asx.com.au/asxpdf/20230913/pdf/05tvfphyv421qp.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d99cf357d160df73387c": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "aeb46f66fa72d0bb9003a61b01356fc65151db75185f91d980adcd86b21dbbf5"
+      ],
+      "historical_source_keys": [
+        "auto2_identity_southern_cross"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d99cf357d160df73387c": 1
+      },
+      "project_ids": [
+        "AU-d99cf357d160df73387c"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-9d09cdd6533e22e3f6d68ce4",
+      "url": "https://announcements.asx.com.au/asxpdf/20230922/pdf/05v5qdfqlg7vwx.pdf"
+    },
+    {
+      "association_references": {
+        "AU-b31d00e2272ffa6ccbd3": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "7f46c1631aa6a6b9eab24314635bbc589905dd202e04de2203135e79f93b330a"
+      ],
+      "historical_source_keys": [
+        "r6_identity_peak_charles"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-b31d00e2272ffa6ccbd3": 1
+      },
+      "project_ids": [
+        "AU-b31d00e2272ffa6ccbd3"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0fa1ea53ffdf0713fb652814",
+      "url": "https://announcements.asx.com.au/asxpdf/20230928/pdf/05vfsc0gqnp1zf.pdf"
+    },
+    {
+      "association_references": {
+        "AU-1103c5aa8bb63077ac61": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-70cc41e3a7106f983f73": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-a9b72e86940271be45a3": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-b3ae34ac85d16018bd4b": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-f81823bd8ba271840345": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9e263ac3d2b1ef16e79da666295aa6dac391b85cf633a3b996fb3f9dbbefc425"
+      ],
+      "historical_source_keys": [
+        "wcn_annual2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-1103c5aa8bb63077ac61": 1,
+        "AU-70cc41e3a7106f983f73": 1,
+        "AU-a9b72e86940271be45a3": 1,
+        "AU-b3ae34ac85d16018bd4b": 1,
+        "AU-f81823bd8ba271840345": 1
+      },
+      "project_ids": [
+        "AU-1103c5aa8bb63077ac61",
+        "AU-70cc41e3a7106f983f73",
+        "AU-a9b72e86940271be45a3",
+        "AU-b3ae34ac85d16018bd4b",
+        "AU-f81823bd8ba271840345"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-ac6edb8015313a3f35ed8b9d",
+      "url": "https://announcements.asx.com.au/asxpdf/20230929/pdf/05vhvny9k7ghx0.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2ab3e8eb7b5784e64f9b": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "31efc775284b45cc43118d960eb7c26638d3697030abdf1013831e0da2cc7ea3"
+      ],
+      "historical_source_keys": [
+        "hre_duke_targets_20231113"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2ab3e8eb7b5784e64f9b": 2
+      },
+      "project_ids": [
+        "AU-2ab3e8eb7b5784e64f9b"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-373c181f86a847fcc3e1e0dd",
+      "url": "https://announcements.asx.com.au/asxpdf/20231113/pdf/05x7tyw3tbq7b3.pdf"
+    },
+    {
+      "association_references": {
+        "AU-7c198d219aa1db3e291f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9c9df3bfd3cca3c86946638121c09cd07117d1bea12737ecfc06dbf8b7c14334"
+      ],
+      "historical_source_keys": [
+        "lyons_2024_mre_campaign_link"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-7c198d219aa1db3e291f": 3
+      },
+      "project_ids": [
+        "AU-7c198d219aa1db3e291f"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-e74d18d7e038bb89d666c33b",
+      "url": "https://announcements.asx.com.au/asxpdf/20240315/pdf/061k5t4brnh2bl.pdf"
+    },
+    {
+      "association_references": {
+        "AU-68da41afe874c3bd66d4": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "463c341f20d41c5a3596163ca0c80889fe147acc949e74a4ed1a64f589918097"
+      ],
+      "historical_source_keys": [
+        "voyager20240328"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-68da41afe874c3bd66d4": 1
+      },
+      "project_ids": [
+        "AU-68da41afe874c3bd66d4"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0011b53781e17720ded5cfe6",
+      "url": "https://announcements.asx.com.au/asxpdf/20240328/pdf/061z9ycpc5ygs2.pdf"
+    },
+    {
+      "association_references": {
+        "AU-630885ed0d74d8641d6c": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "439a29594c54430d9fc7e91ef7217fed0cb12cc5526518b7f524a3e90414bef8"
+      ],
+      "historical_source_keys": [
+        "r6_identity_bencubbin"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-630885ed0d74d8641d6c": 1
+      },
+      "project_ids": [
+        "AU-630885ed0d74d8641d6c"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-dc0f9911b2dcb11c16606bd3",
+      "url": "https://announcements.asx.com.au/asxpdf/20240328/pdf/061zwpgyygh38r.pdf"
+    },
+    {
+      "association_references": {
+        "AU-75fe0f1a81005bd19586": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9d23cfd05efad75d66ec9c2e86b701876f7bdbde332cc6b22a4fb8005fca6481"
+      ],
+      "historical_source_keys": [
+        "durack_20240703"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-75fe0f1a81005bd19586": 1
+      },
+      "project_ids": [
+        "AU-75fe0f1a81005bd19586"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-e549eda0c35d9bf4d139a338",
+      "url": "https://announcements.asx.com.au/asxpdf/20240703/pdf/0656mxcyyksmfs.pdf"
+    },
+    {
+      "association_references": {
+        "AU-3eaa906d8230334ef698": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "1f5e83ea28b7b59ef46355ecb6d3f7d47d4eb88adcc7c0e4502f60362cab5b74"
+      ],
+      "historical_source_keys": [
+        "r6_identity_mukinbudin"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3eaa906d8230334ef698": 1
+      },
+      "project_ids": [
+        "AU-3eaa906d8230334ef698"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-39545b717c43de207d0fd357",
+      "url": "https://announcements.asx.com.au/asxpdf/20240927/pdf/068fpszm6j002r.pdf"
+    },
+    {
+      "association_references": {
+        "AU-4ec1fb08563b42352d29": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513"
+      ],
+      "historical_source_keys": [
+        "cowalinya_ar2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-4ec1fb08563b42352d29": 2
+      },
+      "project_ids": [
+        "AU-4ec1fb08563b42352d29"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-cf018b177f71055f2a66aba0",
+      "url": "https://announcements.asx.com.au/asxpdf/20240930/pdf/068jx9r9284599.pdf"
+    },
+    {
+      "association_references": {
+        "AU-c5e94422a89a23f82408": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "b0faf81a98d605436700670fbaff7e6b3d10f733c5af9a5311fbe9ddf08bb246"
+      ],
+      "historical_source_keys": [
+        "taruga_ar2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-c5e94422a89a23f82408": 1
+      },
+      "project_ids": [
+        "AU-c5e94422a89a23f82408"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-d5538231707b168867514767",
+      "url": "https://announcements.asx.com.au/asxpdf/20240930/pdf/068jy1z4w261mt.pdf"
+    },
+    {
+      "association_references": {
+        "AU-7135b2eb1d3f193da9a6": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-88dfe58aac214c33e576": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "61a1e373fbb3651668e4cc7916fb0299ec5dff4e4ad7fea8e9ca734fedc070fd"
+      ],
+      "historical_source_keys": [
+        "aiv_ar2024_native"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-7135b2eb1d3f193da9a6": 1,
+        "AU-88dfe58aac214c33e576": 1
+      },
+      "project_ids": [
+        "AU-7135b2eb1d3f193da9a6",
+        "AU-88dfe58aac214c33e576"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-95d82cdfc1201c53382ba84c",
+      "url": "https://announcements.asx.com.au/asxpdf/20241025/pdf/069l2vscydzht4.pdf"
+    },
+    {
+      "association_references": {
+        "AU-14f7cb8ca1fcd58f536c": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "c0684f1fa2358241c68110d1c1ac471239caa5995c79da9872108423e32f0986"
+      ],
+      "historical_source_keys": [
+        "ida_half20250314"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-14f7cb8ca1fcd58f536c": 2
+      },
+      "project_ids": [
+        "AU-14f7cb8ca1fcd58f536c"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8a4d05e9e657f96fe8ce7e39",
+      "url": "https://announcements.asx.com.au/asxpdf/20250314/pdf/06gn8yfc0vl2jk.pdf"
+    },
+    {
+      "association_references": {
+        "AU-68da41afe874c3bd66d4": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "250eb3778935dfdd8dd56c397ef38ffb396b15d82a0f5a464e99427fd08a5b75"
+      ],
+      "historical_source_keys": [
+        "voyager_relinquishment_fy2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-68da41afe874c3bd66d4": 3
+      },
+      "project_ids": [
+        "AU-68da41afe874c3bd66d4"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-930f5a14fdf41ab50da6c4e0",
+      "url": "https://announcements.asx.com.au/asxpdf/20250331/pdf/06h61k11cfbd3w.pdf"
+    },
+    {
+      "association_references": {
+        "AU-794821a2df9b7a244f96": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "d4476ed757c90a90654ffd2415bcc660ae8ee8ba26c10a7092bebdef7264714d"
+      ],
+      "historical_source_keys": [
+        "hre_perenjori20250613"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-794821a2df9b7a244f96": 1
+      },
+      "project_ids": [
+        "AU-794821a2df9b7a244f96"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-fbdd0bb1587aa59d245c3d31",
+      "url": "https://announcements.asx.com.au/asxpdf/20250613/pdf/06kpv73yk1418b.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2cfeb25aefee0c4f95fb": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab"
+      ],
+      "historical_source_keys": [
+        "dubbo_scoping2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2cfeb25aefee0c4f95fb": 1
+      },
+      "project_ids": [
+        "AU-2cfeb25aefee0c4f95fb"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c0370d73dd1ead01c1c05aa9",
+      "url": "https://announcements.asx.com.au/asxpdf/20250711/pdf/06lq7vsvvk6yms.pdf"
+    },
+    {
+      "association_references": {
+        "AU-203b4d90e5c23a323610": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "e04deab59d81ea702497402ea761e481bdadc126e76fcd93ed015479c3f6f226"
+      ],
+      "historical_source_keys": [
+        "nfm_hartsrange20250724"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-203b4d90e5c23a323610": 1
+      },
+      "project_ids": [
+        "AU-203b4d90e5c23a323610"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-adc2045ca5964ea58b2a31e4",
+      "url": "https://announcements.asx.com.au/asxpdf/20250724/pdf/06m2pqx9qtdgvb.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d99cf357d160df73387c": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "dd29b311224f3e25692592f23d7efedec24b356fccc8513a7022f9534dfad1b1"
+      ],
+      "historical_source_keys": [
+        "terra_quarterly_southern_cross_20250730"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d99cf357d160df73387c": 2
+      },
+      "project_ids": [
+        "AU-d99cf357d160df73387c"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-d80de92bff1a0492b1f2eea0",
+      "url": "https://announcements.asx.com.au/asxpdf/20250730/pdf/06m9c8rkytc9sm.pdf"
+    },
+    {
+      "association_references": {
+        "AU-12cc237ae66c7a6508ca": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "749bb4f962c58520f83a2f85a753e82e80b21bb13821c3605f79592882eba43f"
+      ],
+      "historical_source_keys": [
+        "redlings_quarter2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-12cc237ae66c7a6508ca": 2
+      },
+      "project_ids": [
+        "AU-12cc237ae66c7a6508ca"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-ddd50ed3517db429c31ce6b7",
+      "url": "https://announcements.asx.com.au/asxpdf/20250731/pdf/06mcv639h20jz3.pdf"
+    },
+    {
+      "association_references": {
+        "AU-ee5ca893d12883df35f1": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "eb73f28443e453f9663f7957b0b9d3950d8734cf910543acc213d5ef6742a668"
+      ],
+      "historical_source_keys": [
+        "yttria_2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ee5ca893d12883df35f1": 2
+      },
+      "project_ids": [
+        "AU-ee5ca893d12883df35f1"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-81ed278f9305cf4294402c9b",
+      "url": "https://announcements.asx.com.au/asxpdf/20250731/pdf/06mdccyq4dppkh.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2fc429d0556dfa0b95c4": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-9bd8e5ed8408cd84d876": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075"
+      ],
+      "historical_source_keys": [
+        "browns_range_2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2fc429d0556dfa0b95c4": 3,
+        "AU-9bd8e5ed8408cd84d876": 2
+      },
+      "project_ids": [
+        "AU-2fc429d0556dfa0b95c4",
+        "AU-9bd8e5ed8408cd84d876"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c1d00026e0f434e17d5e8285",
+      "url": "https://announcements.asx.com.au/asxpdf/20250915/pdf/06p6zt0hxtpg01.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2a3a86a4d971e9f9838d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "4b622bb6796fc414c55a0c81f89e4186468a95bca99076969d3989335f2713b2"
+      ],
+      "historical_source_keys": [
+        "brockman_ar2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2a3a86a4d971e9f9838d": 3
+      },
+      "project_ids": [
+        "AU-2a3a86a4d971e9f9838d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-016262ac29b2718ebfbaa98e",
+      "url": "https://announcements.asx.com.au/asxpdf/20250930/pdf/06pxy5r49ssw7y.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2ab3e8eb7b5784e64f9b": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "35827076ddfd075f906a2a4d549a397ed35c810e8f4743c114c93e0a0b01814d"
+      ],
+      "historical_source_keys": [
+        "r6_identity_duke"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2ab3e8eb7b5784e64f9b": 1
+      },
+      "project_ids": [
+        "AU-2ab3e8eb7b5784e64f9b"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-9cf1db6a52ff5b49cc05673c",
+      "url": "https://announcements.asx.com.au/asxpdf/20250930/pdf/06py49c2g3fm9t.pdf"
+    },
+    {
+      "association_references": {
+        "AU-6d807eb7caec9db0f35e": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0"
+      ],
+      "historical_source_keys": [
+        "goschen_mre2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-6d807eb7caec9db0f35e": 1
+      },
+      "project_ids": [
+        "AU-6d807eb7caec9db0f35e"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-50ec7babc2038894a2904191",
+      "url": "https://announcements.asx.com.au/asxpdf/20251015/pdf/06qkvvhp20rxx2.pdf"
+    },
+    {
+      "association_references": {
+        "AU-524c37fc04cf47bf8dca": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9db2f5de7122f05ebb0e9870e2d77bfd2d0da0af05fbd877c6b65c17160b2df3"
+      ],
+      "historical_source_keys": [
+        "r5_identity_balranald"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-524c37fc04cf47bf8dca": 1
+      },
+      "project_ids": [
+        "AU-524c37fc04cf47bf8dca"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0c7a4ffd6d340f66831dd896",
+      "url": "https://announcements.asx.com.au/asxpdf/20260218/pdf/06wf3q27w0q4x7.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d2cd77f89298d6dae330": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "d9211f418e3de534d69f8f7d599b434a8353d2293a53a0c63cf7f85d150d2828"
+      ],
+      "historical_source_keys": [
+        "nim_mons20260312"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d2cd77f89298d6dae330": 2
+      },
+      "project_ids": [
+        "AU-d2cd77f89298d6dae330"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8a53884db63a440ee4befde6",
+      "url": "https://announcements.asx.com.au/asxpdf/20260312/pdf/06xcdmcg44zmqd.pdf"
+    },
+    {
+      "association_references": {
+        "AU-cc4e217a90b7123dce0a": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "a40893cb537f1d9cdeb2eeb9cc7b2289d3cfee4e11974dc33e8ab765dafd6376"
+      ],
+      "historical_source_keys": [
+        "devex_kennedy_halfyear20260313"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-cc4e217a90b7123dce0a": 2
+      },
+      "project_ids": [
+        "AU-cc4e217a90b7123dce0a"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-65cf92e38050a35efd8c2169",
+      "url": "https://announcements.asx.com.au/asxpdf/20260313/pdf/06xdgw8tr21hqs.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2262a37ca19531f08da3": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "7e80a7f29787898f9c422bde35d14337651c5975c3e7e6cda06968721bff2a79"
+      ],
+      "historical_source_keys": [
+        "splinter_presentation2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2262a37ca19531f08da3": 2
+      },
+      "project_ids": [
+        "AU-2262a37ca19531f08da3"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-d05c39a3fce7b77e1bf8e930",
+      "url": "https://announcements.asx.com.au/asxpdf/20260420/pdf/06yn1rhry98mw3.pdf"
+    },
+    {
+      "association_references": {
+        "AU-cae6c11543b0da5f840d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "ae8825f63b7ce1ac8bb26e0406fb9c75adf12fe31b8a86658a33fff4715f1766"
+      ],
+      "historical_source_keys": [
+        "r6_identity_west_arunta_luni"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-cae6c11543b0da5f840d": 1
+      },
+      "project_ids": [
+        "AU-cae6c11543b0da5f840d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-f9da75ec39c7fc38486c7b49",
+      "url": "https://announcements.asx.com.au/asxpdf/20260918/pdf/0747zs94kk1v6x.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d0827cf51def7e0014fc": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "157a0749d62f96166a4b26188aaf3401c3074fba74eef8e56ab3d07da22492f0"
+      ],
+      "historical_source_keys": [
+        "r6_identity_rocky_gully"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d0827cf51def7e0014fc": 1
+      },
+      "project_ids": [
+        "AU-d0827cf51def7e0014fc"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-fab1a56c577e0a30ec145dc5",
+      "url": "https://announcements.asx.com.au/asxpdf/20260924/pdf/074h3x3v7sc2z8.pdf"
+    },
+    {
+      "association_references": {
+        "AU-203b4d90e5c23a323610": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9c4f1f01212bbc65471d4bcb1806688390ed5aba16ce958a5fcbb0f51e8a9471"
+      ],
+      "historical_source_keys": [
+        "nfm_annual2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-203b4d90e5c23a323610": 2
+      },
+      "project_ids": [
+        "AU-203b4d90e5c23a323610"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-3cdc97de60e6bf5d845c2acd",
+      "url": "https://announcements.asx.com.au/asxpdf/20260929/pdf/074nqg9s1b67ll.pdf"
+    },
+    {
+      "association_references": {
+        "AU-6d807eb7caec9db0f35e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "8a70d4ca8cdc287da19cd6a50060e0496f84c5f153c62b452870aed1ff92497c"
+      ],
+      "historical_source_keys": [
+        "goschen_rec_offtake_20261019"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-6d807eb7caec9db0f35e": 2
+      },
+      "project_ids": [
+        "AU-6d807eb7caec9db0f35e"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-1d02c23eb513845dbefb8523",
+      "url": "https://announcements.asx.com.au/asxpdf/20261019/pdf/075h3jfgqhmlkb.pdf"
+    },
+    {
+      "association_references": {
+        "AU-b2dadf9c8046c3c68a02": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "246dea894d0044a3ca5a35ff838389a463409dd9131ffbace4753b1e0b67240e"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_246dea894d0044a3"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-b2dadf9c8046c3c68a02": 2
+      },
+      "project_ids": [
+        "AU-b2dadf9c8046c3c68a02"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-26fdf2c9c48b9aee66cbdacd",
+      "url": "https://api.investi.com.au/api/announcements/mek/6817bae2-b84.pdf"
+    },
+    {
+      "association_references": {
+        "AU-bb565f5348679a46d4a0": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "6fc10fc0475c5572ae75a4b36099526c8ecea7ecfe790f07a80e495487fbad7e"
+      ],
+      "historical_source_keys": [
+        "salazar_mre2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-bb565f5348679a46d4a0": 1
+      },
+      "project_ids": [
+        "AU-bb565f5348679a46d4a0"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c4c9658f7dd3da60cb4e5252",
+      "url": "https://api.investi.com.au/api/announcements/wc1/ea9172ff-a94.pdf"
+    },
+    {
+      "association_references": {
+        "AU-3eb7131e4daea18a60a0": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "a3cbfc5610b14dcef8838cbaa6f0bc11ffcfb69b50942e29988e7e0c970d9d1d"
+      ],
+      "historical_source_keys": [
+        "ark_sandy_mre20260922"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3eb7131e4daea18a60a0": 2
+      },
+      "project_ids": [
+        "AU-3eb7131e4daea18a60a0"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-66053f64e736aa342168e99d",
+      "url": "https://arkmines.com/wp-content/uploads/2026/09/2A1698314_AHK.pdf"
+    },
+    {
+      "association_references": {
+        "AU-4286ab9c245effb445ff": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "fa734539ef761f002e7d8ab700c2efcfdb2fd2d8c7be2680e4dea481f19d927c"
+      ],
+      "historical_source_keys": [
+        "burracoppin_maiden2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-4286ab9c245effb445ff": 1
+      },
+      "project_ids": [
+        "AU-4286ab9c245effb445ff"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-648e4648d8d8738c6872054e",
+      "url": "https://assets.birdsoftware.io/wp-content/uploads/2023/05/01-06-2023-Burracoppin-Project-96Mt-Mineral-Resource-Estimate.pdf"
+    },
+    {
+      "association_references": {
+        "AU-785536db5ff12c25350d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "b65a525000fb8d74d87024056f7c001df5ee466eb4cf4a8ccf9d6fd5ae08ce19"
+      ],
+      "historical_source_keys": [
+        "circle_met2022"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-785536db5ff12c25350d": 2
+      },
+      "project_ids": [
+        "AU-785536db5ff12c25350d"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-1a042aa7c946b942099b604d",
+      "url": "https://assets.ctfassets.net/tpcqj4q45rlx/1ykWDllcGKP5Hm40Js55vV/064c5054260f786d59c023c5a8b60ab8/MEK_Positive_Rare_Earth_Metallurgical_Testwork_and_Forward_Plan.pdf"
+    },
+    {
+      "association_references": {
+        "AU-e6d859a831ed5954b440": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "f571a145b96e1a73b612f73f0004c3fb98dd8baab7854837434e996bbf6a5635"
+      ],
+      "historical_source_keys": [
+        "evergreen_kenny_ree_targets_20230525"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-e6d859a831ed5954b440": 3
+      },
+      "project_ids": [
+        "AU-e6d859a831ed5954b440"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0d30e471dbc41efbcf191545",
+      "url": "https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02669486-6A1151580"
+    },
+    {
+      "association_references": {
+        "AU-68da41afe874c3bd66d4": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "07f43fb166d2b18a32c19575615ec85fbae4bcc53721efcf7f917c7f6779aca0"
+      ],
+      "historical_source_keys": [
+        "lu7_voyager_20230810_prospectus"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-68da41afe874c3bd66d4": 4
+      },
+      "project_ids": [
+        "AU-68da41afe874c3bd66d4"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-b001cf144f44f581bccf5a83",
+      "url": "https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02696214-6A1162755"
+    },
+    {
+      "association_references": {
+        "AU-73549b8a9b1c6faf55eb": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "222d4f576f1240665a857e5bae8ede427939f82d6628cb54e337f5cf4f0ae89f"
+      ],
+      "historical_source_keys": [
+        "strandline_coburn_msp_commissioning_20230821"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-73549b8a9b1c6faf55eb": 2
+      },
+      "project_ids": [
+        "AU-73549b8a9b1c6faf55eb"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-46b4fcea597665c6e5bd6eff",
+      "url": "https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02699350-6A1163850"
+    },
+    {
+      "association_references": {
+        "AU-d0ce731e1d8198ffaf58": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-ee5ca893d12883df35f1": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "73936d124c5ce52038f968db521713ba86e72b92c847fb391254ebc47c0f0d51",
+        "bb46f35ad584143bdf7915b53b84c7ff55b6e8dc2aa23bab52f45eb0da057726"
+      ],
+      "historical_source_keys": [
+        "asra_yttria_maiden20240416",
+        "yttria_maiden2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d0ce731e1d8198ffaf58": 1,
+        "AU-ee5ca893d12883df35f1": 1
+      },
+      "project_ids": [
+        "AU-d0ce731e1d8198ffaf58",
+        "AU-ee5ca893d12883df35f1"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-d9e031190ec9ad33cdcecf8d",
+      "url": "https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02795766-6A1202739"
+    },
+    {
+      "association_references": {
+        "AU-1345edd8165c10930e94": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "1015a12c4459f8a43c0dd735ddd1603971b6785997a9c7955dfcbf9ce1e84fc2"
+      ],
+      "historical_source_keys": [
+        "nolans_quarter202610"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-1345edd8165c10930e94": 2
+      },
+      "project_ids": [
+        "AU-1345edd8165c10930e94"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-aaed0adf36d48469e38e7350",
+      "url": "https://cdn.financialreports.eu/financialreports/media/filings/64425/2026/RNS/64425_rns_2026-10-30_04faeca9-e33e-4783-b0c9-9583aebf843a.pdf"
+    },
+    {
+      "association_references": {
+        "AU-7157ac0201b7d1e93ff7": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "3f9db544c68335bbaf29ee2018280e28633df2b58395cf5d6d0eb906b3749226"
+      ],
+      "historical_source_keys": [
+        "graceland_discovery20230525"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-7157ac0201b7d1e93ff7": 2
+      },
+      "project_ids": [
+        "AU-7157ac0201b7d1e93ff7"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-eb18313775ce6a49c0409d66",
+      "url": "https://company-announcements.afr.com/asx/emu/09fdd0c2-fa8f-11ed-98c0-9270fe0ac238.pdf"
+    },
+    {
+      "association_references": {
+        "AU-5ea2535a2de9a1a3327e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "de3bd4bffa11e7980fc624dcbdbd7d956e6b266008c5d1033446ebb1951d0604"
+      ],
+      "historical_source_keys": [
+        "emu_viper_ree_discovery_20230515"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-5ea2535a2de9a1a3327e": 2
+      },
+      "project_ids": [
+        "AU-5ea2535a2de9a1a3327e"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-d56d9bdac2d6f67beb17458e",
+      "url": "https://company-announcements.afr.com/asx/emu/c9c664c6-f2b1-11ed-82f2-6e9c8c69ee5f.pdf"
+    },
+    {
+      "association_references": {
+        "AU-5ea2535a2de9a1a3327e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "5cda0e1a4cabf309fb89d41649fd306adb09ed21711952b15d7bfeff0112806a"
+      ],
+      "historical_source_keys": [
+        "emu_fy24_annual_report_20240930"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-5ea2535a2de9a1a3327e": 3
+      },
+      "project_ids": [
+        "AU-5ea2535a2de9a1a3327e"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-e672c454541c8b8a4b5df9e2",
+      "url": "https://company-announcements.afr.com/asx/emu/d039faa6-7f07-11ef-8e7c-be773cd2d8da.pdf"
+    },
+    {
+      "association_references": {
+        "AU-af44c2bd1173b453953f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "cad9eef849d62a11d3eee3bc036d553f7860522502b7fa655f3755cbe5f8039b"
+      ],
+      "historical_source_keys": [
+        "r17_primary_20"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-af44c2bd1173b453953f": 4
+      },
+      "project_ids": [
+        "AU-af44c2bd1173b453953f"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-f1ad0e244e6a22f44e87515a",
+      "url": "https://company-announcements.afr.com/asx/enr/3d2fa808-7c80-11f0-a14a-aaf2b0bbb5d6.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d9fb1b1e3e2ec9fa0851": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "2b5aa789537b0e291490b265995312b8a9111c097f9b65a6ce5ac96d4def3c12"
+      ],
+      "historical_source_keys": [
+        "charley_creek_env20240430"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d9fb1b1e3e2ec9fa0851": 4
+      },
+      "project_ids": [
+        "AU-d9fb1b1e3e2ec9fa0851"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-757f312dd87944d167c68bc4",
+      "url": "https://company-announcements.afr.com/asx/env/26c9f602-06ac-11ef-85a8-b29345b45cfb.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2a3a86a4d971e9f9838d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "83d558a6e132c3b280fa45449f07b5ac8ee1d27b5da603b7c0bf9876925adce5"
+      ],
+      "historical_source_keys": [
+        "hastings_brockman20260127"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2a3a86a4d971e9f9838d": 6
+      },
+      "project_ids": [
+        "AU-2a3a86a4d971e9f9838d"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-d5ed9f9e36db4f7cb3202002",
+      "url": "https://company-announcements.afr.com/asx/has/6140bba0-faff-11f0-823d-aaf2f6c17b1e.pdf"
+    },
+    {
+      "association_references": {
+        "AU-3651cf8448b9227adcf5": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "ce906009372d81146577ceaea0c670ff082e277ebdd7b122b6b48de7ac299e66"
+      ],
+      "historical_source_keys": [
+        "mrd_ree20230112"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3651cf8448b9227adcf5": 3
+      },
+      "project_ids": [
+        "AU-3651cf8448b9227adcf5"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-804f705002ca769883c4fa69",
+      "url": "https://company-announcements.afr.com/asx/mrd/eb7f361c-91f5-11ed-b701-befebebb5124.pdf"
+    },
+    {
+      "association_references": {
+        "AU-645024d708baf5b52bc2": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "9e3227e2cfbc2c75259b78b5c8096d7fe02cc18629cf47d9ef1f2af49e0843eb"
+      ],
+      "historical_source_keys": [
+        "zmi_cascade20230725"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-645024d708baf5b52bc2": 1
+      },
+      "project_ids": [
+        "AU-645024d708baf5b52bc2"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-17dff67f492654ea602a4b40",
+      "url": "https://company-announcements.afr.com/asx/zmi/afd79334-2ac1-11ee-9e97-fef68616d084.pdf"
+    },
+    {
+      "association_references": {
+        "AU-ad64122c217f0dbfabc8": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "7da4404af58caddba90ef7b83c2e26c3a121b2b44e33895a45d139d30183f6ca"
+      ],
+      "historical_source_keys": [
+        "barkly_ipo20260130"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ad64122c217f0dbfabc8": 3
+      },
+      "project_ids": [
+        "AU-ad64122c217f0dbfabc8"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c8106bfc129e24fa762b254c",
+      "url": "https://data-api.marketindex.com.au/api/v1/announcements/XASX%3ABAK%3A6A1309514/pdf/inline/barkly-rare-earths-completes-successful-ipo"
+    },
+    {
+      "association_references": {
+        "AU-d2cd77f89298d6dae330": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "395b2db17e463b2dae5761c3ea598c149177fbacb9b805b638ed236402bc7b91"
+      ],
+      "historical_source_keys": [
+        "mons_mre2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d2cd77f89298d6dae330": 1
+      },
+      "project_ids": [
+        "AU-d2cd77f89298d6dae330"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-80ee6d0ca65bcf0ba117cbc0",
+      "url": "https://data-api.marketindex.com.au/api/v1/announcements/XASX%3ANIM%3A6A1296587/pdf/inline/extremely-highgrade-gallium-and-rare-earths-resource"
+    },
+    {
+      "association_references": {
+        "AU-0832169526bb5ec07626": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "5b604c62d614a5c5a3937d99d06fd59b4260489af5d1900b60b23cc7739940d7",
+        "cb23be1e28cbd8c2500e275363e46cfa217008de390f716582da6368e65343f1"
+      ],
+      "historical_source_keys": [
+        "sa_mindep_live"
+      ],
+      "kind": "csv",
+      "priority_by_project": {
+        "AU-0832169526bb5ec07626": 4
+      },
+      "project_ids": [
+        "AU-0832169526bb5ec07626"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8d4c5ab362aa364063816663",
+      "url": "https://dem-sdp.s3-ap-southeast-2.amazonaws.com/sarig_md_details_exp.csv"
+    },
+    {
+      "association_references": {
+        "AU-0832169526bb5ec07626": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "2244941bf326848ba9dcd36e4fc44533ab914fe34cd683f8bedc25ddb9ab9601"
+      ],
+      "historical_source_keys": [
+        "sa_gssa_rare_earth_elements_rb2024_00028"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-0832169526bb5ec07626": 3
+      },
+      "project_ids": [
+        "AU-0832169526bb5ec07626"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-24ed082e7aedb02b6cbdee59",
+      "url": "https://demstedpprodaue12.blob.core.windows.net/mesac-public/resources/files/5880056/RB24-28%20CMSA%20REE%202.pdf"
+    },
+    {
+      "association_references": {
+        "AU-430f216ca620b69af5f9": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "e37750161e156498c0462ab537117037e61d77295243037a0be0fbf720be2757"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_e37750161e156498"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-430f216ca620b69af5f9": 1
+      },
+      "project_ids": [
+        "AU-430f216ca620b69af5f9"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0a5456d09d2e33589fb4586b",
+      "url": "https://geoscience.nt.gov.au/gemis/server/api/core/bitstreams/081c4a79-20e1-475e-9c5a-53105d57aed9/content"
+    },
+    {
+      "association_references": {
+        "AU-d1e3e2803f3c4287f6db": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "edb1583a4bcc4eddb7142b233ced822c1ef711df9c7c72051399dd22c7ad9b75"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_edb1583a4bcc4edd"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d1e3e2803f3c4287f6db": 1
+      },
+      "project_ids": [
+        "AU-d1e3e2803f3c4287f6db"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-61f46872d3ead05114741b03",
+      "url": "https://geoscience.nt.gov.au/gemis/server/api/core/bitstreams/8d21ecb5-d25c-47ed-ad23-f612ec6564c9/content"
+    },
+    {
+      "association_references": {
+        "AU-70fc8a7de18ad8209c32": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "06916f0c5d2b6e1c52d38f04cfcab7f17d95d23f77bf5d12389d351a37b2205a"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_06916f0c5d2b6e1c"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-70fc8a7de18ad8209c32": 1
+      },
+      "project_ids": [
+        "AU-70fc8a7de18ad8209c32"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-b7a395fd3d2e853215b878b0",
+      "url": "https://geoscience.nt.gov.au/gemis/server/api/core/bitstreams/96bd706a-287d-48dc-86f8-37301544145e/content"
+    },
+    {
+      "association_references": {
+        "AU-97137ef07af49e3607b2": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "e6bed25382926c6dc85a982e9f8831d70f681fe64782283f4825b00947f650e0"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_e6bed25382926c6d"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-97137ef07af49e3607b2": 1
+      },
+      "project_ids": [
+        "AU-97137ef07af49e3607b2"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-7ee4a2d5f55bcd016a754b8b",
+      "url": "https://geoscience.nt.gov.au/gemis/server/api/core/bitstreams/9850665d-8b10-4b1d-8568-212867bd6782/content"
+    },
+    {
+      "association_references": {
+        "AU-d1e3e2803f3c4287f6db": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "5d4d954c63513e05659c8545630ec2a6b1d0aafeb599c8552d38892a13b2ee59"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_5d4d954c63513e05"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d1e3e2803f3c4287f6db": 2
+      },
+      "project_ids": [
+        "AU-d1e3e2803f3c4287f6db"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-7825c90ccc2550736341535a",
+      "url": "https://geoscience.nt.gov.au/gemis/server/api/core/bitstreams/dd35f2fd-4045-4f54-8894-eda7ce33681d/content"
+    },
+    {
+      "association_references": {
+        "AU-8f3fe174a998d20ee4cf": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5"
+      ],
+      "historical_source_keys": [
+        "mangaroon_mre2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-8f3fe174a998d20ee4cf": 1
+      },
+      "project_ids": [
+        "AU-8f3fe174a998d20ee4cf"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-a6cd0f36b87fea47aa0da4cb",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896"
+    },
+    {
+      "association_references": {
+        "AU-ee34781b030807146e64": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "31949313a2809151408ff4a141a93364c4b10904d619c1ce2851f0236cc24ca1"
+      ],
+      "historical_source_keys": [
+        "mtm_ravensthorpe_fy2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ee34781b030807146e64": 3
+      },
+      "project_ids": [
+        "AU-ee34781b030807146e64"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-ccbe47ee616bec28c56fd41f",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/6553898.pdf?v=63941960415"
+    },
+    {
+      "association_references": {
+        "AU-6f0ecda27d291720036d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "b015e3fa347138082ed14171e4921d32dde1377e6fe62317a0b0f8420131ef21"
+      ],
+      "historical_source_keys": [
+        "nutgrove_rhyolite_20260303"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-6f0ecda27d291720036d": 2
+      },
+      "project_ids": [
+        "AU-6f0ecda27d291720036d"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c85ac2cb5c0238ae85b9f1e2",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7412204.pdf?v=63941896543"
+    },
+    {
+      "association_references": {
+        "AU-49b538453133bd968e8d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "c14ed919368d815403c67780f8d76e4f01cb789da8e3d5547ed531055f23c979"
+      ],
+      "historical_source_keys": [
+        "koppamurra_pfs2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-49b538453133bd968e8d": 2
+      },
+      "project_ids": [
+        "AU-49b538453133bd968e8d"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-f96441294f5cd5f465228c9b",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7600073.pdf?v=63949564086"
+    },
+    {
+      "association_references": {
+        "AU-2a3a86a4d971e9f9838d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-908fd6f4461622e89548": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb"
+      ],
+      "historical_source_keys": [
+        "yangibana_ar2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2a3a86a4d971e9f9838d": 1,
+        "AU-908fd6f4461622e89548": 1
+      },
+      "project_ids": [
+        "AU-2a3a86a4d971e9f9838d",
+        "AU-908fd6f4461622e89548"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-fa6915a2b1b494e356f2a3be",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7763164.pdf?v=63957978608"
+    },
+    {
+      "association_references": {
+        "AU-47d12ebe6b66df8e5936": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-dac3c8e40326b8244cdb": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a"
+      ],
+      "historical_source_keys": [
+        "jupiter_scoping2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-47d12ebe6b66df8e5936": 1,
+        "AU-dac3c8e40326b8244cdb": 1
+      },
+      "project_ids": [
+        "AU-47d12ebe6b66df8e5936",
+        "AU-dac3c8e40326b8244cdb"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-7b5711f8d3849d68d7962d15",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7794821.pdf?v=63959663947"
+    },
+    {
+      "association_references": {
+        "AU-216d0983f6892f9b58f9": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "e3ece5b0173dae538cf610486f76b2815d1830abd1dfbf7f29039955a4db224c"
+      ],
+      "historical_source_keys": [
+        "north_stanmore_quarter202610"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-216d0983f6892f9b58f9": 2
+      },
+      "project_ids": [
+        "AU-216d0983f6892f9b58f9"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-cf9919400f0b7a1594324d7d",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7814024.pdf?v=63960532622"
+    },
+    {
+      "association_references": {
+        "AU-908fd6f4461622e89548": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "188f2437560f2ec98af07e444782bd40a7612450b51c988bbe97c3e412dccd70"
+      ],
+      "historical_source_keys": [
+        "yangibana_quarter2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-908fd6f4461622e89548": 2
+      },
+      "project_ids": [
+        "AU-908fd6f4461622e89548"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8e838de2f720770849e5c861",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7814729.pdf?v=63960562204"
+    },
+    {
+      "association_references": {
+        "AU-0098e17a63e7c05c213f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864"
+      ],
+      "historical_source_keys": [
+        "metadata_wudinna_cobra_20261026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-0098e17a63e7c05c213f": 2
+      },
+      "project_ids": [
+        "AU-0098e17a63e7c05c213f"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-f09f74b43a7e20826fb9eda9",
+      "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384"
+    },
+    {
+      "association_references": {
+        "AU-1345edd8165c10930e94": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-2cfeb25aefee0c4f95fb": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-2fc429d0556dfa0b95c4": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-329908ab8d4c1d1d3e03": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-6d807eb7caec9db0f35e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-7537d9555628040fab40": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-908fd6f4461622e89548": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-9bd8e5ed8408cd84d876": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-fe65cb1bd28eacb7a67f": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "af0a8ff9a1b194a45f16dc56dd3b71c04c5f426f15dd23d0511de087f9ec8ac5"
+      ],
+      "historical_source_keys": [
+        "austrade_2026_prospectus_pdf"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-1345edd8165c10930e94": 5,
+        "AU-2cfeb25aefee0c4f95fb": 3,
+        "AU-2fc429d0556dfa0b95c4": 4,
+        "AU-329908ab8d4c1d1d3e03": 1,
+        "AU-6d807eb7caec9db0f35e": 5,
+        "AU-7537d9555628040fab40": 1,
+        "AU-908fd6f4461622e89548": 5,
+        "AU-9bd8e5ed8408cd84d876": 3,
+        "AU-fe65cb1bd28eacb7a67f": 1
+      },
+      "project_ids": [
+        "AU-1345edd8165c10930e94",
+        "AU-2cfeb25aefee0c4f95fb",
+        "AU-2fc429d0556dfa0b95c4",
+        "AU-329908ab8d4c1d1d3e03",
+        "AU-6d807eb7caec9db0f35e",
+        "AU-7537d9555628040fab40",
+        "AU-908fd6f4461622e89548",
+        "AU-9bd8e5ed8408cd84d876",
+        "AU-fe65cb1bd28eacb7a67f"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-37a432f0c1acb3ceae32e764",
+      "url": "https://international.austrade.gov.au/content/dam/austrade-assets/international/documents/reports/critical-minerals/australian-critical-minerals-prospectus-march-2026.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2cfeb25aefee0c4f95fb": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9"
+      ],
+      "historical_source_keys": [
+        "dubbo_phaseb20250617"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2cfeb25aefee0c4f95fb": 2
+      },
+      "project_ids": [
+        "AU-2cfeb25aefee0c4f95fb"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-e1e8118f7fbd33f5dd6ce401",
+      "url": "https://investornews.com/wp-content/uploads/2025/06/ASM-6-17-25.pdf"
+    },
+    {
+      "association_references": {
+        "AU-6f0ecda27d291720036d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "0c8a2522657ada2f0b778f0f8b3c7c3e973be6bea630da929355a80a30e2c126"
+      ],
+      "historical_source_keys": [
+        "nutgrove20251030"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-6f0ecda27d291720036d": 1
+      },
+      "project_ids": [
+        "AU-6f0ecda27d291720036d"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8592e036c93ad06c2f57681b",
+      "url": "https://investorpa.com/announcement-pdf/20251030/212822.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d0ce731e1d8198ffaf58": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "c016a2d9fae34fa766a461d7011c18bc56db0a43f843949807e039cb91df6e77"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_c016a2d9fae34fa7"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d0ce731e1d8198ffaf58": 2
+      },
+      "project_ids": [
+        "AU-d0ce731e1d8198ffaf58"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-810ddcc5001d669804cc8c85",
+      "url": "https://investorpa.com/announcement-pdf/20260330/275183.pdf"
+    },
+    {
+      "association_references": {
+        "AU-ad64122c217f0dbfabc8": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "aaa865cfb08d10c134cd7fa562fc88064821c4f64cfec5af34085ba7bdddfc14"
+      ],
+      "historical_source_keys": [
+        "barkly_amended_quarter20260518"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ad64122c217f0dbfabc8": 2
+      },
+      "project_ids": [
+        "AU-ad64122c217f0dbfabc8"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-7412d9bccb20ec5613b12cf4",
+      "url": "https://investorpa.com/announcement-pdf/20260518/293797.pdf"
+    },
+    {
+      "association_references": {
+        "AU-fe65cb1bd28eacb7a67f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "cbdda7c5d96958d226d5a10d44419da79d5971c64f26d8cb6cd31a27ebeb7702"
+      ],
+      "historical_source_keys": [
+        "copi_nsw_scoping_20220420"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-fe65cb1bd28eacb7a67f": 2
+      },
+      "project_ids": [
+        "AU-fe65cb1bd28eacb7a67f"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-1ac7b017663cecafc41be8a3",
+      "url": "https://majorprojects.planningportal.nsw.gov.au/prweb/PRRestService/mp/01/getContent?AttachRef=PDA-39468490%2120220420T012349.556+GMT"
+    },
+    {
+      "association_references": {
+        "AU-3a0020b6daf659f62138": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "095f218d0cd94fc8fdef24d38b16d8c67d10e778010c301a589277490e75ae70"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_095f218d0cd94fc8"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3a0020b6daf659f62138": 2
+      },
+      "project_ids": [
+        "AU-3a0020b6daf659f62138"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-9a7595a2b8581f186c6b98f9",
+      "url": "https://majorprojects.planningportal.nsw.gov.au/prweb/PRRestService/mp/01/getContent?AttachRef=PDA-49591461%2120230119T024434.317+GMT"
+    },
+    {
+      "association_references": {
+        "AU-af44c2bd1173b453953f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "8d4f0bb34133cea1d8ac9704e9abdaa3c62ce829895bc8cdbf1115689594b399"
+      ],
+      "historical_source_keys": [
+        "aileron_drilling20260616"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-af44c2bd1173b453953f": 2
+      },
+      "project_ids": [
+        "AU-af44c2bd1173b453953f"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-fd75daa4d39e9acf0e6cabee",
+      "url": "https://newswire.iguana2.com/2fee0049d633f441/announcements/enr.asx/6A1329558/ENR_70_000m_Drill_Program_in_Full_Swing_at_Aileron.pdf"
+    },
+    {
+      "association_references": {
+        "AU-430f216ca620b69af5f9": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "773be501babb87dc78ba444e8fc0d914d7b0fb0df4333679e3ef016c4a7a5b49"
+      ],
+      "historical_source_keys": [
+        "nt_statutory_cessations_mn101_20240822"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-430f216ca620b69af5f9": 2
+      },
+      "project_ids": [
+        "AU-430f216ca620b69af5f9"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-3f0e8e64b16359f5e128491b",
+      "url": "https://nt.gov.au/__data/assets/pdf_file/0007/1436362/mn101-24.pdf"
+    },
+    {
+      "association_references": {
+        "AU-d28382dfa82f1664065e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "ea8af91a78b952f02c8d4d0a313d93e200792183dd4b5cfeea6038b2ed1abf28"
+      ],
+      "historical_source_keys": [
+        "metadata_narraburra_orbit_20261030"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d28382dfa82f1664065e": 2
+      },
+      "project_ids": [
+        "AU-d28382dfa82f1664065e"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-2949c4011dd8666125c7e595",
+      "url": "https://orbitresources.au/downloads/announcements/obt_2026103001.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2ab3e8eb7b5784e64f9b": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-d9fb1b1e3e2ec9fa0851": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "013de14181fdf89dd82486d2f9ab80467bc8942179b36f5a3af5139116496432"
+      ],
+      "historical_source_keys": [
+        "reviewed_source_013de14181fdf89d"
+      ],
+      "kind": "csv",
+      "priority_by_project": {
+        "AU-2ab3e8eb7b5784e64f9b": 3,
+        "AU-d9fb1b1e3e2ec9fa0851": 3
+      },
+      "project_ids": [
+        "AU-2ab3e8eb7b5784e64f9b",
+        "AU-d9fb1b1e3e2ec9fa0851"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-099dee9b28fb7d4464c1a2b7",
+      "url": "https://strike.nt.gov.au/link/https://geoscience.nt.gov.au/contents/prod/Downloads/Mineral_Deposits/MINERALOCCURRENCES_csv.zip"
+    },
+    {
+      "association_references": {
+        "AU-216d0983f6892f9b58f9": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "c5561e8d0d8c06d2c2579c3c44ce5906bb62841f5cd3b9e142f13e8160531f84"
+      ],
+      "historical_source_keys": [
+        "north_stanmore_mre2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-216d0983f6892f9b58f9": 3
+      },
+      "project_ids": [
+        "AU-216d0983f6892f9b58f9"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-6e178cebb84f01c875c9678e",
+      "url": "https://victorymetalsaustralia.com/wp-content/uploads/2025/11/02976976.pdf"
+    },
+    {
+      "association_references": {
+        "AU-efff91a06cf344122d88": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "6faf69a2970df7948b3d04ddb5835eec18302d4d6e2896e8013fb45de24b0dfa"
+      ],
+      "historical_source_keys": [
+        "reviewed_snapshot_6faf69a2970df794",
+        "wamex_A107882_440687"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-efff91a06cf344122d88": 2
+      },
+      "project_ids": [
+        "AU-efff91a06cf344122d88"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8a76f78af8ed50ae97331abb",
+      "url": "https://wamex.dmp.wa.gov.au/Wamex/Search/ReportDetails?ANumber=107882"
+    },
+    {
+      "association_references": {
+        "AU-574465211976ec57b1ef": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "428c8f759ec2f4dc393177f0fccce12cc96c9b1359638d003f7ea30b6d388df7"
+      ],
+      "historical_source_keys": [
+        "wamex_splinter_r254_20151109"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-574465211976ec57b1ef": 1
+      },
+      "project_ids": [
+        "AU-574465211976ec57b1ef"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-df8605e33f527a764c1654ea",
+      "url": "https://wamex.dmp.wa.gov.au/Wamex/Search/ReportDetails?ANumber=109432"
+    },
+    {
+      "association_references": {
+        "AU-447261eed0e81eae88bf": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "22016f67e614f73963e5a2252e0ec78184ed3906d668649e0dbdb17c365dba59"
+      ],
+      "historical_source_keys": [
+        "goschen_central_mre2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-447261eed0e81eae88bf": 1
+      },
+      "project_ids": [
+        "AU-447261eed0e81eae88bf"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c1b2776314b04aa965b54f65",
+      "url": "https://wcsecure.weblink.com.au/clients/acdcmetals/headline.aspx?headlineid=3657278"
+    },
+    {
+      "association_references": {
+        "AU-7c198d219aa1db3e291f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "c0de51d6c074432a65021864590f87035d66889c4e55e8d9280006c79ab586c4"
+      ],
+      "historical_source_keys": [
+        "discovery_lanthanein_reports_page_3ebae993bf18"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-7c198d219aa1db3e291f": 4
+      },
+      "project_ids": [
+        "AU-7c198d219aa1db3e291f"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-3ebae993bf186dfcc7f57db9",
+      "url": "https://wcsecure.weblink.com.au/clients/fortunametals/headline.aspx?headlineid=61344787"
+    },
+    {
+      "association_references": {
+        "AU-d0ce731e1d8198ffaf58": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "436db5f42cee6172bdb0efc023e997138c0c3eb8b979af60e2b60411b9cde095"
+      ],
+      "historical_source_keys": [
+        "goldarc_annual2025_native"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d0ce731e1d8198ffaf58": 3
+      },
+      "project_ids": [
+        "AU-d0ce731e1d8198ffaf58"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-15d47640d21a093935ec10e4",
+      "url": "https://wcsecure.weblink.com.au/clients/goldarcresources/headline.aspx?headlineid=61318517"
+    },
+    {
+      "association_references": {
+        "AU-447261eed0e81eae88bf": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "f1ce45037adea362e82497f6d1f8c73dbaa1dca6191873a92355b37ea28693a5"
+      ],
+      "historical_source_keys": [
+        "goschen_central_scoping"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-447261eed0e81eae88bf": 2
+      },
+      "project_ids": [
+        "AU-447261eed0e81eae88bf"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8114d833323248fa9839c428",
+      "url": "https://wcsecure.weblink.com.au/pdf/ADC/02955863.pdf"
+    },
+    {
+      "association_references": {
+        "AU-7c198d219aa1db3e291f": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "3a57f527c4e21755eb10c2fa83499318a636f6917d8b8c85b55e70a83e3fb3b4"
+      ],
+      "historical_source_keys": [
+        "lyons_mre2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-7c198d219aa1db3e291f": 1
+      },
+      "project_ids": [
+        "AU-7c198d219aa1db3e291f"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-760a2cce1162e7c21237023e",
+      "url": "https://wcsecure.weblink.com.au/pdf/LNR/02729838.pdf"
+    },
+    {
+      "association_references": {
+        "AU-efff91a06cf344122d88": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503"
+      ],
+      "historical_source_keys": [
+        "mt_weld_2024"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-efff91a06cf344122d88": 1
+      },
+      "project_ids": [
+        "AU-efff91a06cf344122d88"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0e199202bc98d13c2e420af6",
+      "url": "https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf"
+    },
+    {
+      "association_references": {
+        "AU-c4391f8d2a6690076436": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "eca5e18b8e794e76f5531147875fea3b156899d745a4404d1cebac73b0027df2"
+      ],
+      "historical_source_keys": [
+        "norwest_arunta_20230222"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-c4391f8d2a6690076436": 1
+      },
+      "project_ids": [
+        "AU-c4391f8d2a6690076436"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-730ffa2d2f3e1ecb74e0f594",
+      "url": "https://wcsecure.weblink.com.au/pdf/NWM/02634405.pdf"
+    },
+    {
+      "association_references": {
+        "AU-6d807eb7caec9db0f35e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ISSUER_DISTRIBUTION",
+      "historical_sha256": [
+        "1a069bb6aaa19d44b36b00b391de98ffe21a2910f53c1eab335456648b20a181"
+      ],
+      "historical_source_keys": [
+        "goschen_hydromet_pilot20230606"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-6d807eb7caec9db0f35e": 3
+      },
+      "project_ids": [
+        "AU-6d807eb7caec9db0f35e"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-52f3448c1f1e9549ff71b790",
+      "url": "https://wcsecure.weblink.com.au/pdf/VHM/02673409.pdf"
+    },
+    {
+      "association_references": {
+        "AU-b3ae34ac85d16018bd4b": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "f0a39e633c5a0ae78b272e76ef26e9ac60de9d1abacf46ee02c58a28d957c67b"
+      ],
+      "historical_source_keys": [
+        "wa_dasc_dead_tenements_20250727"
+      ],
+      "kind": "zip",
+      "priority_by_project": {
+        "AU-b3ae34ac85d16018bd4b": 3
+      },
+      "project_ids": [
+        "AU-b3ae34ac85d16018bd4b"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0451d4ca90342ec405333fe1",
+      "url": "https://web.archive.org/web/20250727060812id_/https://warsydprdstadasc.blob.core.windows.net/downloads/dasc/Dynamic/Tenements/DeadTenements_shp.zip"
+    },
+    {
+      "association_references": {
+        "AU-794821a2df9b7a244f96": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-b31d00e2272ffa6ccbd3": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-e50ba6a268ea89226495": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-e6d859a831ed5954b440": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "f45f27a7d469cc71c57819461a1b5e9594ef67440a87adb8deb68a9cb467f278"
+      ],
+      "historical_source_keys": [
+        "wa_dasc_current_tenements_20250727"
+      ],
+      "kind": "zip",
+      "priority_by_project": {
+        "AU-794821a2df9b7a244f96": 2,
+        "AU-b31d00e2272ffa6ccbd3": 2,
+        "AU-e50ba6a268ea89226495": 2,
+        "AU-e6d859a831ed5954b440": 2
+      },
+      "project_ids": [
+        "AU-794821a2df9b7a244f96",
+        "AU-b31d00e2272ffa6ccbd3",
+        "AU-e50ba6a268ea89226495",
+        "AU-e6d859a831ed5954b440"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-740c33488a52d7041eaf0adb",
+      "url": "https://web.archive.org/web/20250727065548id_/https://warsydprdstadasc.blob.core.windows.net/downloads/dasc/Dynamic/Tenements/CurrentTenements_shp.zip"
+    },
+    {
+      "association_references": {
+        "AU-3eaa906d8230334ef698": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-cefbde90dc34312547d3": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-d0827cf51def7e0014fc": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "0caf2754da4e2a4854fa2e8b2e450ed0585f75de985e1a393a24c590df4f3c90"
+      ],
+      "historical_source_keys": [
+        "wa_dasc_current_tenements_20260911"
+      ],
+      "kind": "zip",
+      "priority_by_project": {
+        "AU-3eaa906d8230334ef698": 3,
+        "AU-cefbde90dc34312547d3": 2,
+        "AU-d0827cf51def7e0014fc": 2
+      },
+      "project_ids": [
+        "AU-3eaa906d8230334ef698",
+        "AU-cefbde90dc34312547d3",
+        "AU-d0827cf51def7e0014fc"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-43b1c71c7137f20afd8e4561",
+      "url": "https://web.archive.org/web/20260911005540id_/https://warsydprdstadasc.blob.core.windows.net/downloads/dasc/Dynamic/Tenements/CurrentTenements_GDA2020_shp.zip?ts=20260911085537"
+    },
+    {
+      "association_references": {
+        "AU-d28382dfa82f1664065e": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "716da939dba80b7c057a71e1190a3fa96f6d8b0342029910b3fce8b597925707"
+      ],
+      "historical_source_keys": [
+        "narraburra_ar2023"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d28382dfa82f1664065e": 1
+      },
+      "project_ids": [
+        "AU-d28382dfa82f1664065e"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-92a5e100d0c0efe8ef565ef1",
+      "url": "https://www.annualreports.com/HostedData/AnnualReportArchive/g/ASX_GRL_2023.pdf"
+    },
+    {
+      "association_references": {
+        "AU-1345edd8165c10930e94": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "d02c9266e500ee396195a299e15436f4faef5613c2a6393ea6493a6e7c7a5d6f"
+      ],
+      "historical_source_keys": [
+        "nolans_ar2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-1345edd8165c10930e94": 3
+      },
+      "project_ids": [
+        "AU-1345edd8165c10930e94"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-2eb2de9968aeb21ed0075b47",
+      "url": "https://www.arultd.com/wp-content/uploads/2025/09/Arafura-Annual-Report-2025.pdf"
+    },
+    {
+      "association_references": {
+        "AU-b3ae34ac85d16018bd4b": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "606cc24f03762ba4f73cd78e552127f5bc557195a9f1bae7d4f17c638f6a11a8"
+      ],
+      "historical_source_keys": [
+        "wcn_ree_acquisitions_20230518"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-b3ae34ac85d16018bd4b": 2
+      },
+      "project_ids": [
+        "AU-b3ae34ac85d16018bd4b"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-4643b8d6579e4e622c2d14a9",
+      "url": "https://www.aspecthuntley.com.au/asxdata/20230518/pdf/02667313.pdf"
+    },
+    {
+      "association_references": {
+        "AU-c4391f8d2a6690076436": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "efaafa511113d00eda8fbccd8e407a364ddad320df36452091277a0f63052fb4"
+      ],
+      "historical_source_keys": [
+        "nwm_arunta_west_20230801"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-c4391f8d2a6690076436": 2
+      },
+      "project_ids": [
+        "AU-c4391f8d2a6690076436"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c3ab613d084b05c33c26e91d",
+      "url": "https://www.aspecthuntley.com.au/asxdata/20230801/pdf/02692965.pdf"
+    },
+    {
+      "association_references": {
+        "AU-ee5ca893d12883df35f1": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "288f07ef6630bb20031240f92d99114cfab43385bd493f45ef000213747c4e70"
+      ],
+      "historical_source_keys": [
+        "discovery_asra_primary_met_alternative_530e7a5f3d94"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ee5ca893d12883df35f1": 3
+      },
+      "project_ids": [
+        "AU-ee5ca893d12883df35f1"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-530e7a5f3d9493c3b376778e",
+      "url": "https://www.aspecthuntley.com.au/asxdata/20240402/pdf/02790601.pdf"
+    },
+    {
+      "association_references": {
+        "AU-b2dadf9c8046c3c68a02": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9f049399b0e97a04d85c1842d4401187d04dcbb59bd86c37fd80e4921d45c43d"
+      ],
+      "historical_source_keys": [
+        "cascade20220530"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-b2dadf9c8046c3c68a02": 1
+      },
+      "project_ids": [
+        "AU-b2dadf9c8046c3c68a02"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-4d7d244a87b3044e57e0b103",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02526230"
+    },
+    {
+      "association_references": {
+        "AU-8c5887498873bf838e09": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "cfffe61a6c30d43c50a1988a0d7af0c4f5b5a2e7253c9bef42983c587932ed2f"
+      ],
+      "historical_source_keys": [
+        "coondina_ree20230214"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-8c5887498873bf838e09": 1
+      },
+      "project_ids": [
+        "AU-8c5887498873bf838e09"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-f469a834ebcc828e460f9663",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02631363"
+    },
+    {
+      "association_references": {
+        "AU-785536db5ff12c25350d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "259ebe012c6b6e2048ca2f50f5b47e4c91d9a56e520c97f6deee554d069a54ad"
+      ],
+      "historical_source_keys": [
+        "asx_review_circle_valley_global_202306"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-785536db5ff12c25350d": 1
+      },
+      "project_ids": [
+        "AU-785536db5ff12c25350d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-bb20a8d121ac745b478d4b9e",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02675850"
+    },
+    {
+      "association_references": {
+        "AU-5ea2535a2de9a1a3327e": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-7157ac0201b7d1e93ff7": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-81b21bdd06796fa2217d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "72c12db7a0c3b86d7c5baf0bbf6fc17d5fcb767009a36637931266b396fb69c7"
+      ],
+      "historical_source_keys": [
+        "r6_identity_merredin"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-5ea2535a2de9a1a3327e": 1,
+        "AU-7157ac0201b7d1e93ff7": 1,
+        "AU-81b21bdd06796fa2217d": 1
+      },
+      "project_ids": [
+        "AU-5ea2535a2de9a1a3327e",
+        "AU-7157ac0201b7d1e93ff7",
+        "AU-81b21bdd06796fa2217d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-8b3e47d5ee8c9a05724ee9c7",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02675888"
+    },
+    {
+      "association_references": {
+        "AU-e6d859a831ed5954b440": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "6f67ebbe197e435ad53153e5faafdd004823b36f355964a47573cd649378ca64"
+      ],
+      "historical_source_keys": [
+        "eg1_kenny20230731"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-e6d859a831ed5954b440": 1
+      },
+      "project_ids": [
+        "AU-e6d859a831ed5954b440"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-030b7a085378e7486f9f27bd",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02692316"
+    },
+    {
+      "association_references": {
+        "AU-cefbde90dc34312547d3": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "075a54f0b388184f869ea1a9f0aec59119405b46661cbe7173d78be7f05f3ce0"
+      ],
+      "historical_source_keys": [
+        "north_dam20230822"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-cefbde90dc34312547d3": 1
+      },
+      "project_ids": [
+        "AU-cefbde90dc34312547d3"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-89e6dbd7b6053cd712bf6594",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02700097"
+    },
+    {
+      "association_references": {
+        "AU-785536db5ff12c25350d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "d413df91d19ec8bdb153fc1244d4274b4fe499c26ebecf46873e4356e5039431"
+      ],
+      "historical_source_keys": [
+        "pending_source_d413df91d19ec8bd"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-785536db5ff12c25350d": 3
+      },
+      "project_ids": [
+        "AU-785536db5ff12c25350d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-078acca87299988af5ba67e7",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02717607"
+    },
+    {
+      "association_references": {
+        "AU-4ec1fb08563b42352d29": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "39699576fe9ebe47225c083dc285d7a561b732ab357a9050a67472e89a5512aa"
+      ],
+      "historical_source_keys": [
+        "asx_review_cowalinya_global_202309"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-4ec1fb08563b42352d29": 1
+      },
+      "project_ids": [
+        "AU-4ec1fb08563b42352d29"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-aca62a85db81c699877a09e8",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02720445"
+    },
+    {
+      "association_references": {
+        "AU-9d967ecaac6e02fc76a5": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "f6f127c62e9c4ddcab67c5f01552f21cc9ee1c17095451b963e7b66e757981b3"
+      ],
+      "historical_source_keys": [
+        "r6_identity_rankin_dome"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-9d967ecaac6e02fc76a5": 1
+      },
+      "project_ids": [
+        "AU-9d967ecaac6e02fc76a5"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-2323c03955531a9c2819e7ad",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02749716"
+    },
+    {
+      "association_references": {
+        "AU-176852ef1348ac10d154": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "77097e83c9434efe3ce797b8400aa1b5159d152a66994db3425a5ad86e03f4e4"
+      ],
+      "historical_source_keys": [
+        "nowie_mre20240124"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-176852ef1348ac10d154": 1
+      },
+      "project_ids": [
+        "AU-176852ef1348ac10d154"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-3a50ece1d76b0dfbd897c1fc",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02765469"
+    },
+    {
+      "association_references": {
+        "AU-9b667066e6eb66753005": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9"
+      ],
+      "historical_source_keys": [
+        "asx_review_cummins_global_202401"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-9b667066e6eb66753005": 1
+      },
+      "project_ids": [
+        "AU-9b667066e6eb66753005"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-f9e741006bb93d9bc9742f6c",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02766275"
+    },
+    {
+      "association_references": {
+        "AU-41ee0148c804293cfc39": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "eba3ca8ecb4a5a29f0db08fd4432585f3ea31bd34ec1950ea8e06735c90ec24c"
+      ],
+      "historical_source_keys": [
+        "new_goldfield20240321"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-41ee0148c804293cfc39": 1
+      },
+      "project_ids": [
+        "AU-41ee0148c804293cfc39"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-45f20433f24ab36ef4e583d4",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02787845"
+    },
+    {
+      "association_references": {
+        "AU-d1aeb21e18e60fe8e32e": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "56ccd7821131cdba6a520e55a91ae97894592ee3223b8170df0827e1fed3909b"
+      ],
+      "historical_source_keys": [
+        "r4_deep_leads_rubble_mound_wind_break"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d1aeb21e18e60fe8e32e": 1
+      },
+      "project_ids": [
+        "AU-d1aeb21e18e60fe8e32e"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-2b395a474657f5cadaf94f74",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02803111"
+    },
+    {
+      "association_references": {
+        "AU-2262a37ca19531f08da3": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "56b1bb55bef057af81a1d31faa701e69bef70c9eb95fc7d46ffd1174f5186ca9"
+      ],
+      "historical_source_keys": [
+        "asx_review_splinter_global_202405"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2262a37ca19531f08da3": 1
+      },
+      "project_ids": [
+        "AU-2262a37ca19531f08da3"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-affc25aed05657dabfcc352e",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02812349"
+    },
+    {
+      "association_references": {
+        "AU-02d486d425ca0792bdc5": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "19e61b328cdd14e6174e1de0870bf44a576642c66053214118e8433e7f7673b8"
+      ],
+      "historical_source_keys": [
+        "r5_identity_comet"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-02d486d425ca0792bdc5": 1
+      },
+      "project_ids": [
+        "AU-02d486d425ca0792bdc5"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-ef286419aa0f4db316d08e00",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02861291"
+    },
+    {
+      "association_references": {
+        "AU-9bd8e5ed8408cd84d876": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0"
+      ],
+      "historical_source_keys": [
+        "asx_document_02904920"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-9bd8e5ed8408cd84d876": 1
+      },
+      "project_ids": [
+        "AU-9bd8e5ed8408cd84d876"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-bd72d08c8bc572b11a0276c4",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02904920"
+    },
+    {
+      "association_references": {
+        "AU-12cc237ae66c7a6508ca": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "1417f7495f8101992bd14719c42975d83eaba067b83dda56aa93187e030c9d43"
+      ],
+      "historical_source_keys": [
+        "asx_redlings_maiden202501"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-12cc237ae66c7a6508ca": 1
+      },
+      "project_ids": [
+        "AU-12cc237ae66c7a6508ca"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c7b9e7efd2183457438fa527",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02906350"
+    },
+    {
+      "association_references": {
+        "AU-cc4e217a90b7123dce0a": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "d631b0e9edbc2162ee3cb12bf526834518b43cc5ce89c4d995e3497afbbf36fb"
+      ],
+      "historical_source_keys": [
+        "asx_devex_ar2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-cc4e217a90b7123dce0a": 1
+      },
+      "project_ids": [
+        "AU-cc4e217a90b7123dce0a"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-97603f32e9ec708988f84146",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=02996030"
+    },
+    {
+      "association_references": {
+        "AU-ad64122c217f0dbfabc8": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "d77611858d4cc78ae86f757c789364934345f5dcf0d28a42ac7674fb75fc632e"
+      ],
+      "historical_source_keys": [
+        "asx_barkly_prospectus20260128"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ad64122c217f0dbfabc8": 1
+      },
+      "project_ids": [
+        "AU-ad64122c217f0dbfabc8"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0c09f67407cf99d6980646cc",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03053500"
+    },
+    {
+      "association_references": {
+        "AU-ff758cad5beb276d327d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "c2a8b91970be9298bae77c8547268abd7f0969e8ceebeb7cf73530fa6d965e77"
+      ],
+      "historical_source_keys": [
+        "r5_identity_wimmera"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ff758cad5beb276d327d": 2
+      },
+      "project_ids": [
+        "AU-ff758cad5beb276d327d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-584f90492f3ffebdbc237ffa",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03053666"
+    },
+    {
+      "association_references": {
+        "AU-2fc429d0556dfa0b95c4": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "82a4a37bf3a073c799b49bf5ff67d55add185d88a26485e322d64d86f7374097"
+      ],
+      "historical_source_keys": [
+        "asx_review_donald_min5532_202512"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2fc429d0556dfa0b95c4": 1
+      },
+      "project_ids": [
+        "AU-2fc429d0556dfa0b95c4"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-e0125e75bc91cc26e39b01d6",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03067134"
+    },
+    {
+      "association_references": {
+        "AU-3651cf8448b9227adcf5": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "245f282102453bf6dc97056eba1ac4b889f8d506d07b5515bc354caec94ab170"
+      ],
+      "historical_source_keys": [
+        "asx_ridley_blocks12_202603"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3651cf8448b9227adcf5": 1
+      },
+      "project_ids": [
+        "AU-3651cf8448b9227adcf5"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-c047c750b114b3164dc41d4c",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03075245"
+    },
+    {
+      "association_references": {
+        "AU-2fc429d0556dfa0b95c4": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "9d863e075258b45c84d5c29961c77331c6c1cff3ac0d6ee6f13d6b54fc6e999f"
+      ],
+      "historical_source_keys": [
+        "asx_review_donald_bfs_product_202603"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2fc429d0556dfa0b95c4": 2
+      },
+      "project_ids": [
+        "AU-2fc429d0556dfa0b95c4"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-cd5cd8d3d3b508d3d0fccc43",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03077607"
+    },
+    {
+      "association_references": {
+        "AU-d9fb1b1e3e2ec9fa0851": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "7c39273cc15b4e56b59d0514a3134eadb203230add73e24d36eb8cd0094fda1e"
+      ],
+      "historical_source_keys": [
+        "pending_source_7c39273cc15b4e56"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d9fb1b1e3e2ec9fa0851": 2
+      },
+      "project_ids": [
+        "AU-d9fb1b1e3e2ec9fa0851"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-a5a7883b528eead7548e5583",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03077988"
+    },
+    {
+      "association_references": {
+        "AU-af44c2bd1173b453953f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "fc466daa68b5f988ef61f0dc494b08cb14e2dcbed0e297b00a2c0a8379a975b3"
+      ],
+      "historical_source_keys": [
+        "pending_source_fc466daa68b5f988"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-af44c2bd1173b453953f": 3
+      },
+      "project_ids": [
+        "AU-af44c2bd1173b453953f"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-9c297847a97bedcc0d14c016",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03084938"
+    },
+    {
+      "association_references": {
+        "AU-1345edd8165c10930e94": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "03ee0d0da9323708e1ed5008c4a35981cdc85ec16ddb06b299da1a10ce59914b"
+      ],
+      "historical_source_keys": [
+        "asx_nolans_clarification202606"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-1345edd8165c10930e94": 4
+      },
+      "project_ids": [
+        "AU-1345edd8165c10930e94"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-e0e66ab141dd3fbc2915c4c5",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03105109"
+    },
+    {
+      "association_references": {
+        "AU-49b538453133bd968e8d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01"
+      ],
+      "historical_source_keys": [
+        "asx_document_03107711"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-49b538453133bd968e8d": 1
+      },
+      "project_ids": [
+        "AU-49b538453133bd968e8d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-b936de8e87f8b2ab9c56277b",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03107711"
+    },
+    {
+      "association_references": {
+        "AU-908fd6f4461622e89548": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "99233befa81a1e193848122f00dfaa25079d0b2adbc2f19ef96326ca63c38f2a"
+      ],
+      "historical_source_keys": [
+        "asx_document_03114333"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-908fd6f4461622e89548": 3
+      },
+      "project_ids": [
+        "AU-908fd6f4461622e89548"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-95fd06ed1e0c68b3e0bb4009",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03114333"
+    },
+    {
+      "association_references": {
+        "AU-75fe0f1a81005bd19586": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5ebb04f84564bebc1f8e96073fe45b1e3792b6b6115414c28be94d4886bcea28"
+      ],
+      "historical_source_keys": [
+        "bpm_quarter20260716"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-75fe0f1a81005bd19586": 2
+      },
+      "project_ids": [
+        "AU-75fe0f1a81005bd19586"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-00ac7a88cdec9a7619119526",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03115395"
+    },
+    {
+      "association_references": {
+        "AU-216d0983f6892f9b58f9": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491"
+      ],
+      "historical_source_keys": [
+        "asx_document_03126345"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-216d0983f6892f9b58f9": 1
+      },
+      "project_ids": [
+        "AU-216d0983f6892f9b58f9"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-9888bf001e0f411c17e409a8",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03126345"
+    },
+    {
+      "association_references": {
+        "AU-176852ef1348ac10d154": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-410159af7b79ea498ec2": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "51f880cf3d1e2ea890434886739d82500c0b3bb9d0fa4131a1b2376ccbac79b9"
+      ],
+      "historical_source_keys": [
+        "vhm_ar2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-176852ef1348ac10d154": 2,
+        "AU-410159af7b79ea498ec2": 2
+      },
+      "project_ids": [
+        "AU-176852ef1348ac10d154",
+        "AU-410159af7b79ea498ec2"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-aa6709ea41e88ad97550618e",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03137624"
+    },
+    {
+      "association_references": {
+        "AU-6d807eb7caec9db0f35e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5a783d0c7a9ed69fd62c532c77927af0f83e0813feeaab093ed617ae1556e0b3"
+      ],
+      "historical_source_keys": [
+        "asx_document_03141511"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-6d807eb7caec9db0f35e": 4
+      },
+      "project_ids": [
+        "AU-6d807eb7caec9db0f35e"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-9196c76f99cc0c06c25ec37e",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03141511"
+    },
+    {
+      "association_references": {
+        "AU-3eb7131e4daea18a60a0": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "4ed22ad39457baf2ec0904d2199ec8f59199f2b1cd39535c232a74fdd6b2ca79"
+      ],
+      "historical_source_keys": [
+        "ark_annual2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3eb7131e4daea18a60a0": 1
+      },
+      "project_ids": [
+        "AU-3eb7131e4daea18a60a0"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-882b46ebe8664d29ed81099b",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03145754"
+    },
+    {
+      "association_references": {
+        "AU-2a3a86a4d971e9f9838d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-908fd6f4461622e89548": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "f03cdb2769d58dcc65159e1f3bc892b3525e871c4bf685e480aa428bcf47a260"
+      ],
+      "historical_source_keys": [
+        "hastings_ar2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2a3a86a4d971e9f9838d": 4,
+        "AU-908fd6f4461622e89548": 4
+      },
+      "project_ids": [
+        "AU-2a3a86a4d971e9f9838d",
+        "AU-908fd6f4461622e89548"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-37759233dc5188e7d4b9c890",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03146806"
+    },
+    {
+      "association_references": {
+        "AU-dac3c8e40326b8244cdb": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e"
+      ],
+      "historical_source_keys": [
+        "asx_jupiter_latest_mre202610"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-dac3c8e40326b8244cdb": 2
+      },
+      "project_ids": [
+        "AU-dac3c8e40326b8244cdb"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-03d445d34cb3c979a495870e",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03150890"
+    },
+    {
+      "association_references": {
+        "AU-dac3c8e40326b8244cdb": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "5e88f8aaf0d5da1a9de7f64ec7628ffea48e1a22a7daf296b563e5ee5aa65328"
+      ],
+      "historical_source_keys": [
+        "asx_document_03154309"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-dac3c8e40326b8244cdb": 3
+      },
+      "project_ids": [
+        "AU-dac3c8e40326b8244cdb"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0ff75fef88edeced3f374c04",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03154309"
+    },
+    {
+      "association_references": {
+        "AU-af44c2bd1173b453953f": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "88dfed30776b41d3739253fefaa1e5972a0b9969ec4db39dc1130efa2164775a"
+      ],
+      "historical_source_keys": [
+        "enr_ar2026"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-af44c2bd1173b453953f": 1
+      },
+      "project_ids": [
+        "AU-af44c2bd1173b453953f"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-f11bb01721e11f397dcd5c2a",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03157945"
+    },
+    {
+      "association_references": {
+        "AU-3eb7131e4daea18a60a0": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "36348003c5a713e0735e5ca8e526f54e1e5e1a3440038086ef0627b09746d089"
+      ],
+      "historical_source_keys": [
+        "r4_sandy_mitchell"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-3eb7131e4daea18a60a0": 3
+      },
+      "project_ids": [
+        "AU-3eb7131e4daea18a60a0"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-0af918c4cb8b7a35315b3cf9",
+      "url": "https://www.asx.com.au/asx/v2/statistics/displayAnnouncement.do?display=pdf&idsId=03159067"
+    },
+    {
+      "association_references": {
+        "AU-d9fb1b1e3e2ec9fa0851": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "40b378004d36b7b852cb7990438a126a84b0827a0ec4042ad3f7524923622f70"
+      ],
+      "historical_source_keys": [
+        "charley_jorc2013"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d9fb1b1e3e2ec9fa0851": 1
+      },
+      "project_ids": [
+        "AU-d9fb1b1e3e2ec9fa0851"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-485dd54d0b114c37a4de9742",
+      "url": "https://www.asx.com.au/asxpdf/20130415/pdf/42f7v06gx1svy4.pdf"
+    },
+    {
+      "association_references": {
+        "AU-785536db5ff12c25350d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "38df62723a26b2d94bacfe0f0673b3e6ece3dc09465e36620a57c11bab461000"
+      ],
+      "historical_source_keys": [
+        "circle_valley20220602"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-785536db5ff12c25350d": 4
+      },
+      "project_ids": [
+        "AU-785536db5ff12c25350d"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-a57bb3774aa5fbcd4341d178",
+      "url": "https://www.asx.com.au/asxpdf/20220602/pdf/459kjghznk3ckq.pdf"
+    },
+    {
+      "association_references": {
+        "AU-14f7cb8ca1fcd58f536c": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "abd44d8d94bc3bf89e8186d260982e8652d723e3eca2b571bc6c96d4ab8569a1"
+      ],
+      "historical_source_keys": [
+        "central_gawler_ida20220614"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-14f7cb8ca1fcd58f536c": 1
+      },
+      "project_ids": [
+        "AU-14f7cb8ca1fcd58f536c"
+      ],
+      "publisher": "ASX",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-2894e52258a60ad70d4286d6",
+      "url": "https://www.asx.com.au/asxpdf/20220614/pdf/459whszj3hf2sp.pdf"
+    },
+    {
+      "association_references": {
+        "AU-cc4e217a90b7123dce0a": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "79fb3bcab351602dcddbe7d79192b3d304b01281021ef59801e6f37eb5a9c566"
+      ],
+      "historical_source_keys": [
+        "kennedy_mre20240704"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-cc4e217a90b7123dce0a": 3
+      },
+      "project_ids": [
+        "AU-cc4e217a90b7123dce0a"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-5294d3dcba0ebb0c4a01089f",
+      "url": "https://www.devexresources.com.au/wp-content/uploads/2024/07/61214441.pdf"
+    },
+    {
+      "association_references": {
+        "AU-7537d9555628040fab40": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "b8ca632328afd48b524eaff7c595e5a49c8e7be978deacac41da9c8ad38a9865"
+      ],
+      "historical_source_keys": [
+        "fingerboards_issuer_jobs_guide_20260410"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-7537d9555628040fab40": 2
+      },
+      "project_ids": [
+        "AU-7537d9555628040fab40"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-6c8ef38b5ff1dbc26ff3c09f",
+      "url": "https://www.gippslandcriticalminerals.com/wp-content/uploads/2026/04/GCM-Jobs-Guide.pdf"
+    },
+    {
+      "association_references": {
+        "AU-2af694147ae21c393820": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "2216995c003de902672e4cb90be0b6d3049e94dd5f812b92b9c970029ae4cb23"
+      ],
+      "historical_source_keys": [
+        "igo_fy24_exploration_results_20240829"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2af694147ae21c393820": 2
+      },
+      "project_ids": [
+        "AU-2af694147ae21c393820"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-60750fdc2d69942166ef5913",
+      "url": "https://www.igo.com.au/site/pdf/861fc73d-91d3-4eb3-8f3b-c6da2b4ad8eb/FY24-Exploration-Results-Update.pdf?Platform=ListPage"
+    },
+    {
+      "association_references": {
+        "AU-2af694147ae21c393820": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "d02cf6e37d7da28ac638f8ce9c00248ed688a4c0210ca8a23d39713394394840"
+      ],
+      "historical_source_keys": [
+        "igo_fy25_exploration_portfolio_20250828"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-2af694147ae21c393820": 3
+      },
+      "project_ids": [
+        "AU-2af694147ae21c393820"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-98fa3a1a36baba77218f850c",
+      "url": "https://www.igo.com.au/site/pdf/dc6e3c38-112d-405b-9d81-99087ec25b1e/FY25-Mineral-Resources-and-Ore-Reserves.pdf?Platform=ListPage"
+    },
+    {
+      "association_references": {
+        "AU-0832169526bb5ec07626": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "ARCHIVED_PUBLISHER_UNVERIFIED",
+      "historical_sha256": [
+        "9256d094dca299e55713370e068730b90b7a96942959e0610518fc51f5acb631"
+      ],
+      "historical_source_keys": [
+        "itech_franklyn_identity20211027"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-0832169526bb5ec07626": 1
+      },
+      "project_ids": [
+        "AU-0832169526bb5ec07626"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-921a9e683d58d9d87c4a39e5",
+      "url": "https://www.itechminerals.com.au/wp-content/uploads/2022/07/20211027-iTECH-MINERALS-2021-ANNUAL-REPORT.pdf"
+    },
+    {
+      "association_references": {
+        "AU-0098e17a63e7c05c213f": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_EXCHANGE",
+      "historical_sha256": [
+        "e41fa365bd85fe16c468809804da59a3918326cd9990997e0c9ce8535b5e0950"
+      ],
+      "historical_source_keys": [
+        "wudinna_mre2026"
+      ],
+      "kind": "html",
+      "priority_by_project": {
+        "AU-0098e17a63e7c05c213f": 1
+      },
+      "project_ids": [
+        "AU-0098e17a63e7c05c213f"
+      ],
+      "publisher": "London Stock Exchange",
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-bf91e3dc9c32d80730e6eb9f",
+      "url": "https://www.londonstockexchange.com/en/news/article/COBR/maiden-rare-earth-mineral-resource-estimate/637e-cb-eb-9d-8e-465a87"
+    },
+    {
+      "association_references": {
+        "AU-ff758cad5beb276d327d": [
+          "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "THIRD_PARTY_ARCHIVED_POINTER",
+      "historical_sha256": [
+        "54ae6be3b275f744e627c0ae5dd542fe2fdaab7404649c809cdc48d97ff11732"
+      ],
+      "historical_source_keys": [
+        "wim100_mre20260129"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-ff758cad5beb276d327d": 1
+      },
+      "project_ids": [
+        "AU-ff758cad5beb276d327d"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-913522901dc5d1e6fe89aa9e",
+      "url": "https://www.marketindex.com.au/data-api/api/v1/announcements/XASX%3AILU%3A6A1308937/pdf/inline/wim100-mineral-resource-estimate-increase"
+    },
+    {
+      "association_references": {
+        "AU-d28382dfa82f1664065e": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "09185265e2ae83778d47d499c52ae6f13e950aa8d0e2ac8001a3fe2334f5cc67"
+      ],
+      "historical_source_keys": [
+        "nsw_critical_minerals_projects_jul2025"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-d28382dfa82f1664065e": 3
+      },
+      "project_ids": [
+        "AU-d28382dfa82f1664065e"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-7300e95c849d552e80d3c7d9",
+      "url": "https://www.resources.nsw.gov.au/sites/default/files/2025-09/NSW_crit_mins_map_projects_July2025_A3_web.pdf"
+    },
+    {
+      "association_references": {
+        "AU-12cc237ae66c7a6508ca": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-216d0983f6892f9b58f9": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-2262a37ca19531f08da3": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-2a3a86a4d971e9f9838d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-3651cf8448b9227adcf5": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-4286ab9c245effb445ff": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-47d12ebe6b66df8e5936": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-4ec1fb08563b42352d29": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-574465211976ec57b1ef": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-785536db5ff12c25350d": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-7c198d219aa1db3e291f": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-8f3fe174a998d20ee4cf": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-9b667066e6eb66753005": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-a8258e4989c7bd95b7af": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-bb565f5348679a46d4a0": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-d0ce731e1d8198ffaf58": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-d2cd77f89298d6dae330": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ],
+        "AU-efff91a06cf344122d88": [
+          "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
+        ]
+      },
+      "channel": "OFFICIAL_GOVERNMENT",
+      "historical_sha256": [
+        "a4392118bfbb95fc082b5ca74c47c92da40cbcdfb5a4bd60855187e6bc0cd8eb"
+      ],
+      "historical_source_keys": [
+        "wa_dmpe_ree2026_original",
+        "wa_dmpe_ree_2026_pdf"
+      ],
+      "kind": "pdf",
+      "priority_by_project": {
+        "AU-12cc237ae66c7a6508ca": 3,
+        "AU-216d0983f6892f9b58f9": 4,
+        "AU-2262a37ca19531f08da3": 3,
+        "AU-2a3a86a4d971e9f9838d": 5,
+        "AU-3651cf8448b9227adcf5": 2,
+        "AU-4286ab9c245effb445ff": 2,
+        "AU-47d12ebe6b66df8e5936": 3,
+        "AU-4ec1fb08563b42352d29": 3,
+        "AU-574465211976ec57b1ef": 2,
+        "AU-785536db5ff12c25350d": 5,
+        "AU-7c198d219aa1db3e291f": 5,
+        "AU-8f3fe174a998d20ee4cf": 2,
+        "AU-9b667066e6eb66753005": 4,
+        "AU-a8258e4989c7bd95b7af": 2,
+        "AU-bb565f5348679a46d4a0": 2,
+        "AU-d0ce731e1d8198ffaf58": 4,
+        "AU-d2cd77f89298d6dae330": 3,
+        "AU-efff91a06cf344122d88": 3
+      },
+      "project_ids": [
+        "AU-12cc237ae66c7a6508ca",
+        "AU-216d0983f6892f9b58f9",
+        "AU-2262a37ca19531f08da3",
+        "AU-2a3a86a4d971e9f9838d",
+        "AU-3651cf8448b9227adcf5",
+        "AU-4286ab9c245effb445ff",
+        "AU-47d12ebe6b66df8e5936",
+        "AU-4ec1fb08563b42352d29",
+        "AU-574465211976ec57b1ef",
+        "AU-785536db5ff12c25350d",
+        "AU-7c198d219aa1db3e291f",
+        "AU-8f3fe174a998d20ee4cf",
+        "AU-9b667066e6eb66753005",
+        "AU-a8258e4989c7bd95b7af",
+        "AU-bb565f5348679a46d4a0",
+        "AU-d0ce731e1d8198ffaf58",
+        "AU-d2cd77f89298d6dae330",
+        "AU-efff91a06cf344122d88"
+      ],
+      "publisher": null,
+      "reference": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+      "source_key": "seed-745cd54537d50f542055acbf",
+      "url": "https://www.wa.gov.au/media/159141/download?inline="
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "columns": [
+    "專案ID",
+    "開發商",
+    "未上市公司",
+    "專案名稱",
+    "所在地_中文",
+    "所在地_英文",
+    "國家",
+    "州省地區",
+    "緯度",
+    "經度",
+    "礦床型態代碼",
+    "礦床型態",
+    "開發階段代碼",
+    "開發階段類別",
+    "開發階段",
+    "礦石蘊藏量_Mt",
+    "TREO品位_pct",
+    "總TREO蘊藏量_kt",
+    "磁鐵稀土氧化物蘊藏量_kt",
+    "磁鐵稀土佔TREO_pct",
+    "NdPr蘊藏量_kt_需兩者皆公布",
+    "完整重稀土組合蘊藏量_kt_需8元素皆公布",
+    "預估年產TREO_t_per_year",
+    "預估年產NdPr_t_per_year",
+    "產品/產出",
+    "有TREO資源估計",
+    "有來源文件",
+    "資料來源名稱",
+    "資料來源URL",
+    "已公布元素數_共15項",
+    "已公布元素總和_kt",
+    "元素總和/TREO",
+    "總說明",
+    "四項磁性元素皆公布",
+    "磁性元素重算值_NdPrTbDy_kt",
+    "La2O3_氧化鑭_kt",
+    "CeO2_氧化鈰_kt",
+    "Pr6O11_氧化鐠_kt",
+    "Nd2O3_氧化釹_kt",
+    "Sm2O3_氧化釤_kt",
+    "Eu2O3_氧化銪_kt",
+    "Gd2O3_氧化釓_kt",
+    "Tb4O7_氧化鋱_kt",
+    "Dy2O3_氧化鏑_kt",
+    "Ho2O3_氧化鈥_kt",
+    "Er2O3_氧化鉺_kt",
+    "Tm2O3_氧化銩_kt",
+    "Yb2O3_氧化鐿_kt",
+    "Lu2O3_氧化鎦_kt",
+    "Y2O3_氧化釔_kt",
+    "ASX代碼"
+  ],
+  "historical_reference": {
+    "artifact_commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+    "artifacts": {
+      "results/ree-project-census/coverage-locked-20261125/REE project census.csv": {
+        "git_blob_sha": "cf79a3d1f2db353dbe8fa895c0e1ada97d6ffb75",
+        "sha256": "a643607a1fe104e3cd7c6590fc4752e37a09902087000882430931aa69b25308"
+      },
+      "results/ree-project-census/coverage-locked-20261125/asset_manifest.json": {
+        "git_blob_sha": "73b01d4a04cc3abe69ad75785647a587ed24fbe8",
+        "sha256": "082c26b30b2616445b4eabeefd1bc08265740268b146ae34085ccc0a8374b8ae"
+      },
+      "results/ree-project-census/coverage-locked-20261125/census_identity_roles.csv": {
+        "git_blob_sha": "204b0059cd0fbce2cfca31430a372f115bd6446b",
+        "sha256": "34b50b1cf3d63dbb319906f9ebb528b1fe7f4b732dd8da8dec30e23f798a82d4"
+      },
+      "results/ree-project-census/coverage-locked-20261125/census_release.json": {
+        "git_blob_sha": "bb5ed1f59307f59e4cfe408b15d1aff96c2bb5d9",
+        "sha256": "9b10857fca27163b173ab4540aaa1f59898d270181b7b147b43a30ba4b52bcd6"
+      },
+      "results/ree-project-census/coverage-locked-20261125/census_selection.csv": {
+        "git_blob_sha": "b269d45a0fdbb78095adab3b3d2fb79f2ca76e69",
+        "sha256": "d8cb35a3b66e9cfd1862bb479178f6a82280dbd53c923fe46d163c07ef6bebec"
+      },
+      "results/ree-project-census/coverage-locked-20261125/field_provenance.csv": {
+        "git_blob_sha": "c9915469c67504acf0e6e23104aaa94dac7f96a5",
+        "sha256": "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d"
+      }
+    },
+    "historical_cutoff": "2026-11-13",
+    "historical_science_commit": "0dff6beb5aca52e565c37289e3ab295737e76942"
+  },
+  "schema_version": "census-column-contract-v1"
+}
