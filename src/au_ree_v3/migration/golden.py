@@ -66,9 +66,13 @@ def _canonical_json(value: object) -> bytes:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
 
 
-def _jsonl(path: Path, rows: list[dict]) -> str:
+def _jsonl(path: Path, rows: list[dict], *, immutable: bool = False) -> str:
     payload = b"".join(_canonical_json(row) + b"\n" for row in rows)
-    path.write_bytes(payload)
+    if immutable and path.exists():
+        if path.read_bytes() != payload:
+            raise ValueError(f"Refusing to overwrite frozen expectations at {path}")
+    else:
+        path.write_bytes(payload)
     return sha256(payload).hexdigest()
 
 
@@ -206,7 +210,7 @@ def build_golden(v2_root: Path, out: Path, assets: Path | None = None) -> dict:
     if len(ids) != len(expected):
         raise ValueError("Duplicate Golden case IDs in frozen source artifacts")
     expected_path = out / "golden_expected.jsonl"
-    expected_sha = _jsonl(expected_path, expected)
+    expected_sha = _jsonl(expected_path, expected, immutable=True)
     cases_path = out / "golden_cases.jsonl"
     cases_sha = _jsonl(cases_path, cases)
     _write_json(out / "oracle_manifest.json", {
@@ -228,5 +232,11 @@ def build_golden(v2_root: Path, out: Path, assets: Path | None = None) -> dict:
         },
         "external_scientific_accuracy": "UNMEASURED",
     })
+    # Temporal governance is a parallel result; historical reference bytes stay unchanged.
+    from .temporal_audit import _audit_pinned_temporal
+    temporal_out = out / "temporal"
+    _ensure_output_outside_reference(v2_root, temporal_out)
+    temporal = _audit_pinned_temporal(repo, expected_path, out / "oracle_manifest.json", temporal_out, inputs, checks)
+    manifest["temporal_audit"] = {"status": temporal["status"], "directory": "temporal"}
     _write_json(out / "golden_manifest.json", manifest)
     return manifest

@@ -42,4 +42,4 @@ AU_REE_REPLAY_ASSETS="$ASSET_LIBRARY" \
   python -m unittest discover -s tests -p 'test_pipeline.py' -v
 ```
 
-The integration suite uses named Golden cases for independent comparisons and includes two clean replays and source-error isolation.
+The integration suite uses named Golden cases for independent comparisons and includes two clean replays and source-error isolation. The [temporal evidence audit](docs/migration/temporal/README.md) documents exact-edition cutoff decisions and how to reproduce the frozen row-by-row comparison.

@@ -14,6 +14,8 @@ import re
 import subprocess
 from time import perf_counter
 
+from .source_temporal import source_temporal_inventory
+
 
 ARCHIVED_CENSUS = "archived-census-2026-11-13"
 PHASE22_SUBSET = "phase22-2026-11-05"
@@ -358,6 +360,7 @@ def verify_baseline(v2_root: Path, profile: str, out: Path, assets: Path | None 
     repo = PinnedRepository(v2_root)
     inputs, checks = pinned_inputs(repo, profile)
     detail: dict = {}
+    temporal_inventory = None
     inventory: list[dict] = []
     baseline_status = _status(checks)
     replay = {"status": "BLOCKED", "reason": "REFERENCE_UNVERIFIED"}
@@ -375,6 +378,12 @@ def verify_baseline(v2_root: Path, profile: str, out: Path, assets: Path | None 
                 required = set(recovery["verified_subset_source_inputs"]["required_sha256"])
             checks.extend(profile_checks)
             inventory = asset_inventory(repo, required, recovery, assets)
+            snapshot_path = BASELINES["snapshot_lock"]
+            temporal_inventory = source_temporal_inventory(
+                inventory, specification["cutoff"], inputs["subset", snapshot_path],
+                BASELINES["refs"]["subset"], snapshot_path,
+                frozenset(recovery["verified_subset_source_inputs"]["required_sha256"]),
+            )
             checks.append(_check("required_assets_covered_by_inventory", sorted(required), sorted(
                 row["expected_sha256"] for row in inventory if row["status"] != "NOT_REQUIRED_FOR_SCOPE")))
             if any(item["status"] == "BLOCKED" for item in detail.get("configuration", {}).values()):
@@ -405,6 +414,11 @@ def verify_baseline(v2_root: Path, profile: str, out: Path, assets: Path | None 
         "detail": detail,
         "asset_inventory_counts": dict(Counter(row["status"] for row in inventory)),
         "asset_inventory_path": "source_availability.json",
+        "source_temporal_inventory": ({
+            "path": "source_temporal.json",
+            "decisions_by_status": temporal_inventory["decisions_by_status"],
+            "proof_scope": temporal_inventory["proof_scope"],
+        } if temporal_inventory is not None else {"status": "NOT_RUN"}),
         "source_to_output_replay": replay if status == "PASS" else {"status": "BLOCKED", "reason": "REFERENCE_UNVERIFIED"},
         "environment": {"platform": platform.platform(), "python": platform.python_version()},
         "elapsed_seconds": perf_counter() - start,
@@ -414,5 +428,7 @@ def verify_baseline(v2_root: Path, profile: str, out: Path, assets: Path | None 
         "profile": profile, "cutoff": specification["cutoff"], "assets": inventory,
         "status": "PASS" if inventory else "NOT_RUN",
     })
+    if temporal_inventory is not None:
+        _write_json(out / "source_temporal.json", temporal_inventory)
     _write_json(out / "baseline_verification.json", receipt)
     return receipt

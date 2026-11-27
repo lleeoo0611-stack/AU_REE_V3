@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import calendar
 import hashlib
 import json
 import sqlite3
+from collections.abc import Iterable
 from contextlib import contextmanager
-from datetime import date, datetime
 from pathlib import Path
 from typing import TypeVar
 
@@ -29,9 +28,10 @@ from .contracts import (
     ValidationOutcome,
     canonical_json,
 )
+from .contracts.temporal import TEMPORAL_POLICY_VERSION, TemporalDecision, evaluate_temporal
 
 APPLICATION_ID = 0x41555233
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 _MIGRATIONS = {
     1: (
@@ -103,6 +103,15 @@ _MIGRATIONS = {
             raw_record_id TEXT NOT NULL REFERENCES raw_observations, PRIMARY KEY(derived_id, position)
         )""",
     ),
+    2: (
+        """CREATE TABLE temporal_decisions (
+            validation_id TEXT PRIMARY KEY NOT NULL REFERENCES validations,
+            raw_record_id TEXT NOT NULL REFERENCES raw_observations,
+            source_key TEXT NOT NULL, source_sha TEXT NOT NULL, cutoff TEXT NOT NULL,
+            policy_version TEXT NOT NULL, decision_id TEXT NOT NULL, payload TEXT NOT NULL,
+            FOREIGN KEY(source_key, source_sha) REFERENCES sources
+        )""",
+    ),
 }
 
 # Each entry lists the table, stable key and relational fields in its JSON payload.
@@ -136,7 +145,8 @@ class SourceDigestMismatch(ContractViolation):
 class Store:
     """Apply schema migrations and persist batches through a single SQLite writer."""
 
-    def __init__(self, path: str | Path):
+    def __init__(self, path: str | Path, *, trusted_temporal_evidence_ids: Iterable[str] = ()):
+        self._trusted_temporal_evidence_ids = frozenset(trusted_temporal_evidence_ids)
         self._db = sqlite3.connect(path, isolation_level=None)
         try:
             self._db.execute("PRAGMA foreign_keys = ON")
@@ -216,6 +226,35 @@ class Store:
             raise ContractViolation(f"missing NormalizedObservation {candidate_id!r}")
         return self._required(RawObservation, row[0])
 
+    def accepted_for_release(self, release_id: str) -> list[AcceptedResearchValue]:
+        """Read governed selections for downstream research, with archive-only rows excluded."""
+        release = self._required(ResearchRelease, release_id)
+        if release.temporal_policy_version is None:
+            return []
+        rows = self._db.execute(
+            "SELECT payload FROM accepted_values WHERE release_id = ? ORDER BY acceptance_id", (release_id,)
+        )
+        accepted = [AcceptedResearchValue.from_dict(json.loads(payload)) for (payload,) in rows]
+        for value in accepted:
+            self.selection_temporal_trace(value, release)
+        return accepted
+
+    def validation_temporal_trace(self, validation_id: str) -> dict | None:
+        """Expose the immutable gate receipt, including candidate and conflict decisions."""
+        row = self._db.execute(
+            "SELECT payload FROM temporal_decisions WHERE validation_id = ?", (validation_id,)
+        ).fetchone()
+        return json.loads(row[0]) if row else None
+
+    def selection_temporal_trace(self, accepted: AcceptedResearchValue, release: ResearchRelease) -> dict:
+        """Recheck a stored selection against its raw evidence edition and release pins."""
+        if self.get(AcceptedResearchValue, accepted.acceptance_id) != accepted:
+            raise ContractViolation("temporal trace requires the stored acceptance")
+        if accepted.release_id != release.release_id:
+            raise ContractViolation("temporal trace requires the acceptance's immutable release")
+        validation = self._required(ValidatedObservation, accepted.validation_id)
+        return self.require_temporal_eligible(validation, release)
+
     def _required(self, record_type: type[R], key: str | tuple[str, ...]) -> R:
         record = self.get(record_type, key)
         if record is None:
@@ -256,7 +295,7 @@ class Store:
                 raise RecordConflict(f"{type(record).__name__} {key!r} already has different contents")
             return False
 
-        self._validate_links(record)
+        decision = self._validate_links(record)
         columns = (*keys, *extra_columns, "payload")
         placeholders = ", ".join("?" for _ in columns)
         values = [getattr(record, column) for column in columns[:-1]]
@@ -277,6 +316,14 @@ class Store:
             self._db.executemany(
                 "INSERT INTO validation_anchors VALUES (?, ?)",
                 [(record.validation_id, anchor_id) for anchor_id in record.evidence_anchor_ids],
+            )
+            raw = self.raw_for_candidate(record.candidate_id)
+            self._db.execute(
+                "INSERT INTO temporal_decisions VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    record.validation_id, raw.raw_record_id, raw.source_key, raw.source_sha, record.cutoff,
+                    TEMPORAL_POLICY_VERSION, decision.decision_id, canonical_json(decision.to_dict()),
+                ),
             )
         elif isinstance(record, ResearchRelease):
             self._db.executemany(
@@ -299,7 +346,7 @@ class Store:
             raise ContractViolation(f"{project_id!r} must be a project")
         return project
 
-    def _validate_links(self, record: Record) -> None:
+    def _validate_links(self, record: Record) -> TemporalDecision | None:
         if isinstance(record, Entity) and record.kind == EntityKind.DEPOSIT:
             self._require_project(record.parent_id)
         elif isinstance(record, ResourceScope):
@@ -316,14 +363,22 @@ class Store:
         elif isinstance(record, RawObservation):
             self._validate_raw(record)
         elif isinstance(record, ValidatedObservation):
-            self._validate_assessment(record)
+            return self._validate_assessment(record)
         elif isinstance(record, ResearchRelease):
+            if record.temporal_policy_version != TEMPORAL_POLICY_VERSION:
+                raise ContractViolation("new releases require the supported temporal policy")
+            if record.release_mode == "FORMAL" and (
+                not record.temporal_evidence_ids
+                or not self._trusted_temporal_evidence_ids.issuperset(record.temporal_evidence_ids)
+            ):
+                raise ContractViolation("formal releases require operator-approved temporal evidence pins")
             for project_id in record.cohort:
                 self._require_project(project_id)
         elif isinstance(record, AcceptedResearchValue):
             self._validate_acceptance(record)
         elif isinstance(record, DerivedValue):
             self._validate_derivation(record)
+        return None
 
     def _validate_raw(self, raw: RawObservation) -> None:
         scope = self._required(ResourceScope, raw.scope_id)
@@ -334,15 +389,19 @@ class Store:
             if (anchor.source_key, anchor.source_sha) != (raw.source_key, raw.source_sha):
                 raise ContractViolation("observation evidence is from another source version")
 
-    def _validate_assessment(self, assessment: ValidatedObservation) -> None:
+    def _validate_assessment(self, assessment: ValidatedObservation) -> TemporalDecision:
         candidate = self._required(NormalizedObservation, assessment.candidate_id)
         raw = self.raw_for_candidate(candidate.candidate_id)
         anchors = [self._required(EvidenceAnchor, key) for key in assessment.evidence_anchor_ids]
-        if assessment.outcome != ValidationOutcome.VALIDATED:
-            return
-
         source_key = (raw.source_key, raw.source_sha)
         source = self._required(Source, source_key)
+        decision = self._temporal_decision(assessment, raw, source)
+        if assessment.temporal_decision_id != decision.decision_id:
+            raise ContractViolation("validation requires the recomputed temporal decision ID")
+        if assessment.outcome != ValidationOutcome.VALIDATED:
+            return decision
+        if decision.status != "ELIGIBLE":
+            raise ContractViolation(f"observation is ineligible for this cutoff: {decision.reason}")
         if not self.source_verified(*source_key):
             raise ContractViolation("validated observations require verified source bytes")
         if raw.anchor_id not in assessment.evidence_anchor_ids:
@@ -356,14 +415,6 @@ class Store:
             raise ContractViolation("this evidence profile requires anchored evidence from the same source page")
         if raw.raw_value is None or candidate.value is None:
             raise ContractViolation("validated observations require a reported and normalized value")
-        dates = (
-            source.publication_date, source.available_date, raw.reported_publication_date,
-            raw.effective_date, raw.event_date,
-        )
-        if not (source.publication_date or source.available_date) or any(
-            _latest_possible_day(value) > date.fromisoformat(assessment.cutoff) for value in dates if value
-        ):
-            raise ContractViolation("historical availability and observation dates must be within the cutoff")
         if assessment.comparable:
             bases = (
                 (candidate.material_basis, raw.material_basis),
@@ -374,31 +425,79 @@ class Store:
                 raise ContractViolation("this evidence profile does not authorize unbound basis changes")
             if not raw.statement_id or not raw.category or "exploration target" in raw.category.casefold().replace("_", " "):
                 raise ContractViolation("comparable resource values require an identifiable non-target statement and category")
+        return decision
 
-    def _validate_acceptance(self, accepted: AcceptedResearchValue) -> None:
-        release = self._required(ResearchRelease, accepted.release_id)
-        validation = self._required(ValidatedObservation, accepted.validation_id)
-        raw = self.raw_for_candidate(validation.candidate_id)
+    @staticmethod
+    def _temporal_decision(
+        validation: ValidatedObservation, raw: RawObservation, source: Source,
+    ) -> TemporalDecision:
+        return evaluate_temporal(
+            source_sha256=source.sha256, cutoff=validation.cutoff,
+            publication_date=source.publication_date, available_date=source.available_date,
+            acquired_at=source.acquired_at, reacquired_at=validation.reacquired_at or source.reacquired_at,
+            availability_role=source.availability_role,
+            effective_date=raw.effective_date, event_date=raw.event_date,
+            reported_publication_date=raw.reported_publication_date, observation_role=raw.observation_role,
+            evidence=validation.temporal_evidence,
+        )
+
+    def require_temporal_eligible(self, validation: ValidatedObservation, release: ResearchRelease) -> dict:
+        if self.get(ValidatedObservation, validation.validation_id) != validation:
+            raise ContractViolation("temporal gate requires the stored validation")
+        if self.get(ResearchRelease, release.release_id) != release:
+            raise ContractViolation("temporal gate requires the stored release")
+        if release.temporal_policy_version != TEMPORAL_POLICY_VERSION:
+            raise ContractViolation("release has no supported temporal policy; its values remain archive-only")
         if validation.outcome != ValidationOutcome.VALIDATED or not validation.comparable:
             raise ContractViolation("this selection profile requires a validated, comparable observation")
         if validation.cutoff != release.cutoff or validation.rules_sha != release.rules_sha:
             raise ContractViolation("selection cutoff and rules must match the release")
+        raw = self.raw_for_candidate(validation.candidate_id)
         if raw.project_id not in release.cohort:
             raise ContractViolation("selected observation project is outside the release cohort")
+        source = self._required(Source, (raw.source_key, raw.source_sha))
+        if not self.source_verified(raw.source_key, raw.source_sha):
+            raise ContractViolation("temporal eligibility requires verified source bytes")
+        row = self._db.execute(
+            """SELECT raw_record_id, source_key, source_sha, cutoff, policy_version, decision_id, payload
+               FROM temporal_decisions WHERE validation_id = ?""",
+            (validation.validation_id,),
+        ).fetchone()
+        if row is None:
+            raise ContractViolation("historical validation has no persisted temporal decision")
+        decision = self._temporal_decision(validation, raw, source)
+        pins = (
+            raw.raw_record_id, raw.source_key, raw.source_sha, validation.cutoff,
+            TEMPORAL_POLICY_VERSION, decision.decision_id, canonical_json(decision.to_dict()),
+        )
+        if row != pins or validation.temporal_decision_id != decision.decision_id:
+            raise ContractViolation("stored temporal decision does not match the observation edition and policy")
+        if decision.status != "ELIGIBLE" or decision.decision_id not in release.temporal_decision_ids:
+            raise ContractViolation("release must pin an eligible temporal decision")
+        if release.release_mode == "FORMAL":
+            approved = self._trusted_temporal_evidence_ids.intersection(release.temporal_evidence_ids)
+            if (
+                not approved.issuperset(release.temporal_evidence_ids)
+                or not approved.issuperset(decision.evidence_ids)
+                or decision.evidence_ids != decision.matching_evidence_ids
+            ):
+                raise ContractViolation("formal selections require exact-edition temporal evidence approved by the operator")
+        return json.loads(row[-1])
+
+    def _validate_acceptance(self, accepted: AcceptedResearchValue) -> None:
+        release = self._required(ResearchRelease, accepted.release_id)
+        validation = self._required(ValidatedObservation, accepted.validation_id)
+        self.require_temporal_eligible(validation, release)
 
     def _validate_derivation(self, derived: DerivedValue) -> None:
         scope = self._required(ResourceScope, derived.scope_id)
         release = self._required(ResearchRelease, derived.release_id)
         if scope.project_id != derived.project_id or derived.project_id not in release.cohort:
             raise ContractViolation("derived value is outside its Project scope or release cohort")
-        cohort_observations = self._db.execute(
-            """SELECT candidate.raw_record_id FROM accepted_values AS accepted
-               JOIN validations AS validation USING (validation_id)
-               JOIN candidates AS candidate USING (candidate_id)
-               WHERE accepted.release_id = ?""",
-            (derived.release_id,),
-        )
-        accepted_inputs = {row[0] for row in cohort_observations}
+        accepted_inputs = {
+            self.raw_for_candidate(self._required(ValidatedObservation, accepted.validation_id).candidate_id).raw_record_id
+            for accepted in self.accepted_for_release(derived.release_id)
+        }
         for observation_id in derived.input_observation_ids:
             observed = self._required(RawObservation, observation_id)
             if observed.scope_id != derived.scope_id or observed.raw_record_id not in accepted_inputs:
@@ -419,16 +518,3 @@ class Store:
             "integrity_check": [row[0] for row in self._db.execute("PRAGMA integrity_check")],
             "foreign_key_check": [list(row) for row in self._db.execute("PRAGMA foreign_key_check")],
         }
-
-
-def _latest_possible_day(value: str) -> date:
-    """Preserve month/year roles while conservatively comparing against daily cutoffs."""
-    if len(value) > 10:
-        return datetime.fromisoformat(value.replace("Z", "+00:00")).date()
-    year, *rest = value.split("-")
-    if not rest:
-        return date(int(year), 12, 31)
-    month, *days = rest
-    if not days:
-        return date(int(year), int(month), calendar.monthrange(int(year), int(month))[1])
-    return date.fromisoformat(value)

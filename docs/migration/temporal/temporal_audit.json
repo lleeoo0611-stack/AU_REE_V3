@@ -1,0 +1,79 @@
+{
+  "audit_scope": "FIXED_HISTORICAL_OBSERVATION_REFERENCE",
+  "counts": {
+    "exact_pre_cutoff_capture_supported": 27,
+    "fresh_formal_promotions": 0,
+    "golden_observation_rows": 93,
+    "joined_distinct_acquisition_episodes": 17,
+    "observed_acquisition_after_cutoff": 66,
+    "observed_availability_after_acquisition": 17,
+    "observed_availability_after_cutoff": 83,
+    "observed_availability_after_cutoff_previously_selected": 69
+  },
+  "cutoff": "2026-11-13",
+  "expected_sha256": "f2b6d2d27017b875c7ee204beaba6c952b3c6a5e9674874290e70c7aab7d5195",
+  "oracle_manifest_sha256": "3ec0490ee7e696035002c3641645ba58278e6a7aed07d1cdc6f731a5ccb33cbc",
+  "proof_scope": "Exact Phase 22 pre-cutoff capture verified in the fixed subset receipt.",
+  "references": {
+    "acquisition": {
+      "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "path": "results/ree-project-census/coverage-locked-20261125/source_acquisition.json",
+      "sha256": "66556c196593a7ed84ef7642d9dcbf9d2852c75bfcce7cde62ea9617fecbddf6"
+    },
+    "bundle": {
+      "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "path": "results/ree-project-census/coverage-locked-20261125/bundle_verification.json",
+      "sha256": "4a6c0dfab48506eeff08294e9fd6f3f29c07c612f935c7bfd5d77c714ce17ab7"
+    },
+    "capture": {
+      "commit": "dcda87e81e1250d443f73c1984faaa7beaa19930",
+      "path": "results/phase22-2026-11-06/snapshot_lock.json",
+      "sha256": "3d0848bd302294ff247bd931579e0c5fcec25f0908c83dd72a9fdfeada97981d"
+    },
+    "native_acquisition_receipt_sha256_in_release": "1ec0005824bb2e85e5dfc3d0aa9a0a298376267d66fcbf12b9cc984ca418901e",
+    "observations": {
+      "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "path": "results/ree-project-census/coverage-locked-20261125/resource_statement_observations.csv",
+      "sha256": "067e6bf1d8ba46426fb5f16ec7ab404606aa58c181b6ec57445ea6321e97aeb2"
+    },
+    "policy": {
+      "commit": "0dff6beb5aca52e565c37289e3ab295737e76942",
+      "path": "src/au_ree_v2/acquisition.py",
+      "sha256": "16df3e2cfe36600a7911d130964f2198325460fdeea982ee36a0f3fe951a1ca5"
+    },
+    "recovery": {
+      "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "path": "results/phase10-2026-11-27/source_recovery_manifest.json",
+      "sha256": "36b467ac625cc7caccd4589f18562f6d19c5848b83dfed4ae495fad7706ccdc5"
+    },
+    "release": {
+      "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "path": "results/ree-project-census/coverage-locked-20261125/census_release.json",
+      "sha256": "9b10857fca27163b173ab4540aaa1f59898d270181b7b147b43a30ba4b52bcd6"
+    },
+    "selection": {
+      "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "path": "results/ree-project-census/coverage-locked-20261125/source_selection.csv",
+      "sha256": "aa475199f5e13d1f14e3807e4ebfb70ec062e80d70cbc757a36e9452b1aafa75"
+    },
+    "subset_receipt": {
+      "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "path": "results/phase10-2026-11-27/verified-subset.json",
+      "sha256": "bfb1b382708e4b20159c6894866952af4e7bfbcaab76c2dcc9a5d2e2df254500"
+    }
+  },
+  "schema": "golden-temporal-audit-v1",
+  "status": "PASS",
+  "temporal_dispositions": {
+    "path": "temporal_dispositions.jsonl",
+    "sha256": "ef9050159e7ebdb1a57a0d12852d2e1f1f61a9a5632806cd2c4fb3b4a67e3f88"
+  },
+  "unclassified_temporal_status_counts": {
+    "CANDIDATE": 76,
+    "CONFLICT": 17
+  },
+  "v3_temporal_status_counts": {
+    "CANDIDATE": 66,
+    "ELIGIBLE": 27
+  }
+}

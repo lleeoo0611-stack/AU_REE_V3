@@ -9,7 +9,10 @@ from dataclasses import asdict, dataclass
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from enum import StrEnum
-from typing import ClassVar, Self
+from typing import TYPE_CHECKING, ClassVar, Self
+
+if TYPE_CHECKING:
+    from .temporal import TemporalEvidence
 
 
 class ContractViolation(ValueError):
@@ -71,6 +74,17 @@ def _decimal(field: str, value: str) -> None:
     raise ContractViolation(f"{field} must be a finite decimal string")
 
 
+def _timestamp(field: str, value: str | None) -> None:
+    if value is None:
+        return
+    try:
+        timestamp = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except (AttributeError, ValueError) as error:
+        raise ContractViolation(f"{field} must be an ISO timezone-aware timestamp") from error
+    if timestamp.utcoffset() is None:
+        raise ContractViolation(f"{field} must be an ISO timezone-aware timestamp")
+
+
 def _reject_json_constant(value: str) -> None:
     raise ContractViolation(f"invalid JSON number {value}")
 
@@ -105,19 +119,17 @@ class Source(Record):
     acquired_at: str | None = None
     original_path: str | None = None
     source_locator: str | None = None
+    reacquired_at: str | None = None
+    availability_role: str = "UNCLASSIFIED"
 
     def __post_init__(self) -> None:
         _required_text(source_key=self.source_key, url=self.url, kind=self.kind, source_version=self.source_version)
         _digest("sha256", self.sha256)
-        _day("publication_date", self.publication_date)
-        _day("available_date", self.available_date)
-        if self.acquired_at is not None:
-            try:
-                acquired = datetime.fromisoformat(self.acquired_at.replace("Z", "+00:00"))
-            except (AttributeError, ValueError) as error:
-                raise ContractViolation("acquired_at must be an ISO timezone-aware timestamp") from error
-            if acquired.utcoffset() is None:
-                raise ContractViolation("acquired_at must be an ISO timezone-aware timestamp")
+        _day("publication_date", self.publication_date, partial=True)
+        _day("available_date", self.available_date, partial=True)
+        _required_text(availability_role=self.availability_role)
+        _timestamp("acquired_at", self.acquired_at)
+        _timestamp("reacquired_at", self.reacquired_at)
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -242,6 +254,7 @@ class RawObservation(Record):
     native_raw_id: str | None = None
     null_reason: str | None = None
     id_version: str = "observation-v1"
+    observation_role: str = "HISTORICAL_MEASUREMENT"
 
     def __post_init__(self) -> None:
         _required_text(
@@ -250,6 +263,8 @@ class RawObservation(Record):
             transform_version=self.transform_version, id_version=self.id_version,
         )
         _digest("source_sha", self.source_sha)
+        if self.observation_role not in {"HISTORICAL_MEASUREMENT", "HISTORICAL_EVENT", "FORECAST", "ENGINEERING_PLAN"}:
+            raise ContractViolation("unknown temporal observation role")
         for field in ("effective_date", "event_date", "reported_publication_date", "acquisition_date"):
             _day(field, getattr(self, field), partial=True, timestamp=True)
         if self.raw_value is not None and not isinstance(self.raw_value, str):
@@ -308,6 +323,9 @@ class ValidatedObservation(Record):
     reason: str
     evidence_anchor_ids: tuple[str, ...] = ()
     comparable: bool = False
+    temporal_decision_id: str | None = None
+    temporal_evidence: tuple[TemporalEvidence, ...] = ()
+    reacquired_at: str | None = None
 
     def __post_init__(self) -> None:
         _required_text(validation_id=self.validation_id, candidate_id=self.candidate_id, cutoff=self.cutoff, reason=self.reason)
@@ -325,6 +343,25 @@ class ValidatedObservation(Record):
             raise ContractViolation("comparable must be boolean")
         if self.outcome != ValidationOutcome.VALIDATED and self.comparable:
             raise ContractViolation("a rejected candidate cannot be comparable")
+        if self.temporal_decision_id is not None:
+            _digest("temporal_decision_id", self.temporal_decision_id)
+        _timestamp("reacquired_at", self.reacquired_at)
+        if not isinstance(self.temporal_evidence, (tuple, list)):
+            raise ContractViolation("temporal_evidence must be an ordered sequence")
+        if self.temporal_evidence:
+            from .temporal import TemporalEvidence
+
+            try:
+                evidence = tuple(
+                    item if isinstance(item, TemporalEvidence) else TemporalEvidence(**item)
+                    for item in self.temporal_evidence
+                )
+            except (TypeError, ValueError) as error:
+                raise ContractViolation("invalid temporal evidence") from error
+            by_id = {item.evidence_id: item for item in evidence}
+            object.__setattr__(self, "temporal_evidence", tuple(by_id[key] for key in sorted(by_id)))
+        else:
+            object.__setattr__(self, "temporal_evidence", ())
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -396,6 +433,9 @@ class ResearchRelease(Record):
     weights: dict[str, str] | None = None
     seed: int | None = None
     result_fingerprints: dict[str, str] | None = None
+    temporal_policy_version: str | None = None
+    temporal_decision_ids: tuple[str, ...] = ()
+    temporal_evidence_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         _required_text(release_id=self.release_id, schema_version=self.schema_version, cutoff=self.cutoff)
@@ -424,3 +464,17 @@ class ResearchRelease(Record):
         for name, digest in (self.result_fingerprints or {}).items():
             _required_text(fingerprint_name=name)
             _digest(name, digest)
+        if self.temporal_policy_version is not None:
+            _required_text(temporal_policy_version=self.temporal_policy_version)
+        for field in ("temporal_decision_ids", "temporal_evidence_ids"):
+            values = getattr(self, field)
+            if not isinstance(values, (tuple, list)):
+                raise ContractViolation(f"{field} must be an ordered sequence")
+            for value in values:
+                _digest(field, value)
+            values = tuple(values)
+            if values != tuple(sorted(set(values))):
+                raise ContractViolation(f"{field} must be sorted and unique")
+            if values and self.temporal_policy_version is None:
+                raise ContractViolation(f"{field} requires a pinned temporal policy")
+            object.__setattr__(self, field, values)

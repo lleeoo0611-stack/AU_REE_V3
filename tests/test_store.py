@@ -1,5 +1,6 @@
 """Synthetic cases for contract behavior and SQLite integrity."""
 
+import json
 import sqlite3
 import tempfile
 import unittest
@@ -20,8 +21,10 @@ from au_ree_v3.contracts import (
     Source,
     ValidatedObservation,
     ValidationOutcome,
+    canonical_json,
 )
-from au_ree_v3.store import RecordConflict, SourceDigestMismatch, Store
+from au_ree_v3.contracts.temporal import TEMPORAL_POLICY_VERSION, TemporalEvidence, evaluate_temporal
+from au_ree_v3.store import RecordConflict, SCHEMA_VERSION, SourceDigestMismatch, Store
 
 CONTENT = b"synthetic source bytes"
 SOURCE = Source(
@@ -33,6 +36,11 @@ SOURCE = Source(
     publication_date="2026-08-17",
     available_date="2026-08-19",
     acquired_at="2026-11-27T12:00:00Z",
+    reacquired_at="2026-11-28T12:00:00Z",
+)
+TEMPORAL_EVIDENCE = TemporalEvidence(
+    source_sha256=SOURCE.sha256, kind="ARCHIVED_PUBLIC_CAPTURE", public_on="2026-08-19",
+    reference="synthetic://public-capture", reference_sha256="d" * 64,
 )
 PROJECT = Entity(
     entity_id="synthetic-project", native_namespace="synthetic", native_id="prj", kind="PROJECT", name="Same Name",
@@ -78,14 +86,28 @@ CANDIDATE = NormalizedObservation(
     material_basis=RAW.material_basis, denominator_basis=RAW.denominator_basis, chemical_basis=RAW.chemical_basis,
     transform_version="synthetic-transform-v1",
 )
+def evidence_decision(raw=RAW, cutoff="2026-11-05", source=SOURCE, evidence=(TEMPORAL_EVIDENCE,), reacquired_at=None):
+    return evaluate_temporal(
+        source_sha256=source.sha256, cutoff=cutoff, publication_date=source.publication_date,
+        available_date=source.available_date, availability_role=source.availability_role,
+        acquired_at=source.acquired_at, reacquired_at=reacquired_at or source.reacquired_at,
+        effective_date=raw.effective_date, event_date=raw.event_date,
+        reported_publication_date=raw.reported_publication_date, observation_role=raw.observation_role,
+        evidence=evidence,
+    )
+
+
+ELIGIBLE_DECISION = evidence_decision()
 VALIDATION = ValidatedObservation(
     validation_id="synthetic-validation", candidate_id=CANDIDATE.candidate_id,
     cutoff="2026-11-05", rules_sha="c" * 64, outcome="VALIDATED", reason="synthetic_fixture",
     evidence_anchor_ids=(ANCHOR.anchor_id,), comparable=True,
+    temporal_decision_id=ELIGIBLE_DECISION.decision_id, temporal_evidence=(TEMPORAL_EVIDENCE,),
 )
 RELEASE = ResearchRelease(
     release_id="synthetic-release", input_sha="a" * 64, code_commit="b" * 40, rules_sha=VALIDATION.rules_sha,
     cutoff=VALIDATION.cutoff, cohort=(PROJECT.entity_id,), validation_status="NOT_RUN",
+    temporal_policy_version=TEMPORAL_POLICY_VERSION, temporal_decision_ids=(ELIGIBLE_DECISION.decision_id,),
 )
 ACCEPTED = AcceptedResearchValue(
     acceptance_id="synthetic-acceptance", validation_id=VALIDATION.validation_id, release_id=RELEASE.release_id,
@@ -100,6 +122,11 @@ def persist_observation(store, *, raw=RAW, candidate=CANDIDATE, verify_source=Tr
         store.add(SOURCE)
     for record in (PROJECT, DEPOSIT, SCOPE, ANCHOR, raw, candidate):
         store.add(record)
+
+
+def pin_decision(validation=VALIDATION, *, raw=RAW, source=SOURCE, evidence=(TEMPORAL_EVIDENCE,)):
+    decision = evidence_decision(raw, validation.cutoff, source, evidence, validation.reacquired_at)
+    return replace(validation, temporal_decision_id=decision.decision_id, temporal_evidence=evidence)
 
 
 class StoreTests(unittest.TestCase):
@@ -124,6 +151,11 @@ class StoreTests(unittest.TestCase):
                 for record in (PROJECT, DEPOSIT, SCOPE, ANCHOR, RAW, CANDIDATE, VALIDATION, RELEASE, ACCEPTED):
                     self.assertFalse(store.add(record))
                 self.assertEqual(store.records(AcceptedResearchValue), [ACCEPTED])
+                self.assertEqual(store.accepted_for_release(RELEASE.release_id), [ACCEPTED])
+                self.assertEqual(
+                    store.selection_temporal_trace(ACCEPTED, RELEASE),
+                    json.loads(canonical_json(ELIGIBLE_DECISION.to_dict())),
+                )
 
     def test_conflict_rolls_back_whole_transaction(self):
         with Store(":memory:") as store:
@@ -226,7 +258,7 @@ class StoreTests(unittest.TestCase):
                     persist_observation(store, raw=raw, candidate=candidate)
                     store.add(replace(ANCHOR, anchor_id="different-page", page=2))
                 with self.assertRaises(ContractViolation), store.transaction():
-                    store.add(validation)
+                    store.add(pin_decision(validation, raw=raw))
                 self.assertEqual(store.records(NormalizedObservation), [candidate])
                 self.assertEqual(store.records(ValidatedObservation), [])
                 self.assertEqual(store.records(AcceptedResearchValue), [])
@@ -294,6 +326,129 @@ class StoreTests(unittest.TestCase):
             self.assertEqual(store.records(DerivedValue), [derived])
             self.assertEqual(len(store.records(AcceptedResearchValue)), 2)
             self.assertEqual(store.get(ResearchRelease, RELEASE.release_id), RELEASE)
+
+    def test_source_bytes_and_legacy_dates_cannot_substitute_for_exact_public_evidence(self):
+        missing = pin_decision(evidence=())
+        wrong_version = pin_decision(evidence=(replace(TEMPORAL_EVIDENCE, source_sha256="a" * 64),))
+        with Store(":memory:") as store:
+            with store.transaction():
+                persist_observation(store)
+            for validation in (missing, wrong_version):
+                with self.assertRaisesRegex(ContractViolation, "ineligible"), store.transaction():
+                    store.add(validation)
+            candidate = replace(missing, outcome="EVIDENCE_INSUFFICIENT", comparable=False)
+            with store.transaction():
+                store.add(candidate)
+            self.assertIsNone(store.validation_temporal_trace(candidate.validation_id)["earliest_proven_public_date"])
+            self.assertEqual(store.validation_temporal_trace(candidate.validation_id)["status"], "CANDIDATE")
+            self.assertEqual(store.records(AcceptedResearchValue), [])
+
+    def test_temporal_decisions_and_release_pins_are_immutable_and_verified(self):
+        unpinned = replace(RELEASE, release_id="unpinned-release", temporal_decision_ids=())
+        with Store(":memory:") as store:
+            with store.transaction():
+                persist_observation(store)
+                store.add(RELEASE)
+                store.add(unpinned)
+            with self.assertRaisesRegex(ContractViolation, "recomputed temporal decision ID"), store.transaction():
+                store.add(replace(VALIDATION, temporal_decision_id="0" * 64))
+            with store.transaction():
+                store.add(VALIDATION)
+                store.add(ACCEPTED)
+            with self.assertRaisesRegex(ContractViolation, "pin an eligible temporal decision"), store.transaction():
+                store.add(replace(ACCEPTED, acceptance_id="unpinned-acceptance", release_id=unpinned.release_id))
+            with self.assertRaises(RecordConflict), store.transaction():
+                store.add(replace(RELEASE, temporal_decision_ids=()))
+            with self.assertRaises(RecordConflict), store.transaction():
+                store.add(replace(VALIDATION, temporal_decision_id="0" * 64))
+            self.assertEqual(store.accepted_for_release(RELEASE.release_id), [ACCEPTED])
+            self.assertEqual(store.accepted_for_release(unpinned.release_id), [])
+
+    def test_formal_selection_requires_all_exact_edition_evidence_approved(self):
+        formal = replace(
+            RELEASE, release_id="synthetic-formal-release", release_mode="FORMAL",
+            validation_status="PASS", result_fingerprints={"results": "a" * 64},
+            temporal_evidence_ids=(TEMPORAL_EVIDENCE.evidence_id,),
+        )
+        with Store(":memory:") as store, store.transaction():
+            persist_observation(store)
+            with self.assertRaisesRegex(ContractViolation, "operator-approved"):
+                store.add(formal)
+        unapproved = replace(TEMPORAL_EVIDENCE, public_on="2026-08-18", reference="synthetic://unapproved")
+        mixed = pin_decision(
+            replace(VALIDATION, validation_id="mixed-evidence-validation"),
+            evidence=(TEMPORAL_EVIDENCE, unapproved),
+        )
+        formal = replace(formal, temporal_decision_ids=tuple(sorted((VALIDATION.temporal_decision_id, mixed.temporal_decision_id))))
+        with Store(":memory:", trusted_temporal_evidence_ids=formal.temporal_evidence_ids) as store, store.transaction():
+            persist_observation(store)
+            for record in (VALIDATION, mixed, formal):
+                store.add(record)
+            accepted = replace(ACCEPTED, release_id=formal.release_id)
+            with self.assertRaisesRegex(ContractViolation, "approved by the operator"):
+                store.add(replace(accepted, validation_id=mixed.validation_id))
+            store.add(accepted)
+            self.assertEqual(store.accepted_for_release(formal.release_id), [accepted])
+
+    def test_same_edition_reacquisition_adds_distinct_immutable_decision(self):
+        reacquired = pin_decision(replace(
+            VALIDATION, validation_id="later-reacquisition", reacquired_at="2026-11-29T12:00:00Z",
+        ))
+        next_release = replace(
+            RELEASE, release_id="later-release", temporal_decision_ids=(reacquired.temporal_decision_id,),
+        )
+        next_selection = replace(
+            ACCEPTED, acceptance_id="later-selection", validation_id=reacquired.validation_id,
+            release_id=next_release.release_id,
+        )
+        with Store(":memory:") as store, store.transaction():
+            persist_observation(store)
+            for record in (VALIDATION, RELEASE, ACCEPTED, reacquired, next_release, next_selection):
+                store.add(record)
+            original_trace = store.selection_temporal_trace(ACCEPTED, RELEASE)
+            next_trace = store.selection_temporal_trace(next_selection, next_release)
+            self.assertEqual(store.records(Source), [SOURCE])
+            self.assertNotEqual(original_trace["decision_id"], next_trace["decision_id"])
+            self.assertEqual(original_trace["reacquired_at"], SOURCE.reacquired_at)
+            self.assertEqual(next_trace["reacquired_at"], reacquired.reacquired_at)
+            self.assertEqual(original_trace["earliest_proven_public_date"], next_trace["earliest_proven_public_date"])
+
+    def test_schema_upgrade_preserves_legacy_acceptances_as_read_only_archive(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "legacy.sqlite"
+            with Store(path) as store, store.transaction():
+                persist_observation(store)
+                for record in (VALIDATION, RELEASE, ACCEPTED):
+                    store.add(record)
+            connection = sqlite3.connect(path)
+            try:
+                connection.execute("DROP TABLE temporal_decisions")
+                connection.execute("PRAGMA user_version = 1")
+                for table in ("validations", "releases"):
+                    row = json.loads(connection.execute(f"SELECT payload FROM {table}").fetchone()[0])
+                    old_payload = canonical_json({
+                        k: v for k, v in row.items() if not k.startswith("temporal_") and k != "reacquired_at"
+                    })
+                    connection.execute(f"UPDATE {table} SET payload = ?", (old_payload,))
+                connection.commit()
+                archived_payloads = [
+                    connection.execute(f"SELECT payload FROM {table}").fetchone()[0]
+                    for table in ("validations", "releases", "accepted_values")
+                ]
+                with Store(path) as store:
+                    self.assertEqual(store.records(AcceptedResearchValue), [ACCEPTED])
+                    self.assertEqual(store.accepted_for_release(RELEASE.release_id), [])
+                    self.assertIsNone(store.validation_temporal_trace(VALIDATION.validation_id))
+                    self.assertEqual(store.integrity(), {"integrity_check": ["ok"], "foreign_key_check": []})
+                    with self.assertRaisesRegex(ContractViolation, "archive-only"), store.transaction():
+                        store.add(replace(ACCEPTED, acceptance_id="legacy-new", selection_key="legacy-new"))
+                self.assertEqual(connection.execute("PRAGMA user_version").fetchone(), (SCHEMA_VERSION,))
+                self.assertEqual(archived_payloads, [
+                    connection.execute(f"SELECT payload FROM {table}").fetchone()[0]
+                    for table in ("validations", "releases", "accepted_values")
+                ])
+            finally:
+                connection.close()
 
     def test_foreign_keys_and_foreign_database_guard(self):
         with Store(":memory:") as store:

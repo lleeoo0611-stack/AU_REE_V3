@@ -65,6 +65,13 @@ jobs:
           print("Source availability", receipt["asset_inventory_counts"])
           PY
           done
+      - name: Audit frozen Golden temporal evidence
+        run: |
+          au-ree-v3 migration audit-temporal --v2-root "$RUNNER_TEMP/au-ree-v2" \
+            --expected tests/golden/golden_expected.jsonl --oracle-manifest tests/golden/oracle_manifest.json \
+            --out work/migration/temporal
+          cmp work/migration/temporal/temporal_audit.json docs/migration/temporal/temporal_audit.json
+          cmp work/migration/temporal/temporal_dispositions.jsonl docs/migration/temporal/temporal_dispositions.jsonl
 
   resource-integration:
     name: Exact resource integration

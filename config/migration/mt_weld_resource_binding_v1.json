@@ -36,7 +36,16 @@
       "material_basis": "WHOLE_ORE",
       "chemical_basis": "TREO",
       "page": 2,
-      "locator": "physical PDF page 2; Table 1 and preceding narrative"
+      "locator": "physical PDF page 2; Table 1 and preceding narrative",
+      "temporal_evidence": [
+        {
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-02",
+          "reference": "https://github.com/lleeoo0611-stack/AU_REE_V2/blob/dcda87e81e1250d443f73c1984faaa7beaa19930/results/phase22-2026-11-06/snapshot_lock.json#key=mt_weld_2024",
+          "reference_sha256": "3d0848bd302294ff247bd931579e0c5fcec25f0908c83dd72a9fdfeada97981d"
+        }
+      ]
     }
   ]
 }
