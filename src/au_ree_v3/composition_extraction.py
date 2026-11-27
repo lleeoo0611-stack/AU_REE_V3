@@ -4,9 +4,8 @@ from datetime import date
 from decimal import Decimal
 import re
 
-from .comparability import OXIDE_VARIABLES
 from .documents import DocumentError
-from .observations import NUMBER, exact_value, half_width
+from .observations import NUMBER, OXIDE_VARIABLES, exact_value, half_width
 from .resource_extraction import ResourceCell, ResourceStatement
 
 _COLUMNS = (
