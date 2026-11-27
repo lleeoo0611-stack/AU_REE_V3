@@ -1,0 +1,55 @@
+path,git_status,disposition,unit,reason
+.github/workflows/research-web.yml,A,ADD,D,"Implement and verify release gate, pointer transaction, or authorized delivery."
+.github/workflows/web-check.yml,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+README.md,M,MODIFY,D,Document release-aware access and verification.
+config/research_profiles/census_columns_v1.json,-,KEEP,Reference,Preserve exact 51 headings and their historical contract.
+docs/research/census_metadata_historical_diagnostic.json,A,ADD,A,Pin and apply Census display and evidence roles.
+docs/research/census_projection_engineering.json,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/census_science_historical_diagnostic.json,A,ADD,B,"Evidence-backed scientific views, strict formula checks, or archived method inventory."
+docs/research/census_science_views.md,A,ADD,B,"Evidence-backed scientific views, strict formula checks, or archived method inventory."
+docs/research/census_static_web_engineering.json,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/census_v2_diagnostic.md,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/census_v2_rule_inventory.json,A,ADD,B,"Evidence-backed scientific views, strict formula checks, or archived method inventory."
+docs/research/census_web_failure_injection.json,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/census_web_file_lifecycle.csv,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/census_web_publication.md,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/census_web_verification.json,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/cw0_baseline_verification.json,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/cw0_census_historical_diagnostic.json,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+docs/research/web_release_linkage.md,A,ADD,D,"Implement and verify release gate, pointer transaction, or authorized delivery."
+pyproject.toml,M,MODIFY,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+src/au_ree_v3/census_composition_evidence_v1.json,A,ADD,B,"Evidence-backed scientific views, strict formula checks, or archived method inventory."
+src/au_ree_v3/census_metadata.py,A,ADD,A,Pin and apply Census display and evidence roles.
+src/au_ree_v3/census_projection_policy_v1.json,A,ADD,A,Pin and apply Census display and evidence roles.
+src/au_ree_v3/census_science.py,A,ADD,B,"Evidence-backed scientific views, strict formula checks, or archived method inventory."
+src/au_ree_v3/cli.py,M,MODIFY,C/D,Route data and website operations to their implementation services.
+src/au_ree_v3/comparability.py,M,MODIFY,B,Reuse scope and chemistry for multi-member consistency checks.
+src/au_ree_v3/fresh_census.py,M,MODIFY,A/B,Preserve projection entry point; add attributable metadata and governed view hooks.
+src/au_ree_v3/fresh_decision_policy_v1.json,-,KEEP,Reference,Preserve all formal MCDA and T1-v1 policy definitions.
+src/au_ree_v3/fresh_research.py,M,MODIFY,A,Pin and apply Census display and evidence roles.
+src/au_ree_v3/normalization.py,-,KEEP,Reference,Reuse Decimal normalization inputs and formula precision.
+src/au_ree_v3/publication.py,M,MODIFY,D,Bind website authorization to the existing gated research pointer.
+src/au_ree_v3/research_delta.py,M,MODIFY,A/B,Validate separate display and science provenance in same-grid comparisons.
+src/au_ree_v3/web_publication.py,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+src/au_ree_v3/web_release.py,A,ADD,D,"Implement and verify release gate, pointer transaction, or authorized delivery."
+src/au_ree_v3/web_release_cli.py,A,ADD,D,"Implement and verify release gate, pointer transaction, or authorized delivery."
+tests/golden/,-,KEEP,Reference,Preserve V2 reference oracle and cutoff expectations.
+tests/test_census_projection.py,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+tests/test_census_science.py,A,ADD,B,"Evidence-backed scientific views, strict formula checks, or archived method inventory."
+tests/test_web_publication.py,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+tests/test_web_release.py,A,ADD,D,"Implement and verify release gate, pointer transaction, or authorized delivery."
+tools/census_projection_benchmark.py,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+tools/census_v2_coverage_diagnostic.py,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+tools/census_web_baseline.py,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
+web/README.md,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/assets/app.js,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/assets/australia.geojson,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/assets/labels.mjs,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/assets/release.mjs,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/assets/styles.css,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/assets/views.mjs,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/index.html,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/package-lock.json,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/package.json,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+web/tests/browser.mjs,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
+work/census-web/preview/,-,ARCHIVE,D,Seal controlled website data versions locally while awaiting formal approval.

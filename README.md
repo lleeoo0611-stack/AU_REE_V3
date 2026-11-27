@@ -61,6 +61,8 @@ The [data yield and comparability report](docs/research/data_yield_comparability
 
 The [ontology, normalization and technical processing report](docs/research/ontology_normalization.md) records the evidence-bound shadow study, same-input ablations, and offline replay from the sealed study archive.
 
+The [Census and website publication report](docs/research/census_web_publication.md) documents the projected 93×51 study, the controlled bilingual website, and the formally authorized release channel.
+
 The `sources combine` command verifies and merges recorded capture runs without another network request. Pass `--manifest` once per capture manifest, the same `--store`, and a new `--out` directory. It preserves original attempts and verifies the linked objects and temporal evidence.
 
 The exact-resource admission command uses the combined source inventory and the reviewed structure bindings. It rechecks capture proofs and serves only the eligible statements within those bindings.

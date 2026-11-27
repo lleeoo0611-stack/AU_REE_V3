@@ -1,0 +1,441 @@
+{
+  "by_column": {
+    "ASX代碼": {
+      "FORMAL_UNAVAILABLE": 84
+    },
+    "CeO2_氧化鈰_kt": {
+      "FORMAL_UNAVAILABLE": 24
+    },
+    "Dy2O3_氧化鏑_kt": {
+      "FORMAL_UNAVAILABLE": 24
+    },
+    "Er2O3_氧化鉺_kt": {
+      "FORMAL_UNAVAILABLE": 19
+    },
+    "Eu2O3_氧化銪_kt": {
+      "FORMAL_UNAVAILABLE": 19
+    },
+    "Gd2O3_氧化釓_kt": {
+      "FORMAL_UNAVAILABLE": 19
+    },
+    "Ho2O3_氧化鈥_kt": {
+      "FORMAL_UNAVAILABLE": 18
+    },
+    "La2O3_氧化鑭_kt": {
+      "FORMAL_UNAVAILABLE": 19
+    },
+    "Lu2O3_氧化鎦_kt": {
+      "FORMAL_UNAVAILABLE": 18
+    },
+    "Nd2O3_氧化釹_kt": {
+      "FORMAL_UNAVAILABLE": 25
+    },
+    "NdPr蘊藏量_kt_需兩者皆公布": {
+      "FORMAL_UNAVAILABLE": 31
+    },
+    "Pr6O11_氧化鐠_kt": {
+      "FORMAL_UNAVAILABLE": 25
+    },
+    "Sm2O3_氧化釤_kt": {
+      "FORMAL_UNAVAILABLE": 19
+    },
+    "TREO品位_pct": {
+      "FORMAL_UNAVAILABLE": 33,
+      "MATCHED": 4
+    },
+    "Tb4O7_氧化鋱_kt": {
+      "FORMAL_UNAVAILABLE": 24
+    },
+    "Tm2O3_氧化銩_kt": {
+      "FORMAL_UNAVAILABLE": 19
+    },
+    "Y2O3_氧化釔_kt": {
+      "FORMAL_UNAVAILABLE": 21
+    },
+    "Yb2O3_氧化鐿_kt": {
+      "FORMAL_UNAVAILABLE": 19
+    },
+    "元素總和/TREO": {
+      "FORMAL_UNAVAILABLE": 28
+    },
+    "四項磁性元素皆公布": {
+      "FORMAL_UNAVAILABLE": 24
+    },
+    "國家": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "完整重稀土組合蘊藏量_kt_需8元素皆公布": {
+      "FORMAL_UNAVAILABLE": 18
+    },
+    "專案ID": {
+      "MATCHED": 93
+    },
+    "專案名稱": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "州省地區": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "已公布元素數_共15項": {
+      "FORMAL_UNAVAILABLE": 30
+    },
+    "已公布元素總和_kt": {
+      "FORMAL_UNAVAILABLE": 30
+    },
+    "所在地_中文": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "所在地_英文": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "有TREO資源估計": {
+      "FORMAL_UNAVAILABLE": 37
+    },
+    "有來源文件": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "未上市公司": {
+      "FORMAL_UNAVAILABLE": 92
+    },
+    "產品/產出": {
+      "FORMAL_UNAVAILABLE": 23
+    },
+    "磁性元素重算值_NdPrTbDy_kt": {
+      "FORMAL_UNAVAILABLE": 24
+    },
+    "磁鐵稀土佔TREO_pct": {
+      "FORMAL_UNAVAILABLE": 25
+    },
+    "磁鐵稀土氧化物蘊藏量_kt": {
+      "FORMAL_UNAVAILABLE": 26
+    },
+    "礦床型態": {
+      "FORMAL_UNAVAILABLE": 91
+    },
+    "礦床型態代碼": {
+      "FORMAL_UNAVAILABLE": 75
+    },
+    "礦石蘊藏量_Mt": {
+      "FORMAL_UNAVAILABLE": 34,
+      "MATCHED": 4
+    },
+    "經度": {
+      "FORMAL_UNAVAILABLE": 64
+    },
+    "緯度": {
+      "FORMAL_UNAVAILABLE": 64
+    },
+    "總TREO蘊藏量_kt": {
+      "FORMAL_UNAVAILABLE": 33,
+      "MATCHED": 4
+    },
+    "總說明": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "資料來源URL": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "資料來源名稱": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "開發商": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "開發階段": {
+      "FORMAL_UNAVAILABLE": 93
+    },
+    "開發階段代碼": {
+      "FORMAL_UNAVAILABLE": 85
+    },
+    "開發階段類別": {
+      "FORMAL_UNAVAILABLE": 85
+    },
+    "預估年產NdPr_t_per_year": {
+      "FORMAL_UNAVAILABLE": 11
+    },
+    "預估年產TREO_t_per_year": {
+      "FORMAL_UNAVAILABLE": 13
+    }
+  },
+  "cells": 4743,
+  "columns": 51,
+  "formal_baseline_preservation": {
+    "additional_comparable_criterion_keys": 0,
+    "additional_observation_rows": 0,
+    "baseline_code_commit": "40309ea006d2eaace3fe4bbf33beccca492261de",
+    "comparison_identity_treatment": {
+      "release_id": "Checked against each build's observation Release then omitted from cross-version comparisons",
+      "selection_id": "Independently recomputed from its own Release and validation ID, then compared by stable validation ID"
+    },
+    "criterion_keys_changed_or_lost": [],
+    "criterion_keys_checked": 6,
+    "formal_cell_differences": [],
+    "formal_cells_checked": 12,
+    "formal_cells_with_release_rekeyed_selections": 0,
+    "mcda_policy_changed": false,
+    "observation_rows_changed_or_lost": [],
+    "observation_rows_checked": 38,
+    "panel_inputs_changed": [],
+    "panel_outputs_changed": [],
+    "status": "PASS"
+  },
+  "legacy_edition_availability_in_current_manifest": {
+    "EXACT_PROJECT_EDITION_IN_CURRENT_MANIFEST": 1859,
+    "EXACT_PROJECT_EDITION_NOT_IN_CURRENT_MANIFEST": 455,
+    "NO_ARCHIVED_EDITION_SHA": 186
+  },
+  "outputs_sha256": {
+    "v2_census_present_diagnostic.csv": "158af8f7af3d98804ee4b5504ee9f4bf13ae92d39a0f41002b7996f305ad371b",
+    "v2_census_rule_inventory.json": "c763961c5dc4ac78bd3d62b97e72b225e37d1ff91a882aae042fcfefe62c1c59",
+    "v2_not_applicable_diagnostic.csv": "e803da3821a075f7b0bb17ea7905c4bf1d9800f8d3733202625cc2c8c2bd0f4b"
+  },
+  "projects": 93,
+  "schema": "census-web-historical-diagnostic-v1",
+  "scope": "V2 archival accounting against V3 Census state for stable cell keys. No V2 value promotion or raw value copy.",
+  "source_overlay_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "status": "PASS",
+  "v2_archive_sha256": {
+    "REE project census.csv": "a643607a1fe104e3cd7c6590fc4752e37a09902087000882430931aa69b25308",
+    "census_release.json": "9b10857fca27163b173ab4540aaa1f59898d270181b7b147b43a30ba4b52bcd6",
+    "coverage.json": "ac3ab7b47e0961c16ec580a8edcc870905f61dcec4b7ada4482704642609cce2",
+    "field_provenance.csv": "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d",
+    "field_status.csv": "5eeb7bc0c176f5c07669b622a498916aa84763ac4d04adedbc5b4e40fefd70a6"
+  },
+  "v2_archived_historical_coverage": "2500 / 3034 = 82.40%",
+  "v2_archived_reclassified_coverage": "2500 / 3028 = 82.56%",
+  "v2_archived_rules_sha256": "bddde0aebe2b80dd58c7e4345b07bc20da8dd1aff34679cf59dd77abff28211e",
+  "v2_distinct_referenced_ids": {
+    "attribute_ids": 417,
+    "observation_ids": 847
+  },
+  "v2_exact_status_totals": {
+    "CLASSIFICATION_INPUT_NOT_VERIFIED": 34,
+    "COMPATIBLE_FORECAST_INPUT_NOT_VERIFIED": 52,
+    "NOT_APPLICABLE_NO_MRE": 1650,
+    "NOT_APPLICABLE_STAGE": 57,
+    "NOT_APPLICABLE_UNLISTED_DEVELOPER": 8,
+    "NO_SOURCE_VALUE": 17,
+    "PARTIAL_RESOURCE_BASIS_OR_COMPONENTS": 5,
+    "REPRESENTATIVE_POINT_NOT_VERIFIED": 58,
+    "SELECTED_STATEMENT_FIELD_INPUT_MISSING": 362,
+    "VALUE_PRESENT": 2500
+  },
+  "v2_filled_cells": 2500,
+  "v2_fixed_commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+  "v2_legacy_NA": 1715,
+  "v2_legacy_applicable_missing": 528,
+  "v2_legacy_diagnostics": {
+    "DIFFERENT_SCIENTIFIC_SCOPE": 0,
+    "FORMAL_UNAVAILABLE": 2395,
+    "MATCHED": 105,
+    "NO_NEW_V3_SOURCE": 0,
+    "UNVERIFIED_LEGACY_VALUE": 0,
+    "UPDATED_WITH_EVIDENCE": 0
+  },
+  "v2_legacy_populated_field_groups": {
+    "forecast_and_product": 47,
+    "geology_and_development": 429,
+    "location": 128,
+    "registry_identity_affiliation_and_admin": 827,
+    "resource_and_composition": 697,
+    "source_reference_and_notes": 372
+  },
+  "v2_methods_at_populated_cells": {
+    "ANNUAL_HMC_KTPA_X_PRODUCT_TREO_PERCENT": 1,
+    "APPROVED_RESEARCHER_STAGE_RULE": 154,
+    "AUSTRALIAN_CENSUS_SCOPE": 93,
+    "AVAILABLE_OXIDE_SUM_DIVIDED_BY_MATCHED_TREO": 28,
+    "COMPLETE_SOURCE_BOUND_RESOURCE_PAIR": 36,
+    "COUNT_CANONICAL_INDIVIDUAL_OXIDES": 30,
+    "DATED_ENGINEERING_FORECAST_T_PER_YEAR_NOT_OPERATING_OUTPUT": 15,
+    "DATED_ENGINEERING_PRODUCT_ENDPOINT_NOT_OPERATING_OUTPUT": 14,
+    "DATED_STUDY_DISCLOSURE_NOT_CURRENT_OPERATING_STATUS": 9,
+    "DERIVED_SAME_ROW_TREO_MINUS_TREO_EX_CEO2_X_MATCHED_ORE_MT_X_0_001": 3,
+    "DERIVED_STOICHIOMETRIC_CE2O3_TO_CEO2": 1,
+    "DETERMINISTIC_SOURCE_GROUNDED_PRESENTATION_NOTES_V1": 93,
+    "EXISTING_CANONICAL_PROJECT_RELATION": 93,
+    "EXISTING_PROJECT_REGISTRY": 87,
+    "EXISTING_PROJECT_WITH_EXPLICIT_RESOURCE_SUBSCOPE_LABEL": 6,
+    "FORECAST_CONTAINED_TREO_X_CONCENTRATE_NDPR_OXIDE_SHARE": 1,
+    "HISTORICAL_DATED_PROPRIETARY_COMPANY_CONFIRMED_IN_ASIC_REGISTER": 5,
+    "MATCHED_HM_HOSTED_OXIDES_DIVIDED_BY_VERIFIED_IN_SITU_TREO": 2,
+    "MODEL_ASSUMPTION_DERIVED_ANNUAL_NDPR_NOT_DIRECT_REPORTED_OUTPUT": 1,
+    "MODEL_ASSUMPTION_DERIVED_NAMEPLATE_NDPR_NOT_OPERATING_OUTPUT": 1,
+    "NORMALIZED_NAME_MATCH": 10,
+    "ORE_MT_X_GRADE_PERCENT_X_10": 22,
+    "ORE_MT_X_LINKED_RESOURCE_NDPR_OXIDE_PERCENT_X_10": 1,
+    "ORE_MT_X_OXIDE_PPM_X_0_001": 274,
+    "ORE_MT_X_REPORTED_MAGNET_OXIDE_GROUP_PPM_X_0_001": 1,
+    "ORE_MT_X_REPORTED_NDPR_OXIDE_GROUP_PPM_X_0_001": 3,
+    "ORE_MT_X_STOICHIOMETRIC_OXIDE_FROM_REVIEWED_ELEMENTAL_PPM": 15,
+    "ORE_MT_X_VERIFIED_IN_SITU_TREO_PPM_X_0_001": 1,
+    "PUBLISHED_WHOLE_PLAN_AVERAGE_VERIFIED_ANNUAL_PERIOD": 2,
+    "RECONCILED_AGGREGATE_OXIDE_RESIDUAL_KT": 2,
+    "REPORTED": 13,
+    "REPORTED_MAGNET_GROUP_PPM_DIV_MATCHED_TREO_PPM_X_100": 1,
+    "REPRESENTATIVE_POINT_NOT_BOUNDARY": 46,
+    "RESEARCHER_RULE_CASE_SPECIFIC_ARCHIVED_HOST": 5,
+    "RESEARCHER_RULE_CLAY_REGOLITH_TO_IAC": 34,
+    "RESEARCHER_RULE_PEGMATITE_TO_HARD": 4,
+    "RESEARCHER_RULE_SANDS_TO_PLACER": 3,
+    "REVIEWED_GA_GDA94_NAMED_REPRESENTATIVE_POINT_NOT_BOUNDARY": 28,
+    "REVIEWED_IMAGE_ROW_CEO2_DIFFERENCE_KT": 1,
+    "REVIEWED_OFFICIAL_PROJECT_FEATURE": 16,
+    "ROUND3_OFFICIAL_POINT_RESEARCHER_APPROVED": 4,
+    "ROUND4_TENEMENT_CENTROID_RESEARCHER_APPROVED": 24,
+    "SAME_SOURCE_STATEMENT_SCOPE_DATE": 74,
+    "SOURCE_BOUND_DATED_DEVELOPER_NOT_OWNERSHIP": 1,
+    "SOURCE_BOUND_DATED_LISTED_DEVELOPER_NOT_OWNERSHIP": 44,
+    "SOURCE_BOUND_PROJECT_REPORTING_ISSUER_ASX_CODE": 84,
+    "SOURCE_BOUND_SELECTED_RESOURCE_SCOPE_HOST_DESCRIPTION": 1,
+    "SOURCE_COMBINED_NDPR_OXIDE_PPM_X_ORE_MT": 1,
+    "SOURCE_REPORTED": 252,
+    "SOURCE_REPORTED_GEOLOGY_WITH_SCOPE": 22,
+    "SOURCE_REPORTED_MATCHED_NDPR_OXIDE_GROUP_KT": 1,
+    "SOURCE_REVIEWED_ATTRIBUTE_NOT_CURRENT_LEGAL_CERTIFICATION": 231,
+    "SOURCE_REVIEWED_PROJECT_PRODUCT": 3,
+    "SOURCE_STATED_ANNUAL_PRODUCTION": 2,
+    "SOURCE_STATE_CODE_LABEL": 279,
+    "SOURCE_TREO_PLUS_Y_MINUS_CE2O3_PLUS_CEO2": 21,
+    "STAGED_ANNUAL_USE_FIRST_FULL_PRODUCTION_STAGE": 1,
+    "STAGE_EXIT_RESEARCHER_DECISION_RELINQUISHMENT": 8,
+    "SUM_AVAILABLE_MATCHED_OXIDES_NOT_TOTAL_RESOURCE": 30,
+    "SUM_COMPLETE_MATCHED_MAGNET_OXIDES_AFTER_CE_CANONICALIZATION": 19,
+    "SUM_COMPLETE_MATCHED_OXIDE_SET": 91,
+    "SUM_MATCHED_HM_HOSTED_MAGNET_OXIDES": 2,
+    "SUM_RECONCILED_RESOURCE_BLOCK_MASSES": 1,
+    "SUM_SAME_CUTOFF_CATEGORY_OXIDE_MASSES": 15,
+    "TREO_KT_X_MAGNET_SHARE_PERCENT": 4,
+    "USER_PROVIDED_TEMPLATE_MAPPING_FROM_礦床型態": 29,
+    "USER_PROVIDED_TEMPLATE_MAPPING_FROM_開發階段": 8,
+    "VERIFIED_PDF_SOURCE_PRESENT_NOT_COMPLETENESS": 93
+  },
+  "v2_n_a_no_mre_to_v3_states": {
+    "UNKNOWN": 1650
+  },
+  "v2_pinned_method_implementations": {
+    "summary_complete_sum": "src/au_ree_v2/census.py:117",
+    "summary_coverage": "src/au_ree_v2/census.py:1156",
+    "summary_deposit_fields": "src/au_ree_v2/census.py:730",
+    "summary_forecasts": "src/au_ree_v2/technical.py:1668",
+    "summary_locations": "src/au_ree_v2/spatial.py:351",
+    "summary_missing": "src/au_ree_v2/census.py:1080",
+    "summary_reported_oxide_group": "src/au_ree_v2/census.py:120",
+    "summary_resource_bundle": "src/au_ree_v2/census.py:30",
+    "summary_resource_fields": "src/au_ree_v2/census.py:469",
+    "summary_scoped_oxide_fields": "src/au_ree_v2/census.py:613",
+    "summary_stage_fields": "src/au_ree_v2/census.py:675",
+    "summary_template_fills": "src/au_ree_v2/census.py:247"
+  },
+  "v2_populated_cells_by_column": {
+    "ASX代碼": 84,
+    "CeO2_氧化鈰_kt": 24,
+    "Dy2O3_氧化鏑_kt": 24,
+    "Er2O3_氧化鉺_kt": 19,
+    "Eu2O3_氧化銪_kt": 19,
+    "Gd2O3_氧化釓_kt": 19,
+    "Ho2O3_氧化鈥_kt": 18,
+    "La2O3_氧化鑭_kt": 19,
+    "Lu2O3_氧化鎦_kt": 18,
+    "Nd2O3_氧化釹_kt": 25,
+    "NdPr蘊藏量_kt_需兩者皆公布": 31,
+    "Pr6O11_氧化鐠_kt": 25,
+    "Sm2O3_氧化釤_kt": 19,
+    "TREO品位_pct": 37,
+    "Tb4O7_氧化鋱_kt": 24,
+    "Tm2O3_氧化銩_kt": 19,
+    "Y2O3_氧化釔_kt": 21,
+    "Yb2O3_氧化鐿_kt": 19,
+    "元素總和/TREO": 28,
+    "四項磁性元素皆公布": 24,
+    "國家": 93,
+    "完整重稀土組合蘊藏量_kt_需8元素皆公布": 18,
+    "專案ID": 93,
+    "專案名稱": 93,
+    "州省地區": 93,
+    "已公布元素數_共15項": 30,
+    "已公布元素總和_kt": 30,
+    "所在地_中文": 93,
+    "所在地_英文": 93,
+    "有TREO資源估計": 37,
+    "有來源文件": 93,
+    "未上市公司": 92,
+    "產品/產出": 23,
+    "磁性元素重算值_NdPrTbDy_kt": 24,
+    "磁鐵稀土佔TREO_pct": 25,
+    "磁鐵稀土氧化物蘊藏量_kt": 26,
+    "礦床型態": 91,
+    "礦床型態代碼": 75,
+    "礦石蘊藏量_Mt": 38,
+    "經度": 64,
+    "緯度": 64,
+    "總TREO蘊藏量_kt": 37,
+    "總說明": 93,
+    "資料來源URL": 93,
+    "資料來源名稱": 93,
+    "開發商": 93,
+    "開發階段": 93,
+    "開發階段代碼": 85,
+    "開發階段類別": 85,
+    "預估年產NdPr_t_per_year": 11,
+    "預估年產TREO_t_per_year": 13
+  },
+  "v2_populated_cells_with_linked_ids": {
+    "attribute_ids": 693,
+    "observation_ids": 1432
+  },
+  "v2_release_science_commit": "0dff6beb5aca52e565c37289e3ab295737e76942",
+  "v2_rule_dispositions": {
+    "ARCHIVE": 12,
+    "KEEP": 7,
+    "MERGE": 43,
+    "REFACTOR": 36,
+    "REMOVE": 2
+  },
+  "v2_rule_sha256": "1d8d7a4a83657eaf81550886423f997313fcf5fb2139608d7607d4b02d9cf753",
+  "v2_rule_version": "integrated-summary-v1",
+  "v2_rules_match_frozen_archive": false,
+  "v3_build_receipt_sha256": "edfebf208ea3a7ac57748aed5da42479a17b3bcdc6a00d9a3ef4f1f735b49d10",
+  "v3_census_receipt_sha256": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69",
+  "v3_census_roles": {
+    "FORMAL_SELECTION": 12,
+    "IDENTITY": 93
+  },
+  "v3_census_states": {
+    "NOT_APPLICABLE": 0,
+    "PRESENT": 105,
+    "UNKNOWN": 4638
+  },
+  "v3_code_commit": "40309ea006d2eaace3fe4bbf33beccca492261de",
+  "v3_science_scope": {
+    "comparable_project_criteria": 6,
+    "formal_scientific_cells": 12,
+    "panels": {
+      "issuer_resource_composition": {
+        "eligible_count": 2,
+        "minimum_cohort": 2,
+        "status": "PASS"
+      },
+      "issuer_resource_infrastructure": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      },
+      "issuer_resource_study": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      },
+      "resource_infrastructure_pilot": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      },
+      "six_domain": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      }
+    }
+  }
+}

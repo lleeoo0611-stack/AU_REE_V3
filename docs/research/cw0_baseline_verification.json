@@ -1,0 +1,103 @@
+{
+  "CW0": "PASS",
+  "census_cells": 4743,
+  "census_columns": 51,
+  "census_identity": 93,
+  "census_populated": 105,
+  "census_scientific": 12,
+  "comparable_project_criteria": 6,
+  "historical_gates": {
+    "F5": "BLOCKED",
+    "O2": "FAIL"
+  },
+  "main_build_input_sha256": {
+    "bindings": "7eab84d027e772052e314590ebb62e29f2950944e67573ebb0a5703cf707c899",
+    "profile": "8ccc8d042c4b8ce16177acf3f1e583d09d373459adeb930651a317ce4ff59c93",
+    "sources": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "main_build_receipt_sha256": "edfebf208ea3a7ac57748aed5da42479a17b3bcdc6a00d9a3ef4f1f735b49d10",
+  "main_build_scientific_artifacts": {
+    "census/cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+    "census/census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+    "census/census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69",
+    "decision/decision_receipt.json": "ac2202f97d444a0b937ae9e644db5545af265742a543b04fceaaa9a8732cddbd",
+    "decision/mcda_inputs.json": "35cdecccd08f23d6e77c86a48b5ae3aeda6141d5c3197e36ecf860dcc6d211e6",
+    "decision/mcda_results.json": "84362450a8d4c2aa8fe92f908502f5326ded70ba58b7c58896e580f0d24e6836",
+    "observations/extraction.json": "78f9d6ffd91618d77115cabd5a1bbe5f4e92bf09147626d1e0a4158b90fd551c",
+    "observations/observations.jsonl": "0c5958adcb70c2798f72aa5ed56fcfe2ee05f7a2d672bfc614b3fb14077a5ce3"
+  },
+  "main_code_commit": "40309ea006d2eaace3fe4bbf33beccca492261de",
+  "observation_counts": {
+    "candidate_count": 38,
+    "selected_count": 17,
+    "validated_count": 23
+  },
+  "optional_legacy_html": {
+    "filename": "rare-earth-projects_v8_2026-07-20.html",
+    "searched": [
+      "workspace",
+      "uploaded attachments",
+      "shared downloads",
+      "library files",
+      "pinned Git worktrees"
+    ],
+    "status": "NOT_FOUND_IN_LOCAL_SEARCH"
+  },
+  "panels": {
+    "issuer_resource_composition": {
+      "eligible_count": 2,
+      "minimum_cohort": 2,
+      "status": "PASS"
+    },
+    "issuer_resource_infrastructure": {
+      "eligible_count": 0,
+      "minimum_cohort": 2,
+      "status": "INSUFFICIENT_COHORT"
+    },
+    "issuer_resource_study": {
+      "eligible_count": 0,
+      "minimum_cohort": 2,
+      "status": "INSUFFICIENT_COHORT"
+    },
+    "resource_infrastructure_pilot": {
+      "eligible_count": 0,
+      "minimum_cohort": 2,
+      "status": "INSUFFICIENT_COHORT"
+    },
+    "six_domain": {
+      "eligible_count": 0,
+      "minimum_cohort": 2,
+      "status": "INSUFFICIENT_COHORT"
+    }
+  },
+  "pinned_candidate_scientific_code_commit": "d5349613a2f24fc8808f001b68aa6818ce29b713",
+  "pinned_research_candidate_id": "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974",
+  "prior_archive_build_sha256": "3b86b9750ce50b78059afb61a53a9e21b2bb45ebb7754e6f8843136a120269ad",
+  "prior_archive_replica_status": "BLOCKED",
+  "prior_cold_replay_compared_artifacts": 8,
+  "prior_cold_replay_receipt_sha256": "0fb33e1474504ae6a5321f8c63ffaf0af6584e07d7fc39ed868e43d957007cb3",
+  "projects": 93,
+  "research_cutoff": "2026-11-28",
+  "schema": "census-web-cw0-baseline-v1",
+  "science_comparison_checked_fields": [
+    "census_scientific_cell_count",
+    "census_states_and_evidence_keys",
+    "comparable_project_criteria",
+    "complete_case_matrices_and_weights",
+    "eligible_source_count",
+    "extracted_observation_values_and_evidence_keys",
+    "formal_census_values_and_order_sha256",
+    "formal_comparison_values_and_evidence",
+    "gates_F0_F3",
+    "mcda_policy_sha256",
+    "observation_counts",
+    "scores_rankings_and_sensitivity",
+    "verified_source_count"
+  ],
+  "science_differences": [],
+  "source_edition_events": 148,
+  "status": "PASS",
+  "temporal_eligible_sha256_count": 144,
+  "timezone": "Asia/Taipei",
+  "verified_sha256_count": 144
+}

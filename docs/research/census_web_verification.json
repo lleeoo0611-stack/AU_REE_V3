@@ -1,0 +1,1598 @@
+{
+  "browser": {
+    "chromium": "156.0.8078.79",
+    "corpus": "EXACT_RESEARCH_PREVIEWS",
+    "metrics": {
+      "browser_history_load_wall_ms": 154,
+      "browser_js_heap_used_bytes": 8636124,
+      "browser_load_census_wall_ms": 514,
+      "formal_pointer_rejects_candidate": "PASS",
+      "history_csv_update_link": "PASS",
+      "map_ree_mcda_language": "PASS",
+      "mixed_cache_missing_atomic": "PASS",
+      "mobile": "PASS",
+      "no_formal_pointer": "PASS",
+      "rehashed_unqualified_pin_rank_lineage": "PASS",
+      "search_filter_sort_columns_evidence": "PASS",
+      "xss_and_source_link": "PASS"
+    },
+    "runtime": "v24.22.3",
+    "status": "PASS",
+    "versions": [
+      "12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef",
+      "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974"
+    ]
+  },
+  "browser_runtime_asset_sha256": {
+    "assets/app.js": "c8c913345bdd71e5801649f395ee03d49f7ba43d1abe1b12bd32496103f306a3",
+    "assets/australia.geojson": "45e9b60001a6bbf856a289871de87ca79955038cf53fe7900bf8889dee1da643",
+    "assets/labels.mjs": "1da9bba16630aeeb4f9a3759f477fa392fb105326a8fb210b8d54172990736ab",
+    "assets/release.mjs": "8bcfec0fab00c977cea57c20954281c5390cff9f4d2b7f3a6a67fdaf5e2adfc2",
+    "assets/styles.css": "9a83e1c5266abbe108d75875f4fc7208de30391379c34800ae52e96571f21fd1",
+    "assets/views.mjs": "18bbc5bd424c0d4fcfdbc9b59c4daf3ae3a73dca71cd8482670282ec2f845342",
+    "index.html": "c86ca86bb8c827d9b5689e150bef04ca7f9844fbea42840be3da402d64d3ac73"
+  },
+  "chemistry": {
+    "formula_registry_sha256": "8d2d741197dd1606724b04062b0dd6404ed58eb1c20c42cc417f9600e3ccf371",
+    "rejected_and_conflicted_by_reason": {
+      "REQUIRED_OXIDE_MEMBERS_NOT_SELECTED": 4,
+      "SAME_SCOPE_COMPANION_OXIDE_PRECISION_DISAGREEMENT": 5
+    },
+    "review_evidence_sha256": "ddb0772554d958d1b8ab990e6a008f2c1ba1d586e6c3dbdb4f227fbea718acb2",
+    "verified_shadow": [
+      {
+        "key": "mreo_kt",
+        "project_id": "AU-0098e17a63e7c05c213f",
+        "rounding_interval": [
+          "16.66925",
+          "16.93125"
+        ],
+        "status": "SHADOW_VALIDATED",
+        "unit": "kt",
+        "value": "16.800"
+      },
+      {
+        "key": "Nd2O3_kt",
+        "project_id": "AU-9bd8e5ed8408cd84d876",
+        "rounding_interval": [
+          "2.026375",
+          "2.061675"
+        ],
+        "status": "SHADOW_VALIDATED",
+        "unit": "kt",
+        "value": "2.0440"
+      },
+      {
+        "key": "Pr6O11_kt",
+        "project_id": "AU-9bd8e5ed8408cd84d876",
+        "rounding_interval": [
+          "0.431375",
+          "0.444675"
+        ],
+        "status": "SHADOW_VALIDATED",
+        "unit": "kt",
+        "value": "0.4380"
+      },
+      {
+        "key": "Tb4O7_kt",
+        "project_id": "AU-9bd8e5ed8408cd84d876",
+        "rounding_interval": [
+          "0.866375",
+          "0.885675"
+        ],
+        "status": "SHADOW_VALIDATED",
+        "unit": "kt",
+        "value": "0.8760"
+      },
+      {
+        "key": "ndpr_kt",
+        "project_id": "AU-9bd8e5ed8408cd84d876",
+        "rounding_interval": [
+          "2.457750",
+          "2.506350"
+        ],
+        "status": "SHADOW_VALIDATED",
+        "unit": "kt",
+        "value": "2.4820"
+      }
+    ]
+  },
+  "code_baseline": "40309ea006d2eaace3fe4bbf33beccca492261de",
+  "coverage": {
+    "complete_panel_cases": 2,
+    "current_coverage_by_role": {
+      "metadata": {
+        "denominator": 1116,
+        "present": 1088,
+        "rate": "0.974910"
+      },
+      "origins": {
+        "EVIDENCE_REFERENCE": 4,
+        "FORMAL_SELECTION": 12,
+        "IDENTITY": 93,
+        "METADATA_SUMMARY": 93,
+        "REGISTRY_MAPPING": 279,
+        "REGISTRY_SNAPSHOT": 363,
+        "SOURCE_EVIDENCE": 260
+      },
+      "raw": {
+        "denominator": 4743,
+        "present": 1104,
+        "rate": "0.232764"
+      },
+      "scientific": {
+        "by_column": {
+          "ceo2_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "contained_treo_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 89,
+            "demonstrated_applicable_denominator": 4,
+            "not_applicable_with_evidence": 0,
+            "present": 4,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 89,
+            "unknown_reasons": {
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "dy2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "er2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "eu2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "gd2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "ho2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "hree8_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "la2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "lu2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "magnet_oxide_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "magnet_pct_of_treo": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "nd2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "ndpr_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "ore_mt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 89,
+            "demonstrated_applicable_denominator": 4,
+            "not_applicable_with_evidence": 0,
+            "present": 4,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 89,
+            "unknown_reasons": {
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "oxide_sum_over_treo": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "pr6o11_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "recalculated_magnet_oxide_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "reported_oxide_count": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "reported_oxide_sum_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "sm2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "tb4o7_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "tm2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "treo_grade_pct": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 89,
+            "demonstrated_applicable_denominator": 4,
+            "not_applicable_with_evidence": 0,
+            "present": 4,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 89,
+            "unknown_reasons": {
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "y2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          },
+          "yb2o3_kt": {
+            "applicability_rule": "REQUIRE_AFFIRMATIVE_PURPOSE_SPECIFIC_INAPPLICABILITY_EVIDENCE",
+            "applicability_undetermined": 93,
+            "demonstrated_applicable_denominator": 0,
+            "not_applicable_with_evidence": 0,
+            "present": 0,
+            "unexcluded_grid_denominator": 93,
+            "unknown": 93,
+            "unknown_reasons": {
+              "NO_APPROVED_SELECTION": 4,
+              "NO_SELECTED_MRE": 89
+            }
+          }
+        },
+        "derived_cells": 0,
+        "direct_cells": 12,
+        "unique_derived_values": 0,
+        "unique_direct_observations": 12
+      }
+    },
+    "current_states": {
+      "NOT_APPLICABLE": 0,
+      "PRESENT": 1104,
+      "UNKNOWN": 3639
+    },
+    "descriptive_resource_references_gain": 4,
+    "display_gain": 999,
+    "existing_composition_context": [
+      {
+        "census_admission": "NO_APPROVED_CENSUS_DERIVATION_SELECTION",
+        "decision_policy_sha256": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+        "derivation": {
+          "component_tokens": {
+            "MREO": "112"
+          },
+          "denominator_ppm": "470",
+          "formula": "reported_MREO_ppm / TREO_ppm * 100",
+          "input_observation_ids": [
+            "2de14f251ec4892688a0b52ebf490cbf24666a586dc2c73941a35f6c4d7a46c8",
+            "3006c076a1c7abfebf3d00dfd9aae2ca526790db3a5cccda1a1ee79ab2a3984d"
+          ],
+          "method": "same-statement-reported-four-oxide-share-v1",
+          "numerator_ppm": "112",
+          "reported_definition": {
+            "page": 3,
+            "quote": "MREO = Magnet Rare Earth Oxide(Nd2O3, Pr6O11, Dy2O3, Tb4O7)"
+          },
+          "reported_unit_evidence": {
+            "cutoff": [
+              "200",
+              "ppm",
+              "TREO-CeO2"
+            ],
+            "decoder_runtime": "pdfimages version 25.03.0",
+            "dy_tb_token_ppm": "10.5",
+            "effective_date": "2026-10-22",
+            "grade_token_ppm": "470",
+            "grade_unit": "ppm",
+            "group_unit": "ppm",
+            "image_sha256": "f776a023a5a7f96c8ef90aeb52ce3a05427b609603a01064d4e100bd440447f0",
+            "image_slot": 2,
+            "locator": "Combined Estimate > Total > Indicated + Inferred > ISR & OP",
+            "nd_pr_token_ppm": "101",
+            "ore_token_mt": "149.92",
+            "physical_page": 15,
+            "scope": "Wudinna REE Project Mineral Resource, Garford and Pidinga total",
+            "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "version": "fixed-original-combined-oxide-table-review-v1"
+          },
+          "rounding_interval_pct": [
+            "23.69819341126461211477151965993624",
+            "23.96166134185303514376996805111821"
+          ],
+          "treo_token": "470",
+          "treo_unit": "ppm"
+        },
+        "inputs": [
+          {
+            "anchor_id": "8b891c95fb1c753a29fcb9db24761f91488d9014e927ca53c22c72b08e6a67d9",
+            "candidate_id": "f118f512f1cf25ad9b64737ecdb8a3973e74a7490f0815668625db5028b15357",
+            "chemical_basis": "TREO",
+            "column": "Mt",
+            "denominator_basis": null,
+            "effective_date": "2026-10-22",
+            "locator": "physical PDF page 3; Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce; Total; Mt",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "Mt",
+            "normalized_value": "150",
+            "observation_id": "41dc54bc8c976886f628d7c191822f037c259e0a055bfaf7703198b70e078da0",
+            "physical_page": 3,
+            "project_id": "AU-0098e17a63e7c05c213f",
+            "raw_record_id": "41dc54bc8c976886f628d7c191822f037c259e0a055bfaf7703198b70e078da0",
+            "raw_token": "150",
+            "raw_unit": "Mt",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total",
+            "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+            "selection_id": "735168f6919bf4845936ca2100c61ea148baefad4671e1351afbd93b8386c059",
+            "source_key": "seed-f09f74b43a7e20826fb9eda9",
+            "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384",
+            "source_version": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "statement_id": "763a4d2d39f3afed5792b22f9bcf99f7dd22e60c5138e9259baaced2756087f0",
+            "table": "Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:28:33.622225+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2026-10-22",
+              "event_date": null,
+              "evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "matching_evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2026-10-26",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2026-10-26",
+              "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "a66ffc59f11fd362142b920ba31f2f7f56731cf518a83f24dbe402b1b84ce116",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "36342564101593af5aab8babd2967b43def4349addd51295adc334f2ad7c0fb5",
+            "candidate_id": "b985e1c0dd8b88e8a41e6fad2fa6d60cb4fb1062410b80fa2a11adf7c5dd939c",
+            "chemical_basis": "TREO",
+            "column": "TREO",
+            "denominator_basis": "WHOLE_ORE",
+            "effective_date": "2026-10-22",
+            "locator": "physical PDF page 3; Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce; Total; TREO",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "ppm",
+            "normalized_value": "470",
+            "observation_id": "3006c076a1c7abfebf3d00dfd9aae2ca526790db3a5cccda1a1ee79ab2a3984d",
+            "physical_page": 3,
+            "project_id": "AU-0098e17a63e7c05c213f",
+            "raw_record_id": "3006c076a1c7abfebf3d00dfd9aae2ca526790db3a5cccda1a1ee79ab2a3984d",
+            "raw_token": "470",
+            "raw_unit": "ppm",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total",
+            "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+            "selection_id": "86309ae6bced0ec6c1f45a10d0ee1ab76a2e6f6cadf6b7b17fd47241720a95c8",
+            "source_key": "seed-f09f74b43a7e20826fb9eda9",
+            "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384",
+            "source_version": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "statement_id": "763a4d2d39f3afed5792b22f9bcf99f7dd22e60c5138e9259baaced2756087f0",
+            "table": "Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:28:33.622225+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2026-10-22",
+              "event_date": null,
+              "evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "matching_evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2026-10-26",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2026-10-26",
+              "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "8ca70701b69856ad211126b45fa1f68fde860be5a64c758839c23a48cdd22c7b",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "42f4ecaec42c59e970fb4cc373d98262f4115ec4940d911d2641717547c6f94a",
+            "candidate_id": "24ff47f204e3be61add9f96e8188a12d03fcc819c70ac37b01ad3ba80de003bd",
+            "chemical_basis": "TREO",
+            "column": "Contained TREO",
+            "denominator_basis": null,
+            "effective_date": "2026-10-22",
+            "locator": "physical PDF page 1; Issuer summary; Maiden estimate; Contained TREO",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "kt TREO",
+            "normalized_value": "70.400",
+            "observation_id": "8b2bdafea773accd5dc36cf6ff9d2a848c81975c7bda8ef84baa4b68c0762057",
+            "physical_page": 1,
+            "project_id": "AU-0098e17a63e7c05c213f",
+            "raw_record_id": "8b2bdafea773accd5dc36cf6ff9d2a848c81975c7bda8ef84baa4b68c0762057",
+            "raw_token": "70,400",
+            "raw_unit": "t",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Maiden estimate",
+            "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+            "selection_id": "be3ca088d5f5bddca67a5701a84cd77a34fc3f67bc1173a2045ec82d284d2c8e",
+            "source_key": "seed-f09f74b43a7e20826fb9eda9",
+            "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384",
+            "source_version": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "statement_id": "763a4d2d39f3afed5792b22f9bcf99f7dd22e60c5138e9259baaced2756087f0",
+            "table": "Issuer summary",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:28:33.622225+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2026-10-22",
+              "event_date": null,
+              "evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "matching_evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2026-10-26",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2026-10-26",
+              "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "06a98419d68b967ce7bf77bc5b46749f20c7a5b8d76dc42364ec51469c399d7c",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "7453133f8c5d013f5e892da33d116e6d3ebfdcf0bc51ab16146a83576cb192cf",
+            "candidate_id": "c7d9a4c58fc75febbfbb7def0dbfaa91bb4cc6209971fdccdbf773579ece5ab3",
+            "chemical_basis": "PrNdDyTb_REO",
+            "column": "MREO",
+            "denominator_basis": "WHOLE_ORE",
+            "effective_date": "2026-10-22",
+            "locator": "physical PDF page 3; Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce; Total; MREO",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "ppm",
+            "normalized_value": "112",
+            "observation_id": "2de14f251ec4892688a0b52ebf490cbf24666a586dc2c73941a35f6c4d7a46c8",
+            "physical_page": 3,
+            "project_id": "AU-0098e17a63e7c05c213f",
+            "raw_record_id": "2de14f251ec4892688a0b52ebf490cbf24666a586dc2c73941a35f6c4d7a46c8",
+            "raw_token": "112",
+            "raw_unit": "ppm",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total",
+            "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+            "selection_id": "44a0dbc32a07de6ec7eb5974d5943336d57daf649596ff77a94dd3f56cd598a6",
+            "source_key": "seed-f09f74b43a7e20826fb9eda9",
+            "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384",
+            "source_version": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+            "statement_id": "763a4d2d39f3afed5792b22f9bcf99f7dd22e60c5138e9259baaced2756087f0",
+            "table": "Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:28:33.622225+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2026-10-22",
+              "event_date": null,
+              "evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "matching_evidence_ids": [
+                "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2026-10-26",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2026-10-26",
+              "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "c99cf7098a88c117ac85388d00f47742b54d7447e858fc9aaf1a6b65f3f0b83b",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          }
+        ],
+        "project_id": "AU-0098e17a63e7c05c213f",
+        "reason": "SAME_STATEMENT_FOUR_OXIDE_DERIVATION",
+        "unit": "%",
+        "value": "23.82978723404255319148936170212766"
+      },
+      {
+        "census_admission": "NO_APPROVED_CENSUS_DERIVATION_SELECTION",
+        "decision_policy_sha256": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+        "derivation": {
+          "component_tokens": {
+            "Dy2O3": "840",
+            "Nd2O3": "280",
+            "Pr6O11": "60",
+            "Tb4O7": "120"
+          },
+          "denominator_ppm": "9600.00",
+          "formula": "(Pr6O11_ppm + Nd2O3_ppm + Dy2O3_ppm + Tb4O7_ppm) / TREO_ppm * 100",
+          "input_observation_ids": [
+            "402291de4008ecde83408051d799555b497b842e132d0366fdcf27de812a2071",
+            "200d4ed6b7b6579ec9cffe1683f240438ed3b48108b4ac68ad20c6f623c8a6c5",
+            "14765263d2ca2840fbabcff43dec63cb7b9ba5ae535481737a26665ecb8ce5c9",
+            "9bada3ed0f7d76e2771660ff2705230666ca3647e03ef73c6f1c84617e64f354",
+            "9fdb34620f5d55562fda408d5b03f8289519d0760ae5b96650f0ea346cedbbb7"
+          ],
+          "method": "same-statement-four-oxide-share-v1",
+          "numerator_ppm": "1300",
+          "rounding_interval_pct": [
+            "13.45077720207253886010362694300518",
+            "13.63350785340314136125654450261780"
+          ],
+          "treo_token": "0.96",
+          "treo_unit": "%"
+        },
+        "inputs": [
+          {
+            "anchor_id": "fc97564ce7a02ba4d3ca0154a44fc5309d211f9fdb5a10d46332db3f1d9e7839",
+            "candidate_id": "11b01a9f797a2daa80a9aa8868833ab3eb7a255442a19f03fd5b596b8d0a155f",
+            "chemical_basis": "TREO",
+            "column": "Tonnage",
+            "denominator_basis": null,
+            "effective_date": "2025-01-15",
+            "locator": "physical PDF page 5; Table 2; Total Total; Tonnage",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "Mt",
+            "normalized_value": "7.3",
+            "observation_id": "489a3558f37b28105abcd6abb383ba670f50542dcf297a2a4537ddfd6ca621bd",
+            "physical_page": 5,
+            "project_id": "AU-9bd8e5ed8408cd84d876",
+            "raw_record_id": "489a3558f37b28105abcd6abb383ba670f50542dcf297a2a4537ddfd6ca621bd",
+            "raw_token": "7.3",
+            "raw_unit": "Mt",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total Total",
+            "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+            "selection_id": "758e598144e34949289bf564d3d526c8de0ed7037f19b177f70c8001245e8380",
+            "source_key": "asx_document_02904920",
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+            "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+            "table": "Table 2",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2025-01-15",
+              "event_date": null,
+              "evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "matching_evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2025-01-16",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2025-01-16",
+              "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "1f423902dffba82b3b7174e8ccc14a757d527437e4035a7577f006bc6d675b67",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "d8692e2f97195a08943673f749e977393ce9d3b62d0b57a3bdf69eb107cfd5e5",
+            "candidate_id": "955b6659baebbafbde99ad4b33edcb70a9f4b7dea0a559df35348b5d5cbcebe9",
+            "chemical_basis": "TREO",
+            "column": "TREO grade",
+            "denominator_basis": "WHOLE_ORE",
+            "effective_date": "2025-01-15",
+            "locator": "physical PDF page 5; Table 2; Total Total; TREO grade",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "%",
+            "normalized_value": "0.96",
+            "observation_id": "9fdb34620f5d55562fda408d5b03f8289519d0760ae5b96650f0ea346cedbbb7",
+            "physical_page": 5,
+            "project_id": "AU-9bd8e5ed8408cd84d876",
+            "raw_record_id": "9fdb34620f5d55562fda408d5b03f8289519d0760ae5b96650f0ea346cedbbb7",
+            "raw_token": "0.96",
+            "raw_unit": "%",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total Total",
+            "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+            "selection_id": "1647629817bf08b5cf9295f6f178b5fcb4a4f763b1f8a42add61ea99dd85f500",
+            "source_key": "asx_document_02904920",
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+            "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+            "table": "Table 2",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2025-01-15",
+              "event_date": null,
+              "evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "matching_evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2025-01-16",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2025-01-16",
+              "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "27e24fbc9a6c65f97b432038dc7d803f2ae4bb3316df2d0c25ab38b04251eb70",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "fa1672cc3e8b6d056ed0bf8b1dc5683e1cbe8ce5720ad434ac94a65ca04f601d",
+            "candidate_id": "95ae6e3461a41bb69922cbd89d7e54b81fbe0ea2d3ec91bbda34f2c0ed85de6c",
+            "chemical_basis": "TREO",
+            "column": "Contained TREO",
+            "denominator_basis": null,
+            "effective_date": "2025-01-15",
+            "locator": "physical PDF page 5; Table 2; Total Total; Contained TREO",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "kt TREO",
+            "normalized_value": "70.500",
+            "observation_id": "6c84118d6b6d6a5020f20c91c9fd2153e4aed83bb0f12112b970d4620d10f56a",
+            "physical_page": 5,
+            "project_id": "AU-9bd8e5ed8408cd84d876",
+            "raw_record_id": "6c84118d6b6d6a5020f20c91c9fd2153e4aed83bb0f12112b970d4620d10f56a",
+            "raw_token": "70,500",
+            "raw_unit": "t",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total Total",
+            "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+            "selection_id": "2ebb37808d354fc4e6e2aa65de66fc5f4718d0ae277127ce7c5f8c04c5afbfd7",
+            "source_key": "asx_document_02904920",
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+            "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+            "table": "Table 2",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2025-01-15",
+              "event_date": null,
+              "evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "matching_evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2025-01-16",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2025-01-16",
+              "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "4a2f45bf93d2da813fadb2053f5f44d1b94e2cdc9dfda3a89a544ad9eaaf9e82",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "b3b9f86ae5469c72d571444890e94263b6c359a654c881c262ae08ec68da77bf",
+            "candidate_id": "7fc65f9969db02d6b48b831c3022810ffe2965b36083ed71b34cd97dd6248e84",
+            "chemical_basis": "Pr6O11",
+            "column": "Pr6O11",
+            "denominator_basis": "WHOLE_ORE",
+            "effective_date": "2025-01-15",
+            "locator": "physical PDF page 6; Table 5; Total; Pr6O11",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "ppm",
+            "normalized_value": "60",
+            "observation_id": "402291de4008ecde83408051d799555b497b842e132d0366fdcf27de812a2071",
+            "physical_page": 6,
+            "project_id": "AU-9bd8e5ed8408cd84d876",
+            "raw_record_id": "402291de4008ecde83408051d799555b497b842e132d0366fdcf27de812a2071",
+            "raw_token": "60",
+            "raw_unit": "ppm",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total",
+            "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+            "selection_id": "2cca41e5ce36429ca689e29f27980b1b1f900cd90bc74a08bf1b5f67277f0a27",
+            "source_key": "asx_document_02904920",
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+            "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+            "table": "Table 5",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2025-01-15",
+              "event_date": null,
+              "evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "matching_evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2025-01-16",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2025-01-16",
+              "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "5954fd64a6d11588cab09235c742e8e3c737a3c93e8fd04eecfdda892b81d6a7",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "b1f5fc87e497fe767c8bec9b973b293c742710aafb5e7d0cee94239f52083af9",
+            "candidate_id": "ced4c1bfbdfdd0a9eaf89f2e99edf68fb120a063ace1aaff79c1c9d37c623132",
+            "chemical_basis": "Nd2O3",
+            "column": "Nd2O3",
+            "denominator_basis": "WHOLE_ORE",
+            "effective_date": "2025-01-15",
+            "locator": "physical PDF page 6; Table 5; Total; Nd2O3",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "ppm",
+            "normalized_value": "280",
+            "observation_id": "200d4ed6b7b6579ec9cffe1683f240438ed3b48108b4ac68ad20c6f623c8a6c5",
+            "physical_page": 6,
+            "project_id": "AU-9bd8e5ed8408cd84d876",
+            "raw_record_id": "200d4ed6b7b6579ec9cffe1683f240438ed3b48108b4ac68ad20c6f623c8a6c5",
+            "raw_token": "280",
+            "raw_unit": "ppm",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total",
+            "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+            "selection_id": "b626271ad82e5f586c0de2e29f135ea7fe465dee72907cb0d1cdfdfbe32af4f0",
+            "source_key": "asx_document_02904920",
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+            "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+            "table": "Table 5",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2025-01-15",
+              "event_date": null,
+              "evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "matching_evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2025-01-16",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2025-01-16",
+              "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "950b6b5f6720300f4ad4cdba4c3bacbb5861fb29155103badcc98ee58cd0856a",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "fcc268a225908223305b19800a606dbf078a7c992114ad1ee070790083a035b1",
+            "candidate_id": "ba2b6edfe12ebfb7f45e2c905d0741538463293f21ffd3bad2f2f1a58ac815ac",
+            "chemical_basis": "Dy2O3",
+            "column": "Dy2O3",
+            "denominator_basis": "WHOLE_ORE",
+            "effective_date": "2025-01-15",
+            "locator": "physical PDF page 6; Table 5; Total; Dy2O3",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "ppm",
+            "normalized_value": "840",
+            "observation_id": "14765263d2ca2840fbabcff43dec63cb7b9ba5ae535481737a26665ecb8ce5c9",
+            "physical_page": 6,
+            "project_id": "AU-9bd8e5ed8408cd84d876",
+            "raw_record_id": "14765263d2ca2840fbabcff43dec63cb7b9ba5ae535481737a26665ecb8ce5c9",
+            "raw_token": "840",
+            "raw_unit": "ppm",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total",
+            "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+            "selection_id": "86728c4319bc60cb808a046338c9a12598f4c8e2dc636ed4d62acb579ed7767f",
+            "source_key": "asx_document_02904920",
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+            "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+            "table": "Table 5",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2025-01-15",
+              "event_date": null,
+              "evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "matching_evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2025-01-16",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2025-01-16",
+              "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "766dcb7772fafeff9e4954f42eda92abcdc9b6e51a84d7a6276de3d50357b045",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          },
+          {
+            "anchor_id": "800671f2acd8ce4685864d6be6bfdc7efa54a368672b935fcfd7dbe6fdd74610",
+            "candidate_id": "62fb105764c8ca35d92dece57b6f2ec83b7ee78d778c0a8138335699918b91ae",
+            "chemical_basis": "Tb4O7",
+            "column": "Tb4O7",
+            "denominator_basis": "WHOLE_ORE",
+            "effective_date": "2025-01-15",
+            "locator": "physical PDF page 6; Table 5; Total; Tb4O7",
+            "material_basis": "WHOLE_ORE",
+            "normalized_unit": "ppm",
+            "normalized_value": "120",
+            "observation_id": "9bada3ed0f7d76e2771660ff2705230666ca3647e03ef73c6f1c84617e64f354",
+            "physical_page": 6,
+            "project_id": "AU-9bd8e5ed8408cd84d876",
+            "raw_record_id": "9bada3ed0f7d76e2771660ff2705230666ca3647e03ef73c6f1c84617e64f354",
+            "raw_token": "120",
+            "raw_unit": "ppm",
+            "release_id": "da9530409d425179219581aaa4792cf0edca5f1dbfee496c5f5f2167b2a21eac",
+            "row": "Total",
+            "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+            "selection_id": "87c2a08a21193452556a0ee6b0fad725b9ea14d00a5613fe574622b3df5d4bae",
+            "source_key": "asx_document_02904920",
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+            "source_version": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+            "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+            "table": "Table 5",
+            "temporal_decision": {
+              "acquired_at": "2026-11-27T21:27:46.837574+00:00",
+              "availability_role": "UNCLASSIFIED",
+              "available_date": null,
+              "cutoff": "2026-11-28",
+              "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+              "earliest_proven_public_date": "2026-11-28",
+              "effective_date": "2025-01-15",
+              "event_date": null,
+              "evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "matching_evidence_ids": [
+                "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+              ],
+              "observation_role": "HISTORICAL_MEASUREMENT",
+              "policy_version": "temporal-evidence-v1",
+              "publication_date": "2025-01-16",
+              "reacquired_at": null,
+              "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+              "reported_publication_date": "2025-01-16",
+              "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+              "status": "ELIGIBLE"
+            },
+            "validation_id": "5d22cc565ac1b84ca552120c735aa040f1583636b8171a0e8d88c0238f5532db",
+            "validation_rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f"
+          }
+        ],
+        "project_id": "AU-9bd8e5ed8408cd84d876",
+        "reason": "SAME_STATEMENT_FOUR_OXIDE_DERIVATION",
+        "unit": "%",
+        "value": "13.54166666666666666666666666666667"
+      }
+    ],
+    "formal_derived_cells": 0,
+    "formal_direct_cells": 12,
+    "formal_project_criterion": 6,
+    "formal_project_criterion_delta": 0,
+    "metadata_gain": 995,
+    "new_observations": 0,
+    "old_present": 105
+  },
+  "fixed_sources": {
+    "read_back": 144,
+    "sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "time_eligible_captures": 148
+  },
+  "frozen_science_and_policy": {
+    "observation_counts": {
+      "candidate_count": 38,
+      "selected_count": 17,
+      "validated_count": 23
+    },
+    "panels": {
+      "issuer_resource_composition": {
+        "eligible_count": 2,
+        "minimum_cohort": 2,
+        "status": "PASS"
+      },
+      "issuer_resource_infrastructure": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      },
+      "issuer_resource_study": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      },
+      "resource_infrastructure_pilot": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      },
+      "six_domain": {
+        "eligible_count": 0,
+        "minimum_cohort": 2,
+        "status": "INSUFFICIENT_COHORT"
+      }
+    },
+    "receipt": {
+      "path": "work/census-web/baseline/baseline_verification.json",
+      "sha256": "1da1c0afa32d03c9adab27cbbd63b7697f6d6963b3adf5c10eb7e41c141aa5d7"
+    }
+  },
+  "gates": {
+    "CW0": "PASS",
+    "CW1": "PASS",
+    "CW2": "PASS",
+    "CW3": "PASS",
+    "CW4": "PASS",
+    "CW5": "PASS",
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "O0": "PASS",
+    "O1": "PASS",
+    "O2": "FAIL",
+    "O3": "PASS",
+    "O4": "PASS"
+  },
+  "linkage": {
+    "F5": "BLOCKED",
+    "F5_reason": "REPLICA_UNAVAILABLE",
+    "candidate_formal_rejected": true,
+    "candidate_manifests": {
+      "12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef": "97470d77cc32efabdf9f7eec6553cfddd4b5a144ee7aeaa5b676b3512ebb22f9",
+      "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974": "60908fa7e93a18863908283fde31d7bf007b3cfd6fcd89701fe9ba5ad6114461"
+    },
+    "candidate_previous_release_id": "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974",
+    "candidate_release_id": "12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef",
+    "candidate_site_files": 23,
+    "deployment": "DEPLOYMENT_NOT_AUTHORIZED",
+    "empty_site_files": 8,
+    "formal_pointer_absent": true,
+    "formal_update": "BLOCKED",
+    "frontend_files": {
+      "assets/app.js": "c8c913345bdd71e5801649f395ee03d49f7ba43d1abe1b12bd32496103f306a3",
+      "assets/australia.geojson": "45e9b60001a6bbf856a289871de87ca79955038cf53fe7900bf8889dee1da643",
+      "assets/labels.mjs": "1da9bba16630aeeb4f9a3759f477fa392fb105326a8fb210b8d54172990736ab",
+      "assets/release.mjs": "8bcfec0fab00c977cea57c20954281c5390cff9f4d2b7f3a6a67fdaf5e2adfc2",
+      "assets/styles.css": "9a83e1c5266abbe108d75875f4fc7208de30391379c34800ae52e96571f21fd1",
+      "assets/views.mjs": "18bbc5bd424c0d4fcfdbc9b59c4daf3ae3a73dca71cd8482670282ec2f845342",
+      "index.html": "c86ca86bb8c827d9b5689e150bef04ca7f9844fbea42840be3da402d64d3ac73"
+    },
+    "previous_immutable_bytes_unchanged": true,
+    "primary_f5_objects": 310,
+    "real_preview_rollback_pointer_only": true,
+    "replica_f5_objects": 0,
+    "required_f5_objects": 310,
+    "research_pointer_absent": true,
+    "status": "PASS",
+    "timing": {
+      "build_empty_site": {
+        "process_peak_rss_kib": 19664,
+        "wall_seconds": 0.011
+      },
+      "build_preview_first": {
+        "process_peak_rss_kib": 34740,
+        "wall_seconds": 0.357
+      },
+      "build_preview_second": {
+        "process_peak_rss_kib": 45372,
+        "wall_seconds": 0.67
+      },
+      "formal_publish_without_replica": {
+        "process_peak_rss_kib": 70656,
+        "wall_seconds": 1.099
+      },
+      "formal_site_without_f5": {
+        "process_peak_rss_kib": 70656,
+        "wall_seconds": 0.0
+      },
+      "preview_pointer_only_rollback": {
+        "process_peak_rss_kib": 45372,
+        "wall_seconds": 0.72
+      },
+      "verify_complete_preview": {
+        "process_peak_rss_kib": 45372,
+        "wall_seconds": 0.409
+      }
+    }
+  },
+  "local_test_suite": {
+    "seconds": 39.156,
+    "skips": 0,
+    "status": "PASS",
+    "tests_run": 254
+  },
+  "pr_ci_before_D": {
+    "19": {
+      "head": "d185b401741f7650e8cca496047e5309937de529",
+      "jobs": {
+        "Exact resource integration": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083022916/job/140786144198",
+          "wall_seconds": 44.0
+        },
+        "Frozen reference integrity": {
+          "conclusion": "SKIPPED",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083022916/job/140786145201",
+          "wall_seconds": 0
+        },
+        "Static and unit": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083022916/job/140786143924",
+          "wall_seconds": 20.0
+        }
+      },
+      "merge_commit": "06b66cbdd73c496bfd06928eeb9bdef623cfb21a",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/19"
+    },
+    "20": {
+      "head": "b6094405ba5b88d5b2235850aa937721a8f31fb0",
+      "jobs": {
+        "Exact resource integration": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083365741/job/140787233510",
+          "wall_seconds": 77.0
+        },
+        "Frozen reference integrity": {
+          "conclusion": "SKIPPED",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083365741/job/140787235225",
+          "wall_seconds": 0
+        },
+        "Static and unit": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083365741/job/140787233753",
+          "wall_seconds": 14.0
+        }
+      },
+      "merge_commit": "b622299cf0946fc04f7e645586112eca892c21a8",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/20"
+    },
+    "21": {
+      "head": "a0fcf28adb72625f703421011a8de2d965cbbcb7",
+      "jobs": {
+        "Exact resource integration": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083991444/job/140789197165",
+          "wall_seconds": 41.0
+        },
+        "Frozen reference integrity": {
+          "conclusion": "SKIPPED",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083991444/job/140789198526",
+          "wall_seconds": 0
+        },
+        "Static and unit": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46083991444/job/140789197376",
+          "wall_seconds": 14.0
+        }
+      },
+      "merge_commit": "f695fdd585cb9d6bc97248b9220badc4fd953e28",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/21"
+    },
+    "22": {
+      "head": "1ab771f1c55dc230bbd17f9acd6911daf0b51b72",
+      "jobs": {
+        "Browser interaction and release integrity": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46084126652/job/140789616108",
+          "wall_seconds": 49.0
+        },
+        "Exact resource integration": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46084126572/job/140789616092",
+          "wall_seconds": 45.0
+        },
+        "Frozen reference integrity": {
+          "conclusion": "SKIPPED",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46084126572/job/140789617167",
+          "wall_seconds": 0
+        },
+        "Static and unit": {
+          "conclusion": "SUCCESS",
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46084126572/job/140789616444",
+          "wall_seconds": 23.0
+        }
+      },
+      "merge_commit": "e0228c74a1b97ead822daded0d08d7c735db0d68",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/22"
+    }
+  },
+  "preview_bundle": {
+    "bytes": 227990,
+    "contains_formal_latest": false,
+    "path": "work/census-web/AU_REE_V3_Census_Controlled_Preview.zip",
+    "sha256": "d3de5d62e7dbcdd4f3f3cf560c8c3c8dfb77a3fde13a31624309bfd8c52229ab"
+  },
+  "preview_site_fingerprints": {
+    "assets/app.js": "c8c913345bdd71e5801649f395ee03d49f7ba43d1abe1b12bd32496103f306a3",
+    "assets/australia.geojson": "45e9b60001a6bbf856a289871de87ca79955038cf53fe7900bf8889dee1da643",
+    "assets/labels.mjs": "1da9bba16630aeeb4f9a3759f477fa392fb105326a8fb210b8d54172990736ab",
+    "assets/release.mjs": "8bcfec0fab00c977cea57c20954281c5390cff9f4d2b7f3a6a67fdaf5e2adfc2",
+    "assets/styles.css": "9a83e1c5266abbe108d75875f4fc7208de30391379c34800ae52e96571f21fd1",
+    "assets/views.mjs": "18bbc5bd424c0d4fcfdbc9b59c4daf3ae3a73dca71cd8482670282ec2f845342",
+    "data/preview.json": "a56c586a6027ed09a6d2db79c20e30bf6120d8a710b6e234b9cf094e8a0e7992",
+    "data/publication_mode.json": "60f4d5cd8e2d064d8ca7648820b5c82f51ef46ca5a5c51e39f3f8abb9d3628d8",
+    "data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/census.csv": "77599d4697c1d157f245e4e68c4ac193bf8d78519e131b032b53055135465bd3",
+    "data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/census.json": "5c14ac90a2201ce91d84b8f1bf39350af12d81bed7b4a4cab5b5e23f08dfda40",
+    "data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/census_evidence.json": "ea94f47dd850fb9bf318e527dfcb9c75bf319a6d09c7641436e65e3d8ac02c6e",
+    "data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/coverage.json": "fe2151dd34b2c832d2ad3e567b5ed8ceb230345ca3d993d1877fa51e253d2c6a",
+    "data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/gis.geojson": "d92403d576b611e418a34116a26cb174d6d50bec536ea92e849b6041dc7d5168",
+    "data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/manifest.json": "97470d77cc32efabdf9f7eec6553cfddd4b5a144ee7aeaa5b676b3512ebb22f9",
+    "data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/mcda.json": "49c20aced610f9dbceb035f4f4ad9606c57412b8d25a055754143f41fd0d59b8",
+    "data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+    "data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/census.json": "2b1dccd8d883092eeb7ea77009ba1a2cb996b96d0e67421f4e2330a82d69550d",
+    "data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/census_evidence.json": "6437490bfb3d0e9f0a8e90c8d96b81245e14e8bc34feebb7479f05b725769ed9",
+    "data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/coverage.json": "fc6f34ade592f5ea19c5a52f2d92e6c4a7c9faacd1074804ad340d84d4705476",
+    "data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/gis.geojson": "848dad4bdc1faa986d5cd17be7d37a7bef6f852fa79d7bc51fd330cd46fb5bab",
+    "data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/manifest.json": "60908fa7e93a18863908283fde31d7bf007b3cfd6fcd89701fe9ba5ad6114461",
+    "data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/mcda.json": "334a33bbf0785d4f01469751bf89498bd0f2c29d14952c9b8de7e568461b78f4",
+    "index.html": "c86ca86bb8c827d9b5689e150bef04ca7f9844fbea42840be3da402d64d3ac73"
+  },
+  "profile_id": "au-ree-2026-11-28",
+  "projection_sha256": "68d0d3739a9ab73bce108f9fe37831c4874703467d57f2f9b2d32a079acddcba",
+  "publication_external_status": {
+    "deployment": "BLOCKED",
+    "deployment_variable_read_http": 403,
+    "github_pages_status_check_http": 404,
+    "reason": "DEPLOYMENT_NOT_AUTHORIZED"
+  },
+  "receipts": {
+    "a-pinned-delta/comparison_receipt.json": {
+      "path": "work/census-web/a-pinned-delta/comparison_receipt.json",
+      "sha256": "2292ce6ebb2d17c67bcfe3a1613154b9be02bdd16e4439125d70ebdb3c31606d"
+    },
+    "b-corrected-v2-diagnostic/census_historical_diagnostic.json": {
+      "path": "work/census-web/b-corrected-v2-diagnostic/census_historical_diagnostic.json",
+      "sha256": "5fff03f31a4396052cec6c612cf25011a7d52ad401ea13843392dc970bca8224"
+    },
+    "b-corrected/build/build_receipt.json": {
+      "path": "work/census-web/b-corrected/build/build_receipt.json",
+      "sha256": "269c52402edb569777e2f93a42c20d858f9a857460396e8873c9a96fc9c384ec"
+    },
+    "b-corrected/build/census/census_receipt.json": {
+      "path": "work/census-web/b-corrected/build/census/census_receipt.json",
+      "sha256": "0b707563561493c93ca68391de0da0d1b15dd898530c916f38c55fb84cb33019"
+    },
+    "b-corrected/cold-a/replay_receipt.json": {
+      "path": "work/census-web/b-corrected/cold-a/replay_receipt.json",
+      "sha256": "9eed1d460ae34a1e450fb77a4457b4e386dad3f2d7bbea1e9610ed8cc6a44fd3"
+    },
+    "b-corrected/cold-b/replay_receipt.json": {
+      "path": "work/census-web/b-corrected/cold-b/replay_receipt.json",
+      "sha256": "6c7d5d93fb70b30fce4e6d6292999827cb534cee53b812c62239faa06c6e662e"
+    },
+    "b-corrected/reproducibility.json": {
+      "path": "work/census-web/b-corrected/reproducibility.json",
+      "sha256": "0114d6d111ad3b6463533d1a950cc886e94f6e3dfd07e7e759b27c6958fec6f6"
+    },
+    "b-independent-audit/independent_audit_receipt.json": {
+      "path": "work/census-web/b-independent-audit/independent_audit_receipt.json",
+      "sha256": "f249f25edd2c7deb7b374c53d2af7135871c76ead7538e89f8d10f593490f473"
+    },
+    "baseline/baseline_verification.json": {
+      "path": "work/census-web/baseline/baseline_verification.json",
+      "sha256": "1da1c0afa32d03c9adab27cbbd63b7697f6d6963b3adf5c10eb7e41c141aa5d7"
+    },
+    "browser-verification.json": {
+      "path": "work/census-web/browser-verification.json",
+      "sha256": "163890750c612b06ecb4bfc2a73c76aebc82b8f8961f1e3f02969d2b34e624eb"
+    },
+    "d-full-tests.log": {
+      "path": "work/census-web/d-full-tests.log",
+      "sha256": "483a12e83b63fde1bdb7de37b8e5993eaa83a5284f38d7c8314f0e94f885f823"
+    },
+    "d-release-linkage-final-archived/real_failure_injection.json": {
+      "path": "work/census-web/d-release-linkage-final-archived/real_failure_injection.json",
+      "sha256": "83077637af0bc8ca893a636fb5c088298945646e88b4356bf731a36ee0ebca00"
+    },
+    "d-release-linkage-final-archived/site_linkage_verification.json": {
+      "path": "work/census-web/d-release-linkage-final-archived/site_linkage_verification.json",
+      "sha256": "5f210bbe718ac5ce7e6c3612f4f3701ea1eee3dd7618f6143caadd17a0db8a15"
+    },
+    "engineering/a-b-expanded/expanded_cost_receipt.json": {
+      "path": "work/census-web/engineering/a-b-expanded/expanded_cost_receipt.json",
+      "sha256": "a5263931000389cdc44e8a688db2d94022a6acb6c38b97322125e1beb2c34e46"
+    },
+    "engineering/b-corrected-equal-scope/census_projection_engineering.json": {
+      "path": "work/census-web/engineering/b-corrected-equal-scope/census_projection_engineering.json",
+      "sha256": "9ec46c28bc00283db86f6d3f56350979cec0e34e0d92bc8f7d7a70e1208201b4"
+    },
+    "engineering/static-web.json": {
+      "path": "work/census-web/engineering/static-web.json",
+      "sha256": "8de3a3d35016afa3a104f132c7df6f37d10557cc4cfdebe8ec74224872a6f678"
+    },
+    "engineering/technical-b/technical_engineering.json": {
+      "path": "work/census-web/engineering/technical-b/technical_engineering.json",
+      "sha256": "6f02422666740ec208fcbb06d404a9370f2708fea5acab1bcb6d183a027f9b80"
+    },
+    "formal-empty-verification/site_verification.json": {
+      "path": "work/census-web/formal-empty-verification/site_verification.json",
+      "sha256": "5757cf11123c325feabc021b92f0885844c59f65c0f037ec2db9de623189e15c"
+    },
+    "preview-verification/site_verification.json": {
+      "path": "work/census-web/preview-verification/site_verification.json",
+      "sha256": "85189ef7c8b8ecc7c41a0be725d23e9b02fc45387ee41230772a09147608d24d"
+    },
+    "website-data-verification/web_verification.json": {
+      "path": "work/census-web/website-data-verification/web_verification.json",
+      "sha256": "cf7b8060b760d3e3b27b45fa0320776939711d2f5a3cf733c4a23d805c78bde1"
+    }
+  },
+  "research_cutoff": "2026-11-28",
+  "schema": "census-web-publication-verification-v1",
+  "scientific_code_commit": "a0fcf28adb72625f703421011a8de2d965cbbcb7",
+  "sealed_candidates": {
+    "12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef": {
+      "artifact_fingerprints": {
+        "census.csv": {
+          "path": "census.csv",
+          "sha256": "77599d4697c1d157f245e4e68c4ac193bf8d78519e131b032b53055135465bd3"
+        },
+        "census.json": {
+          "path": "census.json",
+          "sha256": "5c14ac90a2201ce91d84b8f1bf39350af12d81bed7b4a4cab5b5e23f08dfda40"
+        },
+        "census_evidence.json": {
+          "path": "census_evidence.json",
+          "sha256": "ea94f47dd850fb9bf318e527dfcb9c75bf319a6d09c7641436e65e3d8ac02c6e"
+        },
+        "coverage.json": {
+          "path": "coverage.json",
+          "sha256": "fe2151dd34b2c832d2ad3e567b5ed8ceb230345ca3d993d1877fa51e253d2c6a"
+        },
+        "gis.geojson": {
+          "path": "gis.geojson",
+          "sha256": "d92403d576b611e418a34116a26cb174d6d50bec536ea92e849b6041dc7d5168"
+        },
+        "mcda.json": {
+          "path": "mcda.json",
+          "sha256": "49c20aced610f9dbceb035f4f4ad9606c57412b8d25a055754143f41fd0d59b8"
+        }
+      },
+      "manifest": {
+        "path": "work/census-web/website-data/releases/12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef/manifest.json",
+        "sha256": "97470d77cc32efabdf9f7eec6553cfddd4b5a144ee7aeaa5b676b3512ebb22f9"
+      }
+    },
+    "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974": {
+      "artifact_fingerprints": {
+        "census.csv": {
+          "path": "census.csv",
+          "sha256": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048"
+        },
+        "census.json": {
+          "path": "census.json",
+          "sha256": "2b1dccd8d883092eeb7ea77009ba1a2cb996b96d0e67421f4e2330a82d69550d"
+        },
+        "census_evidence.json": {
+          "path": "census_evidence.json",
+          "sha256": "6437490bfb3d0e9f0a8e90c8d96b81245e14e8bc34feebb7479f05b725769ed9"
+        },
+        "coverage.json": {
+          "path": "coverage.json",
+          "sha256": "fc6f34ade592f5ea19c5a52f2d92e6c4a7c9faacd1074804ad340d84d4705476"
+        },
+        "gis.geojson": {
+          "path": "gis.geojson",
+          "sha256": "848dad4bdc1faa986d5cd17be7d37a7bef6f852fa79d7bc51fd330cd46fb5bab"
+        },
+        "mcda.json": {
+          "path": "mcda.json",
+          "sha256": "334a33bbf0785d4f01469751bf89498bd0f2c29d14952c9b8de7e568461b78f4"
+        }
+      },
+      "manifest": {
+        "path": "work/census-web/website-data/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974/manifest.json",
+        "sha256": "60908fa7e93a18863908283fde31d7bf007b3cfd6fcd89701fe9ba5ad6114461"
+      }
+    }
+  },
+  "timezone": "Asia/Taipei",
+  "version_transfer_size": {
+    "12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef": {
+      "gzip_individual_bytes": 125989,
+      "raw_bytes": 3377606
+    },
+    "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974": {
+      "gzip_individual_bytes": 63151,
+      "raw_bytes": 1946646
+    }
+  }
+}
