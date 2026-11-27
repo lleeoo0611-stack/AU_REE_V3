@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import re
 from collections import defaultdict
-from dataclasses import asdict
 from hashlib import sha256
 from pathlib import Path
 
@@ -14,17 +13,13 @@ from .contracts.temporal import evaluate_temporal
 from .fresh_census import build_census
 from .fresh_decision import build_decision
 from .fresh_observations import extract_sources
+from .research_artifacts import ARTIFACTS
 from .research_environment import environment_lock
 from .registry import load_census_columns, load_profile, load_registry
-from .sources import ContentStore, SCHEMA as SOURCE_SCHEMA, validate_capture_proof
+from .sources import ContentStore, SCHEMA as SOURCE_SCHEMA, validate_edition_proofs
 from .store import SCHEMA_VERSION, Store
 
 BUILD_SCHEMA = "fresh-research-build-v1"
-ARTIFACTS = (
-    "observations/observations.jsonl", "observations/extraction.json",
-    "census/census.csv", "census/cell_status.csv", "census/census_receipt.json",
-    "decision/mcda_inputs.json", "decision/mcda_results.json", "decision/decision_receipt.json",
-)
 
 
 def _sha(path: Path) -> str:
@@ -46,20 +41,15 @@ def _verified_edition(profile, edition, event, content):
         event["sha256"], event["requested_url"], event["final_url"], event["project_ids"]
     ) != (source_sha256, edition["url"], edition["final_url"], edition["project_ids"]):
         raise ValueError("source edition does not bind the exact capture event and Projects")
-    proofs = {}
-    for claim in edition["temporal_evidence"]:
-        source_proof = validate_capture_proof(content, claim["reference_sha256"], source_sha256, profile.timezone)
-        if asdict(source_proof) != claim:
-            raise ValueError("source manifest proof fields differ from frozen public receipt")
-        proofs[source_proof.reference_sha256] = source_proof
-    if receipt_sha not in proofs:
-        raise ValueError("current capture does not appear among the edition proofs")
+    proofs = validate_edition_proofs(content, edition, profile.timezone)
+    if not proofs:
+        raise ValueError("captured source edition requires public capture proof")
     capture = json.loads(content.read(receipt_sha))
     if any(capture.get(key) != value for key, value in event.items() if key != "receipt_sha256"):
         raise ValueError("source manifest event differs from the immutable capture receipt")
     decision = evaluate_temporal(
         source_sha256=source_sha256, cutoff=profile.research_cutoff.isoformat(), observation_role="DOCUMENT",
-        acquired_at=edition["acquired_at"], reacquired_at=edition["reacquired_at"], evidence=proofs.values(),
+        acquired_at=edition["acquired_at"], reacquired_at=edition["reacquired_at"], evidence=proofs,
     )
     if _json_value(decision.to_dict()) != edition["temporal_decision"]:
         raise ValueError("source edition temporal decision disagrees with its frozen public proof")

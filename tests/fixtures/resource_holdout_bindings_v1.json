@@ -1,0 +1,67 @@
+{
+  "profile_id": "au-ree-2026-11-28",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "schema": "fresh-resource-extraction-v1",
+  "bindings": [
+    {
+      "case_id": "holdout-dated-niobium-mre",
+      "strategy": "positioned-mineral-resource-total-v1",
+      "source_key": "seed-f9da75ec39c7fc38486c7b49",
+      "approved_urls": [
+        "https://announcements.asx.com.au/asxpdf/20260918/pdf/0747zs94kk1v6x.pdf"
+      ],
+      "publication_date": null,
+      "effective_date": "2026-05-13",
+      "page": 7,
+      "project": {
+        "entity_id": "AU-cae6c11543b0da5f840d",
+        "native_namespace": "reviewed_project_extension_v1",
+        "native_id": "west-arunta-luni",
+        "name": "West Arunta Project — Luni Niobium–REE scope"
+      },
+      "scope_name": "Luni MRE, niobium basis, not a TREO declaration",
+      "category": "INDICATED_INFERRED_TOTAL",
+      "cutoff": {
+        "value": "0.25",
+        "unit": "%",
+        "analyte": "Nb₂O₅",
+        "reported": "0.25% Nb₂O₅"
+      },
+      "reported_chemical_label": "Nb₂O₅",
+      "table": {
+        "caption": "Table 1: Luni MRE (JORC Code 2012)",
+        "header": "Tonnes (Mt) Nb₂O₅ (%) Nb₂O₅ (kt)",
+        "row": "Total",
+        "column_count": 3,
+        "columns": [
+          {
+            "index": 0,
+            "unit": "Mt",
+            "column": "Tonnes"
+          },
+          {
+            "index": 1,
+            "unit": "%",
+            "column": "Nb₂O₅ grade"
+          },
+          {
+            "index": 2,
+            "unit": "kt",
+            "column": "Contained Nb₂O₅"
+          }
+        ]
+      },
+      "context": [
+        {
+          "page": 7,
+          "quote": "The effective date of the Mineral Resource estimate is 13 May 2026."
+        },
+        {
+          "page": 7,
+          "quote": "pit shell and above a 0.25% Nb₂O₅ cut-off grade."
+        }
+      ]
+    }
+  ]
+}

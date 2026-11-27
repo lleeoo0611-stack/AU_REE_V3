@@ -68,7 +68,8 @@
       "forbidden_selected_pages": [
         3,
         23
-      ]
+      ],
+      "effective_date": "2024-06-30"
     },
     {
       "case_id": "wolverine-independent-total",
@@ -115,6 +116,54 @@
           "selected": true,
           "table": "Table 2",
           "row": "Total Total"
+        },
+        {
+          "variable": "pr6o11_ppm",
+          "raw_value": "60",
+          "value": "60",
+          "unit": "ppm",
+          "pages": [
+            6
+          ],
+          "selected": true,
+          "table": "Table 5",
+          "row": "Total"
+        },
+        {
+          "variable": "nd2o3_ppm",
+          "raw_value": "280",
+          "value": "280",
+          "unit": "ppm",
+          "pages": [
+            6
+          ],
+          "selected": true,
+          "table": "Table 5",
+          "row": "Total"
+        },
+        {
+          "variable": "tb4o7_ppm",
+          "raw_value": "120",
+          "value": "120",
+          "unit": "ppm",
+          "pages": [
+            6
+          ],
+          "selected": true,
+          "table": "Table 5",
+          "row": "Total"
+        },
+        {
+          "variable": "dy2o3_ppm",
+          "raw_value": "840",
+          "value": "840",
+          "unit": "ppm",
+          "pages": [
+            6
+          ],
+          "selected": true,
+          "table": "Table 5",
+          "row": "Total"
         }
       ],
       "source_evidence": [
@@ -129,7 +178,8 @@
           "quote": "Total 7,300 170 420 60 280 200 40 560 120 840 170 490 70 380 50 5,700"
         }
       ],
-      "forbidden_selected_pages": []
+      "forbidden_selected_pages": [],
+      "effective_date": "2025-01-15"
     },
     {
       "case_id": "yin-cutoff-contradictions",
@@ -226,7 +276,8 @@
           "quote": "312,300; 283,800; 224,300 t"
         }
       ],
-      "forbidden_selected_pages": []
+      "forbidden_selected_pages": [],
+      "effective_date": null
     },
     {
       "case_id": "wudinna-reported-total",
@@ -252,8 +303,8 @@
         {
           "variable": "grade",
           "raw_value": "470",
-          "value": "0.047",
-          "unit": "%",
+          "value": "470",
+          "unit": "ppm",
           "pages": [
             1,
             3
@@ -288,7 +339,8 @@
           "quote": "Effective Date of 22 October, 2026; results are presented in situ and undiluted"
         }
       ],
-      "forbidden_selected_pages": []
+      "forbidden_selected_pages": [],
+      "effective_date": "2026-10-22"
     },
     {
       "case_id": "holdout-dated-niobium-mre",
@@ -310,23 +362,115 @@
       "forbidden_selected_pages": []
     },
     {
-      "case_id": "goschen-hm-denominator",
+      "case_id": "yangibana-resource-reserve-separation",
+      "split": "DESIGN_REGRESSION",
+      "project_id": "AU-908fd6f4461622e89548",
+      "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+      "scope": "Yangibana project-wide October 2023 Mineral Resource",
+      "layout": "adjacent-ore-reserve-and-dated-reaffirmed-resource-statements",
+      "context": "October 2023 is the published estimate month. Table 2 whole project Mineral Resource figures exclude adjacent Table 1 proved/probable Ore Reserve. Explicit Y-oxide inclusion for the same TREO columns is unbound in the reviewed evidence.",
+      "formal_status": "WITHHOLD",
+      "expected_observations": [
+        {
+          "variable": "ore_mt",
+          "raw_value": "29.93",
+          "value": "29.93",
+          "unit": "Mt",
+          "pages": [
+            14
+          ],
+          "selected": false,
+          "row": "TOTAL"
+        },
+        {
+          "variable": "grade",
+          "raw_value": "0.93",
+          "value": "0.93",
+          "unit": "%",
+          "pages": [
+            14
+          ],
+          "selected": false,
+          "row": "TOTAL"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "276,955",
+          "value": "276.955",
+          "unit": "kt TREO",
+          "pages": [
+            14
+          ],
+          "selected": false,
+          "row": "TOTAL"
+        }
+      ],
+      "source_evidence": [
+        {
+          "page": 14,
+          "locator": "Table 2 (Oct-2023), TOTAL, after Table 1 Ore Reserve",
+          "quote": "TOTAL 29.93 0.93 0.32 276,955"
+        }
+      ],
+      "forbidden_selected_pages": []
+    },
+    {
+      "case_id": "goschen-ore-and-heavy-mineral-bases",
       "split": "DESIGN_REGRESSION",
       "project_id": "AU-6d807eb7caec9db0f35e",
       "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
-      "scope": "Goschen Area 1",
-      "layout": "multiple-MRE-and-reserve-tables",
-      "context": "Effective 2025-10-15. Table 3 reports heavy mineral quantities above 1.0% THM, a different denominator and measurement from whole-ore TREO.",
-      "formal_status": "WITHHOLD",
-      "expected_observations": [],
+      "scope": "Goschen Area 1 bulk Mineral Resource",
+      "layout": "multiple-resource-tables-with-explicit-in-situ-reconciliation",
+      "context": "JORC 2012, 15 October 2025, 1% THM cutoff. Page 12 explicitly reports in-situ bulk TREO plus Y₂O₃. The 2.8% mineral-assemblage column and the page 3 THM-only quantities do not supply bulk TREO grades.",
+      "formal_status": "APPROVED",
+      "expected_observations": [
+        {
+          "variable": "ore_mt",
+          "raw_value": "94,200,000",
+          "value": "94.200000",
+          "unit": "Mt",
+          "pages": [
+            12
+          ],
+          "selected": true
+        },
+        {
+          "variable": "grade",
+          "raw_value": "0.08",
+          "value": "0.08",
+          "unit": "%",
+          "pages": [
+            12
+          ],
+          "selected": true
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "74,000",
+          "value": "74.000",
+          "unit": "kt TREO",
+          "pages": [
+            12
+          ],
+          "selected": true
+        }
+      ],
       "source_evidence": [
         {
           "page": 3,
           "locator": "Table 3 Total and cutoff footnote",
           "quote": "Total 94 2.6 1.72 2.8 17 2; Mineral resources reported at a cut-off grade of 1.0% THM"
+        },
+        {
+          "page": 12,
+          "locator": "Table 8, explicitly reconciled in-situ row and note 3",
+          "quote": "94,200,000 0.08 74,000; In-situ TREO + Y2O3 Grade is calculated by the THM Grade … multiplied by TREO + Y2O3 Grade"
         }
       ],
-      "forbidden_selected_pages": []
+      "forbidden_selected_pages": [
+        3
+      ],
+      "effective_date": "2025-10-15"
     },
     {
       "case_id": "holdout-date-from-other-statement",

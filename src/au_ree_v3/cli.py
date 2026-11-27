@@ -74,6 +74,14 @@ def main(argv: list[str] | None = None) -> int:
     build.add_argument("--assets", type=Path, required=True)
     build.add_argument("--out", type=Path, required=True)
     build.add_argument("--code-commit", required=True)
+    compare = research_commands.add_parser("compare", help="Audit the Census and decision delta between two V3 builds")
+    for argument in ("baseline", "current", "out"):
+        compare.add_argument(f"--{argument}", type=Path, required=True)
+    compare.add_argument("--baseline-release-id")
+    compare.add_argument("--current-release-id")
+    compare.add_argument("--release-root", type=Path)
+    compare.add_argument("--store", type=Path, help="Content-addressed archive storage")
+    compare.add_argument("--replay-run", type=Path, action="append", default=[])
     archive = research_commands.add_parser("archive", help="Archive a fresh research candidate by exact bytes")
     for argument in ("profile", "bindings", "sources", "build", "store", "out"):
         archive.add_argument(f"--{argument}", type=Path, required=True)
@@ -174,6 +182,15 @@ def _run_sources(args) -> dict:
 
 
 def _run_research(args) -> dict:
+    if args.operation == "compare":
+        from .research_delta import compare_research_builds
+        from .sources import ContentStore
+
+        return compare_research_builds(
+            args.baseline, args.current, args.out, baseline_release_id=args.baseline_release_id,
+            current_release_id=args.current_release_id, release_root=args.release_root,
+            storage=ContentStore(args.store) if args.store else None, replay_runs=tuple(args.replay_run),
+        )
     if args.operation == "extract":
         from .fresh_observations import extract_sources
 
