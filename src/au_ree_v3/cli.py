@@ -51,8 +51,10 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError) as error:
         print(f"{operation}: {error}", file=sys.stderr)
         return 1
-    print(json.dumps({"operation": operation, "status": result["status"],
-                      "receipt_directory": str(args.out)}, ensure_ascii=False))
+    response = {"operation": operation, "status": result["status"], "receipt_directory": str(args.out)}
+    if result.get("reason"):
+        response["reason"] = result["reason"]
+    print(json.dumps(response, ensure_ascii=False))
     return EXIT_CODES[result["status"]]
 
 

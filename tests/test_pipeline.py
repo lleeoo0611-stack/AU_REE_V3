@@ -205,6 +205,26 @@ class ResourcePipelineTests(unittest.TestCase):
                     trace = store.selection_temporal_trace(value, release)
                     self.assertEqual(trace["reacquired_at"], timestamp)
 
+    def test_cutoff_revision_keeps_original_release_and_output(self):
+        self.binding("exact")
+        original = self.run_replay()
+        self.assertEqual(original["observations"], 3)
+        original_path = self.folder / "first"
+        original_outputs = {path.name: path.read_bytes() for path in original_path.iterdir()}
+
+        self.spec["research_cutoff"] = "2024-08-04"
+        refused = self.run_replay()
+        self.assertEqual(refused["outcome"], "OUTPUT_RELEASE_CONFLICT")
+        self.assertEqual({path.name: path.read_bytes() for path in original_path.iterdir()}, original_outputs)
+
+        revised = self.run_replay("earlier-cutoff")
+        self.assertEqual(revised["cases"][0]["observation_temporal"]["status"], "INELIGIBLE")
+        self.assertEqual(revised["observations"], 0)
+        self.assertNotEqual(revised["release_id"], original["release_id"])
+        with Store(self.folder / "scratch.sqlite") as store:
+            self.assertEqual(len(store.accepted_for_release(original["release_id"])), 3)
+            self.assertFalse(store.accepted_for_release(revised["release_id"]))
+
     def test_registry_selection_date_does_not_replace_exact_public_proof(self):
         binding = self.binding("exact")
         binding["source"].update(available_date="2026-11-14", availability_role="REGISTRY_SELECTION")

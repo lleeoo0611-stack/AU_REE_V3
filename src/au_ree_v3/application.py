@@ -247,6 +247,10 @@ def replay(bindings: Path, assets: Path, database: Path, out: Path, *, code_comm
     if database.resolve() in {(out / name).resolve() for name in outputs}:
         raise ValueError("database path overlaps a replay output")
     out.mkdir(parents=True, exist_ok=True)
+    receipt_path = out / "replay.json"
+    prior_release = None
+    if receipt_path.exists():
+        prior_release = json.loads(receipt_path.read_text(encoding="utf-8")).get("release_id")
     receipt = {"release_mode": "EXPERIMENTAL", "oracle_status": "NOT_RUN"}
     observations, cells, evidence, rejections, alternatives = [], [], [], [], []
     try:
@@ -280,6 +284,12 @@ def replay(bindings: Path, assets: Path, database: Path, out: Path, *, code_comm
             temporal_policy_version=TEMPORAL_POLICY_VERSION,
             temporal_decision_ids=tuple(sorted({item.observation_temporal.decision_id for item in results})),
         )
+        if prior_release and prior_release != release.release_id:
+            return {
+                **receipt, "status": "FAIL", "outcome": "OUTPUT_RELEASE_CONFLICT",
+                "reason": "Output already holds another release. Use a distinct --out directory.",
+                "existing_release_id": prior_release, "attempted_release_id": release.release_id,
+            }
         database.parent.mkdir(parents=True, exist_ok=True)
         with Store(database) as store:
             with store.transaction():
@@ -324,6 +334,8 @@ def replay(bindings: Path, assets: Path, database: Path, out: Path, *, code_comm
         observations, cells, evidence = [], [], []
         receipt.update({"status": "FAIL", "outcome": "CODE_ERROR", "reason": str(error)})
 
+    if prior_release and receipt.get("release_id") != prior_release:
+        return receipt
     _write_jsonl(out / "v3-observations.jsonl", observations)
     _write_jsonl(out / "v3-evidence.jsonl", evidence)
     _write_jsonl(out / "v3-oracle-actual.jsonl", observations + cells)
@@ -339,5 +351,5 @@ def replay(bindings: Path, assets: Path, database: Path, out: Path, *, code_comm
                 "project_id": value["project_id"], "variable": variable, "field": COLUMNS[variable],
                 "value": value["value"], "state": value["value_state"],
             })
-    (out / "replay.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return receipt
