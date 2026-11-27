@@ -1,0 +1,39 @@
+{
+  "schema": "census-static-web-engineering-v1",
+  "previous_equivalent_workload": "UNMEASURED",
+  "branch_method": "1 plus conditional, Boolean short-circuit, loop, switch and catch nodes per AST function; nested functions scored separately",
+  "module_dependencies": {
+    "app.js": {
+      "bytes": 21602,
+      "sha256": "c8c913345bdd71e5801649f395ee03d49f7ba43d1abe1b12bd32496103f306a3",
+      "imports": [
+        "./release.mjs",
+        "./labels.mjs",
+        "./views.mjs"
+      ]
+    },
+    "labels.mjs": {
+      "bytes": 12547,
+      "sha256": "1da9bba16630aeeb4f9a3759f477fa392fb105326a8fb210b8d54172990736ab",
+      "imports": []
+    },
+    "release.mjs": {
+      "bytes": 11241,
+      "sha256": "8bcfec0fab00c977cea57c20954281c5390cff9f4d2b7f3a6a67fdaf5e2adfc2",
+      "imports": []
+    },
+    "views.mjs": {
+      "bytes": 7917,
+      "sha256": "18bbc5bd424c0d4fcfdbc9b59c4daf3ae3a73dca71cd8482670282ec2f845342",
+      "imports": [
+        "./release.mjs"
+      ]
+    }
+  },
+  "functions": 131,
+  "runtime_module_bytes": 53307,
+  "static_dependency_edges": 4,
+  "function_branch_max": 29,
+  "function_branch_p90": 8,
+  "exact_cross_module_repeated_function_bodies": []
+}

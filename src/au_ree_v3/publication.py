@@ -26,6 +26,7 @@ from .replica import AuthenticatedRemoteReplica, ContentReplica
 from .sources import ContentStore
 
 RELEASE_SCHEMA = "v3-native-research-release-v1"
+AUTHORIZATION_SCHEMA = "v3-formal-publication-authorization-v1"
 SHA256 = re.compile(r"[0-9a-f]{64}")
 COMMIT = re.compile(r"[0-9a-f]{40}")
 INPUT_NAMES = {"profile": "profile.json", "bindings": "bindings.json", "sources": "source_manifest.json"}
@@ -33,6 +34,22 @@ INPUT_NAMES = {"profile": "profile.json", "bindings": "bindings.json", "sources"
 
 class ArchiveError(ValueError):
     """An immutable research artifact or release requirement failed validation."""
+
+
+class PublicationNotAuthorized(ArchiveError):
+    """The trusted research publication has no active F5 authorization."""
+
+
+@dataclass(frozen=True)
+class FormalPublicationAuthorization:
+    """Exact archive inputs authorized by the official research pointer."""
+
+    release_id: str
+    cutoff: str
+    build_receipt_sha256: str
+    profile_sha256: str
+    output_hashes: dict[str, str]
+    authorization_sha256: str
 
 
 def _digest(payload: bytes) -> str:
@@ -552,16 +569,100 @@ def _read_pointer(path: Path) -> dict:
     return _read_json(path)
 
 
-def _replace_pointer(path: Path, current: str, previous: str | None) -> None:
+def _replace_pointer(
+    path: Path, current: str, previous: str | None, *, authorization_sha256: str | None = None,
+) -> None:
+    pointer = {"current": current, "previous": previous}
+    if authorization_sha256 is not None:
+        pointer["authorization_sha256"] = authorization_sha256
     with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as stream:
         temporary = Path(stream.name)
-        stream.write(_encode({"current": current, "previous": previous}))
+        stream.write(_encode(pointer))
         stream.flush()
         os.fsync(stream.fileno())
     try:
         os.replace(temporary, path)
+        _sync_directory(path.parent)
     finally:
         temporary.unlink(missing_ok=True)
+
+
+def _sync_directory(path: Path) -> None:
+    descriptor = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _authorization_record(release_id: str, manifest: dict) -> dict:
+    return {
+        "schema": AUTHORIZATION_SCHEMA, "release_id": release_id,
+        "cutoff": manifest["cutoff"], "build_receipt_sha256": manifest["build_receipt_sha256"],
+        "profile_sha256": manifest["input_artifacts"]["profile"],
+        "output_hashes": manifest["output_hashes"],
+        "gates": dict.fromkeys(("F0", "F1", "F2", "F3", "F4", "F5"), "PASS"),
+    }
+
+
+def _authorization_path(release_root: Path, release_id: str) -> Path:
+    _manifest_path(release_root, release_id)
+    root = release_root / "authorizations"
+    if root.is_symlink():
+        raise ArchiveError("formal publication authorization directory must be plain")
+    return root / f"{release_id}.json"
+
+
+def _read_authorization(
+    release_root: Path, release_id: str, primary: ContentReplica,
+) -> FormalPublicationAuthorization:
+    manifest = load_release(release_root, release_id, primary)
+    if _checked_read(primary, release_id) != _encode(manifest):
+        raise ArchiveError("formal publication requires the same manifest in the archive and primary storage")
+    if any(manifest["build_gates"].get(gate) != "PASS" for gate in ("F0", "F1", "F2", "F3")):
+        raise PublicationNotAuthorized("formal publication archive has incomplete build gates")
+    path = _authorization_path(release_root, release_id)
+    if path.is_symlink() or not path.is_file():
+        raise PublicationNotAuthorized("formal publication authorization is absent (F5 not established)")
+    payload = path.read_bytes()
+    record = _authorization_record(release_id, manifest)
+    if _encode(record) != payload:
+        raise ArchiveError("formal publication authorization differs from its archived release")
+    return FormalPublicationAuthorization(
+        release_id=release_id, cutoff=record["cutoff"], build_receipt_sha256=record["build_receipt_sha256"],
+        profile_sha256=record["profile_sha256"], output_hashes=record["output_hashes"],
+        authorization_sha256=_digest(payload),
+    )
+
+
+def load_authorized_publication(
+    *, release_root: Path, release_id: str, primary: ContentReplica,
+) -> FormalPublicationAuthorization:
+    """Read an F5 seal from the trusted research archive while its release is current."""
+    with authorized_publication(release_root=release_root, release_id=release_id, primary=primary) as authorization:
+        return authorization
+
+
+@contextmanager
+def authorized_publication(*, release_root: Path, release_id: str, primary: ContentReplica):
+    """Hold the research pointer stable while publishing a linked immutable artifact."""
+    if not release_root.is_dir():
+        raise PublicationNotAuthorized("trusted research publication root is unavailable")
+    with _pointer_lock(release_root):
+        yield _authorized_pointer(release_root, release_id, primary)
+
+
+def _authorized_pointer(release_root: Path, release_id: str, primary: ContentReplica):
+    path = release_root / "current.json"
+    if path.is_symlink():
+        raise PublicationNotAuthorized("trusted research pointer must be plain")
+    pointer = _read_pointer(path)
+    if pointer.get("current") != release_id:
+        raise PublicationNotAuthorized("release is not current in the trusted research pointer")
+    authorization = _read_authorization(release_root, release_id, primary)
+    if pointer.get("authorization_sha256") != authorization.authorization_sha256:
+        raise PublicationNotAuthorized("trusted research pointer does not bind the F5 authorization")
+    return authorization
 
 
 def _checked_target(release_root: Path, release_id: str, storage: ContentReplica) -> dict:
@@ -571,12 +672,14 @@ def _checked_target(release_root: Path, release_id: str, storage: ContentReplica
     return target
 
 
-def _rollback(release_root: Path, path: Path, expected_current: str, storage: ContentReplica) -> dict:
+def _rollback(
+    release_root: Path, path: Path, expected_current: str, storage: ContentReplica, *, authorization_sha256: str | None = None,
+) -> dict:
     before = _read_pointer(path)
     if before["current"] != expected_current or not before["previous"]:
         raise ArchiveError("current changed or no verified previous release is recorded")
     _checked_target(release_root, before["previous"], storage)
-    _replace_pointer(path, before["previous"], before["current"])
+    _replace_pointer(path, before["previous"], before["current"], authorization_sha256=authorization_sha256)
     return {"before": before, "after": _read_pointer(path)}
 
 
@@ -616,14 +719,15 @@ def publish_release(
         set(manifest["required_object_sha256"]) | {release_id}, primary, replica,
         replica_failure_domain=replica_failure_domain,
     )
-    result = {"release_id": release_id, "F5": inventory["status"], "replica_inventory": inventory}
+    result = {"release_id": release_id, "F5": inventory["status"], "replica_inventory": inventory,
+              "reason": inventory.get("reason")}
     if inventory["status"] == "PASS":
         gates = manifest["build_gates"]
         if any(gates.get(gate) != "PASS" for gate in ("F0", "F1", "F2", "F3")):
             result.update(F5="BLOCKED", reason="BUILD_GATES_INCOMPLETE")
         else:
             replay = replay_release(release_root=release_root, release_id=release_id, storage=replica, out=out / "cold")
-            result.update(F5=replay["F4"], replay=replay)
+            result.update(F5=replay["F4"], replay=replay, reason=replay.get("reason"))
             if replay["F4"] == "PASS":
                 result["rollback"] = rehearse_rollback(
                     release_root=release_root, previous_release_id=previous_release_id,
@@ -636,8 +740,18 @@ def publish_release(
                         expected_current is not None and previous_release_id != expected_current
                     ):
                         raise ArchiveError("formal pointer changed during publication")
-                    _replace_pointer(pointer, release_id, expected_current)
-                result.update(reason="FORMAL_POINTER_ADVANCED")
+                    if expected_current is not None:
+                        _authorized_pointer(release_root, expected_current, primary)
+                    seal = _authorization_path(release_root, release_id)
+                    if seal.is_symlink():
+                        raise ArchiveError("formal publication authorization file must be plain")
+                    payload = _encode(_authorization_record(release_id, manifest))
+                    _write_once(seal, payload)
+                    _sync_directory(seal.parent)
+                    authorization_sha256 = _digest(payload)
+                    _replace_pointer(pointer, release_id, expected_current, authorization_sha256=authorization_sha256)
+                result.update(reason="FORMAL_POINTER_ADVANCED",
+                              authorization_sha256=authorization_sha256)
     out.mkdir(parents=True, exist_ok=True)
     (out / "publication_receipt.json").write_bytes(_encode(result))
     return result
@@ -646,4 +760,12 @@ def publish_release(
 def rollback_release(*, release_root: Path, expected_current: str, storage: ContentReplica) -> dict:
     """Point to the prior verified release and preserve both immutable editions."""
     with _pointer_lock(release_root):
-        return _rollback(release_root, release_root / "current.json", expected_current, storage)
+        pointer = release_root / "current.json"
+        before = _read_pointer(pointer)
+        if before["current"] != expected_current or not before["previous"]:
+            raise ArchiveError("current changed or no verified previous release is recorded")
+        _authorized_pointer(release_root, expected_current, storage)
+        previous = _read_authorization(release_root, before["previous"], storage)
+        return _rollback(
+            release_root, pointer, expected_current, storage, authorization_sha256=previous.authorization_sha256,
+        )

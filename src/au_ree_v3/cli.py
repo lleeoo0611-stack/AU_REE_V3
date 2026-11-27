@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import sys
 
+from . import web_release_cli
+
 EXIT_CODES = {"PASS": 0, "FAIL": 1, "BLOCKED": 2, "NOT_RUN": 3, "UNMEASURED": 4}
 
 
@@ -73,6 +75,7 @@ def main(argv: list[str] | None = None) -> int:
 
     research = commands.add_parser("research", help="Build and verify the fresh research profile")
     research_commands = research.add_subparsers(dest="operation", required=True)
+    web_release_cli.add_commands(research_commands)
     extract = research_commands.add_parser("extract", help="Extract and govern fresh resource observations")
     extract.add_argument("--bindings", type=Path, required=True)
     extract.add_argument("--sources", type=Path, required=True)
@@ -230,6 +233,8 @@ def _run_geography(args) -> dict:
 
 
 def _run_research(args) -> dict:
+    if args.operation in web_release_cli.OPERATIONS:
+        return web_release_cli.run(args)
     if args.operation == "review-development":
         from .development import review_milestones
 

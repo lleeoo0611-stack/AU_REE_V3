@@ -1,0 +1,12 @@
+{
+  "complete_previous_site_preserved": {
+    "ATOMIC_POINTER_WRITE_FAILURE": true,
+    "CORRUPT_CANDIDATE_FILE": true,
+    "MISSING_CANDIDATE_FILE": true
+  },
+  "previous_pointer_sha256": "b339a9c46edfeb6fabd4452415c3e81bf125b5b2e9018de2d35c66b8ea792303",
+  "previous_release_id": "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974",
+  "proposed_manifest_sha256": "97470d77cc32efabdf9f7eec6553cfddd4b5a144ee7aeaa5b676b3512ebb22f9",
+  "proposed_release_id": "12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef",
+  "status": "PASS"
+}

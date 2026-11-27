@@ -1,0 +1,1767 @@
+{
+  "schema": "same-input-established-census-engineering-v1",
+  "status": "PASS",
+  "fixed_store_sha256": "101a67141ef5580238735cf9fff90aaef45d46a253c54d46ba2073ab27877d29",
+  "fixed_build_receipt_sha256": "edfebf208ea3a7ac57748aed5da42479a17b3bcdc6a00d9a3ef4f1f735b49d10",
+  "fixed_source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "fixed_artifacts_sha256": {
+    "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+    "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+    "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+  },
+  "scope": "Same 93x51 established stand-alone Census, fixed Store, release, source search status and policy; new metadata/derived exporters are a separate workload",
+  "cache": "Fresh Python + SQLite copy per run, alternating ref order; OS page cache uncontrolled",
+  "timing": "Module imports, Store open, Census computation, validated CSV outputs and receipt. Excluded Git archive, copying the Store, and reading fixed benchmark parameters.",
+  "matching_artifacts": [
+    "census.csv",
+    "cell_status.csv",
+    "census_receipt.json"
+  ],
+  "artifact_differences": {
+    "v0-40309ea-1": [],
+    "v1-d185b40-1": [],
+    "v2-a0fcf28-1": [],
+    "v2-a0fcf28-2": [],
+    "v1-d185b40-2": [],
+    "v0-40309ea-2": [],
+    "v0-40309ea-3": [],
+    "v1-d185b40-3": [],
+    "v2-a0fcf28-3": [],
+    "v2-a0fcf28-4": [],
+    "v1-d185b40-4": [],
+    "v0-40309ea-4": [],
+    "v0-40309ea-5": [],
+    "v1-d185b40-5": [],
+    "v2-a0fcf28-5": [],
+    "v2-a0fcf28-6": [],
+    "v1-d185b40-6": [],
+    "v0-40309ea-6": []
+  },
+  "ci_same_workload_cost": "UNMEASURED",
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "versions": {
+    "v0-40309ea": {
+      "commit": "40309ea006d2eaace3fe4bbf33beccca492261de",
+      "source_kind": "GIT_COMMIT",
+      "input_code_sha256": "836c4195d8dfdd1a21dd7651c4bc2ee58dd04ac281a53b75b550e3109360709f",
+      "runs": [
+        {
+          "wall_seconds": 0.2623880099999951,
+          "python_peak_rss_kib": 30760,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.20569657499981986,
+          "python_peak_rss_kib": 30760,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.2360091430000466,
+          "python_peak_rss_kib": 30764,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.1819977890008886,
+          "python_peak_rss_kib": 30764,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.17763790599929052,
+          "python_peak_rss_kib": 30760,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        }
+      ],
+      "reached_code": {
+        "reached_module_count": 12,
+        "reached_modules": [
+          "au_ree_v3",
+          "au_ree_v3.census",
+          "au_ree_v3.comparability",
+          "au_ree_v3.contracts",
+          "au_ree_v3.contracts.temporal",
+          "au_ree_v3.documents",
+          "au_ree_v3.fresh_census",
+          "au_ree_v3.observations",
+          "au_ree_v3.registry",
+          "au_ree_v3.research_inputs",
+          "au_ree_v3.semantics",
+          "au_ree_v3.store"
+        ],
+        "runtime_internal_edge_count": 10,
+        "runtime_internal_edges": [
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ]
+        ],
+        "static_internal_import_edge_count_among_reached_modules": 23,
+        "static_internal_import_edges_among_reached_modules": [
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.semantics"
+          ],
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.documents",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.semantics",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.semantics"
+          ]
+        ],
+        "reached_ast_functions": 64,
+        "branch_score_max": 30,
+        "branch_score_p90": 17,
+        "top_branch_scores": [
+          [
+            30,
+            "au_ree_v3.contracts.temporal",
+            "evaluate_temporal",
+            122
+          ],
+          [
+            23,
+            "au_ree_v3.contracts",
+            "__post_init__",
+            443
+          ],
+          [
+            20,
+            "au_ree_v3.research_inputs",
+            "checked_research_inputs",
+            59
+          ],
+          [
+            20,
+            "au_ree_v3.contracts",
+            "__post_init__",
+            205
+          ],
+          [
+            19,
+            "au_ree_v3.store",
+            "require_temporal_eligible",
+            544
+          ],
+          [
+            17,
+            "au_ree_v3.fresh_census",
+            "_selection_rows",
+            90
+          ],
+          [
+            17,
+            "au_ree_v3.contracts.temporal",
+            "_chronology_conflict",
+            109
+          ],
+          [
+            16,
+            "au_ree_v3.fresh_census",
+            "_check_outputs",
+            193
+          ]
+        ],
+        "cross_module_repeated_AST_body_groups": []
+      },
+      "static_source_review": {
+        "scope": "Named module source only, including new paths and functions not executed in same-scope timing",
+        "reviewed_modules": {
+          "au_ree_v3.cli": {
+            "sha256": "b7d168f877d03303940ee748c845919787ed7c310525b97e83cba1e2a564acdf",
+            "direct_internal_imports": [
+              "au_ree_v3.application",
+              "au_ree_v3.candidate_search",
+              "au_ree_v3.development",
+              "au_ree_v3.fresh_observations",
+              "au_ree_v3.fresh_research",
+              "au_ree_v3.geography",
+              "au_ree_v3.migration.audit",
+              "au_ree_v3.migration.baseline",
+              "au_ree_v3.migration.crosswalk",
+              "au_ree_v3.migration.golden",
+              "au_ree_v3.migration.project_registry",
+              "au_ree_v3.migration.reference_oracle",
+              "au_ree_v3.migration.temporal_audit",
+              "au_ree_v3.publication",
+              "au_ree_v3.replica",
+              "au_ree_v3.research_delta",
+              "au_ree_v3.semantic_research",
+              "au_ree_v3.source_inventory",
+              "au_ree_v3.sources",
+              "au_ree_v3.technical_processing"
+            ],
+            "named_ast_functions": 7,
+            "top_branch_scores": [
+              [
+                28,
+                "main",
+                11
+              ],
+              [
+                10,
+                "_run_research",
+                221
+              ],
+              [
+                7,
+                "_run_publication",
+                263
+              ],
+              [
+                6,
+                "_run_sources",
+                188
+              ],
+              [
+                6,
+                "_run_migration",
+                296
+              ]
+            ]
+          },
+          "au_ree_v3.comparability": {
+            "sha256": "fda70192ed69791bd49604d272e3765ebe01f15fda4e5d520175e9690ea512c3",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.normalization",
+              "au_ree_v3.observations",
+              "au_ree_v3.research_inputs",
+              "au_ree_v3.semantics"
+            ],
+            "named_ast_functions": 29,
+            "top_branch_scores": [
+              [
+                51,
+                "contained_mass_shadow",
+                589
+              ],
+              [
+                26,
+                "_verified_aggregate_units",
+                254
+              ],
+              [
+                25,
+                "_treo_definitions",
+                322
+              ],
+              [
+                25,
+                "_composition",
+                386
+              ],
+              [
+                21,
+                "_resource_semantics_and_evidence",
+                486
+              ]
+            ]
+          },
+          "au_ree_v3.fresh_census": {
+            "sha256": "148aaccf2c1f05e9ca2d80d47dbf44a8d171ae9323cbcb2d2fb69a96caf4c60f",
+            "direct_internal_imports": [
+              "au_ree_v3.census",
+              "au_ree_v3.comparability",
+              "au_ree_v3.contracts",
+              "au_ree_v3.registry",
+              "au_ree_v3.research_inputs",
+              "au_ree_v3.store"
+            ],
+            "named_ast_functions": 13,
+            "top_branch_scores": [
+              [
+                17,
+                "_selection_rows",
+                90
+              ],
+              [
+                16,
+                "_check_outputs",
+                193
+              ],
+              [
+                14,
+                "_receipt",
+                227
+              ],
+              [
+                8,
+                "load",
+                46
+              ],
+              [
+                7,
+                "_field_status",
+                135
+              ]
+            ]
+          },
+          "au_ree_v3.normalization": {
+            "sha256": "e81f10e47a03a06350e3d12b632c121c18b4c4a44cb931eebbaf9114982fe164",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.semantics"
+            ],
+            "named_ast_functions": 10,
+            "top_branch_scores": [
+              [
+                60,
+                "normalize_measurement",
+                113
+              ],
+              [
+                5,
+                "_stoichiometry",
+                82
+              ],
+              [
+                3,
+                "reported_interval",
+                41
+              ],
+              [
+                3,
+                "_weight_factors",
+                90
+              ],
+              [
+                2,
+                "factor",
+                98
+              ]
+            ]
+          },
+          "au_ree_v3.publication": {
+            "sha256": "276a418ff2d171e0944501910cf8f0b4e92256e3b17fd78e0ceba9ef9006829c",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.contracts.temporal",
+              "au_ree_v3.replica",
+              "au_ree_v3.research_environment",
+              "au_ree_v3.sources"
+            ],
+            "named_ast_functions": 31,
+            "top_branch_scores": [
+              [
+                31,
+                "replay_release",
+                437
+              ],
+              [
+                15,
+                "archive_release",
+                273
+              ],
+              [
+                14,
+                "_inventory",
+                148
+              ],
+              [
+                8,
+                "publish_release",
+                609
+              ],
+              [
+                8,
+                "_replica_access",
+                116
+              ]
+            ]
+          }
+        },
+        "cross_module_repeated_AST_body_groups": []
+      },
+      "median_wall_seconds": 0.20569657499981986,
+      "median_python_peak_rss_kib": 30760,
+      "median_child_peak_rss_kib": 0
+    },
+    "v1-d185b40": {
+      "commit": "d185b401741f7650e8cca496047e5309937de529",
+      "source_kind": "GIT_COMMIT",
+      "input_code_sha256": "2d4c8cc241ef2f8f224f015f1137894f9ddbc82db24698c89e41d282681f93a1",
+      "runs": [
+        {
+          "wall_seconds": 0.26461148599992157,
+          "python_peak_rss_kib": 30784,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.29147772599935706,
+          "python_peak_rss_kib": 30664,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.21485910500086902,
+          "python_peak_rss_kib": 30768,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.1902905400002055,
+          "python_peak_rss_kib": 30772,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.19515142400086916,
+          "python_peak_rss_kib": 30768,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        }
+      ],
+      "reached_code": {
+        "reached_module_count": 13,
+        "reached_modules": [
+          "au_ree_v3",
+          "au_ree_v3.census",
+          "au_ree_v3.census_metadata",
+          "au_ree_v3.comparability",
+          "au_ree_v3.contracts",
+          "au_ree_v3.contracts.temporal",
+          "au_ree_v3.documents",
+          "au_ree_v3.fresh_census",
+          "au_ree_v3.observations",
+          "au_ree_v3.registry",
+          "au_ree_v3.research_inputs",
+          "au_ree_v3.semantics",
+          "au_ree_v3.store"
+        ],
+        "runtime_internal_edge_count": 10,
+        "runtime_internal_edges": [
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ]
+        ],
+        "static_internal_import_edge_count_among_reached_modules": 26,
+        "static_internal_import_edges_among_reached_modules": [
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.census_metadata",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census_metadata",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.semantics"
+          ],
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.documents",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census_metadata"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.semantics",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.semantics"
+          ]
+        ],
+        "reached_ast_functions": 64,
+        "branch_score_max": 30,
+        "branch_score_p90": 17,
+        "top_branch_scores": [
+          [
+            30,
+            "au_ree_v3.contracts.temporal",
+            "evaluate_temporal",
+            122
+          ],
+          [
+            23,
+            "au_ree_v3.contracts",
+            "__post_init__",
+            443
+          ],
+          [
+            20,
+            "au_ree_v3.research_inputs",
+            "checked_research_inputs",
+            59
+          ],
+          [
+            20,
+            "au_ree_v3.contracts",
+            "__post_init__",
+            205
+          ],
+          [
+            19,
+            "au_ree_v3.store",
+            "require_temporal_eligible",
+            544
+          ],
+          [
+            19,
+            "au_ree_v3.fresh_census",
+            "_check_outputs",
+            312
+          ],
+          [
+            17,
+            "au_ree_v3.fresh_census",
+            "_selection_rows",
+            98
+          ],
+          [
+            17,
+            "au_ree_v3.contracts.temporal",
+            "_chronology_conflict",
+            109
+          ]
+        ],
+        "cross_module_repeated_AST_body_groups": []
+      },
+      "static_source_review": {
+        "scope": "Named module source only, including new paths and functions not executed in same-scope timing",
+        "reviewed_modules": {
+          "au_ree_v3.census_metadata": {
+            "sha256": "5ce410753ae163298527c8f0b718c048f8baf1cab955245d8b5673401ba4c362",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.registry"
+            ],
+            "named_ast_functions": 10,
+            "top_branch_scores": [
+              [
+                19,
+                "coverage_report",
+                232
+              ],
+              [
+                19,
+                "_source_metadata",
+                130
+              ],
+              [
+                16,
+                "load_projection_policy",
+                59
+              ],
+              [
+                11,
+                "public_source_url",
+                81
+              ],
+              [
+                5,
+                "prepare_census_metadata",
+                189
+              ]
+            ]
+          },
+          "au_ree_v3.cli": {
+            "sha256": "b7d168f877d03303940ee748c845919787ed7c310525b97e83cba1e2a564acdf",
+            "direct_internal_imports": [
+              "au_ree_v3.application",
+              "au_ree_v3.candidate_search",
+              "au_ree_v3.development",
+              "au_ree_v3.fresh_observations",
+              "au_ree_v3.fresh_research",
+              "au_ree_v3.geography",
+              "au_ree_v3.migration.audit",
+              "au_ree_v3.migration.baseline",
+              "au_ree_v3.migration.crosswalk",
+              "au_ree_v3.migration.golden",
+              "au_ree_v3.migration.project_registry",
+              "au_ree_v3.migration.reference_oracle",
+              "au_ree_v3.migration.temporal_audit",
+              "au_ree_v3.publication",
+              "au_ree_v3.replica",
+              "au_ree_v3.research_delta",
+              "au_ree_v3.semantic_research",
+              "au_ree_v3.source_inventory",
+              "au_ree_v3.sources",
+              "au_ree_v3.technical_processing"
+            ],
+            "named_ast_functions": 7,
+            "top_branch_scores": [
+              [
+                28,
+                "main",
+                11
+              ],
+              [
+                10,
+                "_run_research",
+                221
+              ],
+              [
+                7,
+                "_run_publication",
+                263
+              ],
+              [
+                6,
+                "_run_sources",
+                188
+              ],
+              [
+                6,
+                "_run_migration",
+                296
+              ]
+            ]
+          },
+          "au_ree_v3.comparability": {
+            "sha256": "fda70192ed69791bd49604d272e3765ebe01f15fda4e5d520175e9690ea512c3",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.normalization",
+              "au_ree_v3.observations",
+              "au_ree_v3.research_inputs",
+              "au_ree_v3.semantics"
+            ],
+            "named_ast_functions": 29,
+            "top_branch_scores": [
+              [
+                51,
+                "contained_mass_shadow",
+                589
+              ],
+              [
+                26,
+                "_verified_aggregate_units",
+                254
+              ],
+              [
+                25,
+                "_treo_definitions",
+                322
+              ],
+              [
+                25,
+                "_composition",
+                386
+              ],
+              [
+                21,
+                "_resource_semantics_and_evidence",
+                486
+              ]
+            ]
+          },
+          "au_ree_v3.fresh_census": {
+            "sha256": "49cc9e77e67729a4710502d12a017a7be049040f6ac29d489ee7cb8c3694124f",
+            "direct_internal_imports": [
+              "au_ree_v3.census",
+              "au_ree_v3.census_metadata",
+              "au_ree_v3.comparability",
+              "au_ree_v3.contracts",
+              "au_ree_v3.registry",
+              "au_ree_v3.research_inputs",
+              "au_ree_v3.store"
+            ],
+            "named_ast_functions": 17,
+            "top_branch_scores": [
+              [
+                30,
+                "validate_projected_cell",
+                271
+              ],
+              [
+                19,
+                "_check_outputs",
+                312
+              ],
+              [
+                17,
+                "_selection_rows",
+                98
+              ],
+              [
+                15,
+                "_receipt",
+                355
+              ],
+              [
+                12,
+                "_unknown_reason",
+                177
+              ]
+            ]
+          },
+          "au_ree_v3.normalization": {
+            "sha256": "e81f10e47a03a06350e3d12b632c121c18b4c4a44cb931eebbaf9114982fe164",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.semantics"
+            ],
+            "named_ast_functions": 10,
+            "top_branch_scores": [
+              [
+                60,
+                "normalize_measurement",
+                113
+              ],
+              [
+                5,
+                "_stoichiometry",
+                82
+              ],
+              [
+                3,
+                "reported_interval",
+                41
+              ],
+              [
+                3,
+                "_weight_factors",
+                90
+              ],
+              [
+                2,
+                "factor",
+                98
+              ]
+            ]
+          },
+          "au_ree_v3.publication": {
+            "sha256": "276a418ff2d171e0944501910cf8f0b4e92256e3b17fd78e0ceba9ef9006829c",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.contracts.temporal",
+              "au_ree_v3.replica",
+              "au_ree_v3.research_environment",
+              "au_ree_v3.sources"
+            ],
+            "named_ast_functions": 31,
+            "top_branch_scores": [
+              [
+                31,
+                "replay_release",
+                437
+              ],
+              [
+                15,
+                "archive_release",
+                273
+              ],
+              [
+                14,
+                "_inventory",
+                148
+              ],
+              [
+                8,
+                "publish_release",
+                609
+              ],
+              [
+                8,
+                "_replica_access",
+                116
+              ]
+            ]
+          }
+        },
+        "cross_module_repeated_AST_body_groups": []
+      },
+      "median_wall_seconds": 0.21485910500086902,
+      "median_python_peak_rss_kib": 30768,
+      "median_child_peak_rss_kib": 0
+    },
+    "v2-a0fcf28": {
+      "commit": "a0fcf28adb72625f703421011a8de2d965cbbcb7",
+      "source_kind": "GIT_COMMIT",
+      "input_code_sha256": "b95e4603a820ed0124e82377cd139761cc2d2cf9307689dcfea1ca29dc5dc169",
+      "runs": [
+        {
+          "wall_seconds": 0.3835579879996658,
+          "python_peak_rss_kib": 31104,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.32832492999841634,
+          "python_peak_rss_kib": 31092,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.20817750499918475,
+          "python_peak_rss_kib": 31088,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.28106904000014765,
+          "python_peak_rss_kib": 31104,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        },
+        {
+          "wall_seconds": 0.20673912999882305,
+          "python_peak_rss_kib": 31100,
+          "child_peak_rss_kib": 0,
+          "status": "PASS",
+          "source_search_statuses_supplied": 93,
+          "cells": 4743,
+          "formal_scientific_cells": 12,
+          "artifacts_sha256": {
+            "census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+            "cell_status.csv": "8222ab7fce8ac4586c606ca182ad620fe61b002f613a38284a53345078489bb4",
+            "census_receipt.json": "6f04481cd6c2a161e7e9dda1ab0e6bcc3633f333b30c34a02a65402f8d097f69"
+          }
+        }
+      ],
+      "reached_code": {
+        "reached_module_count": 17,
+        "reached_modules": [
+          "au_ree_v3",
+          "au_ree_v3.census",
+          "au_ree_v3.census_metadata",
+          "au_ree_v3.census_science",
+          "au_ree_v3.comparability",
+          "au_ree_v3.contracts",
+          "au_ree_v3.contracts.temporal",
+          "au_ree_v3.decision",
+          "au_ree_v3.documents",
+          "au_ree_v3.fresh_census",
+          "au_ree_v3.fresh_decision",
+          "au_ree_v3.normalization",
+          "au_ree_v3.observations",
+          "au_ree_v3.registry",
+          "au_ree_v3.research_inputs",
+          "au_ree_v3.semantics",
+          "au_ree_v3.store"
+        ],
+        "runtime_internal_edge_count": 11,
+        "runtime_internal_edges": [
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.normalization",
+            "au_ree_v3.semantics"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ]
+        ],
+        "static_internal_import_edge_count_among_reached_modules": 43,
+        "static_internal_import_edges_among_reached_modules": [
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.census_metadata",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census_metadata",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.census_science",
+            "au_ree_v3.census"
+          ],
+          [
+            "au_ree_v3.census_science",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.census_science",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census_science",
+            "au_ree_v3.fresh_decision"
+          ],
+          [
+            "au_ree_v3.census_science",
+            "au_ree_v3.normalization"
+          ],
+          [
+            "au_ree_v3.census_science",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.census_science",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.normalization"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.semantics"
+          ],
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.documents",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census_metadata"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census_science"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.decision"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.normalization",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.normalization",
+            "au_ree_v3.semantics"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.semantics",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.semantics"
+          ]
+        ],
+        "reached_ast_functions": 65,
+        "branch_score_max": 30,
+        "branch_score_p90": 19,
+        "top_branch_scores": [
+          [
+            30,
+            "au_ree_v3.contracts.temporal",
+            "evaluate_temporal",
+            122
+          ],
+          [
+            23,
+            "au_ree_v3.contracts",
+            "__post_init__",
+            443
+          ],
+          [
+            20,
+            "au_ree_v3.research_inputs",
+            "checked_research_inputs",
+            59
+          ],
+          [
+            20,
+            "au_ree_v3.contracts",
+            "__post_init__",
+            205
+          ],
+          [
+            19,
+            "au_ree_v3.store",
+            "require_temporal_eligible",
+            544
+          ],
+          [
+            19,
+            "au_ree_v3.fresh_census",
+            "_selection_rows",
+            99
+          ],
+          [
+            19,
+            "au_ree_v3.fresh_census",
+            "_check_outputs",
+            317
+          ],
+          [
+            17,
+            "au_ree_v3.contracts.temporal",
+            "_chronology_conflict",
+            109
+          ]
+        ],
+        "cross_module_repeated_AST_body_groups": []
+      },
+      "static_source_review": {
+        "scope": "Named module source only, including new paths and functions not executed in same-scope timing",
+        "reviewed_modules": {
+          "au_ree_v3.census_metadata": {
+            "sha256": "5ce410753ae163298527c8f0b718c048f8baf1cab955245d8b5673401ba4c362",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.registry"
+            ],
+            "named_ast_functions": 10,
+            "top_branch_scores": [
+              [
+                19,
+                "coverage_report",
+                232
+              ],
+              [
+                19,
+                "_source_metadata",
+                130
+              ],
+              [
+                16,
+                "load_projection_policy",
+                59
+              ],
+              [
+                11,
+                "public_source_url",
+                81
+              ],
+              [
+                5,
+                "prepare_census_metadata",
+                189
+              ]
+            ]
+          },
+          "au_ree_v3.census_science": {
+            "sha256": "ebd03656880608b93853bd4e0c9d72296fdd4f8a9d643b747ca5281b8b7f097e",
+            "direct_internal_imports": [
+              "au_ree_v3.census",
+              "au_ree_v3.comparability",
+              "au_ree_v3.contracts",
+              "au_ree_v3.fresh_decision",
+              "au_ree_v3.normalization",
+              "au_ree_v3.observations",
+              "au_ree_v3.research_inputs"
+            ],
+            "named_ast_functions": 21,
+            "top_branch_scores": [
+              [
+                57,
+                "_derive_components",
+                247
+              ],
+              [
+                31,
+                "validate_resource_presence",
+                460
+              ],
+              [
+                24,
+                "project_science_views",
+                381
+              ],
+              [
+                13,
+                "_reviewed_precision_conflict",
+                201
+              ],
+              [
+                13,
+                "_composition_scope_rejection",
+                74
+              ]
+            ]
+          },
+          "au_ree_v3.cli": {
+            "sha256": "b7d168f877d03303940ee748c845919787ed7c310525b97e83cba1e2a564acdf",
+            "direct_internal_imports": [
+              "au_ree_v3.application",
+              "au_ree_v3.candidate_search",
+              "au_ree_v3.development",
+              "au_ree_v3.fresh_observations",
+              "au_ree_v3.fresh_research",
+              "au_ree_v3.geography",
+              "au_ree_v3.migration.audit",
+              "au_ree_v3.migration.baseline",
+              "au_ree_v3.migration.crosswalk",
+              "au_ree_v3.migration.golden",
+              "au_ree_v3.migration.project_registry",
+              "au_ree_v3.migration.reference_oracle",
+              "au_ree_v3.migration.temporal_audit",
+              "au_ree_v3.publication",
+              "au_ree_v3.replica",
+              "au_ree_v3.research_delta",
+              "au_ree_v3.semantic_research",
+              "au_ree_v3.source_inventory",
+              "au_ree_v3.sources",
+              "au_ree_v3.technical_processing"
+            ],
+            "named_ast_functions": 7,
+            "top_branch_scores": [
+              [
+                28,
+                "main",
+                11
+              ],
+              [
+                10,
+                "_run_research",
+                221
+              ],
+              [
+                7,
+                "_run_publication",
+                263
+              ],
+              [
+                6,
+                "_run_sources",
+                188
+              ],
+              [
+                6,
+                "_run_migration",
+                296
+              ]
+            ]
+          },
+          "au_ree_v3.comparability": {
+            "sha256": "5f81b4462a9c6005cdf6f2a4967bcd72a2bc1da6ef43c96237d520520f9978cb",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.normalization",
+              "au_ree_v3.observations",
+              "au_ree_v3.research_inputs",
+              "au_ree_v3.semantics"
+            ],
+            "named_ast_functions": 30,
+            "top_branch_scores": [
+              [
+                51,
+                "contained_mass_shadow",
+                621
+              ],
+              [
+                26,
+                "_verified_aggregate_units",
+                256
+              ],
+              [
+                25,
+                "composition_comparison",
+                388
+              ],
+              [
+                25,
+                "_treo_definitions",
+                324
+              ],
+              [
+                24,
+                "reported_ndpr_evidence",
+                489
+              ]
+            ]
+          },
+          "au_ree_v3.fresh_census": {
+            "sha256": "fb1505565ae7bced9fc0941f366d50ceadd0ce76d7c957784fbd98f5cd60d58a",
+            "direct_internal_imports": [
+              "au_ree_v3.census",
+              "au_ree_v3.census_metadata",
+              "au_ree_v3.census_science",
+              "au_ree_v3.comparability",
+              "au_ree_v3.contracts",
+              "au_ree_v3.registry",
+              "au_ree_v3.research_inputs",
+              "au_ree_v3.store"
+            ],
+            "named_ast_functions": 17,
+            "top_branch_scores": [
+              [
+                30,
+                "validate_projected_cell",
+                276
+              ],
+              [
+                19,
+                "_selection_rows",
+                99
+              ],
+              [
+                19,
+                "_check_outputs",
+                317
+              ],
+              [
+                16,
+                "_receipt",
+                362
+              ],
+              [
+                12,
+                "_unknown_reason",
+                182
+              ]
+            ]
+          },
+          "au_ree_v3.normalization": {
+            "sha256": "e81f10e47a03a06350e3d12b632c121c18b4c4a44cb931eebbaf9114982fe164",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.semantics"
+            ],
+            "named_ast_functions": 10,
+            "top_branch_scores": [
+              [
+                60,
+                "normalize_measurement",
+                113
+              ],
+              [
+                5,
+                "_stoichiometry",
+                82
+              ],
+              [
+                3,
+                "reported_interval",
+                41
+              ],
+              [
+                3,
+                "_weight_factors",
+                90
+              ],
+              [
+                2,
+                "factor",
+                98
+              ]
+            ]
+          },
+          "au_ree_v3.publication": {
+            "sha256": "276a418ff2d171e0944501910cf8f0b4e92256e3b17fd78e0ceba9ef9006829c",
+            "direct_internal_imports": [
+              "au_ree_v3.contracts",
+              "au_ree_v3.contracts.temporal",
+              "au_ree_v3.replica",
+              "au_ree_v3.research_environment",
+              "au_ree_v3.sources"
+            ],
+            "named_ast_functions": 31,
+            "top_branch_scores": [
+              [
+                31,
+                "replay_release",
+                437
+              ],
+              [
+                15,
+                "archive_release",
+                273
+              ],
+              [
+                14,
+                "_inventory",
+                148
+              ],
+              [
+                8,
+                "publish_release",
+                609
+              ],
+              [
+                8,
+                "_replica_access",
+                116
+              ]
+            ]
+          }
+        },
+        "cross_module_repeated_AST_body_groups": [
+          [
+            [
+              "au_ree_v3.census_science",
+              "_digest",
+              54
+            ],
+            [
+              "au_ree_v3.normalization",
+              "_digest",
+              32
+            ]
+          ]
+        ]
+      },
+      "median_wall_seconds": 0.28106904000014765,
+      "median_python_peak_rss_kib": 31100,
+      "median_child_peak_rss_kib": 0
+    }
+  }
+}
