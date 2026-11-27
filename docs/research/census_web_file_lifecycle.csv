@@ -3,6 +3,7 @@ path,git_status,disposition,unit,reason
 .github/workflows/web-check.yml,A,ADD,C,"Versioned JSON, fixed interface, exported evidence, or browser coverage."
 README.md,M,MODIFY,D,Document release-aware access and verification.
 config/research_profiles/census_columns_v1.json,-,KEEP,Reference,Preserve exact 51 headings and their historical contract.
+docs/research/capability_progress.csv,M,MODIFY,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
 docs/research/census_metadata_historical_diagnostic.json,A,ADD,A,Pin and apply Census display and evidence roles.
 docs/research/census_projection_engineering.json,A,ADD,Integration,"Pin engineering measures, comparison diagnostics, or verification receipts."
 docs/research/census_science_historical_diagnostic.json,A,ADD,B,"Evidence-backed scientific views, strict formula checks, or archived method inventory."
