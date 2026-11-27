@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; connect-src 'self'; form-action 'none'; img-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'">
+  <meta name="description" content="AU REE V3 Australian rare-earth research explorer">
+  <title>AU REE · 研究資料庫</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i="skip">跳至研究內容</a>
+<header class="mast">
+  <div class="frame mast-inner">
+    <a href="./" class="brand" aria-label="AU REE">
+      <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>AU REE <small>V3</small></span>
+    </a>
+    <span class="mast-sub" data-i="mast">澳洲稀土研究資料庫</span>
+    <div class="mast-tools">
+      <button type="button" id="refresh" class="button quiet" data-i="refresh">檢查版本</button>
+      <button type="button" id="language" class="button quiet" lang="en">English</button>
+    </div>
+  </div>
+</header>
+<main id="main">
+  <section class="hero">
+    <div class="frame hero-inner">
+      <div class="headline">
+        <p class="eyebrow" data-i="eyebrow">澳洲 · 稀土資源與證據</p>
+        <h1 data-i="title">稀土研究總覽</h1>
+        <p data-i="sub">瀏覽固定研究母體、量測與來源。每個正式數值皆可追溯至原始證據。</p>
+      </div>
+      <div class="release-box">
+        <label for="version" data-i="version">研究版本</label>
+        <select id="version" disabled><option data-i="loading">載入中</option></select>
+        <div class="release-meta">
+          <span id="release-status" class="pill" aria-live="polite"></span>
+          <span id="cutoff"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="frame body-frame">
+    <div id="status" class="banner" role="status" aria-live="polite"></div>
+    <div id="workbench" hidden>
+      <section class="metrics" id="metrics" aria-label="研究覆蓋"></section>
+      <nav class="tabs" id="tabs" aria-label="研究內容">
+        <button type="button" data-tab="census" aria-current="page" data-i="census">Census</button>
+        <button type="button" data-tab="map" data-i="map">礦址地圖</button>
+        <button type="button" data-tab="resources" data-i="resources">REE 資源</button>
+        <button type="button" data-tab="mcda" data-i="mcda">MCDA</button>
+      </nav>
+      <section id="census" class="section active" aria-labelledby="census-title">
+        <div class="pane-title">
+          <div><h2 id="census-title" data-i="explorer">Census 總表</h2><p id="table-count"></p></div>
+          <a class="button secondary" id="download" data-i="download" download>下載當期 CSV</a>
+        </div>
+        <div class="filters" id="census-filters">
+          <div class="field wide"><label for="search" data-i="search">搜尋專案</label><input id="search" type="search" autocomplete="off" data-placeholder="searchExample"></div>
+          <div class="field"><label for="state-filter" data-i="state">州別</label><select id="state-filter"></select></div>
+          <div class="field"><label for="stage-filter" data-i="stage">開發階段</label><select id="stage-filter"></select></div>
+          <div class="field"><label for="deposit-filter" data-i="deposit">礦床類型</label><select id="deposit-filter"></select></div>
+          <div class="field"><label for="data-filter" data-i="valueState">資料狀態</label><select id="data-filter"></select></div>
+          <details id="columns" class="field col-picker"><summary data-i="columns">顯示欄位</summary><div id="column-options" class="column-options"></div></details>
+        </div>
+        <div class="table-scroll" tabindex="0" role="region" id="table-region">
+          <table id="census-table"><thead></thead><tbody></tbody></table>
+        </div>
+        <div class="table-footer">
+          <span id="page-info"></span>
+          <div class="pages"><button id="prev" type="button" class="button secondary" data-i="prev">上一頁</button>
+          <button id="next" type="button" class="button secondary" data-i="next">下一頁</button></div>
+        </div>
+      </section>
+      <section id="map" class="section" aria-labelledby="map-title" hidden>
+        <div class="pane-title"><div><h2 id="map-title" data-i="map">礦址地圖</h2><p data-i="mapHint">僅顯示具有合格位置證據的礦址或礦床。</p></div></div>
+        <div class="map-grid">
+          <aside class="map-side">
+            <div class="field"><label for="map-stage" data-i="stage">開發階段</label><select id="map-stage"></select></div>
+            <div class="field"><label for="map-deposit" data-i="deposit">礦床類型</label><select id="map-deposit"></select></div>
+            <label class="map-check"><input id="map-only-resource" type="checkbox"><span data-i="onlyResource">僅顯示有資源估算</span></label>
+            <div class="map-details" id="map-details"></div>
+            <button type="button" id="map-compare" class="button secondary" data-i="compareProjects">比較專案</button>
+          </aside>
+          <div class="map-board"><canvas id="map-canvas" width="960" height="540" role="img"></canvas></div>
+        </div>
+      </section>
+      <section id="resources" class="section" aria-labelledby="resources-title" hidden>
+        <div class="pane-title"><div><h2 id="resources-title" data-i="resourcesTitle">資源與稀土組成</h2>
+          <p data-i="resourcesHint">並列檢視已入表量測。各專案的資源估算範圍與化學基準見證據。</p>
+          <p data-i="comparableWarning">同單位的量測仍可能採用不同估算範圍、分母或化學成員。此處為並列證據檢視。</p></div></div>
+        <div class="filters compact">
+          <div class="field"><label for="compare-left" data-i="compareLeft">專案一</label><select id="compare-left"></select></div>
+          <div class="field"><label for="compare-right" data-i="compareRight">專案二</label><select id="compare-right"></select></div>
+          <div class="field"><label for="compare-metric" data-i="metricsGroup">量測群組</label><select id="compare-metric"></select></div>
+        </div>
+        <div class="table-scroll" tabindex="0" role="region" id="compare-region"><table id="compare-table"><thead></thead><tbody></tbody></table></div>
+      </section>
+      <section id="mcda" class="section" aria-labelledby="mcda-title" hidden>
+        <div class="pane-title"><div><h2 id="mcda-title" data-i="mcdaTitle">多準則決策分析</h2>
+          <p data-i="mcdaHint">面板採用發布資料中已計算的排名、樣本及敏感度。</p></div></div>
+        <div class="filters compact">
+          <div class="field"><label for="panel" data-i="panel">比較面板</label><select id="panel"></select></div>
+        </div>
+        <div id="panel-detail" class="panel-detail"></div>
+      </section>
+    </div>
+  </div>
+</main>
+<footer class="frame footer">
+  <span>AU REE V3</span><span id="footer-release"></span>
+</footer>
+<dialog id="evidence">
+  <div class="dialog-head">
+    <div><p class="eyebrow" data-i="evidence">欄位證據</p><h2 id="evidence-title"></h2></div>
+    <button type="button" id="evidence-close" class="button secondary" data-i="close">關閉</button>
+  </div>
+  <div id="evidence-detail"></div>
+</dialog>
+<noscript><p class="frame">此頁需使用 JavaScript 載入版本化資料。 JavaScript is required to load versioned research data.</p></noscript>
+</body>
+</html>

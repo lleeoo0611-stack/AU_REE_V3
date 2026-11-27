@@ -87,6 +87,17 @@ def main(argv: list[str] | None = None) -> int:
     build.add_argument("--assets", type=Path, required=True)
     build.add_argument("--out", type=Path, required=True)
     build.add_argument("--code-commit", required=True)
+    export_web = research_commands.add_parser("export-web", help="Export immutable candidate web data")
+    for argument in ("profile", "research-build", "out"):
+        export_web.add_argument(f"--{argument}", type=Path, required=True)
+    export_web.add_argument("--release-id", required=True)
+    export_web.add_argument("--release-root", type=Path, help="Exact archive index for a frozen candidate ID")
+    export_web.add_argument("--mode", choices=("candidate",), default="candidate")
+    verify_web = research_commands.add_parser("verify-web", help="Check a web release's files, hashes and lineage")
+    verify_web.add_argument("--data", type=Path, required=True)
+    verify_web.add_argument("--release-id")
+    verify_web.add_argument("--manifest-sha256")
+    verify_web.add_argument("--out", type=Path)
     compare = research_commands.add_parser("compare", help="Audit the Census and decision delta between two V3 builds")
     for argument in ("baseline", "current", "out"):
         compare.add_argument(f"--{argument}", type=Path, required=True)
@@ -232,6 +243,8 @@ def _run_research(args) -> dict:
         from .technical_processing import run_technical_pilot
 
         return run_technical_pilot(args.profile, args.sources, args.assets, args.bindings, args.out, oracle=args.oracle)
+    if args.operation in {"export-web", "verify-web"}:
+        return _run_web_data(args)
     if args.operation == "compare":
         from .research_delta import compare_research_builds
         from .sources import ContentStore
@@ -259,6 +272,42 @@ def _run_research(args) -> dict:
     status = "FAIL" if "FAIL" in statuses else "PASS" if statuses == {"PASS"} else "BLOCKED"
     return {"status": status, **result}
 
+
+
+def _run_web_data(args) -> dict:
+    from hashlib import sha256
+
+    from .contracts import canonical_json
+    from .registry import SHA256
+    from .web_publication import WebPublicationError, export_web, verify_web_release
+
+    if args.operation == "export-web":
+        manifest = export_web(profile=args.profile, research_build=args.research_build,
+                              release_id=args.release_id, out=args.out, release_root=args.release_root)
+        directory = args.out / "releases" / manifest["release_id"]
+    else:
+        if args.release_id is not None and not SHA256.fullmatch(args.release_id):
+            raise WebPublicationError("Web release ID must be a full lowercase SHA-256")
+        directory = args.data
+        if (directory / "releases").is_dir():
+            if args.release_id:
+                directory = directory / "releases" / args.release_id
+            else:
+                releases = list((directory / "releases").iterdir())
+                if len(releases) != 1:
+                    raise WebPublicationError("Select one web release from the data directory")
+                directory, = releases
+        manifest = verify_web_release(directory, expected_release_id=args.release_id,
+                                      expected_manifest_sha256=args.manifest_sha256)
+    result = {
+        "status": "PASS", "release_id": manifest["release_id"], "release_status": manifest["release_status"],
+        "manifest_sha256": sha256((directory / "manifest.json").read_bytes()).hexdigest(),
+        "checked_artifacts": len(manifest["artifacts"]),
+    }
+    if args.operation == "verify-web" and args.out is not None:
+        args.out.mkdir(parents=True, exist_ok=True)
+        (args.out / "web_verification.json").write_text(canonical_json(result) + "\n", encoding="utf-8")
+    return result
 
 def _run_publication(args) -> dict:
     from .publication import archive_release, rehearse_rollback, replay_release, restore_release_replica, sync_release_replica

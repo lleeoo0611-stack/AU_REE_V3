@@ -1,0 +1,11 @@
+{
+  "name": "au-ree-research-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/browser.mjs --synthetic"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

@@ -1,0 +1,31 @@
+name: Static research web verification
+
+on:
+  pull_request:
+    paths: ["web/**", "src/au_ree_v3/web_publication.py", ".github/workflows/web-check.yml"]
+  push:
+    branches: [main]
+    paths: ["web/**", "src/au_ree_v3/web_publication.py", ".github/workflows/web-check.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    name: Browser interaction and release integrity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24"
+      - run: npm ci
+      - run: npx --no-install playwright install --with-deps chromium
+      - run: npm test
