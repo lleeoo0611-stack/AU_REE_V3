@@ -6,12 +6,13 @@ Census 仍輸出固定的 93 × 51 表格。原有礦石量、TREO 品位及含 
 
 | 影子結果 | 對應原件及依據 |
 | --- | --- |
-| Wolverine Pr₆O₁₁ 0.438、Nd₂O₃ 2.044、Tb₄O₇ 0.876、Dy₂O₃ 6.132 kt | 同一份原件的 Table 2 礦石量及 Table 5 全礦石 ppm。選取相同 2025-01-15 JORC 估算與 0.15% TREO 截止品位。 |
-| Wolverine NdPr 2.482 kt、四氧化物重算與 MREO 各 9.490 kt | 同一組量測加總。兩個 MREO 欄引用同一組輸入。 |
+| Wolverine Pr₆O₁₁ 0.438、Nd₂O₃ 2.044、Tb₄O₇ 0.876、NdPr 2.482 kt | 同一份原件的 Table 2 礦石量及 Table 5 全礦石 ppm。選取相同 2025-01-15 JORC 估算與 0.15% TREO 截止品位。 |
 | Wudinna MREO 16.8 kt | 同估算 150 Mt 乘以直接公布的四氧化物合併 112 ppm。保留已核驗原件的化學定義與單位證據。 |
 
-每個候選保留公式 SHA、原始數字及單位、四捨五入區間、各量測 ID、Source SHA、PDF 頁碼、表列欄位、估算日期與 Temporal Gate。已有正式 S1 的兩組份額可在回執引用。八個新衍生候選尚無現行規則下的 Census 正式採納，因此維持影子層。完整氧化物總量和 HREE8 缺少已選成員，未產生 Census 值。
+每個候選保留公式 SHA、原始數字及單位、四捨五入區間、各量測 ID、Source SHA、PDF 頁碼、表列欄位、估算日期與 Temporal Gate。已有正式 S1 的兩組份額仍可在回執引用。五個可行衍生候選尚無現行規則下的 Census 正式採納，因此維持影子層。完整氧化物總量和 HREE8 缺少已選成員，未產生 Census 值。
 
-實際測試重新讀回 Wolverine 原件 Table 5 的全部 15 個原生 ppm 欄；生產流程目前選取其中四項。標示為合成的完整輸入束另驗證全部 15 項運算、HREE8、合併 NdPr 及部分組成的阻擋。跨來源版次、估算日、Scope、截止品位、Reserve／Target、材料分母、TREO 化學成員和出現不一致 rounding interval 的反例均已執行。自原件報告的組合量保留為單一量測。
+Wolverine 同一估算的 Table 2（PDF 第 5 頁）報告 Dy₂O₃ 為 0.85 kg/t，Table 5（第 6 頁）為 840 ppm。依顯示位數計算的區間為 845–855 ppm 和 839.5–840.5 ppm。原件提示可能有四捨五入差異，實際取整尺度未能確定。影子流程保留兩處原文及來源版次，暫停新 Dy₂O₃ 含量及依賴該量測的衍生欄。
+
+實際測試重新讀回 Wolverine 原件 Table 5 的全部 15 個原生 ppm 欄。生產流程目前選取其中四項。標示為合成的完整輸入束另驗證全部 15 項運算、HREE8、合併 NdPr 及部分組成的阻擋。即使分項均在合理範圍內，部分氧化物加總下限超過總 TREO 上限時，該組衍生結果會隔離並保存上下界。跨來源版次、估算日、Scope、截止品位、Reserve／Target、材料分母、TREO 化學成員和出現不一致 rounding interval 的反例均已執行。原件報告的組合量保留為單一量測。
 
 V2 固定方法規則的 100 項處置有逐項來源、SHA、現有 V3 對應及需證據門檻。各規則的相關欄位計數可重疊，能獨立歸因的效果仍為 `UNMEASURED`。[V2 規則清冊](census_v2_rule_inventory.json)
