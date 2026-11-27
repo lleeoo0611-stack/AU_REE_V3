@@ -55,10 +55,12 @@ class TenementLayerTest(unittest.TestCase):
                      and shutil.which("ogrinfo") and shutil.which("pdftotext"), "locked GIS sources unavailable")
 class ExactGovernmentSourceTest(unittest.TestCase):
     def test_boundaries_only_with_issuer_and_cutoff_fingerprints(self):
+        assets = Path(os.environ["AU_REE_FRESH_ASSETS"])
+        store = assets.parent if assets.name == "objects" else assets
         with tempfile.TemporaryDirectory() as directory:
             receipt = inventory_tenements(
                 Path("config/research_profiles/wa_tenement_bindings_v1.json"),
-                Path(os.environ["AU_REE_FULL_SOURCE_MANIFEST"]), Path(os.environ["AU_REE_FRESH_ASSETS"]),
+                Path(os.environ["AU_REE_FULL_SOURCE_MANIFEST"]), store,
                 Path(directory) / "geography.json",
             )
         self.assertEqual(receipt["status"], "PASS")
