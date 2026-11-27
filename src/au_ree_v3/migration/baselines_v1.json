@@ -1,0 +1,263 @@
+{
+  "schema": "migration-baselines-v1",
+  "v2_repository": "lleeoo0611-stack/AU_REE_V2",
+  "refs": {
+    "engineering": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+    "science": "0dff6beb5aca52e565c37289e3ab295737e76942",
+    "subset": "dcda87e81e1250d443f73c1984faaa7beaa19930"
+  },
+  "archive_path": "results/ree-project-census/coverage-locked-20261125",
+  "audit_path": "results/phase10-2026-11-27",
+  "snapshot_lock": "results/phase22-2026-11-06/snapshot_lock.json",
+  "profiles": {
+    "archived-census-2026-11-13": {
+      "cutoff": "2026-11-13",
+      "science_ref": "science",
+      "archive_ref": "engineering",
+      "historical_source_assets": 715,
+      "historical_source_references": 805
+    },
+    "phase22-2026-11-05": {
+      "cutoff": "2026-11-05",
+      "science_ref": "subset",
+      "historical_source_assets": 538,
+      "historical_panel_count": 16
+    }
+  },
+  "pins": {
+    "common": [
+      {
+        "ref": "engineering",
+        "path": "results/phase10-2026-11-27/phase10_baseline.json",
+        "git_blob_sha": "54be2038c5865f790710382f1d44585d0e575248",
+        "sha256": "0108d59c85bb1e572d1c79bec64ef25b91b65aedd65d6f6573f655c8c42c8b30"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/phase10-2026-11-27/phase10_module_audit.json",
+        "git_blob_sha": "a77bfcfd0b484f4f38d24a92e465dba2424c5db1",
+        "sha256": "eddc28d0a4d163c50b4d23e2b6e258cad2dfc51ff255a7072d003f15bc141bb6"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/phase10-2026-11-27/repository_integration.json",
+        "git_blob_sha": "1dace7d798926143d35a9925e70dbea1aa14bace",
+        "sha256": "faf21adbf24be866f5fd785a754cbc97fabbe3e984cfc8e2bf3144ddeca5230e"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/phase10-2026-11-27/source_recovery_manifest.json",
+        "git_blob_sha": "8eba4c0f5128c36d16ef1f49dc18b2e7620dc922",
+        "sha256": "36b467ac625cc7caccd4589f18562f6d19c5848b83dfed4ae495fad7706ccdc5"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/phase10-2026-11-27/verified-subset.json",
+        "git_blob_sha": "05b1012cfa31978c83f5677678eb4f2b8c935e31",
+        "sha256": "bfb1b382708e4b20159c6894866952af4e7bfbcaab76c2dcc9a5d2e2df254500"
+      },
+      {
+        "ref": "subset",
+        "path": "results/phase22-2026-11-06/snapshot_lock.json",
+        "git_blob_sha": "141fc5718a11bf218152fcb9e29f54b845d01607",
+        "sha256": "3d0848bd302294ff247bd931579e0c5fcec25f0908c83dd72a9fdfeada97981d"
+      }
+    ],
+    "archived-census-2026-11-13": [
+      {
+        "ref": "engineering",
+        "path": "config/research.json",
+        "git_blob_sha": "e7e5c8b6d2c95e7984840e2e1a715d7599144195",
+        "sha256": "87acde6f0043bcd145f2189112b60bab572dfccd4e6071020adb7615e3dc369a"
+      },
+      {
+        "ref": "engineering",
+        "path": "config/summary_rules.json",
+        "git_blob_sha": "a3c5afdee67eff3449251c3c6148f750b5fb3808",
+        "sha256": "1d8d7a4a83657eaf81550886423f997313fcf5fb2139608d7607d4b02d9cf753"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/REE project census.csv",
+        "git_blob_sha": "cf79a3d1f2db353dbe8fa895c0e1ada97d6ffb75",
+        "sha256": "a643607a1fe104e3cd7c6590fc4752e37a09902087000882430931aa69b25308"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/asset_manifest.json",
+        "git_blob_sha": "73b01d4a04cc3abe69ad75785647a587ed24fbe8",
+        "sha256": "082c26b30b2616445b4eabeefd1bc08265740268b146ae34085ccc0a8374b8ae"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/bundle_verification.json",
+        "git_blob_sha": "b07edcf319a148bd92784b4dfb025c692d2a5402",
+        "sha256": "4a6c0dfab48506eeff08294e9fd6f3f29c07c612f935c7bfd5d77c714ce17ab7"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/census_release.json",
+        "git_blob_sha": "bb5ed1f59307f59e4cfe408b15d1aff96c2bb5d9",
+        "sha256": "9b10857fca27163b173ab4540aaa1f59898d270181b7b147b43a30ba4b52bcd6"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/coverage.json",
+        "git_blob_sha": "ddb851774c6c584f8f38b35def5d8cb065512b69",
+        "sha256": "ac3ab7b47e0961c16ec580a8edcc870905f61dcec4b7ada4482704642609cce2"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/field_provenance.csv",
+        "git_blob_sha": "c9915469c67504acf0e6e23104aaa94dac7f96a5",
+        "sha256": "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/field_status.csv",
+        "git_blob_sha": "50a75d454df02d48c23a515e818726bf12545d0e",
+        "sha256": "5eeb7bc0c176f5c07669b622a498916aa84763ac4d04adedbc5b4e40fefd70a6"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/gap_review.csv",
+        "git_blob_sha": "8c6e928e667460b1e4d645060bdda9e04908d571",
+        "sha256": "4b493e096bb7ce2aa9e851a587707539ef3d5a0ec1f40d95c6c74d918063ebb4"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/resource_statement_lineage.csv",
+        "git_blob_sha": "1d7c358a431a6fb597abeaf99fab6f01d1136d68",
+        "sha256": "2ffb74c66ca8b6fe173a4e3c45da3473b541c6d9294aa786c30c50988d13f5b4"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/resource_statement_observations.csv",
+        "git_blob_sha": "6ed302e3815ec05a32bea2a61d30db44e83e49c0",
+        "sha256": "067e6bf1d8ba46426fb5f16ec7ab404606aa58c181b6ec57445ea6321e97aeb2"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/source_selection.csv",
+        "git_blob_sha": "027d52cc41f176dc02f133928df17713c0f62e6a",
+        "sha256": "aa475199f5e13d1f14e3807e4ebfb70ec062e80d70cbc757a36e9452b1aafa75"
+      },
+      {
+        "ref": "engineering",
+        "path": "results/ree-project-census/coverage-locked-20261125/verification.json",
+        "git_blob_sha": "86c0ecca55a0bbc0636b33621e2f7d4dd05da099",
+        "sha256": "3a9f2982e6df64d49cd626f109f0c3491645ef037277a08c9b2a8485f6cb3769"
+      },
+      {
+        "ref": "science",
+        "path": "config/assay_evidence.json",
+        "git_blob_sha": "d46d5947f95e7925fbc36251c077fd766cadee85",
+        "sha256": "44ccfb27b00733ac60988560c841def652c1dba981d30a375f4f3ce84bb5c562"
+      },
+      {
+        "ref": "science",
+        "path": "config/candidate_milestones.json",
+        "git_blob_sha": "fe3784fe3c2954f8cc200e123476a27648b28b10",
+        "sha256": "21176ea07f683bc6d05e8eaf1b40b6eed70921bde8723affa02eda49dc77d705"
+      },
+      {
+        "ref": "science",
+        "path": "config/census_gap_review.json",
+        "git_blob_sha": "9b7341c856ae74be9174b8b3e7f5639c791b1a18",
+        "sha256": "cabbc9578301cf21e8fcee0520894a4002df47f06a484c8993e6c7b3e73a58cd"
+      },
+      {
+        "ref": "science",
+        "path": "config/discovery.json",
+        "git_blob_sha": "2087512d6ea7bebaebb764b0a6cfb3388a72a615",
+        "sha256": "67c6d106883ae7daa69e91758c53d02ceb623dfa24378aed1602aef8878e181c"
+      },
+      {
+        "ref": "science",
+        "path": "config/eligibility_compatibility.json",
+        "git_blob_sha": "d280272764b94e0b8b30edd7a3a6e4992e2154bb",
+        "sha256": "c148daacc46e525901e8655721256294c81213fadc352fa896de79a446c33115"
+      },
+      {
+        "ref": "science",
+        "path": "config/evidence_policy.json",
+        "git_blob_sha": "8cc3e7111e516bbcd4c8e3672fad0fbc423d84db",
+        "sha256": "c86f8fe81c21a5147d82b633c1d54f310e979d07487fad0f02db5504d5130d80"
+      },
+      {
+        "ref": "science",
+        "path": "config/formal_c1_review.json",
+        "git_blob_sha": "695357b26f7cce1b54e8b7fc6282d9b7a9d2ad7c",
+        "sha256": "39285301dc6fd30cc0909ce05ada2d841732bea4758246439f372330f932e9ab"
+      },
+      {
+        "ref": "science",
+        "path": "config/pre_cutoff_evidence_events.json",
+        "git_blob_sha": "f2e82c23ba3641db4dee59d60c1f130110e7819a",
+        "sha256": "a35421e6238b459ec6979a0843b1fa683a3ad1233b63c1dc378e68a1b3c70826"
+      },
+      {
+        "ref": "science",
+        "path": "config/project_summary_columns.json",
+        "git_blob_sha": "4800a8df90c4b8f40c7cc95c6cbb64a6b7fc324f",
+        "sha256": "5ac4229ad987c32400f0b55998f3a28af803199424a3cb5b8299671c84e524ba"
+      },
+      {
+        "ref": "science",
+        "path": "config/research.json",
+        "git_blob_sha": "b89c334d8fbe166e33e254b5fde093fc3ea57158",
+        "sha256": "c9ce710fac929d99b638e2ea5c384df40a5ab3f84aa51cb4df09d5892759edb4"
+      },
+      {
+        "ref": "science",
+        "path": "config/researcher_rule_decisions.json",
+        "git_blob_sha": "533a9788cbc6d77d6915d2e4bd89ddfdb1ba9f1a",
+        "sha256": "fd0811034a5bfaeb5ea0a4a4a442a0e0dd14b166e343b2134f7227030ace6802"
+      },
+      {
+        "ref": "science",
+        "path": "config/sources.json",
+        "git_blob_sha": "7d537778c5819677b963fd3e1b37cceda9951d2f",
+        "sha256": "e8a970571bfcb4515b704c4aae96cdef2a3f7d52be6990f3baec643a3af9ff9b"
+      },
+      {
+        "ref": "science",
+        "path": "config/summary_rules.json",
+        "git_blob_sha": "a3c5afdee67eff3449251c3c6148f750b5fb3808",
+        "sha256": "1d8d7a4a83657eaf81550886423f997313fcf5fb2139608d7607d4b02d9cf753"
+      },
+      {
+        "ref": "science",
+        "path": "results/ree-project-census/integrated-evidence-v1-20261120/field_status.csv",
+        "git_blob_sha": "388fa5edced66b0f0d93508d25ee2fa96b018c42",
+        "sha256": "8d83fa26471ab7a7b8ff3d9f82146524fa66d47d5abf882e6f3eba50c7c4e13c"
+      }
+    ],
+    "phase22-2026-11-05": [
+      {
+        "ref": "subset",
+        "path": "config/evidence_policy.json",
+        "git_blob_sha": "8cc3e7111e516bbcd4c8e3672fad0fbc423d84db",
+        "sha256": "c86f8fe81c21a5147d82b633c1d54f310e979d07487fad0f02db5504d5130d80"
+      },
+      {
+        "ref": "subset",
+        "path": "config/research.json",
+        "git_blob_sha": "e7e5c8b6d2c95e7984840e2e1a715d7599144195",
+        "sha256": "87acde6f0043bcd145f2189112b60bab572dfccd4e6071020adb7615e3dc369a"
+      },
+      {
+        "ref": "subset",
+        "path": "config/sources.json",
+        "git_blob_sha": "7d537778c5819677b963fd3e1b37cceda9951d2f",
+        "sha256": "e8a970571bfcb4515b704c4aae96cdef2a3f7d52be6990f3baec643a3af9ff9b"
+      },
+      {
+        "ref": "subset",
+        "path": "config/summary_rules.json",
+        "git_blob_sha": "a3c5afdee67eff3449251c3c6148f750b5fb3808",
+        "sha256": "1d8d7a4a83657eaf81550886423f997313fcf5fb2139608d7607d4b02d9cf753"
+      }
+    ]
+  }
+}

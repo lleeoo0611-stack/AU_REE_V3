@@ -1,0 +1,21 @@
+{
+  "case_count": 130,
+  "cases_file": {
+    "path": "golden_cases.jsonl",
+    "sha256": "8bf5d89b52cfa71dba78f29accdcf9c801efa4340c8133629e552096046344e8"
+  },
+  "comparisons": "Exact typed values and lexical decimal strings. Blank exported fields map to null.",
+  "cutoff": "2026-11-13",
+  "evidence_tiers": {
+    "FROZEN_V2_OUTPUT": 111,
+    "FROZEN_V2_SOURCE_RECOVERY_RECEIPT": 19
+  },
+  "expected_file": {
+    "path": "golden_expected.jsonl",
+    "sha256": "f2b6d2d27017b875c7ee204beaba6c952b3c6a5e9674874290e70c7aab7d5195"
+  },
+  "ref": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+  "reference_scope": "FROZEN_V2_MIGRATION_EQUIVALENCE",
+  "schema": "frozen-v2-golden-v1",
+  "science_ref": "0dff6beb5aca52e565c37289e3ab295737e76942"
+}
