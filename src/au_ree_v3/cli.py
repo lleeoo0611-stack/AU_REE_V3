@@ -51,12 +51,25 @@ def main(argv: list[str] | None = None) -> int:
     inventory.add_argument("--alternate-manifest", type=Path, action="append", default=[])
     inventory.add_argument("--workers", type=int, default=2)
     inventory.add_argument("--ocr-model", type=Path)
+    index = source_commands.add_parser("index-evidence", help="Index exact-edition document text for candidate review")
+    for argument in ("manifest", "store", "out"):
+        index.add_argument(f"--{argument}", type=Path, required=True)
+    search = source_commands.add_parser("search-evidence", help="Retrieve located candidates from the source index")
+    search.add_argument("--index", type=Path, required=True)
+    search.add_argument("--purpose", required=True)
+    search.add_argument("--out", type=Path, required=True)
+    search.add_argument("--query")
+    search.add_argument("--project-id")
+    search.add_argument("--limit", type=int, default=20)
 
     geography = commands.add_parser("geography", help="Verify official spatial evidence")
     geo_commands = geography.add_subparsers(dest="operation", required=True)
     tenements = geo_commands.add_parser("tenements", help="Locate exact-edition WA legal boundaries")
     for argument in ("bindings", "sources", "store", "out"):
         tenements.add_argument(f"--{argument}", type=Path, required=True)
+    infrastructure = geo_commands.add_parser("infrastructure", help="Evaluate the site and layer evidence for I1–I4")
+    for argument in ("tenements", "sources", "out"):
+        infrastructure.add_argument(f"--{argument}", type=Path, required=True)
 
     research = commands.add_parser("research", help="Build and verify the fresh research profile")
     research_commands = research.add_subparsers(dest="operation", required=True)
@@ -82,6 +95,9 @@ def main(argv: list[str] | None = None) -> int:
     compare.add_argument("--release-root", type=Path)
     compare.add_argument("--store", type=Path, help="Content-addressed archive storage")
     compare.add_argument("--replay-run", type=Path, action="append", default=[])
+    milestones = research_commands.add_parser("review-development", help="Verify exact-edition development events")
+    for argument in ("profile", "manifest", "assets", "bindings", "out"):
+        milestones.add_argument(f"--{argument}", type=Path, required=True)
     archive = research_commands.add_parser("archive", help="Archive a fresh research candidate by exact bytes")
     for argument in ("profile", "bindings", "sources", "build", "store", "out"):
         archive.add_argument(f"--{argument}", type=Path, required=True)
@@ -138,9 +154,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "sources":
             result = _run_sources(args)
         elif args.command == "geography":
-            from .geography import inventory_tenements
-
-            result = inventory_tenements(args.bindings, args.sources, args.store, args.out)
+            result = _run_geography(args)
         elif args.command == "research":
             result = _run_research(args)
         else:
@@ -166,6 +180,13 @@ def _replica_options(parser) -> None:
 def _run_sources(args) -> dict:
     from .sources import acquire_sources, combine_acquisition, discover_sources
 
+    if args.operation in {"index-evidence", "search-evidence"}:
+        from .candidate_search import build_candidate_index, search_candidates
+
+        if args.operation == "index-evidence":
+            return build_candidate_index(args.manifest, args.store, args.out)
+        return search_candidates(args.index, args.purpose, args.out, query=args.query,
+                                 project_id=args.project_id, limit=args.limit)
     if args.operation == "inventory":
         from .source_inventory import inventory_sources
 
@@ -181,7 +202,19 @@ def _run_sources(args) -> dict:
     return acquire_sources(args.profile, args.out, store=args.store, replica=args.replica, **limits)
 
 
+def _run_geography(args) -> dict:
+    from .geography import evaluate_infrastructure_candidates, inventory_tenements
+
+    if args.operation == "infrastructure":
+        return evaluate_infrastructure_candidates(args.tenements, args.sources, args.out)
+    return inventory_tenements(args.bindings, args.sources, args.store, args.out)
+
+
 def _run_research(args) -> dict:
+    if args.operation == "review-development":
+        from .development import review_milestones
+
+        return review_milestones(args.profile, args.manifest, args.assets, args.bindings, args.out)
     if args.operation == "compare":
         from .research_delta import compare_research_builds
         from .sources import ContentStore
