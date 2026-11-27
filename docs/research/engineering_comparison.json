@@ -1,0 +1,1120 @@
+{
+  "schema": "same-input-governed-research-engineering-v1",
+  "status": "PASS",
+  "scope": "Real 144-SHA V3 source manifest to formal observations, 93×51 Census and governed MCDA under unchanged policy",
+  "working_snapshot": false,
+  "profile_sha256": "8ccc8d042c4b8ce16177acf3f1e583d09d373459adeb930651a317ce4ff59c93",
+  "resource_bindings_sha256": "7eab84d027e772052e314590ebb62e29f2950944e67573ebb0a5703cf707c899",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "environment": {
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "python": "3.12.14",
+    "python_implementation": "CPython",
+    "sqlite": "3.53.1",
+    "tools": {
+      "pdfimages": {
+        "sha256": "213eba4a36ef021f49a0abc94292a7566baba8dfafef5017467166d9f06074f5",
+        "version": "pdfimages version 25.03.0"
+      },
+      "pdftotext": {
+        "sha256": "7fe3559cac3ba61dd93650a1ba90499b9fc488184ef8d0f2f1305ddf52c0378b",
+        "version": "pdftotext version 25.03.0"
+      },
+      "tesseract": {
+        "sha256": "74b76a5b994adcc18be362bf64ed5118082b2401d5d9a35242e92fc4c62e2b4b",
+        "version": "tesseract 5.5.0"
+      }
+    }
+  },
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "timing_scope": "In a fresh interpreter, from before importing build modules to build receipt completion. Source readback and parser included; Git archive and setup excluded. No network.",
+  "cache": "Fresh process, DocumentCache and SQLite each run; alternating baseline/current; OS page cache uncontrolled",
+  "profiling": "One additional cProfile run each; runtime call edges and static imports among reached modules; AST compares reached named functions only",
+  "ci_cost_same_input": "UNMEASURED",
+  "differences": {
+    "baseline-1": [],
+    "baseline-2": [],
+    "baseline-3": [],
+    "baseline-4": [],
+    "current-1": [],
+    "current-2": [],
+    "current-3": [],
+    "current-4": []
+  },
+  "scientific_counts": {
+    "verified_source_count": 144,
+    "eligible_source_count": 144,
+    "observation_counts": {
+      "candidate_count": 38,
+      "selected_count": 17,
+      "validated_count": 23
+    },
+    "census_scientific_cell_count": 12,
+    "comparable_project_criteria": 6
+  },
+  "versions": {
+    "baseline": {
+      "code_commit": "ac86ab43ec4671e177ce1c71556f88e1425fb633",
+      "src_config_sha256": "15ec3fdef7145b00f492d5fbcb28ffe4ce4669609aa65218d5b92724758b4769",
+      "runs": [
+        {
+          "seconds": 1.7764867189998768,
+          "parent_peak_rss_kib": 55460,
+          "subprocess_peak_rss_kib": 55460,
+          "gates": {
+            "F0": "PASS",
+            "F1": "PASS",
+            "F2": "PASS",
+            "F3": "PASS"
+          }
+        },
+        {
+          "seconds": 1.8072744569999486,
+          "parent_peak_rss_kib": 55468,
+          "subprocess_peak_rss_kib": 55468,
+          "gates": {
+            "F0": "PASS",
+            "F1": "PASS",
+            "F2": "PASS",
+            "F3": "PASS"
+          }
+        },
+        {
+          "seconds": 1.7280578259997128,
+          "parent_peak_rss_kib": 55552,
+          "subprocess_peak_rss_kib": 55552,
+          "gates": {
+            "F0": "PASS",
+            "F1": "PASS",
+            "F2": "PASS",
+            "F3": "PASS"
+          }
+        }
+      ],
+      "reached_code": {
+        "reached_module_count": 21,
+        "reached_modules": [
+          "au_ree_v3",
+          "au_ree_v3.census",
+          "au_ree_v3.comparability",
+          "au_ree_v3.composition_extraction",
+          "au_ree_v3.composition_review",
+          "au_ree_v3.contracts",
+          "au_ree_v3.contracts.temporal",
+          "au_ree_v3.decision",
+          "au_ree_v3.documents",
+          "au_ree_v3.fresh_census",
+          "au_ree_v3.fresh_decision",
+          "au_ree_v3.fresh_observations",
+          "au_ree_v3.fresh_research",
+          "au_ree_v3.observations",
+          "au_ree_v3.registry",
+          "au_ree_v3.research_artifacts",
+          "au_ree_v3.research_environment",
+          "au_ree_v3.research_inputs",
+          "au_ree_v3.resource_extraction",
+          "au_ree_v3.sources",
+          "au_ree_v3.store"
+        ],
+        "runtime_internal_edge_count": 43,
+        "runtime_internal_edges": [
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.decision"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_review"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_census"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_decision"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_observations"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.research_environment"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.resource_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.sources",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ]
+        ],
+        "static_internal_import_edge_count_among_reached_modules": 56,
+        "static_internal_import_edges_among_reached_modules": [
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.documents",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.decision"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_review"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_census"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_decision"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_observations"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.research_artifacts"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.research_environment"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.resource_extraction",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.resource_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.sources",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.sources",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ]
+        ],
+        "reached_ast_functions": 159,
+        "branch_score_max": 79,
+        "branch_score_p90": 20,
+        "top_branch_scores": [
+          [
+            79,
+            "au_ree_v3.fresh_observations",
+            "extract_sources",
+            223
+          ],
+          [
+            49,
+            "au_ree_v3.fresh_research",
+            "verify_source_manifest",
+            59
+          ],
+          [
+            30,
+            "au_ree_v3.contracts.temporal",
+            "evaluate_temporal",
+            122
+          ],
+          [
+            26,
+            "au_ree_v3.composition_review",
+            "corroborated_aggregate",
+            43
+          ],
+          [
+            26,
+            "au_ree_v3.comparability",
+            "_verified_aggregate_units",
+            243
+          ],
+          [
+            25,
+            "au_ree_v3.fresh_observations",
+            "_select",
+            161
+          ],
+          [
+            25,
+            "au_ree_v3.comparability",
+            "_composition",
+            330
+          ],
+          [
+            24,
+            "au_ree_v3.composition_extraction",
+            "classified_total_oxides",
+            17
+          ]
+        ],
+        "cross_module_repeated_AST_body_groups": []
+      },
+      "median_seconds": 1.7764867189998768,
+      "median_parent_peak_rss_kib": 55468,
+      "median_subprocess_peak_rss_kib": 55468
+    },
+    "current": {
+      "code_commit": "9ef642e34d42613cacff1348b3c71c51105c840d",
+      "src_config_sha256": "836c4195d8dfdd1a21dd7651c4bc2ee58dd04ac281a53b75b550e3109360709f",
+      "runs": [
+        {
+          "seconds": 1.967435241000203,
+          "parent_peak_rss_kib": 56084,
+          "subprocess_peak_rss_kib": 56084,
+          "gates": {
+            "F0": "PASS",
+            "F1": "PASS",
+            "F2": "PASS",
+            "F3": "PASS"
+          }
+        },
+        {
+          "seconds": 1.8823107989992423,
+          "parent_peak_rss_kib": 56088,
+          "subprocess_peak_rss_kib": 56088,
+          "gates": {
+            "F0": "PASS",
+            "F1": "PASS",
+            "F2": "PASS",
+            "F3": "PASS"
+          }
+        },
+        {
+          "seconds": 1.7180297610011621,
+          "parent_peak_rss_kib": 56120,
+          "subprocess_peak_rss_kib": 56120,
+          "gates": {
+            "F0": "PASS",
+            "F1": "PASS",
+            "F2": "PASS",
+            "F3": "PASS"
+          }
+        }
+      ],
+      "reached_code": {
+        "reached_module_count": 22,
+        "reached_modules": [
+          "au_ree_v3",
+          "au_ree_v3.census",
+          "au_ree_v3.comparability",
+          "au_ree_v3.composition_extraction",
+          "au_ree_v3.composition_review",
+          "au_ree_v3.contracts",
+          "au_ree_v3.contracts.temporal",
+          "au_ree_v3.decision",
+          "au_ree_v3.documents",
+          "au_ree_v3.fresh_census",
+          "au_ree_v3.fresh_decision",
+          "au_ree_v3.fresh_observations",
+          "au_ree_v3.fresh_research",
+          "au_ree_v3.observations",
+          "au_ree_v3.registry",
+          "au_ree_v3.research_artifacts",
+          "au_ree_v3.research_environment",
+          "au_ree_v3.research_inputs",
+          "au_ree_v3.resource_extraction",
+          "au_ree_v3.semantics",
+          "au_ree_v3.sources",
+          "au_ree_v3.store"
+        ],
+        "runtime_internal_edge_count": 43,
+        "runtime_internal_edges": [
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.decision"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_review"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_census"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_decision"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_observations"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.research_environment"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.resource_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.sources",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ]
+        ],
+        "static_internal_import_edge_count_among_reached_modules": 59,
+        "static_internal_import_edges_among_reached_modules": [
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.comparability",
+            "au_ree_v3.semantics"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_extraction",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.composition_review",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.contracts",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.documents",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.census"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_census",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.comparability"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.decision"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_decision",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.composition_review"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.research_inputs"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.resource_extraction"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_observations",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_census"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_decision"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.fresh_observations"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.research_artifacts"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.research_environment"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.sources"
+          ],
+          [
+            "au_ree_v3.fresh_research",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.observations",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.research_inputs",
+            "au_ree_v3.store"
+          ],
+          [
+            "au_ree_v3.resource_extraction",
+            "au_ree_v3.documents"
+          ],
+          [
+            "au_ree_v3.resource_extraction",
+            "au_ree_v3.observations"
+          ],
+          [
+            "au_ree_v3.semantics",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.sources",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.sources",
+            "au_ree_v3.registry"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.contracts.temporal"
+          ],
+          [
+            "au_ree_v3.store",
+            "au_ree_v3.semantics"
+          ]
+        ],
+        "reached_ast_functions": 161,
+        "branch_score_max": 79,
+        "branch_score_p90": 20,
+        "top_branch_scores": [
+          [
+            79,
+            "au_ree_v3.fresh_observations",
+            "extract_sources",
+            223
+          ],
+          [
+            49,
+            "au_ree_v3.fresh_research",
+            "verify_source_manifest",
+            59
+          ],
+          [
+            30,
+            "au_ree_v3.contracts.temporal",
+            "evaluate_temporal",
+            122
+          ],
+          [
+            26,
+            "au_ree_v3.composition_review",
+            "corroborated_aggregate",
+            43
+          ],
+          [
+            26,
+            "au_ree_v3.comparability",
+            "_verified_aggregate_units",
+            254
+          ],
+          [
+            25,
+            "au_ree_v3.fresh_observations",
+            "_select",
+            161
+          ],
+          [
+            25,
+            "au_ree_v3.comparability",
+            "_treo_definitions",
+            322
+          ],
+          [
+            25,
+            "au_ree_v3.comparability",
+            "_composition",
+            386
+          ]
+        ],
+        "cross_module_repeated_AST_body_groups": []
+      },
+      "median_seconds": 1.8823107989992423,
+      "median_parent_peak_rss_kib": 56088,
+      "median_subprocess_peak_rss_kib": 56088
+    }
+  }
+}

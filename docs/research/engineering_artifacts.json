@@ -1,0 +1,15 @@
+{
+  "schema": "ontology-engineering-delivery-v1",
+  "status": "PASS",
+  "base_commit": "ac86ab43ec4671e177ce1c71556f88e1425fb633",
+  "integrated_commit": "9ef642e34d42613cacff1348b3c71c51105c840d",
+  "artifact_sha256": {
+    "engineering_benchmark.py": "ab0c9e437b798228008499b8392d088ffb13cdd7b502d6bfa740afa251eade02",
+    "engineering_comparison.json": "567f8ea404a70a7f8367f57f6da8abbdf4744d7addb16a11d2dcc85216080162",
+    "ontology_engineering.md": "58051fe32ed9511493ed663808b802ba7e692f610af98ff1bbe709e7c5069d16",
+    "ontology_responsibility.py": "ef36612d48ebc60c181c9f79f82033aa623d113fdb4281cadc5965e90dd17cae",
+    "responsibility_review.json": "bcaca020b7f6e702bf314ab36f0736a9e1ceee8aa09fa927b6472c7922a41563",
+    "technical_benchmark.py": "6006d1475f209a3ca3a4fb48873680e62b2b78e674d4b267bccdd67dc5b59891",
+    "technical_engineering.json": "1ac9b5214346639f061e39b48c04572c84ff170089a215ed593c46aebdebee08"
+  }
+}

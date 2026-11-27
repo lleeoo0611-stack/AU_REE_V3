@@ -1,0 +1,934 @@
+{
+  "ablation": {
+    "A": {
+      "formal_keys": [
+        [
+          "AU-0098e17a63e7c05c213f",
+          "R1"
+        ],
+        [
+          "AU-0098e17a63e7c05c213f",
+          "S1"
+        ],
+        [
+          "AU-6d807eb7caec9db0f35e",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "S1"
+        ],
+        [
+          "AU-efff91a06cf344122d88",
+          "R1"
+        ]
+      ],
+      "live_policy": "criterion-comparability-v1",
+      "observations": 38
+    },
+    "B": {
+      "design_contexts_recovered": 1,
+      "formal_keys": [
+        [
+          "AU-0098e17a63e7c05c213f",
+          "R1"
+        ],
+        [
+          "AU-0098e17a63e7c05c213f",
+          "S1"
+        ],
+        [
+          "AU-6d807eb7caec9db0f35e",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "S1"
+        ],
+        [
+          "AU-efff91a06cf344122d88",
+          "R1"
+        ]
+      ],
+      "readback": {
+        "ORIGINAL_SPANS_LOCATED": 38
+      }
+    },
+    "C": {
+      "formal_keys": [
+        [
+          "AU-0098e17a63e7c05c213f",
+          "R1"
+        ],
+        [
+          "AU-0098e17a63e7c05c213f",
+          "S1"
+        ],
+        [
+          "AU-6d807eb7caec9db0f35e",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "S1"
+        ],
+        [
+          "AU-efff91a06cf344122d88",
+          "R1"
+        ]
+      ],
+      "normalization_outcomes": {
+        "INSUFFICIENT_CONTEXT": 2,
+        "NORMALIZED": 15
+      },
+      "normalization_results": 17,
+      "original_reread_outcomes": {
+        "NORMALIZED": 3
+      }
+    },
+    "D": {
+      "assessment_outcomes": {
+        "COMPARABLE_DERIVED": 2,
+        "COMPARABLE_DIRECT": 3,
+        "INSUFFICIENT_CONTEXT": 1
+      },
+      "derived_mass_assessments": 4,
+      "derived_mass_outcomes": {
+        "COMPARABLE_DERIVED": 3,
+        "INSUFFICIENT_CONTEXT": 1
+      },
+      "formal_keys": [
+        [
+          "AU-0098e17a63e7c05c213f",
+          "R1"
+        ],
+        [
+          "AU-0098e17a63e7c05c213f",
+          "S1"
+        ],
+        [
+          "AU-6d807eb7caec9db0f35e",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "S1"
+        ],
+        [
+          "AU-efff91a06cf344122d88",
+          "R1"
+        ]
+      ],
+      "pair_outcomes": {
+        "NOT_COMPARABLE": 7
+      },
+      "semantic_assessments": 6
+    },
+    "E": {
+      "D1": 0,
+      "D1_shadow_milestones": 3,
+      "I1_I4": 0,
+      "T1": 0,
+      "formal_cohort_delta": 0,
+      "formal_keys": [
+        [
+          "AU-0098e17a63e7c05c213f",
+          "R1"
+        ],
+        [
+          "AU-0098e17a63e7c05c213f",
+          "S1"
+        ],
+        [
+          "AU-6d807eb7caec9db0f35e",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "R1"
+        ],
+        [
+          "AU-9bd8e5ed8408cd84d876",
+          "S1"
+        ],
+        [
+          "AU-efff91a06cf344122d88",
+          "R1"
+        ]
+      ],
+      "official_legal_boundaries": 7,
+      "technical_cross_project_pairs": 0
+    }
+  },
+  "all_38_formal_observations_unchanged": {
+    "path": "work/ontology-v1/current-formal-build/observations/observations.jsonl",
+    "sha256": "0c5958adcb70c2798f72aa5ed56fcfe2ee05f7a2d672bfc614b3fb14077a5ce3"
+  },
+  "baseline_code_commit": "ac86ab43ec4671e177ce1c71556f88e1425fb633",
+  "candidate_index": {
+    "holdout_annotation_sha256": "bffaa60dbe69ad4f1439e85f778d9cb77aa661196250f0b64a1358633d55b323",
+    "holdout_retrieval": [
+      {
+        "annotated_pages": [
+          7
+        ],
+        "case_id": "holdout-dated-niobium-mre",
+        "missed_annotated_pages": [
+          7
+        ],
+        "project_id": "AU-cae6c11543b0da5f840d",
+        "retrieved_annotated_pages": [],
+        "source_sha256": "ae8825f63b7ce1ac8bb26e0406fb9c75adf12fe31b8a86658a33fff4715f1766",
+        "status": "FAIL",
+        "top_k": 20
+      },
+      {
+        "annotated_pages": [
+          8,
+          28
+        ],
+        "case_id": "holdout-date-from-other-statement",
+        "missed_annotated_pages": [],
+        "project_id": "AU-49b538453133bd968e8d",
+        "retrieved_annotated_pages": [
+          8,
+          28
+        ],
+        "source_sha256": "c14ed919368d815403c67780f8d76e4f01cb789da8e3d5547ed531055f23c979",
+        "status": "PASS",
+        "top_k": 20
+      },
+      {
+        "annotated_pages": [
+          15,
+          36
+        ],
+        "case_id": "holdout-announcement-versus-effective",
+        "missed_annotated_pages": [
+          15,
+          36
+        ],
+        "project_id": "AU-1345edd8165c10930e94",
+        "retrieved_annotated_pages": [],
+        "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+        "status": "FAIL",
+        "top_k": 20
+      }
+    ],
+    "index_sha256": "649a47316cfc1c89d6952a7f30f6612517d74ecae23ed446c0b415b6ff88d1ed",
+    "index_sources": {
+      "INDEXED": 142,
+      "UNINDEXED_CONTAINER": 2
+    },
+    "peak_rss_kib": 71300,
+    "precision": "UNMEASURED",
+    "query_receipt_sha256": {
+      "D1": "b151a1337901c64ca7b25e742e997b1552a1a12c96a6b36e83765a96a2b367fe",
+      "GIS": "c436f1b39933f2e3136cd495432a697509f402075e01502f5700dd2c2833bea9",
+      "R1": "ea31b77b987ac41e2a174ba561c1905ea503b68141953af7a730aed339415cbe",
+      "S1": "a60b2f9464817f2da2cbfdff09c2fcf9e5a01c5a1139d5c4240e70e5dc90e9b6",
+      "T1a": "60606bb1233e9b4a218733892200ace42c682e21868fe99b8d6ef08ef283ee1e",
+      "T1b": "85eea58efbf859f18989bee448455c6da92ce0fe79cc4f2f4f8cc0e267b1161b",
+      "T1c": "5f4093f08b69693c5dc7d03c0f9b5ad5c2f54b7a2abb3f4dc58e0db74a4fd982",
+      "T1d": "3b4c14169ae8676abe4fcc8f3d9406c77ce88f76708fa0445785b7e87f70fc5c"
+    },
+    "reason": "NO_EXHAUSTIVE_RELEVANCE_OR_ADMISSION_LABELS_FOR_SEARCH_RESULTS",
+    "recall": "UNMEASURED",
+    "same_index_bytes": true,
+    "same_queries": [
+      "R1",
+      "S1",
+      "D1",
+      "GIS",
+      "T1a",
+      "T1b",
+      "T1c",
+      "T1d"
+    ],
+    "second_build_elapsed_seconds": 45.99258101000123,
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "span_count": 57521,
+    "status": "PASS"
+  },
+  "ci_before_integration": {
+    "14": {
+      "head": "de0a005b76c5d4d638e290dea0b17f143577d643",
+      "jobs": {
+        "Exact resource integration": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 66,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46078619748/job/140772120516"
+        },
+        "Frozen reference integrity": {
+          "result": "SKIPPED",
+          "runner_wall_seconds": 0,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46078619748/job/140772121866"
+        },
+        "Static and unit": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 19,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46078619748/job/140772120151"
+        }
+      },
+      "merge_commit": "7119360d70a9a1ace3d5829b5977dd182542b51f",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/14"
+    },
+    "15": {
+      "head": "ff5cd71b5a93aa9e7ca1acd6005bc94f2155f328",
+      "jobs": {
+        "Exact resource integration": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 62,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46078758509/job/140772561864"
+        },
+        "Frozen reference integrity": {
+          "result": "SKIPPED",
+          "runner_wall_seconds": 0,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46078758509/job/140772563725"
+        },
+        "Static and unit": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 13,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46078758509/job/140772562055"
+        }
+      },
+      "merge_commit": "c595abf0406fffdd5b0bb52414f4918313a814a4",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/15"
+    },
+    "16": {
+      "head": "c91dd652d0010205188a543f511a3e2debaa162e",
+      "jobs": {
+        "Exact resource integration": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 41,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46079370311/job/140774510366"
+        },
+        "Frozen reference integrity": {
+          "result": "SKIPPED",
+          "runner_wall_seconds": 0,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46079370311/job/140774511201"
+        },
+        "Static and unit": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 10,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46079370311/job/140774509967"
+        }
+      },
+      "merge_commit": "ef6d79018b41a08fa89daf252c13211f38d90a37",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/16"
+    },
+    "17": {
+      "head": "9ef642e34d42613cacff1348b3c71c51105c840d",
+      "jobs": {
+        "Exact resource integration": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 70,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46080488084/job/140778053685"
+        },
+        "Frozen reference integrity": {
+          "result": "SKIPPED",
+          "runner_wall_seconds": 0,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46080488084/job/140778055224"
+        },
+        "Static and unit": {
+          "result": "SUCCESS",
+          "runner_wall_seconds": 17,
+          "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46080488084/job/140778054013"
+        }
+      },
+      "merge_commit": "679c710865cd72fe78175f5f59d24e9f377d050c",
+      "state": "MERGED",
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/17"
+    }
+  },
+  "formal_artifacts_exact_sha256": {
+    "census/cell_status.csv": "181dd0dd6ca571441c5a205a16704e9ba07d321b17afaafba0297e94b50392ac",
+    "census/census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+    "census/census_receipt.json": "73cdfa6d71d7afea8424929f5b1f56da676654c57b0f2e0c6f775e9b88a5390e",
+    "decision/decision_receipt.json": "ec4d47ebb45ae821376a687fdc600246e1d043d0a656f4746d802b57ef721685",
+    "decision/mcda_inputs.json": "25bfde893c61710686b69f7871a31a29c62d70d16196888e621012d4dca4a708",
+    "decision/mcda_results.json": "66cdca89330c8a153ac36aae7c2f0e66bcf5863c81b4a35ad7942ae3f8ceb151",
+    "observations/extraction.json": "8e418a644d3c39bdb3a6296f2672ed02e4cc38eca06911baee5a654a9c3e93b0",
+    "observations/observations.jsonl": "0c5958adcb70c2798f72aa5ed56fcfe2ee05f7a2d672bfc614b3fb14077a5ce3"
+  },
+  "formal_build_gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS"
+  },
+  "formal_delta": {
+    "F4": "NOT_RUN",
+    "F5": "NOT_RUN",
+    "after_comparable_project_criteria": 6,
+    "after_formal_census_cells": 12,
+    "before_comparable_project_criteria": 6,
+    "before_formal_census_cells": 12,
+    "census_change_counts": {
+      "PROVENANCE_RECEIPT_CHANGED": 12,
+      "UNCHANGED": 4731
+    },
+    "compared_census_cells": 4743,
+    "net_comparable_project_criteria": 0,
+    "observation_counts": {
+      "after": {
+        "candidate_count": 38,
+        "selected_count": 17,
+        "validated_count": 23
+      },
+      "before": {
+        "candidate_count": 38,
+        "selected_count": 17,
+        "validated_count": 23
+      }
+    },
+    "outputs_sha256": {
+      "census_delta.csv": "b107408c2a8dcf61915c89c9e5c0f2a08369b9969b52fda0884ef9718b755462",
+      "cohort_and_mcda.json": "24650c6db70ba0834fb39b8fce5e982baab4cb6ac87cab926c23b18c8155f33d",
+      "comparability_delta.json": "8ca66083759efefdba542eee023462de5aea88901ead27530ff68ef4ee8edbb5",
+      "release_and_replay.json": "fe928b6b8a08213335ceb68fde6c1bdf0173a921cb6164661bbb1e0ac972c223"
+    },
+    "panels": {
+      "issuer_resource_composition": {
+        "after_eligible_count": 2,
+        "after_status": "PASS"
+      },
+      "issuer_resource_infrastructure": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      },
+      "issuer_resource_study": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      },
+      "resource_infrastructure_pilot": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      },
+      "six_domain": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      }
+    },
+    "profile_id": "au-ree-2026-11-28",
+    "research_cutoff": "2026-11-28",
+    "schema": "research-delta-v1",
+    "status": "PASS",
+    "target_status": "EVIDENCE_INSUFFICIENT"
+  },
+  "formal_gain_challenge_net": 4,
+  "formal_gain_measured_net": 0,
+  "formal_gain_reason": "NO_NEW_EVIDENCE_QUALIFIED_FORMAL_KEYS",
+  "formal_golden_and_policy_preserved": true,
+  "formal_reference_release_id": "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974",
+  "full_work_receipts": [
+    {
+      "path": "work/ontology-v1/release-verification/semantic_release_verification.json",
+      "sha256": "ef948671403f5a2193020d30a8192a08e250603a9f9e0fe5967bac4413c1ceeb"
+    },
+    {
+      "path": "work/ontology-v1/replay-from-shadow/shadow_replay_receipt.json",
+      "sha256": "efe136a0f8df3768c141d84cd86af75e3d0dc888ee931005f0162067fedd400e"
+    },
+    {
+      "path": "work/ontology-v1/release-verification/frozen-formal-replay/replay_receipt.json",
+      "sha256": "7c23ef0064d4cb0e07e12fcb45b22fa896a7945c6729fdf07a8b77c06fc9748a"
+    },
+    {
+      "path": "work/ontology-v1/release-verification/clean-a/resource/semantic_ablation.json",
+      "sha256": "5d63926c547b14a368a5957177dbc40809edd08d988a5b10ed1c6fe51c6bd0c3"
+    },
+    {
+      "path": "work/ontology-v1/release-verification/clean-a/resource_holdout.json",
+      "sha256": "54a38251c8e7c3931c2e6d3a213783a67329ea4c12e9266f633a4532298e6caf"
+    },
+    {
+      "path": "work/ontology-v1/release-verification/clean-a/technical/technical_pilot_receipt.json",
+      "sha256": "acf8eee62b72b66029ff7864c97b5e7b1e559f053370f1d3b0dbc499400763b6"
+    },
+    {
+      "path": "work/ontology-v1/release-verification/clean-a/technical-holdout/technical_pilot_receipt.json",
+      "sha256": "37f381f93a72f07003a8559cfbcabdc228a025535a6ddd39350e0b9b7af98335"
+    },
+    {
+      "path": "work/ontology-v1/release-verification/clean-a/development/development_milestones.json",
+      "sha256": "89437b6bd78a4cbb892f4e2cf945f5632e245075e8bcb951322b31747303cd17"
+    },
+    {
+      "path": "work/ontology-v1/release-verification/clean-a/infrastructure.json",
+      "sha256": "b9da3e493e727defe8d77ff6fea2dbd4c345e13fc43a7255c341945510a44cbd"
+    },
+    {
+      "path": "work/ontology-v1/formal-delta/comparison_receipt.json",
+      "sha256": "c8c65feb25bb4ca0ce97b5d13c4d907b336d3cb92d467a7e09238e666db23954"
+    },
+    {
+      "path": "work/ontology-v1/technical-verified/holdout/independent_observation_role_confusion.json",
+      "sha256": "4d535490933e9ca129b11c4aa50b028d3e67494dab5ca18e09a993cd2b1aff1c"
+    },
+    {
+      "path": "work/ontology-v1/resource-ablation-cost/cost_receipt.json",
+      "sha256": "6383d477c928a6793ce8bcf0ad63e1405535911cd37a661697db931e92d192ed"
+    },
+    {
+      "path": "work/ontology-v1/candidate_retrieval_replay.json",
+      "sha256": "62f325adcd73490586ea15c10b4556192ff76192e8f89fc04dee1bd9f8499c24"
+    },
+    {
+      "path": "work/ontology-v1/candidate_holdout_locator_queries.json",
+      "sha256": "9888f79269a9cad9c83be34e04b016a1a71d57f0c183386c5313ebd79c19cade"
+    }
+  ],
+  "gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "O0": "PASS",
+    "O1": "PASS",
+    "O2": "FAIL",
+    "O3": "PASS",
+    "O4": "PASS"
+  },
+  "local_test_suite": {
+    "elapsed_seconds": 32.819,
+    "executed": 223,
+    "log": "work/ontology-v1/integration-suite.log",
+    "skipped": 0,
+    "status": "PASS"
+  },
+  "research_cutoff": "2026-11-28",
+  "resource_ablation_cost": {
+    "code_commit": "c91dd652d0010205188a543f511a3e2debaa162e",
+    "formal_comparability_unchanged": true,
+    "prior_equivalent_shadow_workload": "UNMEASURED",
+    "runs": [
+      {
+        "peak_document_child_rss_kib": 59492,
+        "peak_python_rss_kib": 59492,
+        "shadow_outputs": {
+          "resource_original_reread.json": "ddb0b0eba56659f7f074ccc1e325146f2829602c07ea78af9642ef2fccbfacd7",
+          "semantic_ablation.json": "5d63926c547b14a368a5957177dbc40809edd08d988a5b10ed1c6fe51c6bd0c3",
+          "semantic_assessments.json": "eef48ea76d896fcd3344837e918163cb5a66ee0d5e7d4d4177e07f1de296b41e",
+          "semantic_observations.json": "bb6f631ec045e12fa1ecce9fcd9bc5dd763b2ea6d3eff6e83dd6310439b08c8f",
+          "semantic_project_pairs.json": "d5b2afa06098b5ccfae192686e5a0ec3f2d8f9cd74874687a3cd3fa535310867",
+          "shadow_contained_mass.json": "36b30a74721489df561f56293689344acdd5e393202c98604eba81a34ad16a68"
+        },
+        "status": "PASS",
+        "wall_seconds": 2.305
+      },
+      {
+        "peak_document_child_rss_kib": 59496,
+        "peak_python_rss_kib": 59496,
+        "shadow_outputs": {
+          "resource_original_reread.json": "ddb0b0eba56659f7f074ccc1e325146f2829602c07ea78af9642ef2fccbfacd7",
+          "semantic_ablation.json": "5d63926c547b14a368a5957177dbc40809edd08d988a5b10ed1c6fe51c6bd0c3",
+          "semantic_assessments.json": "eef48ea76d896fcd3344837e918163cb5a66ee0d5e7d4d4177e07f1de296b41e",
+          "semantic_observations.json": "bb6f631ec045e12fa1ecce9fcd9bc5dd763b2ea6d3eff6e83dd6310439b08c8f",
+          "semantic_project_pairs.json": "d5b2afa06098b5ccfae192686e5a0ec3f2d8f9cd74874687a3cd3fa535310867",
+          "shadow_contained_mass.json": "36b30a74721489df561f56293689344acdd5e393202c98604eba81a34ad16a68"
+        },
+        "status": "PASS",
+        "wall_seconds": 2.311
+      },
+      {
+        "peak_document_child_rss_kib": 59492,
+        "peak_python_rss_kib": 59492,
+        "shadow_outputs": {
+          "resource_original_reread.json": "ddb0b0eba56659f7f074ccc1e325146f2829602c07ea78af9642ef2fccbfacd7",
+          "semantic_ablation.json": "5d63926c547b14a368a5957177dbc40809edd08d988a5b10ed1c6fe51c6bd0c3",
+          "semantic_assessments.json": "eef48ea76d896fcd3344837e918163cb5a66ee0d5e7d4d4177e07f1de296b41e",
+          "semantic_observations.json": "bb6f631ec045e12fa1ecce9fcd9bc5dd763b2ea6d3eff6e83dd6310439b08c8f",
+          "semantic_project_pairs.json": "d5b2afa06098b5ccfae192686e5a0ec3f2d8f9cd74874687a3cd3fa535310867",
+          "shadow_contained_mass.json": "36b30a74721489df561f56293689344acdd5e393202c98604eba81a34ad16a68"
+        },
+        "status": "PASS",
+        "wall_seconds": 2.176
+      }
+    ],
+    "schema": "same-fixed-sources-resource-ablation-cost-v1"
+  },
+  "resource_holdout": {
+    "autonomous_observation_detection": {
+      "reason": "SCOPED_OPERATOR_LOCATORS",
+      "status": "UNMEASURED"
+    },
+    "cutoff": "2026-11-28",
+    "labels_sha256": "1936c23a402aff88d66c3741fa4340a2b43ea3bafab2ff7c007345dfc7e67812",
+    "observation_expected_token_replay": {
+      "fn": 0,
+      "fp": 0,
+      "n": 9,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tn": 0,
+      "tp": 9
+    },
+    "observation_scoped_normalization_eligibility": {
+      "fn": 0,
+      "fp": 0,
+      "n": 9,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tn": 6,
+      "tp": 3
+    },
+    "r1_reported_use_compatibility": {
+      "fn": 0,
+      "fp": 0,
+      "n": 4,
+      "precision": "UNMEASURED",
+      "recall": "UNMEASURED",
+      "tn": 4,
+      "tp": 0
+    },
+    "r1_shadow_use_compatibility": {
+      "fn": 0,
+      "fp": 0,
+      "n": 4,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tn": 3,
+      "tp": 1
+    },
+    "s1_formal_use_compatibility": {
+      "fn": 0,
+      "fp": 0,
+      "n": 0,
+      "precision": "UNMEASURED",
+      "recall": "UNMEASURED",
+      "tn": 0,
+      "tp": 0
+    },
+    "schema": "semantic-resource-independent-holdout-evaluation-v1",
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "status": "PASS",
+    "timezone": "Asia/Taipei",
+    "unique_source_sha256s": 144
+  },
+  "same_inputs": {
+    "event_statuses": {
+      "HTTP_404": 1,
+      "MIME_MISMATCH": 37,
+      "PUBLIC_CAPTURED": 148
+    },
+    "projects": 93,
+    "projects_searched": 93,
+    "projects_with_source": 93,
+    "projects_with_temporally_eligible_source": 93,
+    "same_url_changed_editions": 0,
+    "temporal_statuses": {
+      "ELIGIBLE": 148
+    },
+    "unique_source_sha256": 144,
+    "version_statuses": {
+      "EXACT_SHA_REUSED": 145,
+      "NEW_SHA": 3
+    }
+  },
+  "schema": "ontology-normalization-t1-research-receipt-v1",
+  "scientific_code_commit": "679c710865cd72fe78175f5f59d24e9f377d050c",
+  "shadow": {
+    "code_archive_sha256": "bd41f91301f1074fc79322ca246d920016255bad85120013e1bfab88310394b5",
+    "environment_sha256": "ebefa3c215de4d526dee046b9001d81c45cad0db568a9ce5635cde54d3dd0a3a",
+    "identity": "9adf50117ea5fbee51f9146d52777f979f7b664a03ac8388d6603da94ed40620",
+    "logical_artifact_hashes": {
+      "development/development_milestones.json": "89437b6bd78a4cbb892f4e2cf945f5632e245075e8bcb951322b31747303cd17",
+      "infrastructure.json": "b9da3e493e727defe8d77ff6fea2dbd4c345e13fc43a7255c341945510a44cbd",
+      "resource/resource_original_reread.json": "ddb0b0eba56659f7f074ccc1e325146f2829602c07ea78af9642ef2fccbfacd7",
+      "resource/semantic_ablation.json": "5d63926c547b14a368a5957177dbc40809edd08d988a5b10ed1c6fe51c6bd0c3",
+      "resource/semantic_assessments.json": "eef48ea76d896fcd3344837e918163cb5a66ee0d5e7d4d4177e07f1de296b41e",
+      "resource/semantic_observations.json": "bb6f631ec045e12fa1ecce9fcd9bc5dd763b2ea6d3eff6e83dd6310439b08c8f",
+      "resource/semantic_project_pairs.json": "d5b2afa06098b5ccfae192686e5a0ec3f2d8f9cd74874687a3cd3fa535310867",
+      "resource/shadow_contained_mass.json": "36b30a74721489df561f56293689344acdd5e393202c98604eba81a34ad16a68",
+      "resource/sqlite_logical_sha256.json": "f3486db7917fa95904e890c08bcc797e8cca0375770389485f66f3bc1d1b4ff5",
+      "resource_holdout.json": "54a38251c8e7c3931c2e6d3a213783a67329ea4c12e9266f633a4532298e6caf",
+      "stage_statuses.json": "88059b71cf0b6edcffad378a12c9c3a1a76ef15f25e14b7bf1ae3a7be6725fd5",
+      "technical-holdout/source_readback.json": "8821fd9cc895b3f42368bb261069f5c0bd189f181757384bc0c7e16b7702e946",
+      "technical-holdout/sqlite_logical_sha256.json": "b8a53272c081ba7d21c31e8c53c113f613ec7fdd43f40fce95d2d43dd4b90dce",
+      "technical-holdout/technical_observations.jsonl": "62e7f29a8f2147a936ee2ee5ebb1a1aae48f40929f9cfe4c3152a194ff8a52f8",
+      "technical-holdout/technical_oracle.json": "67a0d125edc5650289b6de1adcab46c527b69210857af3b08b7d4129dec3e27d",
+      "technical-holdout/technical_pairs.json": "c27c482913a098ac25c29b3c6f42fd68fb7f77f7bbb933499db3a08e41633648",
+      "technical-holdout/technical_pilot_receipt.json": "1c2ccac4ae751997e14c6d4e8504a137a022ee051b696541631388ef05f4d2f9",
+      "technical/source_readback.json": "8821fd9cc895b3f42368bb261069f5c0bd189f181757384bc0c7e16b7702e946",
+      "technical/sqlite_logical_sha256.json": "d6cb0aa0f8533053a37835c14e40c9d387ae70420ad73118e3fad1706db17800",
+      "technical/technical_observations.jsonl": "32be701456cacaaf256e9c8994685c08b220989dccffcb42f7c302f63012882a",
+      "technical/technical_oracle.json": "c695759e207a4cd0de7138fa224555e04753a521ca437aa1e9945d95d60ad03e",
+      "technical/technical_pairs.json": "6903d23cb61f29bbcc4b7f9953c405fcf9834764935765af6b52097278efdd1e",
+      "technical/technical_pilot_receipt.json": "7acddb593cd02c34449cf337c527448833a6aa486d16b070a56e7212febfbfc4"
+    },
+    "output_manifest": {
+      "path": "work/ontology-v1/release-verification/shadow-releases/9adf50117ea5fbee51f9146d52777f979f7b664a03ac8388d6603da94ed40620.json",
+      "sha256": "9adf50117ea5fbee51f9146d52777f979f7b664a03ac8388d6603da94ed40620"
+    },
+    "policy_sha256_by_path": {
+      "src/au_ree_v3/comparability.py": "fda70192ed69791bd49604d272e3765ebe01f15fda4e5d520175e9690ea512c3",
+      "src/au_ree_v3/fresh_decision_policy_v1.json": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+      "src/au_ree_v3/normalization.py": "e81f10e47a03a06350e3d12b632c121c18b4c4a44cb931eebbaf9114982fe164",
+      "src/au_ree_v3/semantic_research.py": "2321869533166d653513c7832a3efb8bb7fd910aac74bfe025a901373ec7b044",
+      "src/au_ree_v3/semantic_vocabulary_v1.json": "c520c460eb074ec35543d6dae971df91927327b6cf34e81f50c8f4d085f7ab27",
+      "src/au_ree_v3/semantics.py": "d0cbd34a0f84b63346afc9a533247497457ae6b4e0940d948359dea23584a2d5",
+      "src/au_ree_v3/technical_processing.py": "5a398457e984e969c92b838d0b0148552a183582639e33b505a8dbc68b5f4886"
+    },
+    "sealed_store_replay": {
+      "F5": "BLOCKED",
+      "O4": "PASS",
+      "artifact_count": 23,
+      "differences": [],
+      "run": {
+        "document_tool_peak_rss_kib": 95516,
+        "elapsed_seconds": 10.33458933700058,
+        "python_peak_rss_kib": 95516,
+        "statuses": {
+          "development": "PASS",
+          "infrastructure": "PASS",
+          "resource": "PASS",
+          "resource-holdout": "PASS",
+          "technical": "PASS",
+          "technical-holdout": "PASS"
+        }
+      },
+      "shadow_archive_readback": {
+        "exact_objects": 349,
+        "shadow_release_id": "9adf50117ea5fbee51f9146d52777f979f7b664a03ac8388d6603da94ed40620",
+        "status": "PASS"
+      },
+      "shadow_release_id": "9adf50117ea5fbee51f9146d52777f979f7b664a03ac8388d6603da94ed40620",
+      "status": "PASS"
+    },
+    "verification": {
+      "F5": "BLOCKED",
+      "F5_reason": "INDEPENDENT_REMOTE_RESTORE_UNVERIFIED",
+      "O4": "PASS",
+      "code_commit": "679c710865cd72fe78175f5f59d24e9f377d050c",
+      "differences": [],
+      "formal_artifacts_exact": 8,
+      "formal_baseline_sqlite_unchanged": true,
+      "formal_pointer_unchanged": true,
+      "formal_release_id": "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974",
+      "runs": [
+        {
+          "document_tool_peak_rss_kib": 95468,
+          "elapsed_seconds": 10.92196448300092,
+          "python_peak_rss_kib": 95468,
+          "statuses": {
+            "development": "PASS",
+            "infrastructure": "PASS",
+            "resource": "PASS",
+            "resource-holdout": "PASS",
+            "technical": "PASS",
+            "technical-holdout": "PASS"
+          }
+        },
+        {
+          "document_tool_peak_rss_kib": 95256,
+          "elapsed_seconds": 10.231363172999409,
+          "python_peak_rss_kib": 95256,
+          "statuses": {
+            "development": "PASS",
+            "infrastructure": "PASS",
+            "resource": "PASS",
+            "resource-holdout": "PASS",
+            "technical": "PASS",
+            "technical-holdout": "PASS"
+          }
+        }
+      ],
+      "scope": "Deterministic reproducibility of evaluated states and scientific artifacts",
+      "shadow_archive_readback": {
+        "exact_objects": 349,
+        "shadow_release_id": "9adf50117ea5fbee51f9146d52777f979f7b664a03ac8388d6603da94ed40620",
+        "status": "PASS"
+      },
+      "shadow_artifacts_verified": 23,
+      "shadow_release_id": "9adf50117ea5fbee51f9146d52777f979f7b664a03ac8388d6603da94ed40620",
+      "status": "PASS",
+      "total_elapsed_seconds": 44.979019034000885
+    },
+    "verification_program_sha256": "53f9a8dfcc0b28098adcc490ea0d31d3b554d9ab5565b02823418c76bac52eb0"
+  },
+  "source_manifest": {
+    "path": "work/research-yield/source-inputs/source_manifest.json",
+    "sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "technical": {
+    "O3": "PASS",
+    "accepted_count": 0,
+    "assessments": {
+      "INSUFFICIENT_CONTEXT": 10,
+      "NOT_COMPARABLE": 4,
+      "SCIENTIFIC_CONFLICT": 1
+    },
+    "bindings_sha256": "9c04105210ac49799713cbd2055f324595d7cefb93fbc6163ad20381f9b95133",
+    "candidate_observations": 15,
+    "candidate_pairs_assessed": 47,
+    "cross_project_compatible_pairs": 0,
+    "elapsed_seconds": 3.3890483420000237,
+    "extraction_method": "reviewed-native-quantity-span-v1",
+    "formal_t1_v2": "NOT_RUN",
+    "holdout": "UNMEASURED",
+    "missing_or_rejected": [],
+    "observation_artifact_sha256": "32be701456cacaaf256e9c8994685c08b220989dccffcb42f7c302f63012882a",
+    "observation_validation": {
+      "EVIDENCE_INSUFFICIENT": 8,
+      "SCIENTIFIC_CONFLICT": 1,
+      "VALIDATED": 6
+    },
+    "oracle_sha256": "acceda6bc8a740d22edb86af544e39529a719e2440e5907d9cc61aee97a9230e",
+    "oracle_status": "PASS",
+    "pair_artifact_sha256": "6903d23cb61f29bbcc4b7f9953c405fcf9834764935765af6b52097278efdd1e",
+    "pair_assessments": {
+      "NOT_COMPARABLE": 38,
+      "SCIENTIFIC_CONFLICT": 9
+    },
+    "pairwise_compatible": 0,
+    "pdf_parser": "pdftotext version 25.03.0",
+    "policy": "technical-processing-performance-v2",
+    "profile_id": "au-ree-2026-11-28",
+    "project_subcriteria_assessed": 11,
+    "project_subcriteria_cross_project_usable": 0,
+    "ranked_panels": 0,
+    "rankings_status": "INSUFFICIENT_COHORT",
+    "research_cutoff": "2026-11-28",
+    "schema": "technical-processing-pilot-v1",
+    "source_anchored_observations": 15,
+    "source_families_reviewed": 8,
+    "source_inventory_sha256": "8821fd9cc895b3f42368bb261069f5c0bd189f181757384bc0c7e16b7702e946",
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "source_objects_expected": 144,
+    "source_objects_read_back": 144,
+    "sqlite": {
+      "foreign_key_check": [],
+      "integrity_check": [
+        "ok"
+      ]
+    },
+    "status": "PASS",
+    "subcriteria": {
+      "T1A": 10,
+      "T1B": 2,
+      "T1C": 2,
+      "T1D": 1
+    },
+    "timezone": "Asia/Taipei"
+  },
+  "technical_holdout": {
+    "O3": "PASS",
+    "accepted_count": 0,
+    "assessments": {
+      "INSUFFICIENT_CONTEXT": 1,
+      "NOT_COMPARABLE": 1
+    },
+    "bindings_sha256": "b9ca1d13b5b68ea6a926c4d30f6a2785518b08859aaecae4edc93207806ac820",
+    "candidate_observations": 2,
+    "candidate_pairs_assessed": 1,
+    "cross_project_compatible_pairs": 0,
+    "elapsed_seconds": 2.267206956999871,
+    "extraction_method": "reviewed-native-quantity-span-v1",
+    "formal_t1_v2": "NOT_RUN",
+    "holdout": "UNMEASURED",
+    "missing_or_rejected": [],
+    "observation_artifact_sha256": "62e7f29a8f2147a936ee2ee5ebb1a1aae48f40929f9cfe4c3152a194ff8a52f8",
+    "observation_validation": {
+      "VALIDATED": 2
+    },
+    "oracle_sha256": "0eb9607ef6f8f36418ef68f7e4725e8ebdce37996a5aaaa0b7c8a8f44b1ae4b6",
+    "oracle_status": "PASS",
+    "pair_artifact_sha256": "c27c482913a098ac25c29b3c6f42fd68fb7f77f7bbb933499db3a08e41633648",
+    "pair_assessments": {
+      "NOT_COMPARABLE": 1
+    },
+    "pairwise_compatible": 0,
+    "pdf_parser": "pdftotext version 25.03.0",
+    "policy": "technical-processing-performance-v2",
+    "profile_id": "au-ree-2026-11-28",
+    "project_subcriteria_assessed": 2,
+    "project_subcriteria_cross_project_usable": 0,
+    "ranked_panels": 0,
+    "rankings_status": "INSUFFICIENT_COHORT",
+    "research_cutoff": "2026-11-28",
+    "schema": "technical-processing-pilot-v1",
+    "source_anchored_observations": 2,
+    "source_families_reviewed": 2,
+    "source_inventory_sha256": "8821fd9cc895b3f42368bb261069f5c0bd189f181757384bc0c7e16b7702e946",
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "source_objects_expected": 144,
+    "source_objects_read_back": 144,
+    "sqlite": {
+      "foreign_key_check": [],
+      "integrity_check": [
+        "ok"
+      ]
+    },
+    "status": "PASS",
+    "subcriteria": {
+      "T1A": 2
+    },
+    "timezone": "Asia/Taipei"
+  },
+  "technical_holdout_observation_roles": {
+    "autonomous_extraction_accuracy": "UNMEASURED",
+    "cases": [
+      {
+        "case_id": "holdout-wolverine-variability-treo-recovery",
+        "classification": "TP",
+        "observed_role": "HISTORICAL_MEASUREMENT",
+        "oracle_role": "HISTORICAL_MEASUREMENT",
+        "physical_page": 175,
+        "source_sha256": "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075"
+      },
+      {
+        "case_id": "holdout-goschen-central-scoping-overall-treo",
+        "classification": "TN",
+        "observed_role": "ENGINEERING_PLAN",
+        "oracle_role": "ENGINEERING_PLAN",
+        "physical_page": 4,
+        "source_sha256": "f1ce45037adea362e82497f6d1f8c73dbaa1dca6191873a92355b37ea28693a5"
+      }
+    ],
+    "confusion": {
+      "FN": 0,
+      "FP": 0,
+      "TN": 1,
+      "TP": 1
+    },
+    "observation_precision": {
+      "denominator": 1,
+      "numerator": 1
+    },
+    "observation_recall": {
+      "denominator": 1,
+      "numerator": 1
+    },
+    "observations_sha256": "62e7f29a8f2147a936ee2ee5ebb1a1aae48f40929f9cfe4c3152a194ff8a52f8",
+    "oracle_sha256": "0eb9607ef6f8f36418ef68f7e4725e8ebdce37996a5aaaa0b7c8a8f44b1ae4b6",
+    "schema": "technical-reviewed-observation-role-confusion-v1",
+    "target": "HISTORICAL_MEASUREMENT among two independently reviewed native disclosures"
+  },
+  "temporary_rebuild_provenance_diff_fields": [
+    "release_id",
+    "selection_id"
+  ],
+  "timezone": "Asia/Taipei"
+}

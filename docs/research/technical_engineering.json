@@ -1,0 +1,266 @@
+{
+  "schema": "technical-shadow-engineering-v1",
+  "status": "PASS",
+  "same_workload_baseline": "UNMEASURED",
+  "same_workload_ci_cost": "UNMEASURED",
+  "cache": "Fresh interpreter and SQLite each run. OS page cache uncontrolled.",
+  "code_commit": "9ef642e34d42613cacff1348b3c71c51105c840d",
+  "src_config_sha256": "836c4195d8dfdd1a21dd7651c4bc2ee58dd04ac281a53b75b550e3109360709f",
+  "manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "bindings_sha256": "9c04105210ac49799713cbd2055f324595d7cefb93fbc6163ad20381f9b95133",
+  "oracle_sha256": "acceda6bc8a740d22edb86af544e39529a719e2440e5907d9cc61aee97a9230e",
+  "repeat_outputs_stable": true,
+  "runs": [
+    {
+      "status": "PASS",
+      "seconds": 3.1104701989988826,
+      "parent_peak_rss_kib": 81644,
+      "subprocess_peak_rss_kib": 81644,
+      "source_objects_read_back": 144,
+      "candidate_observations": 15,
+      "source_anchored_observations": 15,
+      "pairwise_compatible": 0,
+      "ranked_panels": 0,
+      "observation_artifact_sha256": "32be701456cacaaf256e9c8994685c08b220989dccffcb42f7c302f63012882a",
+      "pair_artifact_sha256": "6903d23cb61f29bbcc4b7f9953c405fcf9834764935765af6b52097278efdd1e"
+    },
+    {
+      "status": "PASS",
+      "seconds": 3.0953346290007175,
+      "parent_peak_rss_kib": 81516,
+      "subprocess_peak_rss_kib": 81516,
+      "source_objects_read_back": 144,
+      "candidate_observations": 15,
+      "source_anchored_observations": 15,
+      "pairwise_compatible": 0,
+      "ranked_panels": 0,
+      "observation_artifact_sha256": "32be701456cacaaf256e9c8994685c08b220989dccffcb42f7c302f63012882a",
+      "pair_artifact_sha256": "6903d23cb61f29bbcc4b7f9953c405fcf9834764935765af6b52097278efdd1e"
+    },
+    {
+      "status": "PASS",
+      "seconds": 2.8798987150003086,
+      "parent_peak_rss_kib": 81644,
+      "subprocess_peak_rss_kib": 81644,
+      "source_objects_read_back": 144,
+      "candidate_observations": 15,
+      "source_anchored_observations": 15,
+      "pairwise_compatible": 0,
+      "ranked_panels": 0,
+      "observation_artifact_sha256": "32be701456cacaaf256e9c8994685c08b220989dccffcb42f7c302f63012882a",
+      "pair_artifact_sha256": "6903d23cb61f29bbcc4b7f9953c405fcf9834764935765af6b52097278efdd1e"
+    }
+  ],
+  "reached_code": {
+    "reached_module_count": 11,
+    "reached_modules": [
+      "au_ree_v3",
+      "au_ree_v3.contracts",
+      "au_ree_v3.contracts.temporal",
+      "au_ree_v3.documents",
+      "au_ree_v3.migration",
+      "au_ree_v3.migration.reference_oracle",
+      "au_ree_v3.registry",
+      "au_ree_v3.semantics",
+      "au_ree_v3.sources",
+      "au_ree_v3.store",
+      "au_ree_v3.technical_processing"
+    ],
+    "runtime_internal_edge_count": 14,
+    "runtime_internal_edges": [
+      [
+        "au_ree_v3.contracts",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.semantics",
+        "au_ree_v3.contracts"
+      ],
+      [
+        "au_ree_v3.sources",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.store",
+        "au_ree_v3.contracts"
+      ],
+      [
+        "au_ree_v3.store",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.store",
+        "au_ree_v3.semantics"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.contracts"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.documents"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.migration.reference_oracle"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.registry"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.semantics"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.sources"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.store"
+      ]
+    ],
+    "static_internal_import_edge_count_among_reached_modules": 16,
+    "static_internal_import_edges_among_reached_modules": [
+      [
+        "au_ree_v3.contracts",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.documents",
+        "au_ree_v3.contracts"
+      ],
+      [
+        "au_ree_v3.semantics",
+        "au_ree_v3.contracts"
+      ],
+      [
+        "au_ree_v3.sources",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.sources",
+        "au_ree_v3.registry"
+      ],
+      [
+        "au_ree_v3.store",
+        "au_ree_v3.contracts"
+      ],
+      [
+        "au_ree_v3.store",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.store",
+        "au_ree_v3.semantics"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.contracts"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.contracts.temporal"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.documents"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.migration.reference_oracle"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.registry"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.semantics"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.sources"
+      ],
+      [
+        "au_ree_v3.technical_processing",
+        "au_ree_v3.store"
+      ]
+    ],
+    "reached_ast_functions": 108,
+    "branch_score_max": 38,
+    "branch_score_p90": 20,
+    "top_branch_scores": [
+      [
+        38,
+        "au_ree_v3.technical_processing",
+        "run_technical_pilot",
+        393
+      ],
+      [
+        30,
+        "au_ree_v3.contracts.temporal",
+        "evaluate_temporal",
+        122
+      ],
+      [
+        29,
+        "au_ree_v3.semantics",
+        "__post_init__",
+        160
+      ],
+      [
+        26,
+        "au_ree_v3.semantics",
+        "assess_semantic_use",
+        388
+      ],
+      [
+        25,
+        "au_ree_v3.store",
+        "_validate_semantic_assessment",
+        420
+      ],
+      [
+        22,
+        "au_ree_v3.migration.reference_oracle",
+        "_compare_inputs",
+        327
+      ],
+      [
+        21,
+        "au_ree_v3.technical_processing",
+        "_direct_value",
+        113
+      ],
+      [
+        21,
+        "au_ree_v3.store",
+        "_validate_links",
+        377
+      ]
+    ],
+    "cross_module_repeated_AST_body_groups": [
+      [
+        [
+          "au_ree_v3.semantics",
+          "_fingerprint",
+          29
+        ],
+        [
+          "au_ree_v3.technical_processing",
+          "_fingerprint",
+          38
+        ]
+      ]
+    ]
+  },
+  "median_seconds": 3.0953346290007175,
+  "median_parent_peak_rss_kib": 81644,
+  "median_subprocess_peak_rss_kib": 81644
+}

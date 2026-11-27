@@ -1,0 +1,419 @@
+{
+  "schema": "ontology-source-responsibility-audit-v1",
+  "measurement_scope": "Static named files, including functions not used in the equivalent formal workload",
+  "baseline": {
+    "files": {
+      "application": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Pinned historical replay entry point",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.census",
+          "au_ree_v3.documents",
+          "au_ree_v3.observations"
+        ],
+        "named_ast_functions": 6,
+        "maximum_branch_score": 39
+      },
+      "fresh_research": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "V3 all-93 formal build and source-manifest verification",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.fresh_census",
+          "au_ree_v3.fresh_decision",
+          "au_ree_v3.fresh_observations"
+        ],
+        "named_ast_functions": 7,
+        "maximum_branch_score": 49
+      },
+      "observations": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Shared historical parser primitives and fixed V2 claim binding",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents"
+        ],
+        "named_ast_functions": 6,
+        "maximum_branch_score": 20
+      },
+      "fresh_observations": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "V3 multi-strategy evidence admission and selection",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.composition_extraction",
+          "au_ree_v3.documents",
+          "au_ree_v3.observations",
+          "au_ree_v3.resource_extraction"
+        ],
+        "named_ast_functions": 8,
+        "maximum_branch_score": 79
+      },
+      "resource_extraction": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Native document structure parsers bound to resource evidence",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents",
+          "au_ree_v3.observations"
+        ],
+        "named_ast_functions": 16,
+        "maximum_branch_score": 14
+      },
+      "composition_extraction": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Oxide table parsing and exact component retrieval",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents",
+          "au_ree_v3.observations",
+          "au_ree_v3.resource_extraction"
+        ],
+        "named_ast_functions": 1,
+        "maximum_branch_score": 24
+      },
+      "census": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Historical resource projection",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.observations"
+        ],
+        "named_ast_functions": 2,
+        "maximum_branch_score": 13
+      },
+      "fresh_census": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "93-by-51 V3 ledger and governed scientific cells",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.census",
+          "au_ree_v3.comparability"
+        ],
+        "named_ast_functions": 13,
+        "maximum_branch_score": 17
+      },
+      "fresh_decision": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Decision policy, complete-case cohort construction and score projection",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.comparability",
+          "au_ree_v3.decision"
+        ],
+        "named_ast_functions": 9,
+        "maximum_branch_score": 12
+      },
+      "decision": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Numerical SAW, PROMETHEE II, TOPSIS and leave-out kernels",
+        "imports_within_reviewed_files": [],
+        "named_ast_functions": 8,
+        "maximum_branch_score": 16
+      },
+      "comparability": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Approved v1 scoped criterion admission and formal resource comparator",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.observations"
+        ],
+        "named_ast_functions": 17,
+        "maximum_branch_score": 26
+      },
+      "geography": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "GIS geometry identity and proximity evidence eligibility",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents"
+        ],
+        "named_ast_functions": 6,
+        "maximum_branch_score": 18
+      },
+      "source_inventory": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Full document corpus inventory and parsability",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents"
+        ],
+        "named_ast_functions": 18,
+        "maximum_branch_score": 58
+      },
+      "documents": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "SHA-bound native PDF/HTML/CSV and OCR document views",
+        "imports_within_reviewed_files": [],
+        "named_ast_functions": 23,
+        "maximum_branch_score": 15
+      },
+      "research_delta": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Cross-release science, cohort and artifact verification",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.census",
+          "au_ree_v3.comparability",
+          "au_ree_v3.decision",
+          "au_ree_v3.publication"
+        ],
+        "named_ast_functions": 25,
+        "maximum_branch_score": 31
+      },
+      "publication": {
+        "origin_snapshot": "immutable-baseline",
+        "responsibility": "Content-addressed archive, offline replay and publication pointer",
+        "imports_within_reviewed_files": [],
+        "named_ast_functions": 31,
+        "maximum_branch_score": 31
+      }
+    },
+    "repeated_AST_body_groups_across_reviewed_modules": []
+  },
+  "after": {
+    "files": {
+      "application": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Pinned historical replay entry point",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.census",
+          "au_ree_v3.documents",
+          "au_ree_v3.observations"
+        ],
+        "named_ast_functions": 6,
+        "maximum_branch_score": 39
+      },
+      "fresh_research": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "V3 all-93 formal build and source-manifest verification",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.fresh_census",
+          "au_ree_v3.fresh_decision",
+          "au_ree_v3.fresh_observations"
+        ],
+        "named_ast_functions": 7,
+        "maximum_branch_score": 49
+      },
+      "observations": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Shared historical parser primitives and fixed V2 claim binding",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents"
+        ],
+        "named_ast_functions": 6,
+        "maximum_branch_score": 20
+      },
+      "fresh_observations": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "V3 multi-strategy evidence admission and selection",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.composition_extraction",
+          "au_ree_v3.documents",
+          "au_ree_v3.observations",
+          "au_ree_v3.resource_extraction"
+        ],
+        "named_ast_functions": 8,
+        "maximum_branch_score": 79
+      },
+      "resource_extraction": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Native document structure parsers bound to resource evidence",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents",
+          "au_ree_v3.observations"
+        ],
+        "named_ast_functions": 16,
+        "maximum_branch_score": 14
+      },
+      "composition_extraction": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Oxide table parsing and exact component retrieval",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents",
+          "au_ree_v3.observations",
+          "au_ree_v3.resource_extraction"
+        ],
+        "named_ast_functions": 1,
+        "maximum_branch_score": 24
+      },
+      "census": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Historical resource projection",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.observations"
+        ],
+        "named_ast_functions": 2,
+        "maximum_branch_score": 13
+      },
+      "fresh_census": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "93-by-51 V3 ledger and governed scientific cells",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.census",
+          "au_ree_v3.comparability"
+        ],
+        "named_ast_functions": 13,
+        "maximum_branch_score": 17
+      },
+      "fresh_decision": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Decision policy, complete-case cohort construction and score projection",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.comparability",
+          "au_ree_v3.decision"
+        ],
+        "named_ast_functions": 9,
+        "maximum_branch_score": 12
+      },
+      "decision": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Numerical SAW, PROMETHEE II, TOPSIS and leave-out kernels",
+        "imports_within_reviewed_files": [],
+        "named_ast_functions": 8,
+        "maximum_branch_score": 16
+      },
+      "comparability": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Approved v1 scoped criterion admission and formal resource comparator",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.normalization",
+          "au_ree_v3.observations",
+          "au_ree_v3.semantics"
+        ],
+        "named_ast_functions": 29,
+        "maximum_branch_score": 51
+      },
+      "semantics": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Versioned scientific context and independent purpose assessment",
+        "imports_within_reviewed_files": [],
+        "named_ast_functions": 21,
+        "maximum_branch_score": 29
+      },
+      "normalization": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Exact Decimal units, oxide identities and rounding/derivation evidence",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.semantics"
+        ],
+        "named_ast_functions": 10,
+        "maximum_branch_score": 60
+      },
+      "semantic_research": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Same-input A/B/C/D shadow ablation and reporting",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.comparability",
+          "au_ree_v3.documents",
+          "au_ree_v3.fresh_decision",
+          "au_ree_v3.fresh_research",
+          "au_ree_v3.normalization",
+          "au_ree_v3.observations",
+          "au_ree_v3.research_delta",
+          "au_ree_v3.semantics"
+        ],
+        "named_ast_functions": 12,
+        "maximum_branch_score": 29
+      },
+      "technical_processing": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "T1v2 shadow technical measurements, anchoring and Oracle review",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents",
+          "au_ree_v3.semantics"
+        ],
+        "named_ast_functions": 15,
+        "maximum_branch_score": 38
+      },
+      "development": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "D1 scoped issuer milestone extraction and shadow labeling",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents",
+          "au_ree_v3.fresh_decision"
+        ],
+        "named_ast_functions": 7,
+        "maximum_branch_score": 31
+      },
+      "geography": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "GIS geometry identity and proximity evidence eligibility",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents"
+        ],
+        "named_ast_functions": 9,
+        "maximum_branch_score": 20
+      },
+      "source_inventory": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Full document corpus inventory and parsability",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents"
+        ],
+        "named_ast_functions": 18,
+        "maximum_branch_score": 58
+      },
+      "candidate_search": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Read-only candidate retrieval index",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.documents"
+        ],
+        "named_ast_functions": 13,
+        "maximum_branch_score": 11
+      },
+      "documents": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "SHA-bound native PDF/HTML/CSV and OCR document views",
+        "imports_within_reviewed_files": [],
+        "named_ast_functions": 23,
+        "maximum_branch_score": 15
+      },
+      "research_delta": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Cross-release science, cohort and artifact verification",
+        "imports_within_reviewed_files": [
+          "au_ree_v3.census",
+          "au_ree_v3.comparability",
+          "au_ree_v3.decision",
+          "au_ree_v3.publication"
+        ],
+        "named_ast_functions": 25,
+        "maximum_branch_score": 31
+      },
+      "publication": {
+        "origin_snapshot": "immutable-current",
+        "responsibility": "Content-addressed archive, offline replay and publication pointer",
+        "imports_within_reviewed_files": [],
+        "named_ast_functions": 31,
+        "maximum_branch_score": 31
+      }
+    },
+    "repeated_AST_body_groups_across_reviewed_modules": [
+      [
+        {
+          "module": "semantics",
+          "function": "_fingerprint",
+          "line": 29
+        },
+        {
+          "module": "normalization",
+          "function": "_digest",
+          "line": 32
+        },
+        {
+          "module": "semantic_research",
+          "function": "_fingerprint",
+          "line": 39
+        },
+        {
+          "module": "technical_processing",
+          "function": "_fingerprint",
+          "line": 38
+        },
+        {
+          "module": "development",
+          "function": "_canonical_sha",
+          "line": 38
+        }
+      ]
+    ]
+  },
+  "decisions": [
+    "Keep pinned historical replay and current governed research separate.",
+    "Share the SHA-bound document views between strategy extraction and reviewer observations.",
+    "Keep approved formal admission, shadow purpose assessment and quantitative normalization distinct.",
+    "Keep numerical ranking kernels independent of cohort construction and release comparisons.",
+    "Consolidation opportunity is repeated canonical hashing code."
+  ],
+  "limits": "Static counts of expanded scope describe structure. Exact fingerprints do not measure approximate duplication."
+}

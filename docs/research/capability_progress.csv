@@ -7,24 +7,27 @@ entity-resolution,PARTIAL,93 frozen project IDs and retained historical identity
 eligibility,PARTIAL,148 captured editions recomputed against the pinned cutoff; admitted observations retain temporal decisions,DEFERRED
 document-extraction,PARTIAL,Native exact PDF source and separately verified OCR/HTML/CSV views,PARTIAL
 document-recognition,PARTIAL,Five tested PDF structures with verified positive and rejection samples and a source-bound image review,PARTIAL
-observation-normalization,PARTIAL,Exact decimal resource tokens and material/chemical role checks,PARTIAL
-observation-storage,PARTIAL,Fresh immutable sources and governed SQLite resource observations,PARTIAL
+observation-normalization,PARTIAL,Versioned Decimal units and oxide factors preserve original tokens and intervals alongside shadow assessments,PARTIAL
+observation-storage,PARTIAL,Existing governed SQLite persists independent semantic assessments and source anchors using schema v3,PARTIAL
 evidence-validation,PARTIAL,Fresh exact public capture proof and bound page/scope validation,PARTIAL
 resource-estimates,PARTIAL,Scoped Mt Weld Wolverine Wudinna and Goschen estimates with edition and chemistry checks,PARTIAL
 resource-admission,PARTIAL,Seventeen governed selections including five composition observations,DEFERRED
 formal-selection,PARTIAL,Scope and effective date priorities with independent conflict tests,PARTIAL
 assay-derived-data,DEFERRED,Fresh acceptance pending,DEFERRED
-semantic-comparability,PARTIAL,Four R1 and two S1 keys use the shared comparability policy,DEFERRED
-ontology-observation-research,DEFERRED,Fresh acceptance pending,DEFERRED
+semantic-comparability,PARTIAL,Six unchanged formal keys and exact-source shadow purpose decisions across resources and process measures,DEFERRED
+ontology-observation-research,PARTIAL,Versioned semantic-use schema and reproducible resource and process use assessments,DEFERRED
 ontology-portfolio-research,DEFERRED,Fresh acceptance pending,DEFERRED
 census-projection,PARTIAL,All 4743 cells verified; twelve scientific values trace to accepted observations,PARTIAL
 census-quality,PARTIAL,Fresh applicability and unknown-state checks across the fixed cohort,DEFERRED
-gis,PARTIAL,Seven verified WA tenure boundaries; formal site and infrastructure indicators remain pending,DEFERRED
-technical-disclosure,DEFERRED,Fresh acceptance pending,DEFERRED
+gis,PARTIAL,Seven government tenure boundaries and 372 I1 to I4 prerequisite decisions in shadow; eligible mine points remain missing,DEFERRED
+technical-disclosure,DEFERRED,The existing seven-item transparency rule remains in policy; all 93 formal inputs are unknown,DEFERRED
 mcda,PARTIAL,Two eligible cases on the R1 plus S1 composition panel; four panels insufficient,DEFERRED
 sensitivity-and-uncertainty,PARTIAL,Three fixed weight scenarios and criterion and domain removal tested on the composition panel,DEFERRED
 study-experiments-and-ml,DEFERRED,Fresh acceptance pending,DEFERRED
 publication,BLOCKED,Immutable archive and rollback exercised; independent replica unavailable,DEFERRED
 historical-replay,PARTIAL,V3 cold replay verified for twelve formal cells and eight output artifacts,BLOCKED
 derived-cache,DEFERRED,Fresh acceptance pending,DEFERRED
-engineering-audit,PARTIAL,Responsibility and same-scope comparisons reported with local replica and cold replay measurements,PARTIAL
+engineering-audit,PARTIAL,Real same-input formal build and separately scoped shadow costs measured with code and environment fingerprints,PARTIAL
+technical-processing,PARTIAL,T1a to T1d exact-source shadow pilot with independent holdout; zero comparable project cohort,DEFERRED
+development-milestones,PARTIAL,Three dated shadows with project phases distinguished and zero approved formal ordinals,DEFERRED
+evidence-retrieval,PARTIAL,FTS5 candidate locators across 142 document objects with independent page retrieval tests,DEFERRED
