@@ -12,6 +12,7 @@ from tempfile import TemporaryDirectory
 
 from .census import COLUMNS
 from .census_metadata import CensusMetadata, SHA256, coverage_report, metadata_projection, public_source_url
+from .census_science import project_science_views, resource_presence_cells
 from .comparability import census_quantity, resource_context, resource_observation_compatible
 from .contracts import ContractViolation, ResearchRelease, canonical_json
 from .registry import PROJECT_ID_COLUMN, load_census_columns, load_profile, load_registry
@@ -95,18 +96,19 @@ def _accepted_cell(entry: ResearchInput) -> dict:
     }
 
 
-def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxes) -> tuple[str | None, dict, dict]:
+def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxes, *, science=False):
     if (store is None) != (release_id is None):
         raise ContractViolation("Census store and release ID must be supplied together")
     if store is None:
-        return None, {}, {}
+        return None, {}, {}, None
     release = store.get(ResearchRelease, release_id)
     if release is None or release.cutoff != axes.cutoff or not set(release.cohort).issubset(axes.project_ids):
         raise ContractViolation("Census release must have the profile cutoff and registered projects")
 
     selected = defaultdict(list)
     decisions = defaultdict(list)
-    for entry in checked_research_inputs(store, release, purpose="CENSUS"):
+    release_inputs = checked_research_inputs(store, release, purpose="CENSUS")
+    for entry in release_inputs:
         raw, validation, trace = entry.raw, entry.validation, entry.temporal_trace
         if raw.variable not in COLUMNS:
             continue
@@ -137,7 +139,10 @@ def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxe
             else:
                 projected[key] = _accepted_cell(alternatives[0])
 
-    return release.release_mode, projected, decisions
+    scientific_views = project_science_views(release_inputs, release, axes.columns) if science else None
+    if scientific_views is not None:
+        projected.update(resource_presence_cells(scientific_views))
+    return release.release_mode, projected, decisions, scientific_views
 
 
 def _field_status(axes, project, column, searches, selected, decisions):
@@ -348,11 +353,13 @@ def _prepared(profile, store, release_id, project_statuses, metadata):
         or any(project not in axes.project_ids or column not in axes.columns for project, column in metadata.cells)
     ):
         raise ContractViolation("Census display metadata does not belong to the pinned axes")
-    release_mode, selected, decisions = _selection_rows(store, release_id, axes)
-    return axes, release_mode, *_rows(axes, searches, selected, decisions, metadata)
+    release_mode, selected, decisions, science_views = _selection_rows(
+        store, release_id, axes, science=metadata is not None,
+    )
+    return axes, release_mode, *_rows(axes, searches, selected, decisions, metadata), science_views
 
 
-def _receipt(out, axes, release_id, release_mode, cells, metadata):
+def _receipt(out, axes, release_id, release_mode, cells, metadata, science_views):
     origins = Counter(row["value_origin"] for row in cells if row["value_state"] == "PRESENT")
     values_by_column = Counter(row["column"] for row in cells if row["value_origin"] == "FORMAL_SELECTION")
     states = Counter(row["value_state"] for row in cells)
@@ -378,6 +385,8 @@ def _receipt(out, axes, release_id, release_mode, cells, metadata):
             schema_version=PROJECTION_SCHEMA, projection_policy_version=metadata.policy.version,
             projection_policy_sha256=metadata.policy.sha256, coverage=coverage_report(cells, metadata.policy),
         )
+    if science_views is not None:
+        receipt["science_views"] = science_views
     return receipt
 
 
@@ -385,7 +394,9 @@ def build_census(profile: Path, out: Path, *, store: Store | None = None,
                  release_id: str | None = None, project_statuses: dict[str, str] | None = None,
                  metadata: CensusMetadata | None = None) -> dict:
     """Build the grid and verify its CSV values and state ledger before publishing a receipt."""
-    axes, release_mode, census, expected_status = _prepared(profile, store, release_id, project_statuses, metadata)
+    axes, release_mode, census, expected_status, science_views = _prepared(
+        profile, store, release_id, project_statuses, metadata,
+    )
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory(prefix=".census-", dir=out) as staging:
@@ -394,7 +405,7 @@ def build_census(profile: Path, out: Path, *, store: Store | None = None,
         fields = STATUS_FIELDS if metadata is not None else STATUS_FIELDS_V1
         (staged / "cell_status.csv").write_bytes(_csv_bytes(fields, expected_status))
         cells = _check_outputs(staged, axes, expected_status, metadata)
-        receipt = _receipt(staged, axes, release_id, release_mode, cells, metadata)
+        receipt = _receipt(staged, axes, release_id, release_mode, cells, metadata, science_views)
         (staged / "census_receipt.json").write_text(canonical_json(receipt) + "\n", encoding="utf-8")
         for filename in ("census.csv", "cell_status.csv", "census_receipt.json"):
             (staged / filename).replace(out / filename)
@@ -405,10 +416,12 @@ def verify_census(profile: Path, out: Path, *, store: Store | None = None,
                   release_id: str | None = None, project_statuses: dict[str, str] | None = None,
                   metadata: CensusMetadata | None = None) -> dict:
     """Re-resolve governed inputs and verify a previously emitted Census receipt."""
-    axes, release_mode, _, expected_status = _prepared(profile, store, release_id, project_statuses, metadata)
+    axes, release_mode, _, expected_status, science_views = _prepared(
+        profile, store, release_id, project_statuses, metadata,
+    )
     out = Path(out)
     cells = _check_outputs(out, axes, expected_status, metadata)
-    receipt = _receipt(out, axes, release_id, release_mode, cells, metadata)
+    receipt = _receipt(out, axes, release_id, release_mode, cells, metadata, science_views)
     found = json.loads((out / "census_receipt.json").read_text(encoding="utf-8"))
     if found != receipt:
         raise ValueError("Census receipt fingerprint or profile does not match")
