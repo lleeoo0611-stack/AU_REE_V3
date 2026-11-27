@@ -1,0 +1,380 @@
+{
+  "schema": "independent-resource-annotations-v1",
+  "cutoff": "2026-11-28",
+  "annotation_method": "Independent transcription from layout-preserving Poppler text of SHA-verified original PDFs. Expected values were read from the source statements.",
+  "sampling_scope": "Purposeful high-risk stratified reference set, no corpus prevalence or sampling representativeness claim.",
+  "cases": [
+    {
+      "case_id": "mt-weld-in-situ-and-reserve",
+      "split": "DESIGN_REGRESSION",
+      "project_id": "AU-efff91a06cf344122d88",
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "scope": "Mt Weld in-situ Mineral Resource",
+      "layout": "narrative-and-same-page-resource-table",
+      "context": "JORC 2012, effective 2024-06-30, 2.5% TREO cutoff. Do not combine the distinct Reserve or non-in-situ quantities.",
+      "formal_status": "APPROVED",
+      "expected_observations": [
+        {
+          "variable": "ore_mt",
+          "raw_value": "106.6",
+          "value": "106.6",
+          "unit": "Mt",
+          "pages": [
+            2
+          ],
+          "selected": true,
+          "table": "Narrative"
+        },
+        {
+          "variable": "grade",
+          "raw_value": "4.12",
+          "value": "4.12",
+          "unit": "%",
+          "pages": [
+            2
+          ],
+          "selected": true,
+          "table": "Narrative"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "4,389",
+          "value": "4389",
+          "unit": "kt TREO",
+          "pages": [
+            2
+          ],
+          "selected": true,
+          "table": "Table 1"
+        }
+      ],
+      "source_evidence": [
+        {
+          "page": 1,
+          "locator": "announcement highlights",
+          "quote": "from 30 June 2018 to 30 June 2024"
+        },
+        {
+          "page": 2,
+          "locator": "Table 1 and narrative",
+          "quote": "Total 106.6 4.1 4,389"
+        },
+        {
+          "page": 23,
+          "locator": "Table 7 and continuation",
+          "quote": "Ore Reserve June 2024 at 2.8% TREO* cut-off grade"
+        }
+      ],
+      "forbidden_selected_pages": [
+        3,
+        23
+      ]
+    },
+    {
+      "case_id": "wolverine-independent-total",
+      "split": "DESIGN_REGRESSION",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+      "scope": "Wolverine combined open-pit and underground Mineral Resource",
+      "layout": "three-classification-sections",
+      "context": "JORC 2012, effective 2025-01-15, 0.15% TREO cutoff. Distinguish Table 2 deposit total from open pit and underground subtotals.",
+      "formal_status": "APPROVED",
+      "expected_observations": [
+        {
+          "variable": "ore_mt",
+          "raw_value": "7.3",
+          "value": "7.3",
+          "unit": "Mt",
+          "pages": [
+            5
+          ],
+          "selected": true,
+          "table": "Table 2",
+          "row": "Total Total"
+        },
+        {
+          "variable": "grade",
+          "raw_value": "0.96",
+          "value": "0.96",
+          "unit": "%",
+          "pages": [
+            5
+          ],
+          "selected": true,
+          "table": "Table 2",
+          "row": "Total Total"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "70,500",
+          "value": "70.500",
+          "unit": "kt TREO",
+          "pages": [
+            5
+          ],
+          "selected": true,
+          "table": "Table 2",
+          "row": "Total Total"
+        }
+      ],
+      "source_evidence": [
+        {
+          "page": 5,
+          "locator": "Table 2, Wolverine Total Mineral Resource estimate, Total",
+          "quote": "Total 7.3 0.96 0.85 5.68 0.12 89 70,500"
+        },
+        {
+          "page": 6,
+          "locator": "Table 5, Wolverine Total Mineral Resource, Total",
+          "quote": "Total 7,300 170 420 60 280 200 40 560 120 840 170 490 70 380 50 5,700"
+        }
+      ],
+      "forbidden_selected_pages": []
+    },
+    {
+      "case_id": "yin-cutoff-contradictions",
+      "split": "DESIGN_REGRESSION",
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "scope": "Yin Ironstone Complex only",
+      "layout": "cross-page-cutoff-series-and-detail-tables",
+      "context": "Publication date is not an explicit estimate effective day. Corresponding contained quantities conflict for three cutoffs, without deciding which to use.",
+      "formal_status": "WITHHOLD",
+      "expected_observations": [
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "311,800",
+          "value": "311.800",
+          "unit": "kt TREO",
+          "pages": [
+            1
+          ],
+          "selected": false,
+          "table": "Table 1",
+          "row": "0.20% cutoff"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "312,300",
+          "value": "312.300",
+          "unit": "kt TREO",
+          "pages": [
+            11
+          ],
+          "selected": false,
+          "table": "Table 4",
+          "row": "Total"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "284,300",
+          "value": "284.300",
+          "unit": "kt TREO",
+          "pages": [
+            1
+          ],
+          "selected": false,
+          "table": "Table 1",
+          "row": "0.40% cutoff"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "283,800",
+          "value": "283.800",
+          "unit": "kt TREO",
+          "pages": [
+            11
+          ],
+          "selected": false,
+          "table": "Table 5",
+          "row": "Total"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "224,400",
+          "value": "224.400",
+          "unit": "kt TREO",
+          "pages": [
+            1
+          ],
+          "selected": false,
+          "table": "Table 1",
+          "row": "1.00% cutoff"
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "224,300",
+          "value": "224.300",
+          "unit": "kt TREO",
+          "pages": [
+            11
+          ],
+          "selected": false,
+          "table": "Table 6",
+          "row": "Total"
+        }
+      ],
+      "source_evidence": [
+        {
+          "page": 1,
+          "locator": "Table 1 cutoffs 0.20%, 0.40%, 1.00% TREO",
+          "quote": "311,800; 284,300; 224,400 t"
+        },
+        {
+          "page": 11,
+          "locator": "Tables 4–6, TOTAL rows",
+          "quote": "312,300; 283,800; 224,300 t"
+        }
+      ],
+      "forbidden_selected_pages": []
+    },
+    {
+      "case_id": "wudinna-reported-total",
+      "split": "DESIGN_REGRESSION",
+      "project_id": "AU-0098e17a63e7c05c213f",
+      "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+      "scope": "Wudinna maiden in-situ, undiluted Indicated+Inferred Mineral Resource",
+      "layout": "cross-page-RNS-narrative-and-formation-table",
+      "context": "Effective 2026-10-22; public RNS 2026-10-26. Whole-ore TREO includes Y and Ce. 200 ppm TREO-Ce cutoff and Pidinga ISR economic cut-over are retained as declared.",
+      "formal_status": "APPROVED",
+      "expected_observations": [
+        {
+          "variable": "ore_mt",
+          "raw_value": "150",
+          "value": "150",
+          "unit": "Mt",
+          "pages": [
+            1,
+            3
+          ],
+          "selected": true
+        },
+        {
+          "variable": "grade",
+          "raw_value": "470",
+          "value": "0.047",
+          "unit": "%",
+          "pages": [
+            1,
+            3
+          ],
+          "selected": true
+        },
+        {
+          "variable": "contained_treo_kt",
+          "raw_value": "70,400",
+          "value": "70.400",
+          "unit": "kt TREO",
+          "pages": [
+            1
+          ],
+          "selected": true
+        }
+      ],
+      "source_evidence": [
+        {
+          "page": 1,
+          "locator": "opening fifth paragraph, MRE announcement",
+          "quote": "150 Mt grading 470 ppm Total Rare Earth Oxides (\"TREO\") for 70,400 tonnes of contained TREO"
+        },
+        {
+          "page": 3,
+          "locator": "Table 1 Total and notes",
+          "quote": "Total 150 470 101 10 112"
+        },
+        {
+          "page": 3,
+          "locator": "effective date and estimate basis",
+          "quote": "Effective Date of 22 October, 2026; results are presented in situ and undiluted"
+        }
+      ],
+      "forbidden_selected_pages": []
+    },
+    {
+      "case_id": "holdout-dated-niobium-mre",
+      "split": "INDEPENDENT_HOLDOUT",
+      "project_id": "AU-cae6c11543b0da5f840d",
+      "source_sha256": "ae8825f63b7ce1ac8bb26e0406fb9c75adf12fe31b8a86658a33fff4715f1766",
+      "scope": "Luni Niobium MRE",
+      "layout": "JORC-three-classification-table",
+      "context": "Effective 2026-05-13 and 0.25% Nb₂O₅ cutoff. 2,200 kt is Nb₂O₅, so excluded from TREO R1 even with exact date.",
+      "formal_status": "WITHHOLD",
+      "expected_observations": [],
+      "source_evidence": [
+        {
+          "page": 7,
+          "locator": "Table 1 Total and notes 2–3",
+          "quote": "Tonnes (Mt) Nb₂O₅ (%) Nb₂O₅ (kt) Total 220 1.0 2,200"
+        }
+      ],
+      "forbidden_selected_pages": []
+    },
+    {
+      "case_id": "goschen-hm-denominator",
+      "split": "DESIGN_REGRESSION",
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "scope": "Goschen Area 1",
+      "layout": "multiple-MRE-and-reserve-tables",
+      "context": "Effective 2025-10-15. Table 3 reports heavy mineral quantities above 1.0% THM, a different denominator and measurement from whole-ore TREO.",
+      "formal_status": "WITHHOLD",
+      "expected_observations": [],
+      "source_evidence": [
+        {
+          "page": 3,
+          "locator": "Table 3 Total and cutoff footnote",
+          "quote": "Total 94 2.6 1.72 2.8 17 2; Mineral resources reported at a cut-off grade of 1.0% THM"
+        }
+      ],
+      "forbidden_selected_pages": []
+    },
+    {
+      "case_id": "holdout-date-from-other-statement",
+      "split": "INDEPENDENT_HOLDOUT",
+      "project_id": "AU-49b538453133bd968e8d",
+      "source_sha256": "c14ed919368d815403c67780f8d76e4f01cb789da8e3d5547ed531055f23c979",
+      "scope": "Koppamurra Global MRE distinct from Ore Reserve",
+      "layout": "global-resource-and-reserve-in-one-report",
+      "context": "243 Mt and 751 ppm TREO are global MRE at 325 ppm TREO-CeO2. Printed 2026-06-25 effective date is for separate Ore Reserve only. A year precision MRE does not establish an exact effective day.",
+      "formal_status": "WITHHOLD",
+      "expected_observations": [],
+      "source_evidence": [
+        {
+          "page": 8,
+          "locator": "Table 2 Global MRE then Reserve section",
+          "quote": "Total 243 1.6 751 493; Ore Reserve estimate of 26Mt at 920ppm TREO … estimated at 25 June 2026"
+        },
+        {
+          "page": 28,
+          "locator": "Koppamurra 2026 Mineral Resource Statement, Table 3",
+          "quote": "Global Mineral Resource reported above a 325 ppm TREO-CeO2 … 243 Mt @ 751 ppm TREO"
+        }
+      ],
+      "forbidden_selected_pages": []
+    },
+    {
+      "case_id": "holdout-announcement-versus-effective",
+      "split": "INDEPENDENT_HOLDOUT",
+      "project_id": "AU-1345edd8165c10930e94",
+      "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+      "scope": "Nolans Bore Mineral Resource",
+      "layout": "restated-MRE-with-announcement-date",
+      "context": "The 56 Mt and 2.6% TREO are JORC resource totals; 2017-06-07 is declared announcement date. Do not infer an effective day from that heading.",
+      "formal_status": "WITHHOLD",
+      "expected_observations": [],
+      "source_evidence": [
+        {
+          "page": 15,
+          "locator": "Statement of Mineral Resources heading and Total",
+          "quote": "Announced 7 June 2017 – 1% TREO lower cut-off grade; Total 56 2.6 11 26.4"
+        },
+        {
+          "page": 36,
+          "locator": "Table 11 duplicate annual resource disclosure",
+          "quote": "Announced 7 June 2017 – 1% TREO lower cut-off grade"
+        }
+      ],
+      "forbidden_selected_pages": []
+    }
+  ]
+}

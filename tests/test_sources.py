@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
-from au_ree_v3.sources import ContentStore, HttpResult, IntegrityError, acquire_sources, combine_acquisition, discover_sources, validate_capture_proof
+from au_ree_v3.sources import ContentStore, HttpResult, IntegrityError, acquire_sources, combine_acquisition, discover_sources, validate_capture_proof, validate_edition_proofs
 
 
 PDF_A = b"%PDF-1.4\nsynthetic source one\n%%EOF"
@@ -66,6 +66,14 @@ class SourceCaptureTests(unittest.TestCase):
         self.assertEqual(new["temporal_decision"]["earliest_proven_public_date"], "2026-11-28")
         self.assertEqual(new["temporal_decision"]["status"], "ELIGIBLE")
         self.assertEqual(len(new["temporal_evidence"]), 2)
+        proofs = validate_edition_proofs(self.store, new, PROFILE.timezone)
+        self.assertEqual({proof.public_on for proof in proofs}, {"2026-11-28", "2026-11-29"})
+        wrong_metadata = {
+            "url": original, "project_ids": ["P2"], "bytes": new["bytes"] + 1, "event_acquired_at": BEFORE,
+        }
+        for field, value in wrong_metadata.items():
+            with self.subTest(field=field), self.assertRaisesRegex(IntegrityError, "current capture event"):
+                validate_edition_proofs(self.store, {**new, field: value}, PROFILE.timezone)
         self.assertEqual(self.store.read(new["sha256"]), PDF_A)
         first_integrity = json.loads((self.root / "first/source_manifest_integrity.json").read_bytes())
         self.assertEqual(self.store.read(first_integrity["manifest_sha256"]),

@@ -234,6 +234,34 @@ def validate_capture_proof(store: ContentStore, receipt_sha256: str, source_sha2
                             f"sha256:{receipt_sha256}", receipt_sha256)
 
 
+def validate_edition_proofs(store: ContentStore, edition: dict, timezone: ZoneInfo) -> tuple[TemporalEvidence, ...]:
+    """Verify exact edition lineage, including the first and current capture clocks."""
+    verified = {}
+    for claim in edition["temporal_evidence"]:
+        proof = validate_capture_proof(store, claim["reference_sha256"], edition["sha256"], timezone)
+        receipt = json.loads(store.read(proof.reference_sha256))
+        if asdict(proof) != claim:
+            raise IntegrityError("Public proof differs from the exact edition")
+        verified[proof.reference_sha256] = proof, receipt
+    if not verified:
+        return ()
+    if edition["receipt_sha256"] not in verified:
+        raise IntegrityError("Current acquisition receipt is not pinned by the edition")
+    current_event = verified[edition["receipt_sha256"]][1]
+    current_fields = {
+        "requested_url": "url", "final_url": "final_url", "project_ids": "project_ids",
+        "kind": "kind", "bytes": "bytes", "acquired_at": "event_acquired_at",
+    }
+    if any(current_event[field] != edition.get(target) for field, target in current_fields.items()):
+        raise IntegrityError("Edition lineage disagrees with its current capture event")
+    current = current_event["acquired_at"]
+    first = min((item[1]["acquired_at"] for item in verified.values()), key=datetime.fromisoformat)
+    reacquired = current if datetime.fromisoformat(current) != datetime.fromisoformat(first) else None
+    if edition["acquired_at"] != first or edition["reacquired_at"] != reacquired:
+        raise IntegrityError("Edition acquisition dates disagree with the immutable capture receipts")
+    return tuple(sorted((value[0] for value in verified.values()), key=lambda item: item.evidence_id))
+
+
 def _profile_inputs(profile_path: Path):
     from .registry import load_profile
 
