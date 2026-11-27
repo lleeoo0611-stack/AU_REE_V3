@@ -103,6 +103,31 @@ class CompositionProjectionTests(unittest.TestCase):
             self.assertNotIn(name, partial)
         self.assertIn("Tb4O7", refusals["hree8_kt"]["required_members"])
 
+    def test_partial_oxide_sum_must_fit_the_reported_treo_rounding_interval(self):
+        members = {"CeO2", "La2O3"}
+        for concentrations, feasible in ((("8000", "8000"), False), (("4825", "4826"), True)):
+            with self.subTest(concentrations=concentrations):
+                grouped = _bundle(omit=tuple(TABLE_5_PPM))
+                inputs = [_input(species.lower() + "_ppm", token, "ppm", species, oxide=True)
+                          for species, token in zip(sorted(members), concentrations, strict=True)]
+                for item in inputs:
+                    grouped[item.raw.variable].append(item)
+                measures, refusals = _evaluate(grouped)
+                if feasible:
+                    self.assertEqual(set(measures), {species + "_kt" for species in members})
+                    self.assertNotIn("oxide_mass", refusals)
+                else:
+                    self.assertFalse(set(measures))
+                    conflict = refusals["oxide_mass"]
+                    self.assertEqual(conflict["status"], "SCIENTIFIC_CONFLICT")
+                    self.assertEqual(set(conflict["required_members"]), members)
+                    self.assertEqual(conflict["rounding_intervals_ppm"], {
+                        "selected_oxide_sum": ["15999.0", "16001.0"], "declared_treo": ["9550", "9650"],
+                    })
+                    self.assertEqual({item["observation_id"] for item in conflict["inputs"]}, {
+                        item.raw.observation_id for item in (*inputs, grouped["ore_mt"][0], grouped["grade"][0])
+                    })
+
     def test_foreign_editions_statements_dates_and_materials_never_mix(self):
         variations = (
             lambda item: replace(item, source=replace(item.source, source_version="other")),
@@ -190,6 +215,11 @@ class NativeCensusScienceTest(unittest.TestCase):
         native_total, = (line.split()[2:] for line in table.split("Notes:", 1)[0].splitlines()
                          if line.strip().startswith("Total "))
         self.assertEqual([token.replace(",", "") for token in native_total], list(TABLE_5_PPM.values()))
+        table_two = view.pages[4].split("Table 2:", 1)[1].split("Table 3:", 1)[0]
+        self.assertIn("0.15 % TREO cut-off grade", table_two)
+        self.assertIn("Wolverine Total Mineral Resource estimate", table_two)
+        self.assertEqual(table_two.count("kg/t"), 3)
+        self.assertEqual([line.split()[3] for line in table_two.splitlines() if line.strip().startswith("Total ")], ["0.85"])
         with TemporaryDirectory() as folder:
             root = Path(folder)
             receipt = build_research(profile=PROFILE, bindings=ROOT/"config/research_profiles/resource_bindings_v3.json",
@@ -210,6 +240,20 @@ class NativeCensusScienceTest(unittest.TestCase):
             self.assertEqual((report["formal_selected_inputs"], report["new_formal_scientific_cells"]), (17, 0))
             self.assertEqual(len(report["verified_resource_presence"]), 4)
             self.assertEqual(len(report["approved_mcda_s1_references"]), 2)
+            self.assertEqual(len(report["reviewed_composition_evidence_sha256"]), 64)
+            conflicts = {row["key"]: row for row in report["rejected_derivations"]
+                         if row["project_id"] == "AU-9bd8e5ed8408cd84d876" and row.get("source_precision_reviews")}
+            self.assertEqual(set(conflicts), {"dy2o3_ppm", "hree8_kt", "magnet_recalculated_kt", "mreo_kt",
+                                              "complete_oxide_sum_kt"})
+            conflict = conflicts["dy2o3_ppm"]["source_precision_reviews"][0]
+            self.assertEqual(conflicts["dy2o3_ppm"]["status"], "SCIENTIFIC_CONFLICT")
+            self.assertEqual(conflict["nominal_rounding_intervals_ppm"], {
+                "companion": ["845.000", "855.000"], "selected": ["839.5", "840.5"],
+            })
+            for location in (conflict["companion"], conflict["selected"]):
+                page = " ".join(view.pages[location["physical_page"] - 1].split())
+                self.assertIn(location["scope_quote"], page)
+                self.assertIn(location["row_quote"], page)
             census = json.loads((root / "census/census_receipt.json").read_bytes())
             self.assertEqual(census["science_views"], report)
             with (root / "census/cell_status.csv").open(newline="", encoding="utf-8") as stream:
@@ -232,11 +276,8 @@ class NativeCensusScienceTest(unittest.TestCase):
             by_key = {(row["project_id"], row["key"]): Decimal(row["value"]) for row in report["derived_candidates"]}
             self.assertEqual(by_key, {
                 ("AU-0098e17a63e7c05c213f", "mreo_kt"): Decimal("16.8"),
-                ("AU-9bd8e5ed8408cd84d876", "Dy2O3_kt"): Decimal("6.132"),
                 ("AU-9bd8e5ed8408cd84d876", "Nd2O3_kt"): Decimal("2.044"),
                 ("AU-9bd8e5ed8408cd84d876", "Pr6O11_kt"): Decimal("0.438"),
                 ("AU-9bd8e5ed8408cd84d876", "Tb4O7_kt"): Decimal("0.876"),
                 ("AU-9bd8e5ed8408cd84d876", "ndpr_kt"): Decimal("2.482"),
-                ("AU-9bd8e5ed8408cd84d876", "magnet_recalculated_kt"): Decimal("9.49"),
-                ("AU-9bd8e5ed8408cd84d876", "mreo_kt"): Decimal("9.49"),
             })

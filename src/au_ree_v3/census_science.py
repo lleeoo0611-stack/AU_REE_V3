@@ -3,6 +3,7 @@
 from collections import defaultdict
 from decimal import Decimal, ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_EVEN, localcontext
 from hashlib import sha256
+from importlib.resources import files
 import json
 
 from .census import COLUMNS
@@ -13,6 +14,7 @@ from .comparability import (
 )
 from .contracts import ResearchRelease, canonical_json
 from .fresh_decision import POLICY_SHA256, load_policy
+from .normalization import reported_interval
 from .observations import OXIDE_VARIABLES
 from .research_inputs import ResearchInput, checked_research_inputs
 
@@ -40,6 +42,13 @@ _EXPECTED_FORMULAS = {
     "complete_sum_ratio": "sum(member_ppm) / declared_total_TREO_ppm",
 }
 _ADMISSION_GAP = "NO_APPROVED_CENSUS_DERIVATION_SELECTION"
+_PRECISION_CONFLICT = "SAME_SCOPE_COMPANION_OXIDE_PRECISION_DISAGREEMENT"
+_REVIEWED_EVIDENCE_BYTES = files(__package__).joinpath("census_composition_evidence_v1.json").read_bytes()
+_REVIEWED_EVIDENCE = json.loads(_REVIEWED_EVIDENCE_BYTES)
+if _REVIEWED_EVIDENCE["schema"] != "reviewed-census-composition-evidence-v1":
+    raise ValueError("Census composition precision review requires its versioned contract")
+REVIEWED_COMPOSITION_EVIDENCE_SHA256 = sha256(_REVIEWED_EVIDENCE_BYTES).hexdigest()
+_PPM_FACTORS = {"ppm": Decimal(1), "kg/t": Decimal(1000)}
 
 
 def _digest(value):
@@ -172,7 +181,7 @@ def _candidate(key, heading, species, base, inputs, numbers, formula_type, trans
 def _blocked(key, reason, *, members=(), inputs=()):
     state = "INSUFFICIENT_CONTEXT"
     if reason in {"INCONSISTENT_OXIDE_AND_TREO_ROUNDING_INTERVALS", "REPORTED_TOKEN_AND_GOVERNED_VALUE_DISAGREE",
-                  "REPORTED_AND_COMPONENT_GROUP_ROUNDING_INTERVALS_DISAGREE"}:
+                  "REPORTED_AND_COMPONENT_GROUP_ROUNDING_INTERVALS_DISAGREE", _PRECISION_CONFLICT}:
         state = "SCIENTIFIC_CONFLICT"
     elif any(token in reason for token in ("MISMATCH", "REQUIRED")) and not reason.startswith("REQUIRED_"):
         state = "NOT_COMPARABLE"
@@ -187,6 +196,31 @@ def _component_columns(columns):
 
 def _overlap(first, second):
     return first[1] <= second[2] and second[1] <= first[2]
+
+
+def _reviewed_precision_conflict(item, grade, species):
+    anchor = item.anchor
+    for review in _REVIEWED_EVIDENCE["reviews"]:
+        cutoff = review["cutoff"]
+        if (item.source.sha256 != review["source_sha256"] or grade.scope.name != review["scope"]
+                or grade.raw.effective_date != review["effective_date"] or species != review["species"]
+                or resource_context(grade)[-3:] != (Decimal(cutoff[0]), *cutoff[1:])):
+            continue
+        selected, companion = review["selected"], review["companion"]
+        if (anchor.page, anchor.table, anchor.row, anchor.column, item.raw.raw_value, item.raw.raw_unit,
+                " ".join((anchor.quote or "").split())) != (
+            selected["physical_page"], selected["table"], selected["row"], selected["column"],
+            selected["token"], selected["unit"], selected["row_quote"],
+        ):
+            continue
+        bounds = {
+            role: tuple(value * _PPM_FACTORS[reading["unit"]] for value in reported_interval(reading["token"]))
+            for role, reading in (("selected", selected), ("companion", companion))
+        }
+        if not _overlap(bounds["selected"], bounds["companion"]):
+            return {**review, "review_policy_sha256": REVIEWED_COMPOSITION_EVIDENCE_SHA256,
+                    "nominal_rounding_intervals_ppm": {role: _formatted(values)[1] for role, values in bounds.items()}}
+    return None
 
 
 def _reported_group(grade, entries, matches, grade_numbers, *, computed):
@@ -221,7 +255,7 @@ def _derive_components(by_variable, resource, composition, columns, s1_rule):
         return [], [_blocked("oxide_mass", "POSITIVE_ORE_MASS_AND_TREO_REQUIRED", inputs=resource.inputs)]
     known_members = set(resource_semantic_context(grade).treo_members)
     headings = _component_columns(columns)
-    results, failures, components = [], [], {}
+    failures, components, precision_conflicts = [], {}, {}
     for species, variable in _VARIABLES_BY_SPECIES.items():
         values = by_variable.get(variable, ())
         if len(values) > 1:
@@ -232,17 +266,41 @@ def _derive_components(by_variable, resource, composition, columns, s1_rule):
             if gap is None and species not in known_members:
                 gap = "OXIDE_NOT_IN_DECLARED_TREO_MEMBER_SET"
             transform, gap = (None, gap) if gap else _amount(item, "ppm")
-            if gap is None and _numbers(transform)[1] > grade_numbers[2]:
-                gap = "INCONSISTENT_OXIDE_AND_TREO_ROUNDING_INTERVALS"
             if gap:
                 failures.append(_blocked(variable, gap, members=(species,), inputs=(ore, grade, item)))
                 continue
+            if (precision := _reviewed_precision_conflict(item, grade, species)) is not None:
+                precision_conflicts[species] = item, precision
+                conflict = _blocked(variable, _PRECISION_CONFLICT, members=(species,), inputs=(ore, grade, item))
+                failures.append({**conflict, "source_precision_reviews": [precision]})
+                continue
             components[species] = item, transform
-            results.append(_candidate(f"{species}_kt", headings[species], (species,), grade,
-                                      (ore, grade, item), _product(ore_numbers, _numbers(transform)),
-                                      "component_mass", (ore_transform, grade_transform, transform)))
+    if components:
+        selected_inputs, selected_transforms = zip(*components.values(), strict=True)
+        selected_total = _total(selected_transforms)
+        # A reported TREO balance must be feasible even when other members are missing.
+        if selected_total[1] > grade_numbers[2]:
+            conflict = _blocked("oxide_mass", "INCONSISTENT_OXIDE_AND_TREO_ROUNDING_INTERVALS",
+                                members=tuple(components), inputs=(ore, grade, *selected_inputs))
+            conflict["rounding_intervals_ppm"] = {
+                "selected_oxide_sum": _formatted(selected_total)[1],
+                "declared_treo": _formatted(grade_numbers)[1],
+            }
+            return [], [*failures, conflict]
+    results = [
+        _candidate(f"{species}_kt", headings[species], (species,), grade,
+                   (ore, grade, item), _product(ore_numbers, _numbers(transform)),
+                   "component_mass", (ore_transform, grade_transform, transform))
+        for species, (item, transform) in components.items()
+    ]
     group_result = {}
     for key, (members, heading) in _GROUPS.items():
+        conflicts = [precision_conflicts[species] for species in members if species in precision_conflicts]
+        if conflicts:
+            conflict = _blocked(key, _PRECISION_CONFLICT, members=members,
+                                inputs=(ore, grade, *(item for item, _ in conflicts)))
+            failures.append({**conflict, "source_precision_reviews": [review for _, review in conflicts]})
+            continue
         if key == "ndpr_kt" and any(by_variable.get(variable) for variable in NDPR_VARIABLES):
             continue
         if not all(species in components for species in members):
@@ -282,7 +340,12 @@ def _derive_components(by_variable, resource, composition, columns, s1_rule):
                                       (ore, grade, *ndpr), _product(ore_numbers, _numbers(amount)),
                                       "reported_group_mass", (ore_transform, grade_transform, amount), evidence=evidence))
     aggregate_inputs = tuple(by_variable.get(MREO_VARIABLE, ()))
-    if aggregate_inputs:
+    magnet_conflicts = [precision_conflicts[species] for species in MAGNET if species in precision_conflicts]
+    if magnet_conflicts:
+        conflict = _blocked("mreo_kt", _PRECISION_CONFLICT, members=MAGNET,
+                            inputs=(ore, grade, *(item for item, _ in magnet_conflicts)))
+        failures.append({**conflict, "source_precision_reviews": [review for _, review in magnet_conflicts]})
+    elif aggregate_inputs:
         reported = composition_comparison({MREO_VARIABLE: aggregate_inputs}, resource, s1_rule)
         if not reported.comparable:
             failures.append(_blocked("mreo_kt", reported.reason, members=MAGNET, inputs=reported.inputs))
@@ -357,6 +420,7 @@ def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRe
     view = {
         "schema": SCHEMA, "policy_version": POLICY_VERSION, "release_id": release.release_id,
         "research_cutoff": release.cutoff, "release_mode": release.release_mode,
+        "reviewed_composition_evidence_sha256": REVIEWED_COMPOSITION_EVIDENCE_SHA256,
         "formula_registry_sha256": _digest({"version": POLICY_VERSION, "formulas": _EXPECTED_FORMULAS,
                                            "groups": _GROUPS, "oxide_factor": str(COMPONENT_FACTOR),
                                            "formal_admission": False}),

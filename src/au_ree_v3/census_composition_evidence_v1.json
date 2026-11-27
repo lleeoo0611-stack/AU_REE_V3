@@ -1,0 +1,26 @@
+{
+  "schema": "reviewed-census-composition-evidence-v1",
+  "reviews": [
+    {
+      "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+      "scope": "Wolverine Total Mineral Resource",
+      "effective_date": "2025-01-15",
+      "cutoff": ["0.15", "%", "TREO"],
+      "species": "Dy2O3",
+      "companion": {
+        "physical_page": 5, "table": "Table 2", "row": "Total", "column": "Dy2O3",
+        "token": "0.85", "unit": "kg/t",
+        "scope_quote": "Table 2: Mineral Resource estimate for the Wolverine deposit as at 15 January 2025 reported above a 0.15 % TREO cut-off grade.",
+        "row_quote": "Total 7.3 0.96 0.85 5.68 0.12 89 70,500"
+      },
+      "selected": {
+        "physical_page": 6, "table": "Table 5", "row": "Total", "column": "Dy2O3",
+        "token": "840", "unit": "ppm",
+        "scope_quote": "Table 5: Wolverine Total Mineral Resource estimate at 15 January 2025 reported above a 0.15 % TREO cut-off grade – all TREO variables.",
+        "row_quote": "Total 7,300 170 420 60 280 200 40 560 120 840 170 490 70 380 50 5,700"
+      },
+      "issuer_note": "Rounding may have caused computational discrepancies.",
+      "precision_resolution": "SOURCE_ROUNDING_QUANTUM_UNBOUND"
+    }
+  ]
+}
