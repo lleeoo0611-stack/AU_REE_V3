@@ -60,6 +60,23 @@ def main(argv: list[str] | None = None) -> int:
     build.add_argument("--assets", type=Path, required=True)
     build.add_argument("--out", type=Path, required=True)
     build.add_argument("--code-commit", required=True)
+    archive = research_commands.add_parser("archive", help="Archive a fresh research candidate by exact bytes")
+    for argument in ("profile", "bindings", "sources", "build", "store", "out"):
+        archive.add_argument(f"--{argument}", type=Path, required=True)
+    archive.add_argument("--repository", type=Path, default=Path.cwd())
+    archive.add_argument("--replica", type=Path)
+    archive.add_argument("--replica-failure-domain")
+
+    for operation in ("replay", "verify", "rehearse-rollback"):
+        command = research_commands.add_parser(operation)
+        command.add_argument("--release-root", type=Path, required=True)
+        command.add_argument("--release-id", required=True)
+        command.add_argument("--store", type=Path, required=True)
+        command.add_argument("--out", type=Path, required=True)
+        if operation == "replay":
+            command.add_argument("--offline", action="store_true", required=True)
+        if operation == "rehearse-rollback":
+            command.add_argument("--previous-release-id", required=True)
 
     migration = commands.add_parser("migration", help="Audit and verify fixed V2 references")
     operations = migration.add_subparsers(dest="operation", required=True)
@@ -103,8 +120,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{operation}: {error}", file=sys.stderr)
         return 1
     response = {"operation": operation, "status": result["status"], "receipt_directory": str(args.out)}
-    if result.get("reason"):
-        response["reason"] = result["reason"]
+    for key in ("reason", "release_id", "gates", "F4", "F5"):
+        if key in result:
+            response[key] = result[key]
     print(json.dumps(response, ensure_ascii=False))
     return EXIT_CODES[result["status"]]
 
@@ -126,6 +144,9 @@ def _run_research(args) -> dict:
 
         return extract_sources(args.bindings, args.sources, args.assets, args.database, args.out, code_commit=args.code_commit)
 
+    if args.operation != "build":
+        return _run_publication(args)
+
     from .fresh_research import build_research
 
     result = build_research(
@@ -135,6 +156,26 @@ def _run_research(args) -> dict:
     statuses = set(result["gates"].values())
     status = "FAIL" if "FAIL" in statuses else "PASS" if statuses == {"PASS"} else "BLOCKED"
     return {"status": status, **result}
+
+
+def _run_publication(args) -> dict:
+    from .publication import archive_release, rehearse_rollback, replay_release
+    from .sources import ContentStore
+
+    storage = ContentStore(args.store)
+    if args.operation == "archive":
+        replica = ContentStore(args.replica) if args.replica else None
+        return archive_release(
+            repository=args.repository, release_root=args.out, profile=args.profile, bindings=args.bindings,
+            sources=args.sources, build=args.build, primary=storage, replica=replica,
+            replica_failure_domain=args.replica_failure_domain,
+        )
+    if args.operation == "rehearse-rollback":
+        return rehearse_rollback(
+            release_root=args.release_root, previous_release_id=args.previous_release_id,
+            release_id=args.release_id, storage=storage, out=args.out,
+        )
+    return replay_release(release_root=args.release_root, release_id=args.release_id, storage=storage, out=args.out)
 
 
 def _run_migration(args) -> dict:

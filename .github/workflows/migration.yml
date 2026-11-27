@@ -10,6 +10,11 @@ on:
       - "pyproject.toml"
       - ".github/workflows/migration.yml"
   workflow_dispatch:
+    inputs:
+      fresh_release:
+        type: boolean
+        description: Verify a real fresh-source archive and cold replay
+        default: false
 
 permissions:
   contents: read
@@ -33,7 +38,7 @@ jobs:
 
   frozen-reference:
     name: Frozen reference integrity
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && !inputs.fresh_release
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -114,3 +119,8 @@ jobs:
           get_fixture 'https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf' e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0
           get_fixture 'https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896' eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5
           AU_REE_FRESH_ASSETS="$directory" python -m unittest discover -s tests -p 'test_fresh_observations.py' -v
+      - name: Restore a fresh release from its verified local copy
+        if: github.event_name == 'workflow_dispatch' && inputs.fresh_release
+        run: |
+          AU_REE_FRESH_ASSETS="$RUNNER_TEMP/resource-fixture/assets" \
+            python -m unittest discover -s tests -p 'test_publication.py' -v

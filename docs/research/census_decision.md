@@ -17,3 +17,5 @@ F3 的正式組裝使用新研究 Profile 和合併來源清冊。固定次序�
 本機同輸入 Census 組裝與重新核對約 0.21 秒、Python 峰值 RSS 27,488 KiB；固定決策輸入及不足狀態的兩次重算約 0.047 秒、峰值 RSS 16,608 KiB。這些是已完成範圍的新流程量測，跨版本相同功能的複雜度和成本差異為 `UNMEASURED`。
 
 C 新增 `fresh_census.py`、`fresh_decision.py`、`decision.py`、鎖定政策、研究組裝及環境指紋模組、相依測試與本報告，修改 CLI、打包設定、README 及能力矩陣。重跑命令見 [README](../../README.md)。
+
+C 經 [PR #8](https://github.com/lleeoo0611-stack/AU_REE_V3/pull/8) 整合為 `d611d540a005146fde7a025c1540047d53eb1cfa`。測試 head `17d48b5d4eb730444905ba15697df7d34ed46918` 的 [CI](https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46071873013) 通過，並從該提交獨立檢出，完成 123 份來源的整合建置與 126 項本機測試。
