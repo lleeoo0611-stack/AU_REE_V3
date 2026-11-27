@@ -1,5 +1,6 @@
 from datetime import date
 from hashlib import sha256
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
@@ -7,7 +8,7 @@ import unittest
 from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
-from au_ree_v3.sources import ContentStore, HttpResult, IntegrityError, acquire_sources, discover_sources, validate_capture_proof
+from au_ree_v3.sources import ContentStore, HttpResult, IntegrityError, acquire_sources, combine_acquisition, discover_sources, validate_capture_proof
 
 
 PDF_A = b"%PDF-1.4\nsynthetic source one\n%%EOF"
@@ -121,3 +122,24 @@ class SourceCaptureTests(unittest.TestCase):
         self.store.path(digest).write_bytes(PDF_B)
         with self.assertRaisesRegex(IntegrityError, "SHA-256 mismatch"):
             validate_capture_proof(self.store, edition["receipt_sha256"], digest, PROFILE.timezone)
+
+    def test_combiner_revalidates_captures_and_preserves_every_attempt(self):
+        first_url = "https://publisher-one.test/report.pdf"
+        second_url = "https://publisher-two.test/report.pdf"
+        self.acquire("first", [seed("P1", first_url)], {first_url: fetched(first_url)})
+        self.acquire("second", [seed("P2", second_url)], {
+            second_url: HttpResult("HTTP_403", second_url, BEFORE, 403),
+        })
+        first = self.root / "first/source_manifest.json"
+        second = self.root / "second/source_manifest.json"
+        with patch("au_ree_v3.sources._profile_inputs", return_value=(PROFILE, ("P1", "P2"), [])):
+            combined = combine_acquisition(Path("profile"), [first, second, first], self.root / "combined",
+                                           store=self.store.root)
+            self.assertEqual(combined["counts"]["projects_searched"], 2)
+            self.assertEqual(combined["counts"]["event_statuses"], {"PUBLIC_CAPTURED": 1, "HTTP_403": 1})
+            self.assertEqual(combined["primary_readback"]["verified_objects"], 2)
+            tampered = json.loads(first.read_bytes())
+            tampered["editions"][0]["temporal_decision"]["status"] = "CANDIDATE"
+            first.write_text(json.dumps(tampered))
+            with self.assertRaisesRegex(IntegrityError, "Temporal decision cannot be reproduced"):
+                combine_acquisition(Path("profile"), [first, second], self.root / "invalid", store=self.store.root)

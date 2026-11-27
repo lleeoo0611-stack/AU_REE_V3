@@ -17,7 +17,7 @@
 
 固定清冊有 180 個可供檢索的歷史公開來源指標和 226 筆專案關聯。A 由每案優先的最多兩個指標發出實際連線，合併重複網址後，執行 144 次 HEAD 與 144 次 GET。HEAD 有 139 次可達、3 次 404、2 次 500。GET 有 111 次通過原件檢查、1 次 404、32 次 MIME 不合。第一輪有 85 案取得時間合格原件。8 個缺口隨後以可核對的 ASX 官方直接 PDF 連結取得 10 份文件。另保存 6 筆解析目標來源的實際取得。四份原始批次收據合併後，93 案全數各有至少一份時間資格通過的來源；所有失敗連線保留。
 
-合併清冊有 127 筆成功取得，其中 124 筆相同 SHA、3 筆新 SHA，合計 123 個唯一原件 SHA。獨立回讀核驗原件和時間證據及其配對，詳見 F1 收據。第一輪取得含網路等待為 35.64 秒；為 8 個缺口補查的官方連結請求完成時間跨度為 8.21 秒。主端可讀，獨立副本讀回為 0。舊 SHA 僅作 lineage 分類。時間合格僅表示當期同版公開證據已核對，科學准入屬後續驗證。
+合併清冊有 127 筆成功取得，其中 124 筆相同 SHA、3 筆新 SHA，合計 123 個唯一原件 SHA。獨立回讀核驗原件和時間證據及其配對，耗時 0.70 秒、Python 峰值 RSS 49,076 KiB。三個新 SHA 分別為 Wudinna HTML、Strandline Coburn PDF 及 ASRA Yttria PDF。第一輪取得含網路等待為 35.64 秒；為 8 個缺口補查的官方連結請求完成時間跨度為 8.21 秒。主端可讀，獨立副本讀回為 0。舊 SHA 僅作 lineage 分類。時間合格僅表示當期同版公開證據已核對，科學准入屬後續驗證。
 
 本輪新增正式觀測、可比較 Project×criterion、面板及排名均為 0。相同功能範圍的 V2 工程對照、快取收益與 CI 成本差異為 `UNMEASURED`。
 
@@ -25,6 +25,7 @@
 - [93 案來源逐案清冊](project_source_inventory.csv)
 - [來源 SHA 版次對照](source_edition_crosswalk.csv)
 - [F1 獨立回讀收據](source_readback_verification.json)
+- [補查來源與定位依據](supplemental_source_locators.csv)
 - [能力進度](capability_progress.csv)
 
 A 新增四個版本化研究設定、`registry.py`、`migration/project_registry.py`、`sources.py`、來源及清冊測試，以及本目錄中的規格、報告和實測清冊。修改 CLI 與 README 提供可執行入口。本組未合併、封存或移除程式／資料檔。暫存原件與完整事件收據保留於 `work/fresh/`。重現命令見 [README](../../README.md)。
