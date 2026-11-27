@@ -1,0 +1,659 @@
+{
+  "added_formal_criteria": [
+    {
+      "criterion": "R1",
+      "lineage": [
+        {
+          "anchor_id": "8b891c95fb1c753a29fcb9db24761f91488d9014e927ca53c22c72b08e6a67d9",
+          "observation_id": "41dc54bc8c976886f628d7c191822f037c259e0a055bfaf7703198b70e078da0",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+          "selection_id": "a76620be2abcf687a4c680b90933813cebc1744b448b1233e4b521d6c45a4b8a",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+            "matching_evidence_ids": [
+              "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "a66ffc59f11fd362142b920ba31f2f7f56731cf518a83f24dbe402b1b84ce116"
+        },
+        {
+          "anchor_id": "36342564101593af5aab8babd2967b43def4349addd51295adc334f2ad7c0fb5",
+          "observation_id": "3006c076a1c7abfebf3d00dfd9aae2ca526790db3a5cccda1a1ee79ab2a3984d",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+          "selection_id": "8535268ed9b4ad6b6676b52448aed8874dd3416e2fb8650f6b2d1b79d3a80b28",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+            "matching_evidence_ids": [
+              "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "8ca70701b69856ad211126b45fa1f68fde860be5a64c758839c23a48cdd22c7b"
+        },
+        {
+          "anchor_id": "42f4ecaec42c59e970fb4cc373d98262f4115ec4940d911d2641717547c6f94a",
+          "observation_id": "8b2bdafea773accd5dc36cf6ff9d2a848c81975c7bda8ef84baa4b68c0762057",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+          "selection_id": "3ad52864c6fe0efd83fde5f18de06d1069191ffb90ecc4465d305aa81e37c6fe",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+            "matching_evidence_ids": [
+              "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "06a98419d68b967ce7bf77bc5b46749f20c7a5b8d76dc42364ec51469c399d7c"
+        }
+      ],
+      "project_id": "AU-0098e17a63e7c05c213f",
+      "reason": "RELEASE_BOUND_COMPARABLE_SELECTION",
+      "unit": "kt TREO",
+      "value": "70.400"
+    },
+    {
+      "criterion": "S1",
+      "lineage": [
+        {
+          "anchor_id": "8b891c95fb1c753a29fcb9db24761f91488d9014e927ca53c22c72b08e6a67d9",
+          "observation_id": "41dc54bc8c976886f628d7c191822f037c259e0a055bfaf7703198b70e078da0",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+          "selection_id": "a76620be2abcf687a4c680b90933813cebc1744b448b1233e4b521d6c45a4b8a",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+            "matching_evidence_ids": [
+              "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "a66ffc59f11fd362142b920ba31f2f7f56731cf518a83f24dbe402b1b84ce116"
+        },
+        {
+          "anchor_id": "36342564101593af5aab8babd2967b43def4349addd51295adc334f2ad7c0fb5",
+          "observation_id": "3006c076a1c7abfebf3d00dfd9aae2ca526790db3a5cccda1a1ee79ab2a3984d",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+          "selection_id": "8535268ed9b4ad6b6676b52448aed8874dd3416e2fb8650f6b2d1b79d3a80b28",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+            "matching_evidence_ids": [
+              "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "8ca70701b69856ad211126b45fa1f68fde860be5a64c758839c23a48cdd22c7b"
+        },
+        {
+          "anchor_id": "42f4ecaec42c59e970fb4cc373d98262f4115ec4940d911d2641717547c6f94a",
+          "observation_id": "8b2bdafea773accd5dc36cf6ff9d2a848c81975c7bda8ef84baa4b68c0762057",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+          "selection_id": "3ad52864c6fe0efd83fde5f18de06d1069191ffb90ecc4465d305aa81e37c6fe",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+            "matching_evidence_ids": [
+              "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "06a98419d68b967ce7bf77bc5b46749f20c7a5b8d76dc42364ec51469c399d7c"
+        },
+        {
+          "anchor_id": "7453133f8c5d013f5e892da33d116e6d3ebfdcf0bc51ab16146a83576cb192cf",
+          "observation_id": "2de14f251ec4892688a0b52ebf490cbf24666a586dc2c73941a35f6c4d7a46c8",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "49a12551476a4937c90dc2b988e143da0ab0edd11768a1938395ed50cc7903d3",
+          "selection_id": "7bce84bf74a5ca2a48131fec2ecf2084672e6aab7632384ff411f827d2e8193f",
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "9586b82d5ce5240efe79042e9090a1a85e8956a2254c947c089feaf26fa681f2",
+            "matching_evidence_ids": [
+              "713cc0ed4b425d147bdd5c252a04854bd71d87f7e56fbefa91c2afd3bc995539"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "c99cf7098a88c117ac85388d00f47742b54d7447e858fc9aaf1a6b65f3f0b83b"
+        }
+      ],
+      "project_id": "AU-0098e17a63e7c05c213f",
+      "reason": "SAME_STATEMENT_FOUR_OXIDE_DERIVATION",
+      "unit": "%",
+      "value": "23.82978723404255319148936170212766"
+    },
+    {
+      "criterion": "R1",
+      "lineage": [
+        {
+          "anchor_id": "9f0bfdcc8e8f964e913c5bbe49ca7cbad7a0572ffb5cee7382e86fd7ad67e40a",
+          "observation_id": "1cce1a447d3cf96c904c7dc52f9be4b306fd2c6030b760ea0cdbf4aba409878e",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "fcde03e3ca3eabc7e4cd72fc0d42bcf93abfea4bb72ca76c495124694c3055c5",
+          "selection_id": "ca8e7f3b5368c2db09ed79d862e53fa67c806b52a2c1f53877d5bea8a9890ea3",
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "39c891d149e620bcfe0ad44a6c6ef80fc38f32225523da24d7375cb27948a68a",
+            "matching_evidence_ids": [
+              "0277230140cbe2faee8bb9af07e7817636d628fb86d0bcf1c4d5b09145108944"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "ab5a50296e373b53559ffbc9a0490c4c421c1c24b625e036514790e7479faefd"
+        },
+        {
+          "anchor_id": "a021ba23cd58cf222da2544feb5c72df1661dd0865bd371cd222b5f542256dad",
+          "observation_id": "c2096a9574e9efe846f1eeff73b18fd2d0660ce43498debe361b7b2a74d4b520",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "fcde03e3ca3eabc7e4cd72fc0d42bcf93abfea4bb72ca76c495124694c3055c5",
+          "selection_id": "f9c1e52dde6c8fdb326407a3b2f504bb5625d7eaa3928c9555568da93804ca8b",
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "39c891d149e620bcfe0ad44a6c6ef80fc38f32225523da24d7375cb27948a68a",
+            "matching_evidence_ids": [
+              "0277230140cbe2faee8bb9af07e7817636d628fb86d0bcf1c4d5b09145108944"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "c2cd887f397bf5cc1fde6240b9bd98ebdc2b62803a8d2f65c6cc8be33d44d819"
+        },
+        {
+          "anchor_id": "c6ab7872e920591fb9ef86c4b9302cc1b48113148d5047b01f706c91583a32c7",
+          "observation_id": "cf86663469acf6abc2f2b7b0d578168c0086a77b05648c6d190ded097c6429b4",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "fcde03e3ca3eabc7e4cd72fc0d42bcf93abfea4bb72ca76c495124694c3055c5",
+          "selection_id": "0c4c741484e014cff506524b23ddbd9195c612fafc0dee89e5bfefca580c4434",
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "39c891d149e620bcfe0ad44a6c6ef80fc38f32225523da24d7375cb27948a68a",
+            "matching_evidence_ids": [
+              "0277230140cbe2faee8bb9af07e7817636d628fb86d0bcf1c4d5b09145108944"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "772da6172935244fe13055d43cc964097ea4731e2605b6f10df1711ba72ad8b4"
+        }
+      ],
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "reason": "RELEASE_BOUND_COMPARABLE_SELECTION",
+      "unit": "kt TREO",
+      "value": "74.000"
+    },
+    {
+      "criterion": "S1",
+      "lineage": [
+        {
+          "anchor_id": "fc97564ce7a02ba4d3ca0154a44fc5309d211f9fdb5a10d46332db3f1d9e7839",
+          "observation_id": "489a3558f37b28105abcd6abb383ba670f50542dcf297a2a4537ddfd6ca621bd",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+          "selection_id": "a370241f316c7db7502a02d2039e3b91f3a903f65b4e4ee3051a73ce15098a4a",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+            "matching_evidence_ids": [
+              "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "1f423902dffba82b3b7174e8ccc14a757d527437e4035a7577f006bc6d675b67"
+        },
+        {
+          "anchor_id": "d8692e2f97195a08943673f749e977393ce9d3b62d0b57a3bdf69eb107cfd5e5",
+          "observation_id": "9fdb34620f5d55562fda408d5b03f8289519d0760ae5b96650f0ea346cedbbb7",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+          "selection_id": "43e5622ae4b2c651b567eaa4647ad4353c07de6708bb8806837721b2a94ae425",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+            "matching_evidence_ids": [
+              "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "27e24fbc9a6c65f97b432038dc7d803f2ae4bb3316df2d0c25ab38b04251eb70"
+        },
+        {
+          "anchor_id": "fa1672cc3e8b6d056ed0bf8b1dc5683e1cbe8ce5720ad434ac94a65ca04f601d",
+          "observation_id": "6c84118d6b6d6a5020f20c91c9fd2153e4aed83bb0f12112b970d4620d10f56a",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+          "selection_id": "f65fd62af9611d7f6397943bfb4cc87220cf4431572f74607660bf1890f0434d",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+            "matching_evidence_ids": [
+              "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "4a2f45bf93d2da813fadb2053f5f44d1b94e2cdc9dfda3a89a544ad9eaaf9e82"
+        },
+        {
+          "anchor_id": "b3b9f86ae5469c72d571444890e94263b6c359a654c881c262ae08ec68da77bf",
+          "observation_id": "402291de4008ecde83408051d799555b497b842e132d0366fdcf27de812a2071",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+          "selection_id": "38588d4fba20ab432a802974700837857696e92679acfc6add0181a4b4171b43",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+            "matching_evidence_ids": [
+              "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "5954fd64a6d11588cab09235c742e8e3c737a3c93e8fd04eecfdda892b81d6a7"
+        },
+        {
+          "anchor_id": "b1f5fc87e497fe767c8bec9b973b293c742710aafb5e7d0cee94239f52083af9",
+          "observation_id": "200d4ed6b7b6579ec9cffe1683f240438ed3b48108b4ac68ad20c6f623c8a6c5",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+          "selection_id": "284f3c907d2f78de7875f6b2f8221f844c9c99d7037ac5501215c99497bc673b",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+            "matching_evidence_ids": [
+              "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "950b6b5f6720300f4ad4cdba4c3bacbb5861fb29155103badcc98ee58cd0856a"
+        },
+        {
+          "anchor_id": "fcc268a225908223305b19800a606dbf078a7c992114ad1ee070790083a035b1",
+          "observation_id": "14765263d2ca2840fbabcff43dec63cb7b9ba5ae535481737a26665ecb8ce5c9",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+          "selection_id": "c304af873f523a1b09047cb7a84a54a7c6bcaa6b768721466242a3eb99c8eae4",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+            "matching_evidence_ids": [
+              "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "766dcb7772fafeff9e4954f42eda92abcdc9b6e51a84d7a6276de3d50357b045"
+        },
+        {
+          "anchor_id": "800671f2acd8ce4685864d6be6bfdc7efa54a368672b935fcfd7dbe6fdd74610",
+          "observation_id": "9bada3ed0f7d76e2771660ff2705230666ca3647e03ef73c6f1c84617e64f354",
+          "release_id": "6561e53d83abcf2372f1ae4bad1fde3ae69777abe7c88236e9d5cf1bf5bc3876",
+          "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+          "selection_id": "4a478731436ebc94632765dbc76e5373e36e7a8660c33d609e34fe85bb7c4f8f",
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_decision": {
+            "cutoff": "2026-11-28",
+            "decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+            "matching_evidence_ids": [
+              "8c201bdb3a51688690d65aedbfdd40a31c7122595d1683a02087080081aab260"
+            ],
+            "policy_version": "temporal-evidence-v1",
+            "status": "ELIGIBLE"
+          },
+          "validation_id": "5d22cc565ac1b84ca552120c735aa040f1583636b8171a0e8d88c0238f5532db"
+        }
+      ],
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "reason": "SAME_STATEMENT_FOUR_OXIDE_DERIVATION",
+      "unit": "%",
+      "value": "13.54166666666666666666666666666667"
+    }
+  ],
+  "baseline_git_commit": "b6cdab87b2435f66ce295bdb3bbb48e4772edd5c",
+  "billed_ci_cost": "UNMEASURED",
+  "candidate": {
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "archive_required_objects_with_index": 310,
+    "code_commit": "d5349613a2f24fc8808f001b68aa6818ce29b713",
+    "criteria": 6,
+    "environment_sha256": "7a675c8a81f9cc196f022be319d073864b2e4e7597861672b2316328b2db7a89",
+    "performance": {
+      "archive_seconds": 8.501183708999633,
+      "build_seconds": 2.1401942120000967,
+      "cold-local-replica-only_seconds": 5.606176334999873,
+      "cold-previous_seconds": 3.8907200710000325,
+      "cold-primary_seconds": 6.152984313999696,
+      "largest_child_peak_rss_kib": 92904,
+      "process_peak_rss_kib": 92904
+    },
+    "relative_gain": 4,
+    "release_id": "24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974",
+    "rollback": "PASS",
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "census_change_counts": {
+    "FORMAL_ADDED": 6,
+    "PROVENANCE_RECEIPT_CHANGED": 6,
+    "UNCHANGED": 4731
+  },
+  "ci_job_wall_seconds": {
+    "A_pr_10": {
+      "exact_resource": 27,
+      "run": 46074982526,
+      "static": 10
+    },
+    "B_pr_12": {
+      "exact_resource": 62,
+      "run": 46075896932,
+      "static": 19
+    },
+    "D_pr_11": {
+      "exact_resource": 53,
+      "run": 46074886832,
+      "static": 18
+    },
+    "baseline_pr_9": {
+      "exact_resource": 48,
+      "run": 46072420246,
+      "static": 13
+    }
+  },
+  "code_archive_sha256": "a7bcc3f00b270334b89c641dd8ce2b854949489400fa5e40969f916a5b27e101",
+  "corpus_accuracy": "UNMEASURED",
+  "criterion_counts": {
+    "C1": {
+      "after": 0,
+      "before": 0,
+      "net": 0
+    },
+    "D1": {
+      "after": 0,
+      "before": 0,
+      "net": 0
+    },
+    "I1": {
+      "after": 0,
+      "before": 0,
+      "net": 0
+    },
+    "I2": {
+      "after": 0,
+      "before": 0,
+      "net": 0
+    },
+    "I3": {
+      "after": 0,
+      "before": 0,
+      "net": 0
+    },
+    "I4": {
+      "after": 0,
+      "before": 0,
+      "net": 0
+    },
+    "R1": {
+      "after": 4,
+      "before": 2,
+      "net": 2
+    },
+    "S1": {
+      "after": 2,
+      "before": 0,
+      "net": 2
+    },
+    "T1": {
+      "after": 0,
+      "before": 0,
+      "net": 0
+    }
+  },
+  "cutoff": "2026-11-28",
+  "evidence_paths_sha256": {
+    "work/research-yield/issuer-mre-check/source_manifest.json": "87214a297cb762ac64f392000ca3d97c9e66b9666f7ce68322d8656ecbe35cae",
+    "work/research-yield/replica-audit/same_scope_archive_benchmark.json": "c5cada61395a906e7914d75d35f38d9d279c6821a5bb0db08b785dc91f752781",
+    "work/research-yield/replica-audit/same_scope_replay_benchmark.json": "0789beb996d56b29a45822297bd342e112518873bb5fe52bb7d1721969afbc5b",
+    "work/research-yield/source-inputs/source_manifest.json": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "work/research-yield/source-retry/source_manifest.json": "287684fd74bc3ee9baa468b939edd23b91d439584e8e26f003a286a905b751c9",
+    "work/yield/candidate/archive_receipt.json": "6f75b0981bde7148f16e78e931774658dedbb9b15596ed0ff926fc22ca4b2d43",
+    "work/yield/candidate/build/build_receipt.json": "3b86b9750ce50b78059afb61a53a9e21b2bb45ebb7754e6f8843136a120269ad",
+    "work/yield/candidate/candidate_summary.json": "a0e864d8827c2baf030cf9b18bb45dfd221556022ebaee17abe8ace32821411a",
+    "work/yield/candidate/cold-local-replica-only/replay_receipt.json": "5e65f01f41e7de99ac946b32430e28d44b76fd18b23f4ec68dde1cd9acbd12fa",
+    "work/yield/candidate/cold-previous/replay_receipt.json": "6be5670b3ff0be3eb99f5966f56e38a46da320bc0bc783c661536b6421951b58",
+    "work/yield/candidate/cold-primary/replay_receipt.json": "164eb2463b2da62d336c94e637fe84c3b9125a10b3b184e397b1f4920988c0c5",
+    "work/yield/candidate/delta/census_delta.csv": "8b10414e16e231517dbc31e4fcc3189764dab95962c4bfb4ef2a611883f42754",
+    "work/yield/candidate/delta/cohort_and_mcda.json": "37c7059dff1d016da2a5163dd884f8809a7007dce35f8efff1eea83b25a314bd",
+    "work/yield/candidate/delta/comparability_delta.json": "61d10fdc53e0b1c201643b2bef59c990199aebe6bed02d6fddb77e88bbf3570a",
+    "work/yield/candidate/delta/comparison_receipt.json": "b338a0d6220c84c199cbe714fd412a4cb1ac423c926a0901ce79863e190f0e89",
+    "work/yield/candidate/delta/release_and_replay.json": "b0b94d590a88b53092234326eb68e10642b6d87bc8d15d3f236e45ba84dc7d25",
+    "work/yield/candidate/extraction_evaluation.json": "cd55e5893950aeee141b667fd779eb0e2f9510ffaed09d0690985063b3faa627",
+    "work/yield/candidate/promotion-check/publication_receipt.json": "5554a5d0bfd717f31e7c14a60179af433999328b323e1d11d92961ae50a696f8",
+    "work/yield/candidate/rollback/rollback_receipt.json": "e3ce4fae24055a79d352df280f4c016ce4cc849d9e107f371e14ee9e6f95f258",
+    "work/yield/engineering_comparability.json": "9cfd65a7c2b9cbef312ac5e11957691a9c2d12540dbfc4e8a8ae7b5b7c566f77",
+    "work/yield/extraction_evaluation_holdout.json": "58a9a4fbe2a17e894abf008a2c71cb522bb21b40e68c294d02d1db3753855d79",
+    "work/yield/geography_final.json": "e681ca38c488385ba6dc7d5713d4f5bcb3e1f106ccc86add4a933583c4811bb4",
+    "work/yield/same-scope-extraction/engineering_delta.json": "471f8ef78a9272b263ef74c61a6497f8af6ca25d742d7d45849ad4b3519a00ba",
+    "work/yield/semantic-first-panel/independent_review.json": "cf8c2a828b128400b7c7d41b72b0bebbd8c5072e53a589a50ea8539ea3e25e0c",
+    "work/yield/source_content_inventory.json": "4fd8f374dbe085b56d5285ce007778247ae16f63cff41b58abc5d64e75860968",
+    "work/yield/source_content_inventory_receipt.json": "065d8e85f9fa1e16aabbc83fcbecc9547416b402bac4614c531f1c78d859af8c",
+    "work/yield/source_content_priorities.json": "acc4992aacd52b40f0faed6ab130b95a42f41c9772df6bc995fe5bac74252371",
+    "work/yield/source_failure_ledger.json": "29ca617c1e88e95a8b243811b7bb4442a3195856f9bb162cddd60573095b7734",
+    "work/yield/source_ocr_candidates.json": "e76a99a1a74594efc4b1c0751aa20eba34cd14bd7f76d041b5680566cc8a4a4b",
+    "work/yield/source_pdf_page_count_check.json": "85566d7a967769089610468f11292ac65a1458be9f57600069e031666bc48c3d"
+  },
+  "formal_source_and_evidence_objects_readback": 310,
+  "gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED"
+  },
+  "gis_counts": {
+    "candidates": 5,
+    "formal_indicators": 0,
+    "verified_boundaries": 7
+  },
+  "independent_holdout": {
+    "candidate_fn": 0,
+    "candidate_fp": 0,
+    "candidate_tp": 0,
+    "case_statuses": {
+      "NOT_RUN": 2,
+      "PASS": 1
+    },
+    "cases": 3,
+    "formal_false_admissions": 0,
+    "formal_missing": 0,
+    "measured_cases": 1,
+    "precision": null,
+    "recall": null,
+    "status": "MEASURED_SCOPED"
+  },
+  "independent_ranking_check": {
+    "exact_panel_results_match_independently_checked_snapshot": true,
+    "final_matrix_sha256": "25bfde893c61710686b69f7871a31a29c62d70d16196888e621012d4dca4a708",
+    "final_scoring_sha256": "66cdca89330c8a153ac36aae7c2f0e66bcf5863c81b4a35ad7942ae3f8ceb151",
+    "leave_out_checks": 24,
+    "maximum_absolute_score_error": "1.7038648889026617304665336540733558E-16",
+    "point_checks": 18,
+    "status": "PASS"
+  },
+  "input_sha256": {
+    "bindings": "7eab84d027e772052e314590ebb62e29f2950944e67573ebb0a5703cf707c899",
+    "profile": "8ccc8d042c4b8ce16177acf3f1e583d09d373459adeb930651a317ce4ff59c93",
+    "sources": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "legacy_full_replay": "NOT_RUN",
+  "local_test_run": {
+    "skips": 0,
+    "status": "PASS",
+    "tests": 168
+  },
+  "net_target": 10,
+  "observation_counts": {
+    "after": {
+      "candidate_count": 38,
+      "selected_count": 17,
+      "validated_count": 23
+    },
+    "before": {
+      "candidate_count": 24,
+      "selected_count": 6,
+      "validated_count": 12
+    }
+  },
+  "output_sha256": {
+    "census/cell_status.csv": "181dd0dd6ca571441c5a205a16704e9ba07d321b17afaafba0297e94b50392ac",
+    "census/census.csv": "d0d085c769dee511482d4ae2e7eab5d68460cb4e67cdac3221cb2d3f97d40048",
+    "census/census_receipt.json": "73cdfa6d71d7afea8424929f5b1f56da676654c57b0f2e0c6f775e9b88a5390e",
+    "decision/decision_receipt.json": "ec4d47ebb45ae821376a687fdc600246e1d043d0a656f4746d802b57ef721685",
+    "decision/mcda_inputs.json": "25bfde893c61710686b69f7871a31a29c62d70d16196888e621012d4dca4a708",
+    "decision/mcda_results.json": "66cdca89330c8a153ac36aae7c2f0e66bcf5863c81b4a35ad7942ae3f8ceb151",
+    "observations/extraction.json": "8e418a644d3c39bdb3a6296f2672ed02e4cc38eca06911baee5a654a9c3e93b0",
+    "observations/observations.jsonl": "0c5958adcb70c2798f72aa5ed56fcfe2ee05f7a2d672bfc614b3fb14077a5ce3"
+  },
+  "panels": {
+    "issuer_resource_composition": {
+      "after_eligible_count": 2,
+      "after_status": "PASS"
+    },
+    "issuer_resource_infrastructure": {
+      "after_eligible_count": 0,
+      "after_status": "INSUFFICIENT_COHORT"
+    },
+    "issuer_resource_study": {
+      "after_eligible_count": 0,
+      "after_status": "INSUFFICIENT_COHORT"
+    },
+    "resource_infrastructure_pilot": {
+      "after_eligible_count": 0,
+      "after_status": "INSUFFICIENT_COHORT"
+    },
+    "six_domain": {
+      "after_eligible_count": 0,
+      "after_status": "INSUFFICIENT_COHORT"
+    }
+  },
+  "real_design_regression": {
+    "candidate_fn": 0,
+    "candidate_fp": 0,
+    "candidate_tp": 25,
+    "case_statuses": {
+      "PASS": 6
+    },
+    "cases": 6,
+    "formal_false_admissions": 0,
+    "formal_missing": 0,
+    "measured_cases": 6,
+    "precision": 1.0,
+    "recall": 1.0,
+    "status": "MEASURED_SCOPED"
+  },
+  "rules_sha256": "6a10bf1474e48085fd9724d7e61ddaacf4c2c273235d126d38809352cf2a885f",
+  "runtime_manifest_sha256": "7a675c8a81f9cc196f022be319d073864b2e4e7597861672b2316328b2db7a89",
+  "schema": "data-yield-comparability-receipt-v1",
+  "source_counts": {
+    "additional_source_sha256": 21,
+    "baseline_editions": 127,
+    "baseline_unique_source_sha256": 123,
+    "candidate_signal_sources": {
+      "COORDINATES": 65,
+      "JORC_MRE": 134,
+      "MILESTONE": 66,
+      "ORE_RESERVE": 115,
+      "PORT_INFRASTRUCTURE": 54,
+      "PRODUCTION_PLAN": 34,
+      "REE_OXIDES": 109,
+      "TECHNICAL_PROCESS": 123
+    },
+    "candidate_work_items": 368,
+    "pdfs_with_native_text": 141,
+    "physical_pdf_pages": 7051,
+    "prior_get_failure_resolutions": {
+      "EXACT_HISTORICAL_BYTES_CAPTURED": 30,
+      "NO_VERIFIED_ALTERNATE": 1,
+      "RELATED_OFFICIAL_SOURCE_ONLY": 2
+    },
+    "prior_get_failures": {
+      "HTTP_404": 1,
+      "MIME_MISMATCH": 32
+    },
+    "projects": 93,
+    "source_exact_sha_readback": 144,
+    "source_kinds": {
+      "html": 1,
+      "pdf": 141,
+      "zip": 2
+    },
+    "source_parse_failures": 0,
+    "source_parse_statuses": {
+      "ARCHIVE_INDEXED": 2,
+      "NATIVE_TEXT": 138,
+      "NATIVE_TEXT_PARTIAL": 3,
+      "TEXT_INDEXED": 1
+    },
+    "temporal_edition_statuses": {
+      "ELIGIBLE": 148
+    },
+    "unique_source_sha256": 144
+  },
+  "strict_unknown_criteria": {
+    "after": {
+      "CRITERION_ADMISSION_ADAPTER_NOT_MIGRATED": 651,
+      "INCOMPLETE_SELECTED_RESOURCE_BUNDLE": 89,
+      "NO_COMPOSITION_SELECTION": 2,
+      "SAME_STATEMENT_RESOURCE_REQUIRED": 89
+    },
+    "before": {
+      "CRITERION_ADMISSION_ADAPTER_NOT_MIGRATED": 651,
+      "INCOMPLETE_SELECTED_RESOURCE_BUNDLE": 91,
+      "NO_COMPOSITION_SELECTION": 2,
+      "SAME_STATEMENT_RESOURCE_REQUIRED": 91
+    }
+  },
+  "target_status": "EVIDENCE_INSUFFICIENT",
+  "timezone": "Asia/Taipei",
+  "work_unit_checks": {
+    "A": "PASS",
+    "B": "PASS",
+    "C": "PASS",
+    "D_independent": "BLOCKED",
+    "D_local": "PASS"
+  }
+}

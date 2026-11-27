@@ -1,0 +1,54 @@
+change,path,reason
+修改,.github/workflows/migration.yml,在 CI 核對固定 PDF 原始 SHA、組成與原生 GIS 圖徵
+修改,README.md,記錄本輪研究收據、重現命令與故障域驗收
+新增,config/research_profiles/resource_bindings_v2.json,固定研究定位、化學範圍與時間證據，保留歷史設定
+新增,config/research_profiles/resource_bindings_v3.json,固定研究定位、化學範圍與時間證據，保留歷史設定
+新增,config/research_profiles/wa_tenement_bindings_v1.json,固定研究定位、化學範圍與時間證據，保留歷史設定
+新增,docs/research/data_yield_comparability.md,記錄本輪研究收據、重現命令與故障域驗收
+新增,docs/research/data_yield_comparability_receipt.json,記錄本輪研究收據、重現命令與故障域驗收
+新增,docs/research/data_yield_file_lifecycle.csv,記錄本輪研究收據、重現命令與故障域驗收
+新增,docs/research/engineering_responsibility_audit.json,記錄本輪研究收據、重現命令與故障域驗收
+新增,docs/research/replica_operations.md,記錄本輪研究收據、重現命令與故障域驗收
+修改,src/au_ree_v3/cli.py,提供可重播的來源盤點、空間證據、備份與正式差異入口
+新增,src/au_ree_v3/comparability.py,在 Census 與 MCDA 共用化學、範圍與量測相容政策
+新增,src/au_ree_v3/composition_extraction.py,將同聲明氧化物總列的原始 token 對應到證據
+新增,src/au_ree_v3/composition_review.py,以原件影像及精度交叉核對四種氧化物合計
+修改,src/au_ree_v3/documents.py,以共用 SHA 快取提供完整或限定範圍的原生頁面視圖
+修改,src/au_ree_v3/fresh_census.py,共用相容規則並保留原始 ppm 到百分比的精確投影
+修改,src/au_ree_v3/fresh_decision.py,使用共用相容規則並維持既有五個面板的樣本門檻
+修改,src/au_ree_v3/fresh_observations.py,整合可驗證的跨頁數值與組成證據，維持選值隔離
+修改,src/au_ree_v3/fresh_research.py,共用版次驗證並保留凍結輸出界面
+新增,src/au_ree_v3/geography.py,核對政府圖層原生圖徵、資料日期、CRS 與位置角色
+修改,src/au_ree_v3/observations.py,共用來源觀測的氧化物變數字彙
+修改,src/au_ree_v3/publication.py,加入獨立副本讀回、離線復原及舊環境相容驗收
+新增,src/au_ree_v3/replica.py,驗證授權 S3 的故障域、不可變寫入與逐件讀回
+新增,src/au_ree_v3/research_artifacts.py,共用版本化研究產物檔名，維持入口分層
+新增,src/au_ree_v3/research_delta.py,逐格逐準則對照、完整案例重算及冷建結果比對
+修改,src/au_ree_v3/research_environment.py,鎖定原生 PDF 圖像工具版本和 SHA
+修改,src/au_ree_v3/resource_extraction.py,新增版面策略及實際化學欄位准入檢查
+新增,src/au_ree_v3/source_inventory.py,盤點 exact bytes、候選定位、來源失敗與補取狀態
+修改,src/au_ree_v3/sources.py,共用同 SHA 版次、事件歸屬與時間證據驗證
+新增,tests/fixtures/resource_annotations_v1.json,鎖定獨立標註、原件擷取收據、測試清冊、預期及反例
+新增,tests/fixtures/resource_holdout_bindings_v1.json,鎖定獨立標註、原件擷取收據、測試清冊、預期及反例
+新增,tests/fixtures/resource_yield_v1/acquisition_manifest.json,鎖定獨立標註、原件擷取收據、測試清冊、預期及反例
+新增,tests/fixtures/resource_yield_v1/captures/3a7098f1ed36ca2debf8a3bffa18d11a8eb4f09450a827946bf413ce3bf8e754.json,鎖定獨立標註、原件擷取收據、測試清冊、預期及反例
+新增,tests/fixtures/resource_yield_v1/captures/7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92.json,鎖定獨立標註、原件擷取收據、測試清冊、預期及反例
+新增,tests/fixtures/resource_yield_v1/captures/feaf8bc0011eee1ee3c41b32b7d61feb9ffa817f5fbcd4ab73b1864630ebf839.json,鎖定獨立標註、原件擷取收據、測試清冊、預期及反例
+新增,tests/fixtures/resource_yield_v1/expected.json,鎖定獨立標註、原件擷取收據、測試清冊、預期及反例
+新增,tests/test_composition_extraction.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+修改,tests/test_fresh_census.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+修改,tests/test_fresh_decision.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+修改,tests/test_fresh_observations.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+修改,tests/test_fresh_research.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+新增,tests/test_geography.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+修改,tests/test_publication.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+新增,tests/test_replica.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+新增,tests/test_research_delta.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+新增,tests/test_resource_annotation_evaluation.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+新增,tests/test_resource_yield.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+新增,tests/test_source_inventory.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+修改,tests/test_sources.py,驗證新的正常流程、缺件隔離、精度、壞資料或回放相容性
+新增,tools/evaluate_resource_annotations.py,以獨立標註核對候選及正式採納
+合併責任,src/au_ree_v3/sources.py,版次時序查核集中為共用實作，保留各入口的專責驗證
+封存,work/yield/candidate/archive/releases/24bb0056a0655757a14fd11244fcee207e8a9b88f3d576f7e86c6341b97b3974.json,SHA 固定新候選發布，保留先前封存及正式指標
+保留,V2、Frozen Golden、V3 前次研究發布,歷史參考和輸出維持既有指紋
