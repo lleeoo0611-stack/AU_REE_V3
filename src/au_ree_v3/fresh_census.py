@@ -68,7 +68,7 @@ def _accepted_cell(entry: ResearchInput) -> dict:
     raw, candidate, source = entry.raw, entry.candidate, entry.source
     anchor = entry.anchor
     lineage, trace = entry.lineage(), entry.temporal_trace
-    value, unit = census_quantity(entry)
+    value, unit = census_quantity(raw.variable, candidate.value, candidate.unit)
     lineage.pop("temporal_decision")
     lineage.pop("project_id")
     return {

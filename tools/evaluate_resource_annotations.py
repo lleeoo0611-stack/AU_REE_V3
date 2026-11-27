@@ -71,7 +71,8 @@ def _case_result(case, records, attempted, integrity):
     selected_expected = set()
     for label in expected:
         match = next((i for i, row in indexed if i in predictions - used and _in_window(row, label)
-                      and _same_measurement(row, label)), None)
+                      and _same_measurement(row, label)
+                      and ("effective_date" not in case or row.get("effective_date") == case["effective_date"])), None)
         if match is None:
             missing.append(label)
         else:

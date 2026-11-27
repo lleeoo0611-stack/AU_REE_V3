@@ -67,14 +67,15 @@ def resource_observation_compatible(item: ResearchInput) -> bool:
     )
 
 
-def census_quantity(item: ResearchInput) -> tuple[str, str]:
+def census_quantity(variable: str, value: str, unit: str) -> tuple[str, str]:
     """Project a compatible selection in the pinned Census column unit."""
-    canonical = _RESOURCE_UNITS[item.raw.variable][0]
-    value = item.candidate.value
-    if item.raw.variable == "grade" and item.candidate.unit == "ppm":
+    compatible = _RESOURCE_UNITS[variable]
+    if unit not in compatible:
+        raise ValueError("Observation unit cannot be projected to the Census column")
+    if variable == "grade" and unit == "ppm":
         ppm = Decimal(value).as_tuple()
         value = format(Decimal((ppm.sign, ppm.digits, ppm.exponent - 4)), "f")
-    return value, canonical
+    return value, compatible[0]
 
 
 def _statement_identity(item: ResearchInput) -> tuple:
