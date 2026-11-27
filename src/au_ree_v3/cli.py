@@ -1,4 +1,4 @@
-"""Command-line entry point for migration verification."""
+"""Command-line entry point for research and migration verification."""
 
 from argparse import ArgumentParser
 import json
@@ -17,6 +17,33 @@ def main(argv: list[str] | None = None) -> int:
     replay.add_argument("--database", type=Path, required=True)
     replay.add_argument("--out", type=Path, required=True)
     replay.add_argument("--code-commit", required=True, help="Full commit SHA of the code used")
+    registry = commands.add_parser("registry", help="Verify the fixed research cohort")
+    registry_commands = registry.add_subparsers(dest="operation", required=True)
+    verify_registry = registry_commands.add_parser("import-projects", help="Verify the pinned project registry")
+    verify_registry.add_argument("--v2-root", type=Path, required=True)
+    verify_registry.add_argument("--profile", type=Path, required=True)
+    verify_registry.add_argument("--out", type=Path, required=True)
+
+    sources = commands.add_parser("sources", help="Discover and capture public source editions")
+    source_commands = sources.add_subparsers(dest="operation", required=True)
+    for operation, timeout in (("discover", 12), ("acquire", 20)):
+        command = source_commands.add_parser(operation)
+        command.add_argument("--profile", type=Path, required=True)
+        command.add_argument("--out", type=Path, required=True)
+        command.add_argument("--workers", type=int, default=4)
+        command.add_argument("--timeout", type=int, default=timeout)
+        command.add_argument("--per-project-limit", type=int, default=2)
+        if operation == "acquire":
+            command.add_argument("--store", type=Path, required=True, help="Content-addressed source store")
+            command.add_argument("--replica", type=Path, help="Optional independent replica location")
+
+    combine = source_commands.add_parser("combine", help="Combine immutable public capture runs")
+    combine.add_argument("--profile", type=Path, required=True)
+    combine.add_argument("--manifest", type=Path, action="append", required=True)
+    combine.add_argument("--out", type=Path, required=True)
+    combine.add_argument("--store", type=Path, required=True)
+    combine.add_argument("--replica", type=Path)
+
     migration = commands.add_parser("migration", help="Audit and verify fixed V2 references")
     operations = migration.add_subparsers(dest="operation", required=True)
     for name in ("audit", "build-golden", "verify-crosswalk", "verify-baseline"):
@@ -41,11 +68,16 @@ def main(argv: list[str] | None = None) -> int:
     oracle.add_argument("--out", type=Path, required=True)
     oracle.add_argument("--case-id", action="append", help="Limit the comparison to this case (repeatable)")
     args = parser.parse_args(argv)
-    operation = args.operation if args.command == "migration" else args.command
+    operation = getattr(args, "operation", args.command)
     try:
         if args.command == "replay-resource":
             from .application import replay as replay_resource
             result = replay_resource(args.bindings, args.assets, args.database, args.out, code_commit=args.code_commit)
+        elif args.command == "registry":
+            from .migration.project_registry import verify_reference
+            result = verify_reference(args.v2_root, args.profile, args.out)
+        elif args.command == "sources":
+            result = _run_sources(args)
         else:
             result = _run_migration(args)
     except (OSError, ValueError) as error:
@@ -56,6 +88,17 @@ def main(argv: list[str] | None = None) -> int:
         response["reason"] = result["reason"]
     print(json.dumps(response, ensure_ascii=False))
     return EXIT_CODES[result["status"]]
+
+
+def _run_sources(args) -> dict:
+    from .sources import acquire_sources, combine_acquisition, discover_sources
+
+    if args.operation == "combine":
+        return combine_acquisition(args.profile, args.manifest, args.out, store=args.store, replica=args.replica)
+    limits = {"workers": args.workers, "timeout": args.timeout, "per_project_limit": args.per_project_limit}
+    if args.operation == "discover":
+        return discover_sources(args.profile, args.out, **limits)
+    return acquire_sources(args.profile, args.out, store=args.store, replica=args.replica, **limits)
 
 
 def _run_migration(args) -> dict:

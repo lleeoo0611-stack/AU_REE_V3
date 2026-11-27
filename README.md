@@ -43,3 +43,18 @@ AU_REE_REPLAY_ASSETS="$ASSET_LIBRARY" \
 ```
 
 The integration suite uses named Golden cases for independent comparisons and includes two clean replays and source-error isolation. The [temporal evidence audit](docs/migration/temporal/README.md) documents exact-edition cutoff decisions and how to reproduce the frozen row-by-row comparison.
+
+## Start the independent 2026-11-28 research baseline
+
+The profile uses Asia/Taipei for the research day. Its project IDs and column headings are pinned to the historical identity contract. Public captures produce new source editions and temporal evidence for V3. Use a separate output directory for each acquisition run and keep the content store at a stable location.
+
+```sh
+PROFILE=config/research_profiles/au_ree_2026-11-28.json
+au-ree-v3 registry import-projects --v2-root "$V2_ROOT" --profile "$PROFILE" --out work/fresh/registry
+au-ree-v3 sources discover --profile "$PROFILE" --out work/fresh/discovery
+au-ree-v3 sources acquire --profile "$PROFILE" --store work/fresh/source-store --out work/fresh/acquisition
+```
+
+The [fresh baseline report](docs/research/fresh_baseline.md) records the F0–F5 gates and versioned outputs. Historical G0–G5 remain in the migration reports.
+
+The `sources combine` command verifies and merges recorded capture runs without another network request. Pass `--manifest` once per capture manifest, the same `--store`, and a new `--out` directory. It preserves original attempts and verifies the linked objects and temporal evidence.

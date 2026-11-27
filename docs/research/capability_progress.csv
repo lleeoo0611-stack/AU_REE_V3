@@ -1,0 +1,30 @@
+capability_id,fresh_status,fresh_evidence_scope,legacy_status
+pipeline-orchestration,DEFERRED,Fresh acceptance pending,PARTIAL
+source-discovery,PARTIAL,Live public probes from pinned project source references,DEFERRED
+source-acquisition,PARTIAL,HTTPS acquisition of public editions and SHA verification with failure isolation,DEFERRED
+source-recovery,PARTIAL,Fresh content-addressed store and byte read-back,BLOCKED
+entity-resolution,PARTIAL,93 frozen project IDs and retained historical identity evidence,DEFERRED
+eligibility,DEFERRED,Fresh acceptance pending,DEFERRED
+document-extraction,DEFERRED,Fresh acceptance pending,PARTIAL
+document-recognition,DEFERRED,Fresh acceptance pending,PARTIAL
+observation-normalization,DEFERRED,Fresh acceptance pending,PARTIAL
+observation-storage,DEFERRED,Fresh acceptance pending,PARTIAL
+evidence-validation,DEFERRED,Fresh acceptance pending,PARTIAL
+resource-estimates,DEFERRED,Fresh acceptance pending,PARTIAL
+resource-admission,DEFERRED,Fresh acceptance pending,DEFERRED
+formal-selection,DEFERRED,Fresh acceptance pending,PARTIAL
+assay-derived-data,DEFERRED,Fresh acceptance pending,DEFERRED
+semantic-comparability,DEFERRED,Fresh acceptance pending,DEFERRED
+ontology-observation-research,DEFERRED,Fresh acceptance pending,DEFERRED
+ontology-portfolio-research,DEFERRED,Fresh acceptance pending,DEFERRED
+census-projection,DEFERRED,Fresh acceptance pending,PARTIAL
+census-quality,DEFERRED,Fresh acceptance pending,DEFERRED
+gis,DEFERRED,Fresh acceptance pending,DEFERRED
+technical-disclosure,DEFERRED,Fresh acceptance pending,DEFERRED
+mcda,DEFERRED,Fresh acceptance pending,DEFERRED
+sensitivity-and-uncertainty,DEFERRED,Fresh acceptance pending,DEFERRED
+study-experiments-and-ml,DEFERRED,Fresh acceptance pending,DEFERRED
+publication,DEFERRED,Fresh acceptance pending,DEFERRED
+historical-replay,DEFERRED,Fresh acceptance pending,BLOCKED
+derived-cache,DEFERRED,Fresh acceptance pending,DEFERRED
+engineering-audit,DEFERRED,Fresh acceptance pending,PARTIAL

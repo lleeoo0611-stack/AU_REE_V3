@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "source_manifest_sha256": "aa3ffa0ff4cb5a10e2cf19778e088c3e5721dc2a3bace3b7832f1e86a9f1b915",
+  "source_objects": 123,
+  "eligible_objects": 123,
+  "proof_objects": 127,
+  "elapsed_seconds": 0.6990046349997101,
+  "peak_rss_kib": 49076,
+  "source_event_counts": {
+    "event_statuses": {
+      "HTTP_404": 1,
+      "MIME_MISMATCH": 32,
+      "PUBLIC_CAPTURED": 127
+    },
+    "projects": 93,
+    "projects_searched": 93,
+    "projects_with_source": 93,
+    "projects_with_temporally_eligible_source": 93,
+    "same_url_changed_editions": 0,
+    "temporal_statuses": {
+      "ELIGIBLE": 127
+    },
+    "unique_source_sha256": 123,
+    "version_statuses": {
+      "EXACT_SHA_REUSED": 124,
+      "NEW_SHA": 3
+    }
+  },
+  "replica_inventory": {
+    "objects_read_back": 0,
+    "status": "REPLICA_UNAVAILABLE"
+  },
+  "input_manifests": [
+    {
+      "purpose": "PRIMARY_PROFILE_ACQUISITION",
+      "sha256": "8401ae6a22fa73471d945d32ff0ed1551e0926956e574129aa859e9e8d4faa9b"
+    },
+    {
+      "purpose": "OFFICIAL_ALTERNATIVES_FOR_UNCOVERED_PROJECTS",
+      "sha256": "b54a2c1a86d221feef942e5f73d9dafe51540f06c1041771e46763c841de4ef4"
+    },
+    {
+      "purpose": "PRIORITY_TARGET_CHECK_BEFORE_ALL_93",
+      "sha256": "fbb8e5bae2e3a159bdb8d177c32a1522d0f83ac4cf5909d7bacedf939ad7e8a9"
+    },
+    {
+      "purpose": "DOCUMENT_EXTRACTION_TARGET",
+      "sha256": "a501c1535c49cd136bdf83d497c9cf9d555da1e017c726743613fe4ad3085535"
+    }
+  ]
+}
