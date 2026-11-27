@@ -422,6 +422,8 @@ class StoreTests(unittest.TestCase):
                     store.add(record)
             connection = sqlite3.connect(path)
             try:
+                for table in ("semantic_assessment_anchors", "semantic_assessment_inputs", "semantic_assessments"):
+                    connection.execute(f"DROP TABLE {table}")
                 connection.execute("DROP TABLE temporal_decisions")
                 connection.execute("PRAGMA user_version = 1")
                 for table in ("validations", "releases"):
