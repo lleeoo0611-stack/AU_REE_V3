@@ -53,6 +53,13 @@ def main(argv: list[str] | None = None) -> int:
     extract.add_argument("--database", type=Path, required=True)
     extract.add_argument("--out", type=Path, required=True)
     extract.add_argument("--code-commit", required=True)
+    build = research_commands.add_parser("build", help="Build the fresh Census and decision inputs")
+    build.add_argument("--profile", type=Path, required=True)
+    build.add_argument("--bindings", type=Path, required=True)
+    build.add_argument("--sources", type=Path, required=True)
+    build.add_argument("--assets", type=Path, required=True)
+    build.add_argument("--out", type=Path, required=True)
+    build.add_argument("--code-commit", required=True)
 
     migration = commands.add_parser("migration", help="Audit and verify fixed V2 references")
     operations = migration.add_subparsers(dest="operation", required=True)
@@ -114,9 +121,20 @@ def _run_sources(args) -> dict:
 
 
 def _run_research(args) -> dict:
-    from .fresh_observations import extract_sources
+    if args.operation == "extract":
+        from .fresh_observations import extract_sources
 
-    return extract_sources(args.bindings, args.sources, args.assets, args.database, args.out, code_commit=args.code_commit)
+        return extract_sources(args.bindings, args.sources, args.assets, args.database, args.out, code_commit=args.code_commit)
+
+    from .fresh_research import build_research
+
+    result = build_research(
+        profile=args.profile, bindings=args.bindings, sources=args.sources, assets=args.assets,
+        out=args.out, code_commit=args.code_commit,
+    )
+    statuses = set(result["gates"].values())
+    status = "FAIL" if "FAIL" in statuses else "PASS" if statuses == {"PASS"} else "BLOCKED"
+    return {"status": status, **result}
 
 
 def _run_migration(args) -> dict:

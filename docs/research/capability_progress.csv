@@ -1,5 +1,5 @@
 capability_id,fresh_status,fresh_evidence_scope,legacy_status
-pipeline-orchestration,DEFERRED,Fresh acceptance pending,PARTIAL
+pipeline-orchestration,PARTIAL,Fresh build reads immutable source receipts into governed projections,PARTIAL
 source-discovery,PARTIAL,Live public probes from pinned project source references,DEFERRED
 source-acquisition,PARTIAL,HTTPS acquisition of public editions and SHA verification with failure isolation,DEFERRED
 source-recovery,PARTIAL,Fresh content-addressed store and byte read-back,BLOCKED
@@ -17,12 +17,12 @@ assay-derived-data,DEFERRED,Fresh acceptance pending,DEFERRED
 semantic-comparability,DEFERRED,Fresh acceptance pending,DEFERRED
 ontology-observation-research,DEFERRED,Fresh acceptance pending,DEFERRED
 ontology-portfolio-research,DEFERRED,Fresh acceptance pending,DEFERRED
-census-projection,DEFERRED,Fresh acceptance pending,PARTIAL
-census-quality,DEFERRED,Fresh acceptance pending,DEFERRED
+census-projection,PARTIAL,All 4743 cells verified; six resource values trace to new accepted observations,PARTIAL
+census-quality,PARTIAL,Fresh applicability and unknown-state checks across the fixed cohort,DEFERRED
 gis,DEFERRED,Fresh acceptance pending,DEFERRED
 technical-disclosure,DEFERRED,Fresh acceptance pending,DEFERRED
-mcda,DEFERRED,Fresh acceptance pending,DEFERRED
-sensitivity-and-uncertainty,DEFERRED,Fresh acceptance pending,DEFERRED
+mcda,PARTIAL,Two governed R1 inputs; five panels explicitly insufficient,DEFERRED
+sensitivity-and-uncertainty,PARTIAL,Imported deterministic leave-out calculation; exercised by tests,DEFERRED
 study-experiments-and-ml,DEFERRED,Fresh acceptance pending,DEFERRED
 publication,DEFERRED,Fresh acceptance pending,DEFERRED
 historical-replay,DEFERRED,Fresh acceptance pending,BLOCKED
