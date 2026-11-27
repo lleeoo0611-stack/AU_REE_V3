@@ -29,9 +29,10 @@ from .contracts import (
     canonical_json,
 )
 from .contracts.temporal import TEMPORAL_POLICY_VERSION, TemporalDecision, evaluate_temporal
+from .semantics import SemanticAssessment, SemanticStatus, assess_semantic_use
 
 APPLICATION_ID = 0x41555233
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 _MIGRATIONS = {
     1: (
@@ -112,6 +113,22 @@ _MIGRATIONS = {
             FOREIGN KEY(source_key, source_sha) REFERENCES sources
         )""",
     ),
+    3: (
+        """CREATE TABLE semantic_assessments (
+            assessment_id TEXT PRIMARY KEY NOT NULL, purpose TEXT NOT NULL,
+            policy_version TEXT NOT NULL, source_sha256 TEXT NOT NULL, payload TEXT NOT NULL
+        )""",
+        """CREATE TABLE semantic_assessment_inputs (
+            assessment_id TEXT NOT NULL REFERENCES semantic_assessments,
+            raw_record_id TEXT NOT NULL REFERENCES raw_observations,
+            PRIMARY KEY(assessment_id, raw_record_id)
+        )""",
+        """CREATE TABLE semantic_assessment_anchors (
+            assessment_id TEXT NOT NULL REFERENCES semantic_assessments,
+            anchor_id TEXT NOT NULL REFERENCES anchors, PRIMARY KEY(assessment_id, anchor_id)
+        )""",
+        """CREATE INDEX temporal_decision_by_raw_and_id ON temporal_decisions(raw_record_id, decision_id)""",
+    ),
 }
 
 # Each entry lists the table, stable key and relational fields in its JSON payload.
@@ -130,6 +147,7 @@ _TABLES = {
     ResearchRelease: ("releases", ("release_id",), ()),
     AcceptedResearchValue: ("accepted_values", ("acceptance_id",), ("validation_id", "release_id", "selection_key")),
     DerivedValue: ("derived_values", ("derived_id",), ("release_id", "project_id", "scope_id")),
+    SemanticAssessment: ("semantic_assessments", ("assessment_id",), ("purpose", "policy_version", "source_sha256")),
 }
 R = TypeVar("R", bound=Record)
 
@@ -295,7 +313,8 @@ class Store:
                 raise RecordConflict(f"{type(record).__name__} {key!r} already has different contents")
             return False
 
-        decision = self._validate_links(record)
+        semantic_inputs = self._validate_semantic_assessment(record) if isinstance(record, SemanticAssessment) else None
+        decision = self._validate_links(record) if semantic_inputs is None else None
         columns = (*keys, *extra_columns, "payload")
         placeholders = ", ".join("?" for _ in columns)
         values = [getattr(record, column) for column in columns[:-1]]
@@ -337,6 +356,15 @@ class Store:
                     (record.derived_id, i, self._required(RawObservation, observation_id).raw_record_id)
                     for i, observation_id in enumerate(record.input_observation_ids)
                 ],
+            )
+        elif isinstance(record, SemanticAssessment):
+            self._db.executemany(
+                "INSERT INTO semantic_assessment_inputs VALUES (?, ?)",
+                [(record.assessment_id, raw_id) for raw_id in semantic_inputs],
+            )
+            self._db.executemany(
+                "INSERT INTO semantic_assessment_anchors VALUES (?, ?)",
+                [(record.assessment_id, anchor_id) for anchor_id in record.evidence_anchor_ids],
             )
         return True
 
@@ -388,6 +416,78 @@ class Store:
             anchor = self._required(EvidenceAnchor, raw.anchor_id)
             if (anchor.source_key, anchor.source_sha) != (raw.source_key, raw.source_sha):
                 raise ContractViolation("observation evidence is from another source version")
+
+    def _validate_semantic_assessment(self, assessment: SemanticAssessment) -> tuple[str, ...]:
+        context = assessment.normalized_context
+        expected = assess_semantic_use(
+            context, purpose=assessment.purpose, observation_ids=assessment.observation_ids,
+            source_sha256=assessment.source_sha256, evidence_anchor_ids=assessment.evidence_anchor_ids,
+            transforms=assessment.transforms,
+        )
+        if expected != assessment:
+            raise ContractViolation("semantic assessment differs from the versioned use policy")
+        inputs = [self._required(RawObservation, key) for key in assessment.observation_ids]
+        raw_keys = {item.raw_record_id for item in inputs}
+        if len(raw_keys) != len(inputs):
+            raise ContractViolation("semantic assessment repeats an observation edition through an alias")
+        known = (
+            ("project_id", context.project_id), ("scope_id", context.scope_id), ("deposit_id", context.deposit_id),
+            ("statement_id", context.statement_id), ("observation_role", context.observation_role),
+            ("effective_date", context.effective_date), ("event_date", context.event_date),
+        )
+        for item in inputs:
+            if item.source_sha != assessment.source_sha256 or any(
+                value is not None and getattr(item, field) != value for field, value in known
+            ):
+                raise ContractViolation("semantic assessment conflicts with exact source, identity, scope, or time lineage")
+        sources = {(item.source_key, item.source_sha) for item in inputs}
+        for anchor_id in assessment.evidence_anchor_ids:
+            anchor = self._required(EvidenceAnchor, anchor_id)
+            if (anchor.source_key, anchor.source_sha) not in sources:
+                raise ContractViolation("semantic assessment anchor belongs to another source edition")
+        if not {item.anchor_id for item in inputs if item.anchor_id}.issubset(assessment.evidence_anchor_ids):
+            raise ContractViolation("semantic assessment needs the original anchors of all bound observations")
+        for transform in assessment.transforms:
+            if "input_observation_ids" in transform and not set(transform["input_observation_ids"]).issubset(
+                assessment.observation_ids
+            ):
+                raise ContractViolation("semantic transform cites an observation outside the assessment")
+            if "evidence_anchor_ids" in transform and not set(transform["evidence_anchor_ids"]).issubset(
+                assessment.evidence_anchor_ids
+            ):
+                raise ContractViolation("semantic transform cites evidence outside the assessment")
+        for relation in context.identities:
+            if relation.confidence == "DOCUMENTED" and not set(relation.evidence_anchor_ids).issubset(
+                assessment.evidence_anchor_ids
+            ):
+                raise ContractViolation("documented identity relation lacks bound evidence")
+            if relation.source_sha256 != assessment.source_sha256:
+                raise ContractViolation("identity relation uses a different source edition")
+        self._validate_semantic_timing(assessment, inputs, sources)
+        return tuple(sorted(raw_keys))
+
+    def _validate_semantic_timing(self, assessment, inputs, sources) -> None:
+        context = assessment.normalized_context
+        if assessment.status in {SemanticStatus.COMPARABLE_DIRECT, SemanticStatus.COMPARABLE_DERIVED}:
+            if any(item.anchor_id is None or item.raw_value is None for item in inputs):
+                raise ContractViolation("comparable semantic assessment requires reported values and anchors")
+            if not all(self.source_verified(*key) for key in sources):
+                raise ContractViolation("comparable semantic assessment requires verified original source bytes")
+        if context.temporal_decision_id is None:
+            if context.temporal_status is not None:
+                raise ContractViolation("semantic timing claims must identify the exact temporal decision")
+            return
+        for item in inputs:
+            decisions = self._db.execute(
+                """SELECT payload, cutoff FROM temporal_decisions
+                   WHERE raw_record_id = ? AND source_key = ? AND source_sha = ? AND decision_id = ?""",
+                (item.raw_record_id, item.source_key, item.source_sha, context.temporal_decision_id),
+            )
+            if not any(
+                json.loads(payload)["status"] == context.temporal_status
+                and context.research_cutoff in {None, cutoff} for payload, cutoff in decisions
+            ):
+                raise ContractViolation("semantic assessment lacks a bound temporal decision for an input observation")
 
     def _validate_assessment(self, assessment: ValidatedObservation) -> TemporalDecision:
         candidate = self._required(NormalizedObservation, assessment.candidate_id)

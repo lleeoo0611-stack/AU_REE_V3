@@ -1,0 +1,54 @@
+{
+  "schema_version": "semantic-vocabulary-v1",
+  "policy_version": "ontology-use-contract-v1",
+  "standards": {
+    "SKOS": "https://www.w3.org/TR/skos-reference/",
+    "QUDT": "https://qudt.org/",
+    "JORC": "https://www.jorc.org/",
+    "CRIRSCO": "https://crirsco.com/",
+    "EarthResourceML": "https://www.earthresourceml.org/",
+    "SOSA/SSN": "https://www.w3.org/TR/vocab-ssn/",
+    "PROV-O": "https://www.w3.org/TR/prov-o/",
+    "SHACL": "https://www.w3.org/TR/shacl/"
+  },
+  "entities": ["PROJECT", "DEPOSIT", "RESOURCE_SCOPE", "MINE", "PROCESSING_FACILITY", "TENEMENT"],
+  "resource_classes": ["EXPLORATION_TARGET", "MINERAL_RESOURCE", "ORE_RESERVE"],
+  "jorc_categories": ["MEASURED", "INDICATED", "INFERRED", "PROVED", "PROBABLE"],
+  "material_kinds": ["WHOLE_ORE", "BULK_ORE", "HEAVY_MINERAL", "CONCENTRATE", "LEACH_LIQUOR", "PRODUCT", "STOCKPILE"],
+  "oxide_species": [
+    "La2O3", "CeO2", "Ce2O3", "Pr6O11", "Pr2O3", "Nd2O3", "Pm2O3", "Sm2O3",
+    "Eu2O3", "Gd2O3", "Tb4O7", "Tb2O3", "Dy2O3", "Ho2O3", "Er2O3", "Tm2O3",
+    "Yb2O3", "Lu2O3", "Y2O3", "Sc2O3"
+  ],
+  "quantity_dimensions": {
+    "ORE_MASS": "Mass",
+    "GRADE": "MassFraction",
+    "CONTAINED_OXIDE_MASS": "Mass",
+    "OXIDE_COMPOSITION": "MassFraction",
+    "PROCESS_RECOVERY": "MassFraction",
+    "DRILL_CORE_RECOVERY": "MassFraction",
+    "PROCESS_EXTRACTION": "MassFraction",
+    "PROCESS_YIELD": "MassFraction",
+    "PRODUCT_PURITY": "MassFraction",
+    "PRODUCT_GRADE": "MassFraction",
+    "ENERGY_INTENSITY": "EnergyPerMass",
+    "REAGENT_INTENSITY": "MassPerMass",
+    "WATER_INTENSITY": "VolumePerMass",
+    "COST_INTENSITY": "CurrencyPerMass",
+    "PRODUCTION_FORECAST": "MassPerTime",
+    "INFRASTRUCTURE_DISTANCE": "Length",
+    "TECHNICAL_DISCLOSURE": "DisclosureState",
+    "EVIDENCE_APPLICABILITY": "EvidenceState",
+    "DEVELOPMENT_MILESTONE": "EventState"
+  },
+  "purposes": {
+    "R1": ["CONTAINED_OXIDE_MASS"],
+    "S1": ["OXIDE_COMPOSITION"],
+    "T1A": ["PROCESS_RECOVERY", "PROCESS_EXTRACTION", "PROCESS_YIELD"],
+    "T1B": ["PRODUCT_PURITY", "PRODUCT_GRADE"],
+    "T1C": ["ENERGY_INTENSITY", "REAGENT_INTENSITY", "WATER_INTENSITY", "COST_INTENSITY"],
+    "T1D": ["EVIDENCE_APPLICABILITY"],
+    "D1": ["DEVELOPMENT_MILESTONE"],
+    "GIS": ["INFRASTRUCTURE_DISTANCE"]
+  }
+}

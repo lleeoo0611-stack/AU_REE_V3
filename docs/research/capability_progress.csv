@@ -4,27 +4,27 @@ source-discovery,PARTIAL,Live public probes from pinned project source reference
 source-acquisition,PARTIAL,HTTPS acquisition of public editions and SHA verification with failure isolation,DEFERRED
 source-recovery,PARTIAL,Fresh content-addressed store and byte read-back,BLOCKED
 entity-resolution,PARTIAL,93 frozen project IDs and retained historical identity evidence,DEFERRED
-eligibility,DEFERRED,Fresh acceptance pending,DEFERRED
+eligibility,PARTIAL,148 captured editions recomputed against the pinned cutoff; admitted observations retain temporal decisions,DEFERRED
 document-extraction,PARTIAL,Native exact PDF source and separately verified OCR/HTML/CSV views,PARTIAL
-document-recognition,PARTIAL,Three tested PDF structures with verified positive and rejection samples,PARTIAL
+document-recognition,PARTIAL,Five tested PDF structures with verified positive and rejection samples and a source-bound image review,PARTIAL
 observation-normalization,PARTIAL,Exact decimal resource tokens and material/chemical role checks,PARTIAL
 observation-storage,PARTIAL,Fresh immutable sources and governed SQLite resource observations,PARTIAL
 evidence-validation,PARTIAL,Fresh exact public capture proof and bound page/scope validation,PARTIAL
-resource-estimates,PARTIAL,Validated scoped Mt Weld and Wolverine totals plus Yin rejections,PARTIAL
-resource-admission,PARTIAL,Six governed values in the new profile,DEFERRED
+resource-estimates,PARTIAL,Scoped Mt Weld Wolverine Wudinna and Goschen estimates with edition and chemistry checks,PARTIAL
+resource-admission,PARTIAL,Seventeen governed selections including five composition observations,DEFERRED
 formal-selection,PARTIAL,Scope and effective date priorities with independent conflict tests,PARTIAL
 assay-derived-data,DEFERRED,Fresh acceptance pending,DEFERRED
-semantic-comparability,DEFERRED,Fresh acceptance pending,DEFERRED
+semantic-comparability,PARTIAL,Four R1 and two S1 keys use the shared comparability policy,DEFERRED
 ontology-observation-research,DEFERRED,Fresh acceptance pending,DEFERRED
 ontology-portfolio-research,DEFERRED,Fresh acceptance pending,DEFERRED
-census-projection,PARTIAL,All 4743 cells verified; six resource values trace to new accepted observations,PARTIAL
+census-projection,PARTIAL,All 4743 cells verified; twelve scientific values trace to accepted observations,PARTIAL
 census-quality,PARTIAL,Fresh applicability and unknown-state checks across the fixed cohort,DEFERRED
-gis,DEFERRED,Fresh acceptance pending,DEFERRED
+gis,PARTIAL,Seven verified WA tenure boundaries; formal site and infrastructure indicators remain pending,DEFERRED
 technical-disclosure,DEFERRED,Fresh acceptance pending,DEFERRED
-mcda,PARTIAL,Two governed R1 inputs; five panels explicitly insufficient,DEFERRED
-sensitivity-and-uncertainty,PARTIAL,Imported deterministic leave-out calculation; exercised by tests,DEFERRED
+mcda,PARTIAL,Two eligible cases on the R1 plus S1 composition panel; four panels insufficient,DEFERRED
+sensitivity-and-uncertainty,PARTIAL,Three fixed weight scenarios and criterion and domain removal tested on the composition panel,DEFERRED
 study-experiments-and-ml,DEFERRED,Fresh acceptance pending,DEFERRED
 publication,BLOCKED,Immutable archive and rollback exercised; independent replica unavailable,DEFERRED
-historical-replay,PARTIAL,V3 cold replay verified for six formal cells and eight output artifacts,BLOCKED
+historical-replay,PARTIAL,V3 cold replay verified for twelve formal cells and eight output artifacts,BLOCKED
 derived-cache,DEFERRED,Fresh acceptance pending,DEFERRED
-engineering-audit,DEFERRED,Fresh acceptance pending,PARTIAL
+engineering-audit,PARTIAL,Responsibility and same-scope comparisons reported with local replica and cold replay measurements,PARTIAL

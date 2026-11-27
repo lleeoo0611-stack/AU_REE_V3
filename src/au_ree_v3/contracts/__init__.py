@@ -23,6 +23,9 @@ class EntityKind(StrEnum):
     COMPANY = "COMPANY"
     PROJECT = "PROJECT"
     DEPOSIT = "DEPOSIT"
+    MINE = "MINE"
+    PROCESSING_FACILITY = "PROCESSING_FACILITY"
+    TENEMENT = "TENEMENT"
 
 
 class ValidationOutcome(StrEnum):

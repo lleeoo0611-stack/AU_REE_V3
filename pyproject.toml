@@ -16,7 +16,7 @@ au-ree-v3 = "au_ree_v3.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"au_ree_v3" = ["fresh_decision_policy_v1.json"]
+"au_ree_v3" = ["fresh_decision_policy_v1.json", "semantic_vocabulary_v1.json"]
 "au_ree_v3.migration" = ["baselines_v1.json"]
 
 [tool.setuptools.data-files]
