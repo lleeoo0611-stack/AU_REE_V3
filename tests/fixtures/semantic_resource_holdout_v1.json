@@ -1,0 +1,148 @@
+{
+  "schema": "semantic-resource-independent-holdout-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "unique_source_sha256s": 144,
+  "method": "Independent source annotations of fixed original PDFs. Native numeric tokens are replayed from operator-scoped locators. Embedded oxide tables are manually transcribed and bound to decoded image SHA-256. Consult the quote and image evidence separately from expected output.",
+  "cases": [
+    {
+      "case_id": "north-stanmore-august-2026-dry-global-mre",
+      "prior_case_id": null,
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "company": "Victory Metals Limited",
+      "report_family": "North Stanmore 2026 prefeasibility and JORC mineral resource statement",
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "scope": "North Stanmore global 300 ppm dry M+I+I resource",
+      "statement": "August 2026 global JORC Mineral Resource Estimate",
+      "effective_date": "2026-08",
+      "jorc_categories": ["MEASURED", "INDICATED", "INFERRED"],
+      "material": "WHOLE_ORE",
+      "cutoff_grade": "300",
+      "cutoff_unit": "ppm",
+      "cutoff_analyte": "TREO",
+      "treo_members": ["La2O3", "CeO2", "Pr6O11", "Nd2O3", "Sm2O3", "Eu2O3", "Gd2O3", "Tb4O7", "Dy2O3", "Ho2O3", "Er2O3", "Tm2O3", "Yb2O3", "Lu2O3", "Y2O3"],
+      "context_anchors": [
+        {"page": 8, "quote": "Table 4: MRE cutoff grade >=300 ppm TREO, excluding Sc."},
+        {"page": 121, "quote": "APPENDIX 1: 2012 JORC CODE"},
+        {"page": 136, "quote": "Values were calculated for HREO, LREO, and TREO by summing the respective REO estimated grades for each OBM block."},
+        {"page": 136, "quote": "The current August 2026 MRE ≥300ppm for individual light rare earth elements and individual heavy rare earth elements is shown below"},
+        {"page": 138, "quote": "The August 2026 MRE was reported at a 300ppm TREO cutoff"},
+        {"page": 144, "quote": "a dry-grade basis, including 70.668 Mt Measured, 84.090 Mt Indicated and 124.044 Mt"}
+      ],
+      "image_anchors": [
+        {
+          "page": 136, "slot": 3, "sha256": "5cb735031f97069282f29305ad2c64ab3fa6bf410df04b05d7b4e59676d1428f",
+          "locator": "August 2026 ≥300 ppm MRE total, individual light oxides",
+          "row_tokens": {"tonnes": "278,802,000", "TREO_ppm": "482.64", "La2O3": "74.73", "CeO2": "135.26", "Pr6O11": "17.77", "Nd2O3": "68.66", "Sm2O3": "14.83"}
+        },
+        {
+          "page": 136, "slot": 4, "sha256": "b7abaa4d5e693e8ca281d722ff29f9b03a1cd5888d39c27452ea7086806ca4e6",
+          "locator": "August 2026 ≥300 ppm MRE total, individual heavy oxides",
+          "row_tokens": {"Y2O3": "107.10", "Eu2O3": "3.45", "Gd2O3": "15.21", "Tb4O7": "2.54", "Dy2O3": "16.09", "Ho2O3": "3.44", "Er2O3": "10.44", "Tm2O3": "1.53", "Yb2O3": "10.09", "Lu2O3": "1.51"}
+        }
+      ],
+      "cells": [
+        {"name": "ore", "page": 144, "quote": "The August 2026 MRE comprises 278.802 Mt on a dry-tonnage basis at 482.64 ppm TREO on", "number": 1, "unit": "Mt", "basis": "ORE", "expected_token": "278.802"},
+        {"name": "grade", "page": 144, "quote": "The August 2026 MRE comprises 278.802 Mt on a dry-tonnage basis at 482.64 ppm TREO on", "number": 2, "unit": "ppm", "basis": "TREO", "expected_token": "482.64"}
+      ],
+      "expected": {
+        "r1_shadow_compatible": true,
+        "r1_shadow_value_kt": "134.56099728",
+        "r1_shadow_rounding_kt": ["134.5593619525", "134.5626326125"],
+        "r1_formal_compatible": false,
+        "normalized_cells": ["ore", "grade"],
+        "r1_reported_semantic_status": "INSUFFICIENT_CONTEXT",
+        "s1_chemistry_annotation": {
+          "numerator_ppm": "105.06",
+          "denominator_ppm": "482.64",
+          "share_percent": "21.76777722526106414719045251118846",
+          "status": "ANNOTATION_ONLY",
+          "formal_blocker": "SAME_STATEMENT_REPORTED_R1_REQUIRED"
+        }
+      }
+    },
+    {
+      "case_id": "koppamurra-resource-versus-reserve-date",
+      "prior_case_id": "holdout-date-from-other-statement",
+      "project_id": "AU-49b538453133bd968e8d",
+      "company": "Australian Rare Earths Limited",
+      "report_family": "Koppamurra 2026 annual study and Mineral Resource statement",
+      "source_sha256": "c14ed919368d815403c67780f8d76e4f01cb789da8e3d5547ed531055f23c979",
+      "scope": "Koppamurra global Mineral Resource separate from maiden Ore Reserve",
+      "statement": "Koppamurra 2026 Mineral Resource Statement (JORC 2012)",
+      "effective_date": null,
+      "jorc_categories": ["MEASURED", "INDICATED", "INFERRED"],
+      "material": "WHOLE_ORE",
+      "cutoff_grade": "325",
+      "cutoff_unit": "ppm",
+      "cutoff_analyte": "TREO_CE_EXCLUDED",
+      "treo_members": [],
+      "context_anchors": [
+        {"page": 8, "quote": "The Maiden Ore Reserve estimate of 26Mt at 920ppm TREO for the Koppamurra Deposit is estimated at 25 June 2026"},
+        {"page": 28, "quote": "Koppamurra 2026 Mineral Resource Statement (JORC 2012)"},
+        {"page": 28, "quote": "The Global Mineral Resource reported above a 325 ppm TREO-CeO2 (TREO minus cerium oxide) cut-off grade"}
+      ],
+      "cells": [
+        {"name": "ore", "page": 28, "quote": "Grand Total 243 1.6 751 493 25.3 121 257 35 132 26 25", "number": 0, "unit": "Mt", "basis": "ORE", "expected_token": "243"},
+        {"name": "grade", "page": 28, "quote": "Grand Total 243 1.6 751 493 25.3 121 257 35 132 26 25", "number": 2, "unit": "ppm", "basis": "TREO", "expected_token": "751"}
+      ],
+      "expected": {"r1_shadow_compatible": false, "r1_formal_compatible": false, "normalized_cells": [], "r1_reported_semantic_status": "INSUFFICIENT_CONTEXT", "temporal_reason": "HISTORICAL_OBSERVATION_DATE_MISSING"}
+    },
+    {
+      "case_id": "nolans-estimate-versus-announcement-date",
+      "prior_case_id": "holdout-announcement-versus-effective",
+      "project_id": "AU-1345edd8165c10930e94",
+      "company": "Arafura Resources Limited",
+      "report_family": "Nolans 2019 summary report repeating the 2017 MRE",
+      "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+      "scope": "Nolans Bore rare earth deposit total",
+      "statement": "Statement of Mineral Resources for the Nolans Bore Rare Earth Deposit",
+      "effective_date": null,
+      "jorc_categories": ["MEASURED", "INDICATED", "INFERRED"],
+      "material": "WHOLE_ORE",
+      "cutoff_grade": "1",
+      "cutoff_unit": "%",
+      "cutoff_analyte": "TREO",
+      "treo_members": ["La2O3", "CeO2", "Pr6O11", "Nd2O3", "Sm2O3", "Eu2O3", "Gd2O3", "Tb4O7", "Dy2O3", "Ho2O3", "Er2O3", "Tm2O3", "Yb2O3", "Lu2O3", "Y2O3"],
+      "context_anchors": [
+        {"page": 15, "quote": "Mineral Resources were announced on 7 June 2017 and are classified according to the 2012 JORC Code"},
+        {"page": 36, "quote": "Announced 7 June 2017 – 1% TREO lower cut-off grade"},
+        {"page": 36, "quote": "The stated TREO grade is based on the sum of the estimated grades for La2O3, CeO2, Pr6O11, Nd2O3, Sm2O3, Eu2O3, Gd2O3, Tb4O7, Dy2O3, Ho2O3, Er2O3, Tm2O3, Yb2O3, Lu2O3 and Y2O3."}
+      ],
+      "cells": [
+        {"name": "ore", "page": 15, "quote": "Total 56 2.6 11 26.4", "number": 0, "unit": "Mt", "basis": "ORE", "expected_token": "56"},
+        {"name": "grade", "page": 15, "quote": "Total 56 2.6 11 26.4", "number": 1, "unit": "%", "basis": "TREO", "expected_token": "2.6"}
+      ],
+      "expected": {"r1_shadow_compatible": false, "r1_formal_compatible": false, "normalized_cells": [], "r1_reported_semantic_status": "INSUFFICIENT_CONTEXT", "temporal_reason": "HISTORICAL_OBSERVATION_DATE_MISSING"}
+    },
+    {
+      "case_id": "luni-dated-niobium-resource",
+      "prior_case_id": "holdout-dated-niobium-mre",
+      "project_id": "AU-cae6c11543b0da5f840d",
+      "company": "WA1 Resources Limited",
+      "report_family": "Luni 2026 WA1 annual report and niobium MRE",
+      "source_sha256": "ae8825f63b7ce1ac8bb26e0406fb9c75adf12fe31b8a86658a33fff4715f1766",
+      "scope": "Luni Niobium Mineral Resource Total",
+      "statement": "Luni Table 1 MRE (JORC Code 2012)",
+      "effective_date": "2026-05-13",
+      "jorc_categories": ["INDICATED", "INFERRED"],
+      "material": "WHOLE_ORE",
+      "cutoff_grade": "0.25",
+      "cutoff_unit": "%",
+      "cutoff_analyte": "Nb2O5",
+      "treo_members": [],
+      "context_anchors": [
+        {"page": 7, "quote": "Table 1: Luni MRE (JORC Code 2012) Tonnes (Mt) Nb₂O₅ (%) Nb₂O₅ (kt)"},
+        {"page": 7, "quote": "The effective date of the Mineral Resource estimate is 13 May 2026."},
+        {"page": 7, "quote": "pit shell and above a 0.25% Nb₂O₅ cut-off grade."}
+      ],
+      "cells": [
+        {"name": "ore", "page": 7, "quote": "Total 220 1.0 2,200", "number": 0, "unit": "Mt", "basis": "ORE", "expected_token": "220"},
+        {"name": "grade", "page": 7, "quote": "Total 220 1.0 2,200", "number": 1, "unit": "%", "basis": "Nb2O5", "expected_token": "1.0"},
+        {"name": "contained", "page": 7, "quote": "Total 220 1.0 2,200", "number": 2, "unit": "kt", "basis": "Nb2O5", "expected_token": "2,200"}
+      ],
+      "expected": {"r1_shadow_compatible": false, "r1_formal_compatible": false, "normalized_cells": ["ore"], "r1_reported_semantic_status": "NOT_COMPARABLE", "reject_chemical_species": "Nb2O5"}
+    }
+  ]
+}

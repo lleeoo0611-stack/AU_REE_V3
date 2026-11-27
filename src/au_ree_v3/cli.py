@@ -98,6 +98,10 @@ def main(argv: list[str] | None = None) -> int:
     milestones = research_commands.add_parser("review-development", help="Verify exact-edition development events")
     for argument in ("profile", "manifest", "assets", "bindings", "out"):
         milestones.add_argument(f"--{argument}", type=Path, required=True)
+    semantic = research_commands.add_parser("semantic-audit", help="Measure resource evidence and semantic ablations")
+    for argument in ("profile", "baseline", "sources", "assets", "out"):
+        semantic.add_argument(f"--{argument}", type=Path, required=True)
+    semantic.add_argument("--reread-bindings", type=Path)
     archive = research_commands.add_parser("archive", help="Archive a fresh research candidate by exact bytes")
     for argument in ("profile", "bindings", "sources", "build", "store", "out"):
         archive.add_argument(f"--{argument}", type=Path, required=True)
@@ -215,6 +219,11 @@ def _run_research(args) -> dict:
         from .development import review_milestones
 
         return review_milestones(args.profile, args.manifest, args.assets, args.bindings, args.out)
+    if args.operation == "semantic-audit":
+        from .semantic_research import run_resource_ablation
+
+        return run_resource_ablation(args.profile, args.baseline, args.sources, args.assets, args.out,
+                                     reread_bindings=args.reread_bindings)
     if args.operation == "compare":
         from .research_delta import compare_research_builds
         from .sources import ContentStore
