@@ -128,8 +128,9 @@ def _direct_value(binding, main, supporting):
     if raw_unit not in _TECHNICAL_UNITS:
         raise ValueError("Unreviewed technical unit")
     token_pattern = rf"(?<![\d.]){re.escape(token)}(?![\d.])"
-    direct = re.search(rf"{token_pattern}\s*{re.escape(raw_unit)}\b" if raw_unit != "%"
-                       else rf"{token_pattern}\s*%", main["quote"])
+    unit_pattern = r"\s*/\s*".join(re.escape(part) for part in raw_unit.split("/"))
+    unit_end = r"(?!\w|\s*(?:/|\bper\b))" if raw_unit != "%" else ""
+    direct = re.search(rf"{token_pattern}\s*{unit_pattern}{unit_end}", main["quote"])
     if direct:
         return value
     if not binding.get("table") or not binding.get("column") or not re.search(token_pattern, main["quote"]):
@@ -140,6 +141,23 @@ def _direct_value(binding, main, supporting):
     if raw_unit.lower() not in compact and not ("kg" in compact and "/t" in compact and raw_unit == "kg/t"):
         raise DocumentError("EVIDENCE_INSUFFICIENT", "TECHNICAL_TABLE_UNIT_UNBOUND")
     return value
+
+
+def _applicability_target(binding, view, location):
+    target = binding.get("applicability_target")
+    if binding["purpose"] != "T1D":
+        if target is not None:
+            raise ValueError("An applicability target belongs to T1d evidence")
+        return None
+    if not target or target["quantity_kind"] not in {"PROCESS_RECOVERY", "PROCESS_EXTRACTION", "PROCESS_YIELD",
+                                                    "PRODUCT_PURITY", "PRODUCT_GRADE"}:
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "T1D_SAME_TEST_TARGET_UNBOUND")
+    target_location = _locate(view, target["source_span"])
+    if (target_location["page"] != location["page"] or target_location["quote"] not in location["quote"]
+            or target["scope"] != binding["scope"] or target["scope"] != binding["process"]["experiment_id"]):
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "T1D_SAME_TEST_TARGET_UNBOUND")
+    _direct_value(target, target_location, ())
+    return {**target, "source_span": target_location}
 
 
 def _mass_balance(binding, value, original_quote):
@@ -187,6 +205,7 @@ def _observation(store, cache, profile, project, edition, binding, payload, proo
     unit_locations = [_locate(view, item) for item in binding.get("unit_evidence", ())]
     context_locations = [_locate(view, item) for item in binding["context_spans"]]
     value = _direct_value(binding, location, unit_locations)
+    applicability = _applicability_target(binding, view, location)
     balance = _mass_balance(binding, value, location["quote"])
     temporal = evaluate_temporal(
         source_sha256=source.sha256, cutoff=profile.research_cutoff.isoformat(),
@@ -232,6 +251,9 @@ def _observation(store, cache, profile, project, edition, binding, payload, proo
         reason = "EXACT_TECHNICAL_SOURCE_QUOTE"
     else:
         reason = temporal.reason
+    specific_evidence = {}
+    if applicability is not None:
+        specific_evidence["applicability_target"] = {**applicability, "evidence_anchor_id": evidence.anchor_id}
     observation = RawObservation(
         observation_id=_fingerprint([
             BINDING_METHOD, source.sha256, project.project_id, location,
@@ -251,6 +273,7 @@ def _observation(store, cache, profile, project, edition, binding, payload, proo
             "unit_spans": unit_locations, "process": asdict(process), "value_statistic": binding["value_statistic"],
             "quantity_kind": binding["quantity_kind"], "value_state": binding["value_state"],
             "chemical_species": binding["chemical_species"], "material_balance": balance,
+            **specific_evidence,
         },
     )
     normalized_value = str(value) if value is not None else None
@@ -315,23 +338,35 @@ def _pairs(results, annotated):
 def _oracle(out, expected_path, observations, pairs):
     if expected_path is None:
         return {"status":"NOT_RUN", "holdout":"UNMEASURED"}
-    expected = json.loads(expected_path.read_bytes())
+    expected_bytes = expected_path.read_bytes()
+    expected = json.loads(expected_bytes)
     if expected.get("schema") != ORACLE_SCHEMA:
         raise ValueError("Unexpected technical oracle contract")
     actual = []
     for row in observations:
         raw, anchor, info = row["observation"], row["anchor"], row["assessment"]
         process = info["normalized_context"]["process"]
+        values = {
+            "project_id": raw["project_id"], "source_sha256": raw["source_sha"], "page": anchor["page"],
+            "raw_value": raw["raw_value"], "raw_unit": raw["raw_unit"], "purpose": info["purpose"],
+            "quantity_kind": raw["quantity_kind"], "observation_role": raw["observation_role"],
+            "source_scope": process["experiment_id"], "process_step": process["step"],
+            "process_end": process["end"], "process_scale": process["scale"],
+        }
+        if info["purpose"] == "T1D":
+            applicability = json.loads(raw["original_payload"])["applicability_target"]
+            values["applicability"] = {
+                "indicator": "SAMPLE_MASS", "sample_representativeness": process["sample_representativeness"],
+                "scope": applicability["scope"], "target_kind": applicability["quantity_kind"],
+                "target_value": applicability["raw_value"], "target_unit": applicability["raw_unit"],
+                "target_page": applicability["source_span"]["page"], "target_quote": applicability["source_span"]["quote"],
+                "test_date": process["test_date"], "classification": info["status"],
+                "same_source_anchor": applicability["evidence_anchor_id"] == anchor["anchor_id"],
+            }
         actual.append({
             "case_id": row["case_id"],
             "v3_reference": {"observation_id": raw["observation_id"], "anchor_id": anchor["anchor_id"]},
-            "values": {
-                "project_id": raw["project_id"], "source_sha256": raw["source_sha"], "page": anchor["page"],
-                "raw_value": raw["raw_value"], "raw_unit": raw["raw_unit"], "purpose": info["purpose"],
-                "quantity_kind": raw["quantity_kind"], "observation_role": raw["observation_role"],
-                "source_scope": process["experiment_id"], "process_step": process["step"],
-                "process_end": process["end"], "process_scale": process["scale"],
-            },
+            "values": values,
         })
     _jsonl(out/"reviewed_technical_expected.jsonl", expected["observations"])
     _jsonl(out/"reviewed_technical_actual.jsonl", actual)
@@ -348,6 +383,7 @@ def _oracle(out, expected_path, observations, pairs):
             cross["TP" if wanted and matched else "FN" if wanted else "FP" if matched else "TN"] += 1
     return {
         "status":"PASS" if measured["status"] == "PASS" and all(row["status"] == "PASS" for row in comparisons) else "FAIL",
+        "oracle_sha256": sha256(expected_bytes).hexdigest(),
         "observation_regression": measured["counts"], "pair_regression": comparisons,
         "reviewed_pair_confusion": {field: cross[field] for field in ("TP","FP","TN","FN")},
         "holdout": expected["holdout"], "holdout_precision":"UNMEASURED", "holdout_recall":"UNMEASURED",
@@ -451,6 +487,7 @@ def run_technical_pilot(
         "ranked_panels":0, "missing_or_rejected":rejected, "sqlite":integrity,
         "observation_artifact_sha256":assessment_sha, "pair_artifact_sha256":comparison_sha,
         "source_inventory_sha256":readback, "oracle_status":oracle_report["status"],
+        "oracle_sha256":oracle_report.get("oracle_sha256"),
         "holdout":"UNMEASURED", "O3":status if oracle_report["status"] != "NOT_RUN" else "NOT_RUN",
         "elapsed_seconds":perf_counter()-start,
     }

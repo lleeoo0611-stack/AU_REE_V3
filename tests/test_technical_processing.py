@@ -4,11 +4,12 @@ import json
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 import unittest
 
 from au_ree_v3.documents import DocumentCache, DocumentError
 from au_ree_v3.semantics import ProcessContext, SemanticContext, assess_semantic_use, compare_semantic_use
-from au_ree_v3.technical_processing import _direct_value, _locate, _mass_balance, run_technical_pilot
+from au_ree_v3.technical_processing import _applicability_target, _direct_value, _locate, _mass_balance, run_technical_pilot
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,6 +34,25 @@ class TechnicalEvidenceTests(unittest.TestCase):
             _direct_value(acid, row, [{"quote": "EXTRACTED TREO (ppm)"}])
         self.assertEqual(_direct_value(acid, row, [{"quote": "CONSUMPTION (kg HCl/t of leach feed)"}]), Decimal("24.8"))
 
+    def test_absolute_mass_cannot_match_per_tonne_unit(self):
+        sample = {"raw_value": "30", "raw_unit": "kg"}
+        self.assertEqual(_direct_value(sample, {"quote": "30kg bulk surface sample"}, []), Decimal("30"))
+        for quote in ("30 kg/t concentrate", "30 kg / t concentrate", "30 kg per tonne concentrate"):
+            with self.subTest(quote=quote), self.assertRaisesRegex(DocumentError, "MEASUREMENT_UNIT_UNBOUND"):
+                _direct_value(sample, {"quote": quote}, [])
+
+    def test_applicability_target_must_be_inside_the_same_scoped_experiment_span(self):
+        quote = "One 30 kg sample in experiment A returned 92.8% recovery."
+        view = SimpleNamespace(pages=(quote + " Experiment B returned 85.9% recovery.",))
+        location = _locate(view, {"page": 1, "quote": quote})
+        target = {"scope":"A", "quantity_kind":"PROCESS_RECOVERY", "raw_value":"92.8", "raw_unit":"%",
+                  "source_span":{"page":1, "quote":"experiment A returned 92.8% recovery."}}
+        binding = {"purpose":"T1D", "scope":"A", "process":{"experiment_id":"A"}, "applicability_target":target}
+        self.assertEqual(_applicability_target(binding, view, location)["raw_value"], "92.8")
+        other = {**target, "raw_value":"85.9", "source_span":{"page":1, "quote":"Experiment B returned 85.9% recovery."}}
+        with self.assertRaisesRegex(DocumentError, "T1D_SAME_TEST_TARGET_UNBOUND"):
+            _applicability_target({**binding, "applicability_target":other}, view, location)
+
     def test_mass_balance_rejects_report_even_at_favourable_rounding_limits(self):
         binding = {
             "quantity_kind":"PROCESS_YIELD", "raw_unit":"%",
@@ -49,6 +69,7 @@ class TechnicalEvidenceTests(unittest.TestCase):
             step="LEACH", start="ORE_FEED", end="LEACH_LIQUOR", scale="BENCH", target_species=("Nd2O3",),
             procedure="BOTTLE_ROLL_LEACH", conditions=(("duration", "6 h"),),
             sample_representativeness="DOCUMENTED_COMPOSITE",
+            feed_moisture_basis="DRY_MASS", product_moisture_basis="DISSOLVED_ANALYTE_MASS",
         )
         common = SemanticContext(
             quantity_kind="PROCESS_EXTRACTION", project_id="synthetic-first", scope_id="synthetic-scope",
@@ -73,6 +94,15 @@ class TechnicalEvidenceTests(unittest.TestCase):
         self.assertEqual(compare_semantic_use(first, full_flowsheet).status, "NOT_COMPARABLE")
         pilot = measured(replace(second, process=replace(process, scale="PILOT")))
         self.assertIn("process.scale", compare_semantic_use(first, pilot).incompatible_dimensions)
+        unknown_basis = measured(replace(second, process=replace(process, feed_moisture_basis=None)))
+        self.assertEqual(compare_semantic_use(first, unknown_basis).status, "INSUFFICIENT_CONTEXT")
+        self.assertIn("process.feed_moisture_basis", unknown_basis.missing_dimensions)
+        for token in ("UNKNOWN", "NONEMPTY_UNREVIEWED_VALUE"):
+            basis = measured(replace(second, process=replace(process, feed_moisture_basis=token)))
+            self.assertEqual(basis.status, "INSUFFICIENT_CONTEXT")
+            self.assertIn("process.feed_moisture_basis", basis.missing_dimensions)
+        wet_basis = measured(replace(second, process=replace(process, feed_moisture_basis="WET_MASS")))
+        self.assertIn("process.feed_moisture_basis", compare_semantic_use(first, wet_basis).incompatible_dimensions)
         model = measured(replace(second, observation_role="FORECAST"))
         self.assertEqual(compare_semantic_use(first, model).status, "NOT_COMPARABLE")
 

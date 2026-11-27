@@ -72,7 +72,20 @@
         "source_scope": "Yin July 2021 surface bulk sample",
         "process_step": "FLOTATION",
         "process_end": "FLOTATION_CONCENTRATE",
-        "process_scale": null
+        "process_scale": null,
+        "applicability": {
+          "indicator": "SAMPLE_MASS",
+          "sample_representativeness": "ONE_30_KG_BULK_SURFACE_SAMPLE",
+          "scope": "Yin July 2021 surface bulk sample",
+          "target_kind": "PROCESS_RECOVERY",
+          "target_value": "92.8",
+          "target_unit": "%",
+          "target_page": 13,
+          "target_quote": "sample from Yin produced a high-grade monazite concentrate with 92.8% recovery into 3.55% of the original mass.",
+          "test_date": "2021-07",
+          "classification": "INSUFFICIENT_CONTEXT",
+          "same_source_anchor": true
+        }
       }
     },
     {

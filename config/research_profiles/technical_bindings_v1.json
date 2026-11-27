@@ -101,7 +101,22 @@
         "page": 13,
         "quote": "In July 2021, flotation test work conducted on a 30kg bulk surface sample from Yin produced a high-grade monazite concentrate with 92.8% recovery into 3.55% of the original mass. The concentrate grade was 15.31% Nd2O3+Pr6O11 and 41.70% TREO."
       },
-      "context_spans": [],
+      "context_spans": [
+        {
+          "page": 13,
+          "quote": "with TREO recoveries ranging from 85.9%-92.8% using material with head grades ranging from 1.60% - 2.36% TREO."
+        }
+      ],
+      "applicability_target": {
+        "scope": "Yin July 2021 surface bulk sample",
+        "quantity_kind": "PROCESS_RECOVERY",
+        "raw_value": "92.8",
+        "raw_unit": "%",
+        "source_span": {
+          "page": 13,
+          "quote": "sample from Yin produced a high-grade monazite concentrate with 92.8% recovery into 3.55% of the original mass."
+        }
+      },
       "observation_role": "HISTORICAL_MEASUREMENT",
       "process": {
         "experiment_id": "Yin July 2021 surface bulk sample",
@@ -502,6 +517,7 @@
         ],
         "sample_representativeness": "CONDITION_SELECTED_45_COMPOSITES",
         "procedure": null,
+        "intensity_denominator_stream": "FEED",
         "conditions": [
           [
             "acid_solution",
@@ -564,6 +580,7 @@
         ],
         "sample_representativeness": null,
         "procedure": "DFS_PROCESS_DESIGN_EQUATIONS",
+        "intensity_denominator_stream": "FEED",
         "conditions": []
       },
       "chemical_species": [
