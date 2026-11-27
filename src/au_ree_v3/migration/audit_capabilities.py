@@ -181,14 +181,16 @@ CAPABILITIES = (
         paths=("R/run_mcda.R", "R/methods.R", "tests/test_methods.R"),
         contracts=("config/research.json", "docs/ontology-and-weighting.md",
                    "results/phase22-2026-11-06/snapshot_lock.json"),
-        v3="decision",
+        v3="decision", status="PARTIAL",
+        reason="Three point-score methods match all 16 fixed matrices; source-to-matrix generation pending",
     ),
     _capability(
         "sensitivity-and-uncertainty", "Decision", "Recompute method, weight, rank and selection sensitivity",
         modules=("resource_rank_uncertainty", "census_sensitivity", "analysis", "mcda"),
         paths=("R/run_mcda.R", "R/methods.R", "tests/test_methods.R"),
         contracts=("config/research.json", "docs/phase22-validation.md"),
-        v3="decision",
+        v3="decision", status="PARTIAL",
+        reason="Deterministic criterion/domain removal verified; RNG and other sensitivities pending",
     ),
     _capability(
         "study-experiments-and-ml", "Experiments", "Run isolated transfer, learning and synthetic model experiments",
@@ -301,3 +303,16 @@ for capability_id in (
         "mt-weld-2024-resource-page-2",
         "AU_REE_REPLAY_ASSETS=ASSET_LIBRARY python -m unittest discover -s tests -p test_pipeline.py -v",
     )
+
+V3_VERIFICATIONS.update({
+    "mcda": (
+        "PROMETHEE II, SAW and fixed-anchor TOPSIS from frozen benefit scores",
+        "phase22-2026-11-05:16-frozen-matrices",
+        "au-ree-v3 migration verify-mcda --v2-root V2 --out work/migration/point-mcda",
+    ),
+    "sensitivity-and-uncertainty": (
+        "PROMETHEE II leave-one-criterion and leave-one-domain-out",
+        "phase22-2026-11-05:frozen-leave-out",
+        "au-ree-v3 migration verify-sensitivity --v2-root V2 --out work/migration/leave-out",
+    ),
+})

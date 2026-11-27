@@ -350,6 +350,23 @@ def _verify_subset(inputs: dict, subset: dict, recovery: dict) -> tuple[list[dic
     return checks, {"panel_artifacts": products, "historical_subset_replay": subset}
 
 
+
+def _verify_configuration_assets(configuration: dict, assets: Path | None) -> None:
+    """Recognize separately recovered, exact frozen configuration bytes."""
+    if assets is None:
+        return
+    for item in configuration.values():
+        path = assets / "configuration" / item["published_sha256"]
+        if not path.is_file():
+            continue
+        digest = _sha(path.read_bytes())
+        item["recovered_sha256"] = digest
+        item["recovered_path"] = f"configuration/{item['published_sha256']}"
+        item["recovered_asset_status"] = "EXACT_SHA" if digest == item["published_sha256"] else "WRONG_SHA"
+        if item["recovered_asset_status"] == "EXACT_SHA":
+            item["status"] = "PASS"
+            item["reason"] = None
+
 def verify_baseline(v2_root: Path, profile: str, out: Path, assets: Path | None = None) -> dict:
     """Verify one profile's reference data independently of a source replay."""
     start = perf_counter()
@@ -377,7 +394,9 @@ def verify_baseline(v2_root: Path, profile: str, out: Path, assets: Path | None 
             inventory = asset_inventory(repo, required, recovery, assets)
             checks.append(_check("required_assets_covered_by_inventory", sorted(required), sorted(
                 row["expected_sha256"] for row in inventory if row["status"] != "NOT_REQUIRED_FOR_SCOPE")))
-            if any(item["status"] == "BLOCKED" for item in detail.get("configuration", {}).values()):
+            configuration = detail.get("configuration", {})
+            _verify_configuration_assets(configuration, assets)
+            if any(item["status"] == "BLOCKED" for item in configuration.values()):
                 replay = {"status": "BLOCKED", "reason": "REPLAY_ENVIRONMENT_MISMATCH"}
             elif any(row["status"] in {"WRONG_SHA", "MISSING"} for row in inventory):
                 replay = {"status": "BLOCKED", "reason": "SOURCE_UNAVAILABLE"}

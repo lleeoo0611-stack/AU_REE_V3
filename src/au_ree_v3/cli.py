@@ -19,7 +19,7 @@ def main(argv: list[str] | None = None) -> int:
     replay.add_argument("--code-commit", required=True, help="Full commit SHA of the code used")
     migration = commands.add_parser("migration", help="Audit and verify fixed V2 references")
     operations = migration.add_subparsers(dest="operation", required=True)
-    for name in ("audit", "build-golden", "verify-crosswalk", "verify-baseline"):
+    for name in ("audit", "build-golden", "verify-crosswalk", "verify-baseline", "verify-mcda", "verify-sensitivity"):
         operation = operations.add_parser(name)
         operation.add_argument("--v2-root", type=Path, required=True)
         operation.add_argument("--out", type=Path, required=True)
@@ -65,6 +65,12 @@ def _run_migration(args) -> dict:
         case "verify-baseline":
             from .migration.baseline import verify_baseline
             return verify_baseline(args.v2_root, args.profile, args.out, args.assets)
+        case "verify-mcda":
+            from .migration.verify_decision import verify_point_mcda
+            return verify_point_mcda(args.v2_root, args.out)
+        case "verify-sensitivity":
+            from .migration.verify_decision import verify_leave_one_out
+            return verify_leave_one_out(args.v2_root, args.out)
         case "compare-oracle":
             from .migration.reference_oracle import compare_files
             return compare_files(args.expected, args.actual, args.out, case_ids=args.case_id)

@@ -43,3 +43,13 @@ AU_REE_REPLAY_ASSETS="$ASSET_LIBRARY" \
 ```
 
 The integration suite uses named Golden cases for independent comparisons and includes two clean replays and source-error isolation.
+
+## Compare frozen decision outputs
+
+These checks recompute V3 decision scores and ranks using the fixed V2 criteria, matrices and weights at the 2026-11-05 cutoff. They verify point rankings and deterministic criterion/domain removal. The full subset gate also requires generating matrices, weights and draws from the original sources.
+
+```sh
+au-ree-v3 migration verify-mcda --v2-root "$V2_ROOT" --out work/migration/point-mcda
+au-ree-v3 migration verify-sensitivity --v2-root "$V2_ROOT" --out work/migration/leave-out
+python tools/recover_archive_configuration.py --v2-root "$V2_ROOT" --out "$ASSET_LIBRARY"
+```

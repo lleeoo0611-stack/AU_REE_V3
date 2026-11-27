@@ -6,7 +6,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from au_ree_v3.migration.baseline import ARCHIVED_CENSUS, PinnedRepository, asset_inventory, census_counts, verify_baseline
+from au_ree_v3.migration.baseline import ARCHIVED_CENSUS, PinnedRepository, _verify_configuration_assets, asset_inventory, census_counts, verify_baseline
 from au_ree_v3.migration.golden import build_golden
 
 
@@ -116,3 +116,22 @@ class GoldenArtifactsTests(unittest.TestCase):
             ids.append([json.loads(line)["case_id"] for line in data.splitlines()])
         self.assertEqual(ids[0], ids[1])
         self.assertEqual(len(set(ids[0])), manifest["case_count"])
+
+
+class RecoveredConfigurationTests(unittest.TestCase):
+    def test_only_exact_recovered_bytes_can_clear_a_mismatch(self):
+        with TemporaryDirectory() as folder:
+            assets = Path(folder)
+            (assets / "configuration").mkdir()
+            exact = sha256(b"sealed").hexdigest()
+            mismatch = sha256(b"historic").hexdigest()
+            configurations = {
+                "summary_rules.json": {"published_sha256": exact, "status": "BLOCKED", "reason": "REPLAY_ENVIRONMENT_MISMATCH"},
+                "research.json": {"published_sha256": mismatch, "status": "BLOCKED", "reason": "REPLAY_ENVIRONMENT_MISMATCH"},
+            }
+            (assets / "configuration" / exact).write_bytes(b"sealed")
+            (assets / "configuration" / mismatch).write_bytes(b"other")
+            _verify_configuration_assets(configurations, assets)
+            self.assertEqual(configurations["summary_rules.json"]["status"], "PASS")
+            self.assertEqual(configurations["research.json"]["status"], "BLOCKED")
+            self.assertEqual(configurations["research.json"]["recovered_asset_status"], "WRONG_SHA")
