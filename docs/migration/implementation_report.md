@@ -13,7 +13,7 @@ V3 started from `da2957f37a98093333de71f27fd815aa62918c38`. The reference reposi
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | G0 | PASS | Both frozen profiles, inventory, crosswalk and Golden reference extraction passed locally. |
-| G1 | NOT_RUN | This change establishes the reference and mapping. |
+| G1 | PASS | Real Mt Weld imports and synthetic contract tests passed. See B below. |
 | G2 | NOT_RUN | The real-source end-to-end comparison belongs to the verified evidence pipeline. |
 | G3 | NOT_RUN | All 538 required source fingerprints verified locally. V3 source-to-panel replay remains unexecuted. |
 | G4 | BLOCKED | Archived Census verified. Local original availability and historical configuration mismatches block source replay. |
@@ -37,3 +37,21 @@ The fixed V2 engineering tree measured 78 Python modules, 343 internal edges and
 - Added `tests/golden/{golden_cases.jsonl,golden_expected.jsonl,golden_manifest.json,oracle_manifest.json,synthetic_oracle_expected.jsonl,synthetic_rejections.jsonl}` and migration unit suites for frozen inputs and fault injection.
 
 Follow the [README commands](../../README.md) to reproduce the receipts. Per-check outputs live under `work/migration/`. CI status and the exact tested commit are available on the GitHub PR.
+
+## B · Evidence contracts and transactional storage
+
+[A PR #1](https://github.com/lleeoo0611-stack/AU_REE_V3/pull/1) tested commit `8ee8ea6f383ca7f2938171cdbbb8ef6554d39edf` and merged as `5ee98cc24c7a716bb1d150933bfaaeb3e8a9b1b9`. [Actions run 46064858937](https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46064858937) succeeded for static/unit verification in 7 seconds of job elapsed time. [Manual Actions run 46065054821](https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46065054821) completed frozen reference integrity in 31 seconds. Runner billing and equivalent V2 CI cost are unmeasured.
+
+The importer verified the Mt Weld original `fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503` before importing three V2 observations into the shadow layer. The typed interchange SHA-256 was `11e6141503e0ab23df0384c8c6d5840579e1b824e90dd1413e180ac6432eb2be`. Repeating the import inserted zero rows. The V2 input database kept its original SHA-256. V3 SQLite integrity was `ok` and the foreign-key check returned zero rows. The frozen V2 raw token and unit were null for this fixture and remained null in the import. The contract stores source-document tokens independently when available.
+
+```sh
+python -m unittest discover -s tests -p 'test_store.py' -v
+python -m unittest discover -s tests -p 'test_v2_import.py' -v
+python tools/verify_v2_import.py --v2-root "$V2_ROOT" --v2-python "$V2_PYTHON" \
+  --asset "$MT_WELD_PDF" --binding config/migration/mt_weld_resource_binding_v1.json \
+  --out work/migration/frozen-v2-import
+```
+
+The 16 B unit tests cover source editions, missing evidence, distinct scopes and stable IDs, exact precision and dates, idempotence and rollback. The importer reports independent failures and leaves scientific acceptance to the evidence rules. This unit contributes zero formal observations, comparable criteria or rankings. The same-capability engineering comparison is deferred to the real source path in C.
+
+Added `src/au_ree_v3/contracts/__init__.py`, `store.py`, and `migration/v2_import.py` for versioned records, SQLite migration and the read-only V2 adapter. Added `tests/test_store.py` and `tests/test_v2_import.py` and the reproducible real-fixture tools and binding. Updated the capability matrix and its generator. No files were consolidated, archived or removed in V3 in this work unit.

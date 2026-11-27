@@ -78,7 +78,8 @@ CAPABILITIES = (
         "observation-storage", "Observations", "Persist canonical identities, source evidence and observation layers",
         modules=("store", "observation_store", "evidence_model"),
         contracts=("docs/unified-observation-pipeline.md", "docs/migration.md"),
-        v3="store",
+        v3="store / migration.v2_import", status="PARTIAL",
+        reason="Transactional contracts and Mt Weld shadow import verified; wider observation families pending",
     ),
     _capability(
         "evidence-validation", "Evidence", "Verify source-bound locators, numeric witnesses and cutoff eligibility",

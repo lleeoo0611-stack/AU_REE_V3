@@ -1,0 +1,42 @@
+{
+  "schema": "reviewed-resource-bindings-v1",
+  "profile": "archived-census-2026-11-13",
+  "research_cutoff": "2026-11-13",
+  "bindings": [
+    {
+      "case_id": "mt-weld-2024-resource-page-2",
+      "reader": "native-narrative-and-total-table-v1",
+      "legacy_claim_reference": {
+        "commit": "0dff6beb5aca52e565c37289e3ab295737e76942",
+        "path": "data/claims.json",
+        "git_blob_sha": "412514a4e9f39d9729d54a5cde826f3a8f64f778",
+        "sha256": "d1cca97e5a3314f3778f48c6ec2af317bf9551f07e1d8371fae2e4191392c44e"
+      },
+      "source": {
+        "source_key": "mt_weld_2024",
+        "url": "https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf",
+        "sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+        "kind": "pdf",
+        "source_version": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+        "publication_date": "2024-08-05",
+        "available_date": "2026-11-02",
+        "acquired_at": "2026-11-02T11:56:22.891181+00:00"
+      },
+      "project": {
+        "entity_id": "AU-efff91a06cf344122d88",
+        "native_namespace": "project_registry_v1",
+        "native_id": "mt-weld",
+        "name": "Mt Weld Project"
+      },
+      "deposit_name": "Mt Weld",
+      "scope_name": "Mt Weld Mineral Resource",
+      "statement_id": "mt-weld-2024-06-30",
+      "effective_date": "2024-06-30",
+      "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+      "material_basis": "WHOLE_ORE",
+      "chemical_basis": "TREO",
+      "page": 2,
+      "locator": "physical PDF page 2; Table 1 and preceding narrative"
+    }
+  ]
+}
