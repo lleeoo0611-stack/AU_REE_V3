@@ -2,25 +2,24 @@
 
 from __future__ import annotations
 
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import asdict
-from decimal import Decimal, InvalidOperation, localcontext
+from decimal import Decimal
 from hashlib import sha256
 from importlib.resources import files
 import json
 from math import fsum, log1p
 from pathlib import Path
 
+from .comparability import SEMANTIC_POLICY_VERSION, evaluate_comparability
 from .contracts import ContractViolation, ResearchRelease, canonical_json
 from .decision import LEAVE_OUT_VERSION, POINT_METHOD_VERSION, leave_one_out, rank_panel
 from .registry import load_profile, load_registry
-from .research_inputs import ResearchInput, checked_research_inputs
+from .research_inputs import checked_research_inputs
 from .store import Store
 
 POLICY_FILENAME = "fresh_decision_policy_v1.json"
 POLICY_SHA256 = "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19"
-_RESOURCE_VARIABLES = ("ore_mt", "grade", "contained_treo_kt")
-_SUPPORTED = {"R1", "S1"}
 
 
 def load_policy() -> dict:
@@ -48,95 +47,6 @@ def _release_inputs(store, release_id, cutoff, project_ids):
     return checked_research_inputs(store, release, purpose="MCDA"), None
 
 
-def _statement_identity(item: ResearchInput) -> tuple:
-    return (item.scope.scope_id, item.raw.statement_id, item.raw.effective_date,
-            item.source.source_key, item.source.sha256)
-
-
-def _original_precision(item: ResearchInput) -> Decimal:
-    if not item.raw.raw_value or item.candidate.value is None:
-        raise ValueError("Reported quantity lacks its source token")
-    raw = Decimal(item.raw.raw_value.replace(",", ""))
-    if not raw.is_finite() or raw != Decimal(item.candidate.value):
-        raise ValueError("Resource quantity differs from its reported token")
-    return Decimal((0, (5,), raw.as_tuple().exponent - 1))
-
-
-def _jorc_context(item: ResearchInput) -> tuple | None:
-    payload = json.loads(item.raw.original_payload)
-    reporting = str(payload.get("reporting_standard") or "").upper().replace("_", " ")
-    category = str(item.raw.category or "").upper().replace("_", " ")
-    if reporting != "JORC 2012" or item.source.kind != "pdf":
-        return None
-    if "RESERVE" in category or "TARGET" in category:
-        return None
-    resource = "MINERAL RESOURCE" in category or any(
-        name in category.split() for name in ("MEASURED", "INDICATED", "INFERRED")
-    )
-    if not resource or any(payload.get(key) is None for key in ("cutoff_grade", "cutoff_unit", "cutoff_analyte")):
-        return None
-    return (category, payload["cutoff_grade"], payload["cutoff_unit"], payload["cutoff_analyte"])
-
-
-def _resource_input(by_variable):
-    if not all(by_variable.get(name) for name in _RESOURCE_VARIABLES):
-        return None, "INCOMPLETE_SELECTED_RESOURCE_BUNDLE"
-    if any(len(by_variable[name]) != 1 for name in _RESOURCE_VARIABLES):
-        return None, "AMBIGUOUS_SELECTED_RESOURCE_BUNDLE"
-    bundle = tuple(by_variable[name][0] for name in _RESOURCE_VARIABLES)
-    ore, grade, contained = bundle
-    if len({_statement_identity(item) for item in bundle}) != 1:
-        return None, "RESOURCE_STATEMENT_SCOPE_OR_SOURCE_MISMATCH"
-    contexts = [_jorc_context(item) for item in bundle]
-    if not ore.raw.statement_id or not ore.raw.effective_date or any(context is None for context in contexts):
-        return None, "ISSUER_JORC_RESOURCE_AND_CUTOFF_REQUIRED"
-    if any(context != contexts[0] for context in contexts[1:]):
-        return None, "RESOURCE_CATEGORY_OR_CUTOFF_MISMATCH"
-    if any(
-        (item.candidate.material_basis, item.candidate.chemical_basis) != ("WHOLE_ORE", "TREO")
-        for item in bundle
-    ):
-        return None, "WHOLE_ORE_TREO_REQUIRED"
-    if (ore.candidate.unit != "Mt" or grade.candidate.unit not in {"%", "ppm"}
-            or contained.candidate.unit not in {"kt", "kt TREO"}):
-        return None, "RESOURCE_QUANTITY_UNIT_MISMATCH"
-    try:
-        ore_value, grade_value, inventory = (Decimal(item.candidate.value) for item in bundle)
-        ore_half, grade_half = (_original_precision(item) for item in (ore, grade))
-    except (InvalidOperation, TypeError, ValueError):
-        return None, "RESOURCE_REPORTED_PRECISION_UNAVAILABLE"
-    percent = grade.candidate.unit == "%"
-    if not (ore_value > 0 and 0 < grade_value <= (100 if percent else 1_000_000) and inventory > 0):
-        return None, "INVALID_RESOURCE_QUANTITIES"
-    factor = Decimal("10" if percent else "0.001")
-    with localcontext() as context:
-        context.prec = sum(len(value.as_tuple().digits) for value in (
-            ore_value, grade_value, inventory, ore_half, grade_half,
-        )) + 12
-        low = (ore_value - ore_half) * (grade_value - grade_half) * factor
-        high = (ore_value + ore_half) * (grade_value + grade_half) * factor
-    if not low <= inventory <= high:
-        return None, "REPORTED_CONTAINED_OUTSIDE_ROUNDING_INTERVAL"
-    return bundle, None
-
-
-def _composition_input(by_variable, resource, rule):
-    if resource is None:
-        return None, "SAME_STATEMENT_RESOURCE_REQUIRED"
-    options = by_variable.get(rule["variables"][0], ())
-    if len(options) != 1:
-        reason = "AMBIGUOUS_COMPOSITION_SELECTION" if options else "NO_COMPOSITION_SELECTION"
-        return None, reason
-    composition, = options
-    if _statement_identity(composition) != _statement_identity(resource[0]):
-        return None, "COMPOSITION_SCOPE_STATEMENT_OR_EDITION_MISMATCH"
-    if (composition.candidate.chemical_basis not in rule["basis"]
-            or composition.candidate.unit != rule["unit"]
-            or not 0 <= Decimal(composition.candidate.value) <= 100):
-        return None, "COMPOSITION_BASIS_UNIT_OR_RANGE_MISMATCH"
-    return composition, None
-
-
 def _utility(value: Decimal, criterion: dict) -> float:
     low, high = criterion["low"], criterion["high"]
     clipped = float(max(Decimal(low), min(Decimal(high), value)))
@@ -147,49 +57,27 @@ def _utility(value: Decimal, criterion: dict) -> float:
     return 1.0 - score if criterion["direction"] == "MIN" else score
 
 
-def _input_context(item: ResearchInput) -> dict:
-    payload = json.loads(item.raw.original_payload)
-    return {
-        "statement_id": item.raw.statement_id,
-        "scope_id": item.raw.scope_id,
-        "effective_date": item.raw.effective_date,
-        "material_basis": item.candidate.material_basis,
-        "chemical_basis": item.candidate.chemical_basis,
-        "cutoff_grade": payload.get("cutoff_grade"),
-        "cutoff_unit": payload.get("cutoff_unit"),
-        "cutoff_analyte": payload.get("cutoff_analyte"),
-    }
-
-
 def _criterion_rows(project_ids, inputs, policy, blocked_reason):
-    by_project = defaultdict(lambda: defaultdict(list))
-    for item in inputs:
-        by_project[item.raw.project_id][item.raw.variable].append(item)
-    rows = {}
-    for project_id in project_ids:
-        by_variable = by_project[project_id]
-        resource, resource_gap = _resource_input(by_variable)
-        composition, composition_gap = _composition_input(by_variable, resource, policy["s1_admission"])
-        values = {
-            "R1": (resource[-1], resource, None) if resource else (None, (), resource_gap),
-            "S1": (composition, (*resource, composition), None) if composition else (None, (), composition_gap),
-        }
-        cells = {}
-        for code, criterion in policy["criteria"].items():
-            item, evidence, reason = values.get(code, (None, (), "CRITERION_ADMISSION_ADAPTER_NOT_MIGRATED"))
-            cells[code] = {
-                "state": "COMPARABLE" if item else "UNKNOWN",
-                "reason": ("RELEASE_BOUND_COMPARABLE_SELECTION" if item
-                           else blocked_reason if blocked_reason and code in _SUPPORTED else reason),
-                "accepted_value": item.candidate.value if item else None,
-                "source_token": item.raw.raw_value if item else None,
-                "unit": item.candidate.unit if item else None,
-                "utility": _utility(Decimal(item.candidate.value), criterion) if item else None,
-                "scientific_context": _input_context(item) if item else None,
-                "lineage": [entry.lineage() for entry in evidence],
+    comparisons = evaluate_comparability(
+        project_ids, inputs, policy=policy, blocked_reason=blocked_reason,
+    )
+    return {
+        project_id: {
+            code: {
+                "state": "COMPARABLE" if item.comparable else "UNKNOWN",
+                "reason": item.reason,
+                "accepted_value": item.value,
+                "source_token": item.source_token,
+                "unit": item.unit,
+                "utility": _utility(Decimal(item.value), policy["criteria"][code]) if item.comparable else None,
+                "scientific_context": item.context,
+                "lineage": [entry.lineage() for entry in item.inputs],
+                "derivation": item.derivation,
             }
-        rows[project_id] = cells
-    return rows
+            for code, item in criteria.items()
+        }
+        for project_id, criteria in comparisons.items()
+    }
 
 
 def _scenario_weights(codes, policy):
@@ -284,6 +172,7 @@ def build_decision(
         "release_id": release_id,
         "policy_sha256": POLICY_SHA256,
         "policy_version": policy["policy_version"],
+        "semantic_policy_version": SEMANTIC_POLICY_VERSION,
     }
     input_sha = _write_json(out / "mcda_inputs.json", {
         **shared, "schema": "fresh-decision-inputs-v1",

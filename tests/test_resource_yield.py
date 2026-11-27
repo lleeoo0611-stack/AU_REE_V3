@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from au_ree_v3.contracts import ResearchRelease, canonical_json
+from au_ree_v3.fresh_decision import build_decision
 from au_ree_v3.fresh_observations import extract_sources
 from au_ree_v3.research_inputs import checked_research_inputs
 from au_ree_v3.sources import ContentStore
@@ -40,13 +41,13 @@ class ResourceYieldIntegrationTests(unittest.TestCase):
             self.assertIsNotNone(path, f"Missing locked real source {sha}")
             self.assertEqual(self.cas.put(path.read_bytes()), sha)
 
-    def run_extraction(self, name, acquisition=None):
+    def run_extraction(self, name, acquisition=None, *, bindings=BINDINGS):
         home = self.directory / name
         home.mkdir()
         manifest = home / "source_manifest.json"
         manifest.write_text(canonical_json(acquisition or self.acquisition), encoding="utf-8")
         database = home / "observations.sqlite"
-        outcome = extract_sources(BINDINGS, manifest, self.cas.root, database, home, code_commit="d" * 40)
+        outcome = extract_sources(bindings, manifest, self.cas.root, database, home, code_commit="d" * 40)
         observations = [json.loads(line) for line in (home / "observations.jsonl").read_bytes().splitlines()]
         return outcome, observations, database
 
@@ -98,3 +99,64 @@ class ResourceYieldIntegrationTests(unittest.TestCase):
         self.assertEqual(result["selected_count"], 13)
         self.assertEqual({row["project_id"] for row in observations if row["selected_for_census"]},
                          {"AU-efff91a06cf344122d88", "AU-9bd8e5ed8408cd84d876", "AU-6d807eb7caec9db0f35e"})
+
+
+    @unittest.skipUnless(shutil.which("pdfimages"), "native PDF image readback required")
+    def test_reported_mreo_is_bound_to_the_reviewed_image_and_native_total(self):
+        bindings = ROOT / "config/research_profiles/resource_bindings_v3.json"
+        result, _, database = self.run_extraction("composition", bindings=bindings)
+        self.assertEqual(result["selected_count"], 17)
+        with Store(database, trusted_temporal_evidence_ids=result["trusted_temporal_evidence_ids"]) as store:
+            release = store.get(ResearchRelease, result["release_id"])
+            inputs = checked_research_inputs(store, release, purpose="MCDA")
+            decision_out = self.directory / "decision"
+            decision = build_decision(ROOT / "config/research_profiles/au_ree_2026-11-28.json", decision_out,
+                                      store=store, release_id=release.release_id)
+        self.assertEqual(decision["comparable_project_criteria"], 6)
+        composition = decision["panels"]["issuer_resource_composition"]
+        self.assertEqual((composition["status"], composition["eligible_count"]), ("PASS", 2))
+        results = json.loads((decision_out / "mcda_results.json").read_bytes())
+        panel = results["panels"]["issuer_resource_composition"]
+        for scenario in panel["point_rankings"].values():
+            for rankings in scenario.values():
+                self.assertEqual(rankings["AU-0098e17a63e7c05c213f"]["rank"], 1)
+                self.assertEqual(rankings["AU-9bd8e5ed8408cd84d876"]["rank"], 2)
+        wudinna = [item for item in inputs if item.raw.project_id == "AU-0098e17a63e7c05c213f"]
+        mreo, = (item for item in wudinna if item.raw.variable == "mreo_ppm")
+        grade, = (item for item in wudinna if item.raw.variable == "grade")
+        self.assertEqual(mreo.raw.raw_value, "112")
+        self.assertEqual(mreo.candidate.unit, "ppm")
+        self.assertEqual(mreo.candidate.denominator_basis, "WHOLE_ORE")
+        self.assertEqual(mreo.raw.statement_id, grade.raw.statement_id)
+        proof = json.loads(mreo.raw.original_payload)
+        self.assertEqual(set(proof["oxide_species"]), {"Nd2O3", "Pr6O11", "Dy2O3", "Tb4O7"})
+        self.assertEqual(proof["oxide_definition"]["page"], 3)
+        self.assertEqual(proof["reviewed_companion_image"]["physical_page"], 15)
+        self.assertEqual(proof["reviewed_companion_image"]["nd_pr_token_ppm"], "101")
+        self.assertEqual(proof["reviewed_companion_image"]["dy_tb_token_ppm"], "10.5")
+
+        tampered = json.loads(bindings.read_bytes())
+        wudinna_binding = next(row for row in tampered["bindings"] if row["case_id"] == "wudinna-maiden-estimate")
+        wudinna_binding["oxide_aggregate_review"]["image_sha256"] = "0" * 64
+        tampered_path = self.directory / "invalid_review.json"
+        tampered_path.write_text(canonical_json(tampered), encoding="utf-8")
+        failed, observations, _ = self.run_extraction("invalid-proof", bindings=tampered_path)
+        self.assertEqual(failed["selected_count"], 16)
+        self.assertNotIn("mreo_ppm", {row["variable"] for row in observations})
+        wudinna_case = next(case for case in failed["cases"] if case["case_id"] == "wudinna-maiden-estimate")
+        self.assertEqual(wudinna_case["selected_count"], 3)
+        self.assertEqual(wudinna_case["composition_extraction"], {
+            "outcome": "EVIDENCE_INSUFFICIENT", "reason": "REVIEWED_COMPOSITION_IMAGE_FINGERPRINT_MISMATCH",
+        })
+
+    def test_exact_resource_page_does_not_authorize_other_chemical_quantity(self):
+        spec = json.loads(BINDINGS.read_bytes())
+        goschen = next(row for row in spec["bindings"] if row["case_id"] == "goschen-area-one-bulk-oxides")
+        goschen["reported_chemical_label"] = "Nb2O5"
+        path = self.directory / "wrong_chemistry.json"
+        path.write_text(canonical_json(spec), encoding="utf-8")
+        receipt, _, _ = self.run_extraction("wrong-chemistry", bindings=path)
+        case = next(row for row in receipt["cases"] if row["case_id"] == goschen["case_id"])
+        self.assertEqual(case["reason"], "NON_CANONICAL_TREO_VALUE_COLUMNS")
+        self.assertEqual(case["selected_count"], 0)
+        self.assertEqual(receipt["selected_count"], 13)

@@ -1,0 +1,51 @@
+{
+  "schema": "wa-tenement-evidence-v1",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "layers": {
+    "0caf2754da4e2a4854fa2e8b2e450ed0585f75de985e1a393a24c590df4f3c90": "EPSG:7844",
+    "f45f27a7d469cc71c57819461a1b5e9594ef67440a87adb8deb68a9cb467f278": "EPSG:4283"
+  },
+  "bindings": [
+    {
+      "project_id": "AU-794821a2df9b7a244f96",
+      "project_marker": "Perenjori project",
+      "issuer_sha256": "d4476ed757c90a90654ffd2415bcc660ae8ee8ba26c10a7092bebdef7264714d",
+      "issuer_page": 12,
+      "issuer_lines": [[5, 6]],
+      "layer_sha256": "f45f27a7d469cc71c57819461a1b5e9594ef67440a87adb8deb68a9cb467f278",
+      "licences": ["E 70/6397", "E 70/6398", "E 59/2905"]
+    },
+    {
+      "project_id": "AU-b31d00e2272ffa6ccbd3",
+      "project_marker": "Peak Charles Project",
+      "issuer_sha256": "7f46c1631aa6a6b9eab24314635bbc589905dd202e04de2203135e79f93b330a",
+      "issuer_page": 8,
+      "issuer_lines": [[36, 38]],
+      "layer_sha256": "f45f27a7d469cc71c57819461a1b5e9594ef67440a87adb8deb68a9cb467f278",
+      "licences": ["E 74/695", "E 63/2162", "E 63/2163", "E 74/694", "E 74/766", "E 63/2344"]
+    },
+    {
+      "project_id": "AU-cefbde90dc34312547d3",
+      "project_marker": "North Dam Project",
+      "issuer_sha256": "075a54f0b388184f869ea1a9f0aec59119405b46661cbe7173d78be7f05f3ce0",
+      "issuer_page": 1,
+      "issuer_lines": [[33, 35]],
+      "layer_sha256": "0caf2754da4e2a4854fa2e8b2e450ed0585f75de985e1a393a24c590df4f3c90",
+      "licences": ["E 15/1495"]
+    },
+    {
+      "project_id": "AU-d0827cf51def7e0014fc",
+      "project_marker": "Rocky Gully",
+      "issuer_sha256": "157a0749d62f96166a4b26188aaf3401c3074fba74eef8e56ab3d07da22492f0",
+      "issuer_page": 70,
+      "issuer_lines": [[8, 12]],
+      "layer_sha256": "0caf2754da4e2a4854fa2e8b2e450ed0585f75de985e1a393a24c590df4f3c90",
+      "licences": ["E 70/5037", "E 70/6140"]
+    }
+  ],
+  "unbound_projects": {
+    "AU-e50ba6a268ea89226495": "ISSUER_LICENCE_LINK_NOT_YET_VERIFIED",
+    "AU-e6d859a831ed5954b440": "ISSUER_LICENCE_LINK_NOT_YET_VERIFIED"
+  }
+}

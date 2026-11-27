@@ -13,6 +13,7 @@ from au_ree_v3.contracts import (
     RawObservation, ResearchRelease, ResourceScope, Source, ValidatedObservation,
 )
 from au_ree_v3.contracts.temporal import TEMPORAL_POLICY_VERSION, TemporalEvidence, evaluate_temporal
+from au_ree_v3.comparability import MREO_BASIS, MREO_VARIABLE, OXIDE_VARIABLES
 from au_ree_v3.decision import average_ranks, rank_panel
 from au_ree_v3.fresh_decision import build_decision, load_policy
 from au_ree_v3.store import Store
@@ -71,18 +72,38 @@ def _source(pid):
     return source, content, proof
 
 
-def _observation(project, scope, source, anchor, proof, variable, value, unit, basis, *, shift_composition):
+def _observation(project, scope, source, anchor, proof, variable, value, unit, basis, *,
+                 shift_composition, wrong_definition=False, different_cutoff=False,
+                 different_treo=False):
     identifier = f"{project.entity_id}:{variable}"
     statement = scope.scope_id + ":statement"
+    payload = {
+        "reporting_standard": "JORC 2012", "cutoff_grade": "0.15",
+        "cutoff_unit": "%", "cutoff_analyte": "TREO",
+        "statement_context": [{
+            "physical_page": 2,
+            "quote": ("TREO = Total Rare Earth Oxides (La2O3, CeO2, Pr6O11, Nd2O3, Sm2O3, "
+                      "Eu2O3, Gd2O3, Tb4O7, Dy2O3, Ho2O3, Er2O3, Tm2O3, Yb2O3, Lu2O3, Y2O3)"),
+        }],
+    }
+    if variable == MREO_VARIABLE:
+        declared = list(OXIDE_VARIABLES)
+        if wrong_definition:
+            declared[-1] = "Sc2O3"
+        payload.update(oxide_species=list(OXIDE_VARIABLES), oxide_definition={
+            "page": anchor.page, "quote": f"MREO = Magnet Rare Earth Oxide({', '.join(declared)})",
+        })
+    if different_cutoff:
+        payload["cutoff_grade"] = "0.20"
+    if different_treo:
+        payload["statement_context"][0]["quote"] = payload["statement_context"][0]["quote"].replace("Y2O3", "Sc2O3")
     raw = RawObservation(
         observation_id=identifier, project_id=project.entity_id, scope_id=scope.scope_id,
         source_key=source.source_key, source_sha=source.sha256, variable=variable,
         raw_value=value, raw_unit=unit, status="REPORTED", transform_version="synthetic-v1",
-        original_payload={
-            "reporting_standard": "JORC 2012", "cutoff_grade": "0.15",
-            "cutoff_unit": "%", "cutoff_analyte": "TREO",
-        },
+        original_payload=payload,
         anchor_id=anchor.anchor_id, material_basis="WHOLE_ORE", chemical_basis=basis,
+        denominator_basis=("WHOLE_ORE" if variable in {"grade", MREO_VARIABLE, *OXIDE_VARIABLES.values()} else None),
         statement_id=statement + ":other" if shift_composition else statement,
         category="MEASURED_INDICATED_INFERRED_TOTAL", effective_date="2026-06-30",
         reported_publication_date=source.publication_date,
@@ -90,6 +111,7 @@ def _observation(project, scope, source, anchor, proof, variable, value, unit, b
     candidate = NormalizedObservation(
         candidate_id=identifier + ":candidate", observation_id=raw.observation_id, value=value,
         unit=unit, material_basis=raw.material_basis, chemical_basis=raw.chemical_basis,
+        denominator_basis=raw.denominator_basis,
         transform_version="synthetic-v1", raw_record_id=raw.raw_record_id,
     )
     decision = evaluate_temporal(
@@ -107,7 +129,10 @@ def _observation(project, scope, source, anchor, proof, variable, value, unit, b
     return raw, candidate, validation
 
 
-def _seed(store, sources, *, mismatched_composition=False, experimental=False, invalid_inventory=False):
+def _seed(store, sources, *, mismatched_composition=False, experimental=False,
+          invalid_inventory=False, omit_component=False, opaque_composition=False,
+          reported_mreo=False, wrong_mreo_definition=False, missing_mreo_unit=False,
+          different_cutoff=False, different_treo=False):
     validations = []
     with store.transaction():
         for i, pid in enumerate(PROJECT_IDS[:2]):
@@ -120,19 +145,37 @@ def _seed(store, sources, *, mismatched_composition=False, experimental=False, i
             store.add_source(source, content)
             for record in (project, scope, anchor):
                 store.add(record)
-            ore, grade, inventory, share = (("100.0", "2.00", "2000", "40.0") if i == 0
-                                            else ("50.0", "1.0", "500", "10.0"))
+            ore, grade, inventory = (("100.0", "2.00", "2000") if i == 0
+                                     else ("50.0", "1.0", "500"))
             if invalid_inventory and i == 0:
                 inventory = "3000"
             measurements = (
                 ("ore_mt", ore, "Mt", "TREO"), ("grade", grade, "%", "TREO"),
                 ("contained_treo_kt", inventory, "kt TREO", "TREO"),
-                ("magnet_reo_share_pct", share, "%", "PrNdDyTb_REO_DIV_TREO"),
             )
+            oxides = ("1000", "5000", "1000", "1000") if i == 0 else ("200", "400", "300", "100")
+            if reported_mreo and i == 1:
+                measurements += ((MREO_VARIABLE, "1000", "ppm", MREO_BASIS),)
+            elif not opaque_composition:
+                measurements += tuple(
+                    (key, value, "ppm", species)
+                    for (species, key), value in zip(OXIDE_VARIABLES.items(), oxides, strict=True)
+                    if not (omit_component and i == 0 and species == "Tb4O7")
+                )
+            else:
+                measurements += (("magnet_reo_share_pct", "40", "%", "PrNdDyTb_REO_DIV_TREO"),)
             for variable, value, unit, basis in measurements:
+                evidence_anchor = anchor
+                if variable == MREO_VARIABLE and not missing_mreo_unit:
+                    evidence_anchor = replace(anchor, anchor_id=anchor.anchor_id + ":mreo",
+                                              column="MREO", quote=f"MREO {value} ppm")
+                    store.add(evidence_anchor)
                 raw, candidate, validation = _observation(
-                    project, scope, source, anchor, proof, variable, value, unit, basis,
-                    shift_composition=mismatched_composition and i == 0 and variable == "magnet_reo_share_pct",
+                    project, scope, source, evidence_anchor, proof, variable, value, unit, basis,
+                    shift_composition=mismatched_composition and i == 0 and variable == "dy2o3_ppm",
+                    wrong_definition=wrong_mreo_definition,
+                    different_cutoff=different_cutoff and i == 0 and variable == "nd2o3_ppm",
+                    different_treo=different_treo and i == 0 and variable == "grade",
                 )
                 for record in (raw, candidate, validation):
                     store.add(record)
@@ -190,6 +233,10 @@ class FreshDecisionTests(unittest.TestCase):
         evidence = inputs["criteria_by_project"][PROJECT_IDS[0]]["R1"]["lineage"]
         self.assertEqual(len(evidence), 3)
         self.assertTrue(all(row["source_sha256"] == self.sources[PROJECT_IDS[0]][0].sha256 for row in evidence))
+        composition = inputs["criteria_by_project"][PROJECT_IDS[0]]["S1"]
+        self.assertEqual(len(composition["derivation"]["input_observation_ids"]), 5)
+        self.assertEqual(len(composition["lineage"]), 7)
+        self.assertEqual(len(composition["scientific_context"]["treo_denominator"]["chemical_species"]), 15)
         panel = results["panels"]["issuer_resource_composition"]
         for scores in panel["point_rankings"].values():
             for method in ("saw", "topsis", "promethee"):
@@ -221,6 +268,72 @@ class FreshDecisionTests(unittest.TestCase):
         inputs = json.loads((self.root / "work/mcda_inputs.json").read_bytes())
         self.assertEqual(inputs["criteria_by_project"][PROJECT_IDS[0]]["R1"]["reason"],
                          "REPORTED_CONTAINED_OUTSIDE_ROUNDING_INTERVAL")
+
+    def test_unreported_constituent_cannot_be_interpreted_as_zero(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=self.approved) as store:
+            release = _seed(store, self.sources, omit_component=True)
+            report = build_decision(self.profile, self.root / "work", store=store, release_id=release.release_id)
+        self.assertEqual(report["status"], "BLOCKED")
+        self.assertEqual(report["panels"]["issuer_resource_composition"]["eligible_count"], 1)
+        inputs = json.loads((self.root / "work/mcda_inputs.json").read_bytes())
+        cell = inputs["criteria_by_project"][PROJECT_IDS[0]]["S1"]
+        self.assertEqual(cell["reason"], "NO_COMPOSITION_SELECTION")
+        self.assertIsNone(cell["accepted_value"])
+
+    def test_opaque_magnet_ratio_cannot_supply_formula_proof(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=self.approved) as store:
+            release = _seed(store, self.sources, opaque_composition=True)
+            result = build_decision(self.profile, self.root / "work", store=store, release_id=release.release_id)
+        self.assertEqual(result["comparable_project_criteria"], 2)
+        inputs = json.loads((self.root / "work/mcda_inputs.json").read_bytes())
+        self.assertEqual(inputs["criteria_by_project"][PROJECT_IDS[0]]["S1"]["reason"],
+                         "COMPOSITION_FORMULA_EVIDENCE_MISSING")
+
+    def test_exact_reported_four_oxide_aggregate_remains_a_measured_numerator(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=self.approved) as store:
+            release = _seed(store, self.sources, reported_mreo=True)
+            result = build_decision(self.profile, self.root / "work", store=store, release_id=release.release_id)
+        self.assertEqual(result["panels"]["issuer_resource_composition"]["eligible_count"], 2)
+        inputs = json.loads((self.root / "work/mcda_inputs.json").read_bytes())
+        composition = inputs["criteria_by_project"][PROJECT_IDS[1]]["S1"]
+        derivation = composition["derivation"]
+        self.assertEqual(composition["accepted_value"], "10.0")
+        self.assertEqual(derivation["component_tokens"], {"MREO": "1000"})
+        self.assertEqual(len(derivation["input_observation_ids"]), 2)
+        self.assertIn("Tb4O7", derivation["reported_definition"]["quote"])
+
+    def test_wrong_reported_oxide_definition_is_not_accepted(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=self.approved) as store:
+            release = _seed(store, self.sources, reported_mreo=True, wrong_mreo_definition=True)
+            result = build_decision(self.profile, self.root / "work", store=store, release_id=release.release_id)
+        self.assertEqual(result["panels"]["issuer_resource_composition"]["status"], "INSUFFICIENT_COHORT")
+        inputs = json.loads((self.root / "work/mcda_inputs.json").read_bytes())
+        self.assertEqual(inputs["criteria_by_project"][PROJECT_IDS[1]]["S1"]["reason"],
+                         "MREO_DEFINITION_OR_WHOLE_ORE_BASIS_UNBOUND")
+
+    def test_missing_mreo_unit_evidence_holds_the_aggregate(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=self.approved) as store:
+            release = _seed(store, self.sources, reported_mreo=True, missing_mreo_unit=True)
+            report = build_decision(self.profile, self.root / "work", store=store, release_id=release.release_id)
+        self.assertEqual(report["panels"]["issuer_resource_composition"]["eligible_count"], 1)
+        cells = json.loads((self.root / "work/mcda_inputs.json").read_bytes())["criteria_by_project"]
+        self.assertEqual(cells[PROJECT_IDS[1]]["S1"]["reason"], "MREO_UNIT_OR_COMPANION_CONTEXT_UNBOUND")
+
+    def test_matching_statement_id_does_not_hide_cutoff_conflict(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=self.approved) as store:
+            release = _seed(store, self.sources, different_cutoff=True)
+            report = build_decision(self.profile, self.root / "work", store=store, release_id=release.release_id)
+        self.assertEqual(report["panels"]["issuer_resource_composition"]["eligible_count"], 1)
+        cells = json.loads((self.root / "work/mcda_inputs.json").read_bytes())["criteria_by_project"]
+        self.assertEqual(cells[PROJECT_IDS[0]]["S1"]["reason"], "COMPOSITION_SCOPE_STATEMENT_OR_EDITION_MISMATCH")
+
+    def test_wrong_treo_oxide_set_blocks_an_otherwise_linked_numerator(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=self.approved) as store:
+            release = _seed(store, self.sources, different_treo=True)
+            report = build_decision(self.profile, self.root / "work", store=store, release_id=release.release_id)
+        self.assertEqual(report["panels"]["issuer_resource_composition"]["eligible_count"], 1)
+        cells = json.loads((self.root / "work/mcda_inputs.json").read_bytes())["criteria_by_project"]
+        self.assertEqual(cells[PROJECT_IDS[0]]["S1"]["reason"], "COMPOSITION_TREO_CHEMICAL_DEFINITION_UNBOUND")
 
     def test_absent_release_or_experimental_store_never_yields_ranks(self):
         absent = build_decision(self.profile, self.root / "absent")

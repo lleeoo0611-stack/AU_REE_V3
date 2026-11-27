@@ -10,8 +10,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from .census import COLUMNS
+from .comparability import census_quantity, resource_context, resource_observation_compatible
 from .contracts import ContractViolation, ResearchRelease, canonical_json
-from .observations import CATEGORY, VARIABLES
 from .registry import PROJECT_ID_COLUMN, load_census_columns, load_profile, load_registry
 from .research_inputs import ResearchInput, checked_research_inputs
 from .store import Store
@@ -64,40 +64,22 @@ def _sha(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
 
 
-def _resource_compatible(entry: ResearchInput) -> bool:
-    raw, candidate = entry.raw, entry.candidate
-    return (
-        candidate.value is not None
-        and candidate.unit == VARIABLES[raw.variable][0]
-        and candidate.material_basis == "WHOLE_ORE"
-        and candidate.chemical_basis == "TREO"
-        and (raw.variable != "grade" or candidate.denominator_basis == "WHOLE_ORE")
-        and raw.category == CATEGORY
-        and entry.validation.comparable
-        and raw.observation_role == "HISTORICAL_MEASUREMENT"
-    )
-
-
-def _resource_context(entry: ResearchInput) -> tuple:
-    raw = entry.raw
-    return (entry.scope.scope_id, entry.source.source_key, entry.source.sha256,
-            raw.statement_id, raw.effective_date, raw.category)
-
-
 def _accepted_cell(entry: ResearchInput) -> dict:
     raw, candidate, source = entry.raw, entry.candidate, entry.source
     anchor = entry.anchor
     lineage, trace = entry.lineage(), entry.temporal_trace
+    value, unit = census_quantity(entry)
     lineage.pop("temporal_decision")
     lineage.pop("project_id")
     return {
-        **lineage, "value": candidate.value, "value_state": "PRESENT",
-        "reason": "GOVERNED_SELECTION", "value_origin": "FORMAL_SELECTION",
+        **lineage, "value": value, "value_state": "PRESENT",
+        "reason": "GOVERNED_SELECTION" if unit == candidate.unit else "GOVERNED_SELECTION_EXACT_UNIT_CONVERSION",
+        "value_origin": "FORMAL_SELECTION",
         "source_url": source.url, "locator": anchor.locator, "physical_page": anchor.page,
         "source_table": anchor.table, "source_row": anchor.row, "source_column": anchor.column,
         "scope": entry.scope.name, "statement_id": raw.statement_id, "effective_date": raw.effective_date,
         "category": raw.category, "raw_value": raw.raw_value, "raw_unit": raw.raw_unit,
-        "unit": candidate.unit, "material_basis": candidate.material_basis,
+        "unit": unit, "material_basis": candidate.material_basis,
         "chemical_basis": candidate.chemical_basis, "denominator_basis": candidate.denominator_basis,
         "rules_sha256": entry.validation.rules_sha, "temporal_policy_version": trace["policy_version"],
         "temporal_status": trace["status"], "temporal_decision_id": trace["decision_id"],
@@ -133,8 +115,8 @@ def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxe
         by_column = {COLUMNS[entry.raw.variable]: [] for entry in entries}
         contexts = set()
         for entry in entries:
-            if _resource_compatible(entry):
-                contexts.add(_resource_context(entry))
+            if resource_observation_compatible(entry):
+                contexts.add(resource_context(entry))
                 by_column[COLUMNS[entry.raw.variable]].append(entry)
         for column, alternatives in by_column.items():
             key = project_id, column

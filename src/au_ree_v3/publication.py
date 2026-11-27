@@ -446,7 +446,7 @@ def replay_release(*, release_root: Path, release_id: str, storage: ContentRepli
         for sha256 in manifest["required_object_sha256"]:
             _checked_read(storage, sha256)
         environment = json.loads(_checked_read(storage, manifest["environment_hash"]))
-        if environment != environment_lock():
+        if environment != environment_lock(include_pdf_images="pdfimages" in environment["tools"]):
             receipt.update(status="BLOCKED", F4="BLOCKED", reason="REPLAY_ENVIRONMENT_MISMATCH")
         else:
             with tempfile.TemporaryDirectory(prefix="v3-research-cold-") as temporary:

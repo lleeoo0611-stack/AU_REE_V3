@@ -52,6 +52,12 @@ def main(argv: list[str] | None = None) -> int:
     inventory.add_argument("--workers", type=int, default=2)
     inventory.add_argument("--ocr-model", type=Path)
 
+    geography = commands.add_parser("geography", help="Verify official spatial evidence")
+    geo_commands = geography.add_subparsers(dest="operation", required=True)
+    tenements = geo_commands.add_parser("tenements", help="Locate exact-edition WA legal boundaries")
+    for argument in ("bindings", "sources", "store", "out"):
+        tenements.add_argument(f"--{argument}", type=Path, required=True)
+
     research = commands.add_parser("research", help="Build and verify the fresh research profile")
     research_commands = research.add_subparsers(dest="operation", required=True)
     extract = research_commands.add_parser("extract", help="Extract and govern fresh resource observations")
@@ -123,6 +129,10 @@ def main(argv: list[str] | None = None) -> int:
             result = verify_reference(args.v2_root, args.profile, args.out)
         elif args.command == "sources":
             result = _run_sources(args)
+        elif args.command == "geography":
+            from .geography import inventory_tenements
+
+            result = inventory_tenements(args.bindings, args.sources, args.store, args.out)
         elif args.command == "research":
             result = _run_research(args)
         else:

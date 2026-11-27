@@ -98,6 +98,7 @@ def _make_cell(
             "cutoff_grade": statement.cutoff, "cutoff_unit": statement.cutoff_unit, "cutoff_analyte": statement.cutoff_analyte,
             "date_basis": "EFFECTIVE_DATE_FROM_DOCUMENT" if statement.effective_date else "ISSUER_DISCLOSURE_WITH_EFFECTIVE_DATE_UNREPORTED",
             "statement_context": [{"physical_page": page, "quote": text} for page, text in statement.context],
+            **(cell.evidence_context or {}),
             **({"reported_chemical_label": statement.reported_chemical_label}
                if statement.reported_chemical_label is not None else {}),
             "extraction_strategy": binding["strategy"],
@@ -172,9 +173,20 @@ def _select(statements: list[BoundStatement]) -> tuple[dict[str, tuple[Measureme
             reasons[project_id] = "ESTIMATE_ORDER_UNRESOLVED"
             continue
         effective = max(item.statement.effective_date or "" for item in choices)
+        if any(
+            date != effective and effective.startswith(date + "-")
+            for date in (item.statement.effective_date for item in choices)
+            if date
+        ):
+            reasons[project_id] = "ESTIMATE_ORDER_PRECISION_UNRESOLVED"
+            continue
         current = [item for item in choices if (item.statement.effective_date or "") == effective]
         signatures = {
-            tuple((m.raw.variable, Decimal(m.candidate.value), m.validation.outcome) for m in item.measurements)
+            tuple(
+                (m.raw.variable, Decimal(m.candidate.value), m.candidate.unit,
+                 m.candidate.chemical_basis, m.candidate.material_basis, m.validation.outcome)
+                for m in item.measurements
+            )
             for item in current
         }
         if len(signatures) != 1:
@@ -299,19 +311,23 @@ def extract_sources(
                              "INSUFFICIENT_EVIDENCE" if error.outcome == "EVIDENCE_INSUFFICIENT" else "NOT_EVALUATED")
             case.update(outcome=error.outcome, reason=str(error), scientific_comparability=compatibility)
             continue
-        if binding.get("composition_table"):
+        if binding.get("composition_table") or binding.get("oxide_aggregate_review"):
             from .composition_extraction import classified_total_oxides
+            from .composition_review import corroborated_aggregate
 
             enriched = []
             for item in decoded:
                 try:
                     components = classified_total_oxides(documents[source.sha256].pages, binding, item)
+                    aggregate = corroborated_aggregate(
+                        documents[source.sha256].pages, binding, item, originals[source.sha256], source.sha256,
+                    )
                 except DocumentError as error:
                     case["composition_extraction"] = {"outcome": error.outcome, "reason": str(error)}
-                    components = ()
-                if components:
-                    case["composition_extraction"] = {"outcome": "EXTRACTED", "count": len(components)}
-                enriched.append(replace(item, measurements=item.measurements + components))
+                    components = aggregate = ()
+                if components or aggregate:
+                    case["composition_extraction"] = {"outcome": "EXTRACTED", "count": len(components + aggregate)}
+                enriched.append(replace(item, measurements=item.measurements + components + aggregate))
             decoded = tuple(enriched)
         parsed = [
             _bound_statement(item, project, source, binding, proofs, cutoff, rules_sha, edition["reacquired_at"])
