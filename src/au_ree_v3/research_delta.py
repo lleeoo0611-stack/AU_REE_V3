@@ -13,6 +13,7 @@ import re
 
 from .census import COLUMNS
 from .census_metadata import METADATA_ORIGINS, coverage_report, load_projection_policy, metadata_projection
+from .census_science import RESOURCE_PRESENCE_COLUMN, validate_resource_presence
 from .comparability import census_quantity
 from .contracts import canonical_json
 from .decision import leave_one_out, rank_panel
@@ -185,6 +186,7 @@ def _census(artifacts, receipt, observations):
         raise ValueError("Census projection is missing its versioned ledger")
     definitions = policy.by_name if policy else {}
     tabular = {(row[PROJECT_ID_COLUMN], column): row[column] for row in table for column in columns}
+    ledger = {(cell["project_id"], cell["column"]): cell for cell in cells}
     result = {}
     formal = 0
     for cell in cells:
@@ -206,6 +208,8 @@ def _census(artifacts, receipt, observations):
                 raise ValueError(f"Registry identity differs from its pinned Census key: {key}")
         elif state == "PRESENT" and policy and origin in METADATA_ORIGINS:
             _check_display_metadata(cell, definition, receipt)
+        elif state == "PRESENT" and policy and origin == "EVIDENCE_REFERENCE" and key[1] == RESOURCE_PRESENCE_COLUMN:
+            validate_resource_presence(cell, definition, census_receipt, observations, ledger)
         elif state == "PRESENT":
             observation = observations.get(cell["observation_id"])
             _check_observation(cell, observation, key[0], receipt["observation_release_id"])

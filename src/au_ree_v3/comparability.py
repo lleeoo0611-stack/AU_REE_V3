@@ -21,7 +21,9 @@ SEMANTIC_POLICY_VERSION = "criterion-comparability-v1"
 RESOURCE_VARIABLES = ("ore_mt", "grade", "contained_treo_kt")
 MREO_VARIABLE = "mreo_ppm"
 MREO_BASIS = "PrNdDyTb_REO"
-_TREO_SPECIES = (
+NDPR_VARIABLES = ("ndpr_ppm", "reported_resource_ndpr_ppm")
+NDPR_SPECIES = ("Nd2O3", "Pr6O11")
+TOTAL_REO_15 = (
     "La2O3", "CeO2", "Pr6O11", "Nd2O3", "Sm2O3", "Eu2O3", "Gd2O3", "Tb4O7",
     "Dy2O3", "Ho2O3", "Er2O3", "Tm2O3", "Yb2O3", "Lu2O3", "Y2O3",
 )
@@ -373,17 +375,18 @@ def _treo_definitions(grade: ResearchInput, *, extended: bool = False) -> list[t
 def _treo_denominator(grade: ResearchInput) -> dict | None:
     """Require the disclosed 15-oxide denominator for this comparison group."""
     definitions = _treo_definitions(grade)
-    expected = sorted(species.upper() for species in _TREO_SPECIES)
+    expected = sorted(species.upper() for species in TOTAL_REO_15)
     if not definitions or any(species != expected for _, species in definitions):
         return None
     return {
-        "chemical_species": sorted(_TREO_SPECIES),
+        "chemical_species": sorted(TOTAL_REO_15),
         "definition_sha256": sha256(canonical_json(expected).encode("utf-8")).hexdigest(),
         "references": [reference for reference, _ in definitions],
     }
 
 
-def _composition(by_variable, resource: Comparison, rule: dict) -> Comparison:
+def composition_comparison(by_variable, resource: Comparison, rule: dict) -> Comparison:
+    """Evaluate the existing exact same-statement S1 composition rule."""
     if not resource.comparable:
         return Comparison("SAME_STATEMENT_RESOURCE_REQUIRED")
     if (rule["unit"], rule["basis"], rule.get("resource_scope")) != ("%", ["PrNdDyTb_REO_DIV_TREO"], True):
@@ -460,7 +463,7 @@ def evaluate_comparability(
     for project_id in project_ids:
         by_variable = by_project[project_id]
         inventory = resource_bundle(by_variable)
-        comparisons = {"R1": inventory, "S1": _composition(by_variable, inventory, policy["s1_admission"])}
+        comparisons = {"R1": inventory, "S1": composition_comparison(by_variable, inventory, policy["s1_admission"])}
         if blocked_reason:
             comparisons = {code: Comparison(blocked_reason) for code in comparisons}
         results[project_id] = {
@@ -483,7 +486,33 @@ def _stated_treo_members(definitions: list[tuple[dict, list[str]]]) -> tuple[str
     return next(iter(declarations)) if len(declarations) == 1 else ()
 
 
+def reported_ndpr_evidence(item: ResearchInput) -> dict | None:
+    """Recognize a defined native whole-ore combined grade without splitting it."""
+    raw, candidate = item.raw, item.candidate
+    if (raw.variable not in NDPR_VARIABLES or raw.raw_unit != "ppm" or candidate.unit != "ppm"
+            or raw.material_basis != "WHOLE_ORE" or candidate.material_basis != "WHOLE_ORE"
+            or raw.denominator_basis != "WHOLE_ORE" or candidate.denominator_basis != "WHOLE_ORE"
+            or raw.chemical_basis != "NdPr_OXIDES" or candidate.chemical_basis != raw.chemical_basis
+            or not item.anchor.page or not item.anchor.table or not item.anchor.row
+            or (item.anchor.column or "").casefold() != "ndpr"):
+        return None
+    definition = json.loads(raw.original_payload).get("oxide_definition")
+    if not isinstance(definition, dict) or definition.get("page") != item.anchor.page:
+        return None
+    text = unicodedata.normalize("NFKC", str(definition.get("quote", ""))).strip().rstrip(".")
+    match = re.fullmatch(r"NdPr\s*=\s*(?:NdPr Oxides?\s*)?\(?\s*(Nd2O3|Pr6O11)\s*\+\s*(Nd2O3|Pr6O11)\s*\)?", text, re.I)
+    if match is None or set(part.casefold() for part in match.groups()) != {part.casefold() for part in NDPR_SPECIES}:
+        return None
+    unit_evidence = json.loads(raw.original_payload).get("unit_evidence")
+    if not isinstance(unit_evidence, dict) or unit_evidence.get("page") != item.anchor.page:
+        return None
+    if not re.fullmatch(r"NdPr\s*\(ppm\)", str(unit_evidence.get("quote", "")).strip(), re.I):
+        return None
+    return {"definition": definition, "unit_evidence": unit_evidence}
+
+
 def _resource_semantics_and_evidence(item: ResearchInput) -> tuple["SemanticContext", tuple[dict, ...]]:
+    from .normalization import KNOWN_OXIDE_SPECIES
     from .semantics import SemanticContext
 
     raw = item.raw
@@ -492,11 +521,14 @@ def _resource_semantics_and_evidence(item: ResearchInput) -> tuple["SemanticCont
     definitions = _treo_definitions(item, extended=True) if chemical_basis == "TREO" else []
     references = [dict(reference) for reference, _ in definitions]
     species = ()
-    if chemical_basis in OXIDE_VARIABLES or chemical_basis in {"Nd", "Pr", "Dy", "Tb"}:
+    if chemical_basis in KNOWN_OXIDE_SPECIES or chemical_basis in {"Nd", "Pr", "Dy", "Tb"}:
         species = (chemical_basis,)
     elif raw.variable == MREO_VARIABLE and _reported_aggregate_compatible(item):
         species = tuple(OXIDE_VARIABLES)
         references.append(payload["oxide_definition"])
+    elif raw.variable in NDPR_VARIABLES and (evidence := reported_ndpr_evidence(item)) is not None:
+        species = NDPR_SPECIES
+        references.extend(evidence.values())
     kinds = {"ore_mt": "ORE_MASS", "grade": "GRADE", "contained_treo_kt": "CONTAINED_OXIDE_MASS"}
     categories = tuple(part for part in (raw.category or "").split("_")
                        if part in {"MEASURED", "INDICATED", "INFERRED"})
