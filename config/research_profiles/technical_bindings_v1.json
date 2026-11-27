@@ -1,0 +1,751 @@
+{
+  "schema": "technical-evidence-bindings-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "profile_id": "au-ree-2026-11-28",
+  "research_cutoff": "2026-11-28",
+  "expected_source_count": 144,
+  "bindings": [
+    {
+      "id": "yin-drill-composite-treo-recovery",
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "sample_family": "Mangaroon Project — Yin resource scope",
+      "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "edition_id": "bb28ca957c49afa8cb995047278ad364f08ede0059e5124d11f11c65cd6fe49f",
+      "receipt_sha256": "64c3ad75bc9aa1f122c258c0e21a5efb43bfa9a4e29e8f05a2fac722a8fe8463",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_RECOVERY",
+      "scope": "Yin May 2023 drill-composite flotation",
+      "raw_value": "85.9",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 13,
+        "quote": "In May 2023, floatation test work conducted on a bulk composite of diamond drill samples from Yin also produced a high-grade concentrate with 85.9% TREO recovery into 6.7% of the original mass. The concentrate grade was 10.76% Nd2O3+Pr6O11 and 31.22% TREO."
+      },
+      "context_spans": [],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Yin May 2023 drill-composite flotation",
+        "step": "FLOTATION",
+        "feed": "DIAMOND_DRILL_COMPOSITE",
+        "product": "MINERAL_CONCENTRATE",
+        "start": "FLOTATION_FEED",
+        "end": "FLOTATION_CONCENTRATE",
+        "scale": null,
+        "test_date": "2023-05",
+        "target_species": [],
+        "sample_representativeness": "ONE_BULK_DIAMOND_DRILL_COMPOSITE",
+        "procedure": "FLOTATION_TESTWORK",
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "FEED_TREO",
+      "material": null,
+      "source_analyte_label": "TREO"
+    },
+    {
+      "id": "yin-drill-composite-concentrate-grade",
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "sample_family": "Mangaroon Project — Yin resource scope",
+      "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "edition_id": "bb28ca957c49afa8cb995047278ad364f08ede0059e5124d11f11c65cd6fe49f",
+      "receipt_sha256": "64c3ad75bc9aa1f122c258c0e21a5efb43bfa9a4e29e8f05a2fac722a8fe8463",
+      "purpose": "T1B",
+      "quantity_kind": "PRODUCT_GRADE",
+      "scope": "Yin May 2023 drill-composite flotation",
+      "raw_value": "31.22",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 13,
+        "quote": "In May 2023, floatation test work conducted on a bulk composite of diamond drill samples from Yin also produced a high-grade concentrate with 85.9% TREO recovery into 6.7% of the original mass. The concentrate grade was 10.76% Nd2O3+Pr6O11 and 31.22% TREO."
+      },
+      "context_spans": [],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Yin May 2023 drill-composite flotation",
+        "step": "FLOTATION",
+        "feed": "DIAMOND_DRILL_COMPOSITE",
+        "product": "MINERAL_CONCENTRATE",
+        "start": "FLOTATION_FEED",
+        "end": "FLOTATION_CONCENTRATE",
+        "scale": null,
+        "test_date": "2023-05",
+        "target_species": [],
+        "sample_representativeness": "ONE_BULK_DIAMOND_DRILL_COMPOSITE",
+        "procedure": "FLOTATION_TESTWORK",
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "MINERAL_CONCENTRATE_MASS",
+      "material": "CONCENTRATE",
+      "source_analyte_label": "TREO"
+    },
+    {
+      "id": "yin-surface-composite-sample-mass",
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "sample_family": "Mangaroon Project — Yin resource scope",
+      "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "edition_id": "bb28ca957c49afa8cb995047278ad364f08ede0059e5124d11f11c65cd6fe49f",
+      "receipt_sha256": "64c3ad75bc9aa1f122c258c0e21a5efb43bfa9a4e29e8f05a2fac722a8fe8463",
+      "purpose": "T1D",
+      "quantity_kind": "EVIDENCE_APPLICABILITY",
+      "scope": "Yin July 2021 surface bulk sample",
+      "raw_value": "30",
+      "raw_unit": "kg",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 13,
+        "quote": "In July 2021, flotation test work conducted on a 30kg bulk surface sample from Yin produced a high-grade monazite concentrate with 92.8% recovery into 3.55% of the original mass. The concentrate grade was 15.31% Nd2O3+Pr6O11 and 41.70% TREO."
+      },
+      "context_spans": [
+        {
+          "page": 13,
+          "quote": "with TREO recoveries ranging from 85.9%-92.8% using material with head grades ranging from 1.60% - 2.36% TREO."
+        }
+      ],
+      "applicability_target": {
+        "scope": "Yin July 2021 surface bulk sample",
+        "quantity_kind": "PROCESS_RECOVERY",
+        "raw_value": "92.8",
+        "raw_unit": "%",
+        "source_span": {
+          "page": 13,
+          "quote": "sample from Yin produced a high-grade monazite concentrate with 92.8% recovery into 3.55% of the original mass."
+        }
+      },
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Yin July 2021 surface bulk sample",
+        "step": "FLOTATION",
+        "feed": "BULK_SURFACE_SAMPLE",
+        "product": "MONAZITE_CONCENTRATE",
+        "start": "FLOTATION_FEED",
+        "end": "FLOTATION_CONCENTRATE",
+        "scale": null,
+        "test_date": "2021-07",
+        "target_species": [],
+        "sample_representativeness": "ONE_30_KG_BULK_SURFACE_SAMPLE",
+        "procedure": "FLOTATION_TESTWORK",
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "SAMPLE_MASS",
+      "material": null,
+      "source_analyte_label": "bulk surface sample"
+    },
+    {
+      "id": "jupiter-pilot-treo-recovery",
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "sample_family": "Jupiter development study within Brothers",
+      "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "edition_id": "309a9ca75cbcacd0ae071ecde6fae633411e35f4a4b3d020ce52f012acaa9f20",
+      "receipt_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_RECOVERY",
+      "scope": "Jupiter GAVAQ pilot beneficiation",
+      "raw_value": "71",
+      "raw_unit": "%",
+      "value_statistic": "APPROXIMATE",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 32,
+        "quote": "Pilot-scale beneficiation testwork was subsequently conducted at GAVAQ using bulk composites representative of Jupiter mineralisation. Optimisation of the beneficiation circuit achieved approximately 71% TREO recovery and 81% MagREO recovery, as announced on 14 April 2026."
+      },
+      "context_spans": [],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Jupiter GAVAQ pilot beneficiation",
+        "step": "BENEFICIATION",
+        "feed": "BULK_ORE_COMPOSITES",
+        "product": "BENEFICIATION_CONCENTRATE",
+        "start": "BENEFICIATION_FEED",
+        "end": "BENEFICIATION_CONCENTRATE",
+        "scale": "PILOT",
+        "test_date": null,
+        "target_species": [],
+        "sample_representativeness": "BULK_JUPITER_MINERALISATION_COMPOSITES",
+        "procedure": null,
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "FEED_TREO",
+      "material": "WHOLE_ORE",
+      "source_analyte_label": "TREO"
+    },
+    {
+      "id": "jupiter-open-circuit-mass-yield",
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "sample_family": "Jupiter development study within Brothers",
+      "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "edition_id": "892f9b6f9ff524640908b2bb2cf16bd6f0246c8f044147eccb89477b56f3e6ac",
+      "receipt_sha256": "3df5436d06eafadbddcfd59b12401b47f19de724394f19bedb9245c9ecb4e9d2",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_YIELD",
+      "scope": "Jupiter initial GAVAQ 51 kg open-circuit flotation",
+      "raw_value": "51",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 18,
+        "quote": "• Initial open-circuit flotation test work (GAVAQ, Hanoi) on a 51 kg composite (0.14% TREO feed) produced a 1.3% TREO concentrate at 51% mass recovery, rejecting 95% of gangue."
+      },
+      "context_spans": [],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Jupiter initial GAVAQ 51 kg open-circuit flotation",
+        "step": "FLOTATION",
+        "feed": "BULK_ORE_COMPOSITE",
+        "product": "MINERAL_CONCENTRATE",
+        "start": "FLOTATION_FEED",
+        "end": "FLOTATION_CONCENTRATE",
+        "scale": "BENCH",
+        "test_date": null,
+        "target_species": [],
+        "sample_representativeness": "ONE_51_KG_COMPOSITE",
+        "procedure": "OPEN_CIRCUIT_FLOTATION",
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "FLOTATION_FEED_MASS",
+      "material": "WHOLE_ORE",
+      "source_analyte_label": "mass recovery",
+      "material_balance": {
+        "head_grade_pct": "0.14",
+        "product_grade_pct": "1.3",
+        "analyte": "TREO"
+      }
+    },
+    {
+      "id": "jupiter-engineering-assumed-overall-recovery",
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "sample_family": "Jupiter development study within Brothers",
+      "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "edition_id": "309a9ca75cbcacd0ae071ecde6fae633411e35f4a4b3d020ce52f012acaa9f20",
+      "receipt_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_RECOVERY",
+      "scope": "Jupiter Scoping Study financial-model recovery assumption",
+      "raw_value": "58",
+      "raw_unit": "%",
+      "value_statistic": "APPROXIMATE",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 18,
+        "quote": "Importantly, the financial model adopts an overall TREO recovery of approximately 58%, compared with the Scoping Study process design basis of approximately 63%. The adopted recovery comprises 69% beneficiation recovery and approximately 84% downstream hydrometallurgical recovery, with both assumptions supported by the range of metallurgical testwork results achieved to date. Critica has"
+      },
+      "context_spans": [],
+      "observation_role": "FORECAST",
+      "process": {
+        "experiment_id": "Jupiter Scoping Study financial-model recovery assumption",
+        "step": "FULL_FLOWSHEET",
+        "feed": "ORE",
+        "product": null,
+        "start": "BENEFICIATION_FEED",
+        "end": "DOWNSTREAM_HYDROMETALLURGICAL_PRODUCT",
+        "scale": "ENGINEERING_DESIGN",
+        "test_date": null,
+        "target_species": [],
+        "sample_representativeness": null,
+        "procedure": null,
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "ORE_FEED_TREO",
+      "material": "WHOLE_ORE",
+      "source_analyte_label": "TREO"
+    },
+    {
+      "id": "dubbo-west-pr-extraction",
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "sample_family": "Dubbo Project",
+      "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+      "edition_id": "bb8c8dd9928d07f24a81f0d80151505b5b4e83aa974911d29d8da09633b380b9",
+      "receipt_sha256": "98be1c3e1c0970473b29f43b60d5b82e4d86959594fee7fd8fcd0c0aa10f47eb",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_EXTRACTION",
+      "scope": "Dubbo Phase B HLC-West Pr bottle-roll test",
+      "raw_value": "84.9",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 6,
+        "quote": "• The optimal recovery for HLC-West appears to correspond to the 12.5 mm crush size @ 50kg/t starting acid concentration. Under this regime, final recoveries of Pr, Nd, Tb and Dy were 84.9%, 79.9%, 44.2% and 37.7% respectively."
+      },
+      "context_spans": [
+        {
+          "page": 6,
+          "quote": "IBRT is used to simulate the leaching mechanism inherent in heap leaching and is the precursor to column leach testwork for additional heap leach parameter establishment. Each bottle is agitated (turned on rollers) for five minutes every hour, such that diffusion is the dominant mechanism for lixiviant transfer into the crushed ore. This is the same mechanism that dominates in heap leaching. Phase B Program bottle roll results The results for each of the heap leach composites HLC-West, HLC-Central and HLC-East are presented below."
+        }
+      ],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Dubbo Phase B HLC-West Pr bottle-roll test",
+        "step": "BOTTLE_ROLL_LEACH",
+        "feed": "CRUSHED_ORE",
+        "product": "LEACH_LIQUOR",
+        "start": "BOTTLE_ROLL_LEACH_FEED",
+        "end": "BOTTLE_ROLL_LEACH_SOLUTION",
+        "scale": "BENCH",
+        "test_date": null,
+        "target_species": [
+          "Pr"
+        ],
+        "sample_representativeness": "ZONE_COMPOSITE",
+        "procedure": "INTERMITTENT_BOTTLE_ROLL_LEACH",
+        "conditions": [
+          [
+            "crush_size",
+            "12.5 mm"
+          ],
+          [
+            "start_acid_dose",
+            "50 kg/t HCl"
+          ]
+        ]
+      },
+      "chemical_species": [
+        "Pr"
+      ],
+      "denominator_basis": "PR_IN_CRUSHED_ORE_FEED",
+      "material": "WHOLE_ORE",
+      "source_analyte_label": "Pr"
+    },
+    {
+      "id": "dubbo-east-pr-extraction",
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "sample_family": "Dubbo Project",
+      "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+      "edition_id": "bb8c8dd9928d07f24a81f0d80151505b5b4e83aa974911d29d8da09633b380b9",
+      "receipt_sha256": "98be1c3e1c0970473b29f43b60d5b82e4d86959594fee7fd8fcd0c0aa10f47eb",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_EXTRACTION",
+      "scope": "Dubbo Phase B HLC-East Pr bottle-roll test",
+      "raw_value": "82.7",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 10,
+        "quote": "• The optimal recovery for HLC-East appears to correspond to the 12.5 mm crush size @ 50kg/t starting acid concentration. Under this regime, final recoveries of Pr, Nd, Tb and Dy were 82.7%, 75.9%, 27.1% and 17.1% respectively."
+      },
+      "context_spans": [
+        {
+          "page": 6,
+          "quote": "IBRT is used to simulate the leaching mechanism inherent in heap leaching and is the precursor to column leach testwork for additional heap leach parameter establishment. Each bottle is agitated (turned on rollers) for five minutes every hour, such that diffusion is the dominant mechanism for lixiviant transfer into the crushed ore. This is the same mechanism that dominates in heap leaching. Phase B Program bottle roll results The results for each of the heap leach composites HLC-West, HLC-Central and HLC-East are presented below."
+        }
+      ],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Dubbo Phase B HLC-East Pr bottle-roll test",
+        "step": "BOTTLE_ROLL_LEACH",
+        "feed": "CRUSHED_ORE",
+        "product": "LEACH_LIQUOR",
+        "start": "BOTTLE_ROLL_LEACH_FEED",
+        "end": "BOTTLE_ROLL_LEACH_SOLUTION",
+        "scale": "BENCH",
+        "test_date": null,
+        "target_species": [
+          "Pr"
+        ],
+        "sample_representativeness": "ZONE_COMPOSITE",
+        "procedure": "INTERMITTENT_BOTTLE_ROLL_LEACH",
+        "conditions": [
+          [
+            "crush_size",
+            "12.5 mm"
+          ],
+          [
+            "start_acid_dose",
+            "50 kg/t HCl"
+          ]
+        ]
+      },
+      "chemical_species": [
+        "Pr"
+      ],
+      "denominator_basis": "PR_IN_CRUSHED_ORE_FEED",
+      "material": "WHOLE_ORE",
+      "source_analyte_label": "Pr"
+    },
+    {
+      "id": "dubbo-drill-core-recovery",
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "sample_family": "Dubbo Project",
+      "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+      "edition_id": "bb8c8dd9928d07f24a81f0d80151505b5b4e83aa974911d29d8da09633b380b9",
+      "receipt_sha256": "98be1c3e1c0970473b29f43b60d5b82e4d86959594fee7fd8fcd0c0aa10f47eb",
+      "purpose": "T1A",
+      "quantity_kind": "DRILL_CORE_RECOVERY",
+      "scope": "Dubbo Phase B metallurgical drill-hole core retrieval",
+      "raw_value": "98.5",
+      "raw_unit": "%",
+      "value_statistic": "LOWER_BOUND",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 3,
+        "quote": "lithological breaks elsewhere. Due to the consistencies in mineralogy, alteration and grade, the core from the trachyte contact to 360 m RL was combined for the testwork composites. Core recovery in the metallurgical drill holes exceeded 98.5%. This figure includes the small losses that occurred while drilling through the overlying sedimentary cover before intersecting the shallow trachyte. Because most of"
+      },
+      "context_spans": [],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Dubbo Phase B metallurgical drill-hole core retrieval",
+        "step": "CORE_RETRIEVAL",
+        "feed": "DRILL_CORE",
+        "product": null,
+        "start": "DRILL_INTERVAL",
+        "end": "RECOVERED_CORE",
+        "scale": null,
+        "test_date": null,
+        "target_species": [],
+        "sample_representativeness": null,
+        "procedure": null,
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": null,
+      "material": null,
+      "source_analyte_label": "drill core recovery"
+    },
+    {
+      "id": "cowalinya-mreo-leach-extraction",
+      "project_id": "AU-4ec1fb08563b42352d29",
+      "sample_family": "Cowalinya Rare Earth Project",
+      "source_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+      "edition_id": "d0453a1509ea3632cc271f958f6b2f1ad5ff2d97efa8b79790277e1e61c3e816",
+      "receipt_sha256": "73a7a1a3e76759faafe6e34fc0652018a8eb0cd0bf661c4f884a5c378ca47b93",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_EXTRACTION",
+      "scope": "Cowalinya preferred-material 45-composite diagnostic leach average",
+      "raw_value": "84.9",
+      "raw_unit": "%",
+      "value_statistic": "CONDITION_SELECTED_MEAN",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 9,
+        "quote": "AVERAGE 1.8 32.3% 84.9% 1486 30.6% 24.8"
+      },
+      "context_spans": [
+        {
+          "page": 9,
+          "quote": "UPGRADE UNDERSIZE (MREO) MREO/TREO (kg HCl/t of EXTRACTED (% of total EXTRACTION leach feed) (ppm TREO) mass) TO LEACH"
+        },
+        {
+          "page": 9,
+          "quote": "MAGNET RARE EARTHS (MREO) = Pr6O11 + Nd2O3 + Tb4O7 + Dy2O3. ACID is 32% hydrochloric acid (HCl). AVERAGE calculated on 45 composites which satisfy both >75% MREO leach extraction and <40 kg of 32% HCl per tonne of leach feed (i.e., SM01, SM02, SM03, SM04, SM06, SM07, SM12, SM13, SM14, SM16, SM22, SM24, SM26, SM34, SM36, SM38, SM40, SM42, SM44, SM45, SM47, SM48, SM49, SM50, SM51, SM62, SM68, SM72, SM73, SM74, SM77, SM78, SM79, SM80, SM82, SM93, SM94, SM96, SM99, SM105, SM106, SM113, SM114, SM120, SM125)."
+        }
+      ],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Cowalinya preferred-material 45-composite diagnostic leach average",
+        "step": "DIAGNOSTIC_LEACH",
+        "feed": "UNDERSIZE_LEACH_FEED",
+        "product": "LEACH_LIQUOR",
+        "start": "UNDERSIZE_LEACH_FEED",
+        "end": "DIAGNOSTIC_LEACH_LIQUOR",
+        "scale": null,
+        "test_date": null,
+        "target_species": [
+          "Pr6O11",
+          "Nd2O3",
+          "Tb4O7",
+          "Dy2O3"
+        ],
+        "sample_representativeness": "CONDITION_SELECTED_45_COMPOSITES",
+        "procedure": null,
+        "conditions": [
+          [
+            "acid_solution",
+            "32% HCl"
+          ]
+        ]
+      },
+      "chemical_species": [
+        "Pr6O11",
+        "Nd2O3",
+        "Tb4O7",
+        "Dy2O3"
+      ],
+      "denominator_basis": "MREO_IN_UNDERSIZE_LEACH_FEED",
+      "material": null,
+      "source_analyte_label": "MREO",
+      "table": "Table 4",
+      "row": "AVERAGE",
+      "column": "MREO EXTRACTION TO LEACH"
+    },
+    {
+      "id": "cowalinya-acid-consumption",
+      "project_id": "AU-4ec1fb08563b42352d29",
+      "sample_family": "Cowalinya Rare Earth Project",
+      "source_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+      "edition_id": "d0453a1509ea3632cc271f958f6b2f1ad5ff2d97efa8b79790277e1e61c3e816",
+      "receipt_sha256": "73a7a1a3e76759faafe6e34fc0652018a8eb0cd0bf661c4f884a5c378ca47b93",
+      "purpose": "T1C",
+      "quantity_kind": "REAGENT_INTENSITY",
+      "scope": "Cowalinya preferred-material 45-composite diagnostic leach average",
+      "raw_value": "24.8",
+      "raw_unit": "kg/t",
+      "value_statistic": "CONDITION_SELECTED_MEAN",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 9,
+        "quote": "AVERAGE 1.8 32.3% 84.9% 1486 30.6% 24.8"
+      },
+      "context_spans": [
+        {
+          "page": 9,
+          "quote": "MAGNET RARE EARTHS (MREO) = Pr6O11 + Nd2O3 + Tb4O7 + Dy2O3. ACID is 32% hydrochloric acid (HCl). AVERAGE calculated on 45 composites which satisfy both >75% MREO leach extraction and <40 kg of 32% HCl per tonne of leach feed (i.e., SM01, SM02, SM03, SM04, SM06, SM07, SM12, SM13, SM14, SM16, SM22, SM24, SM26, SM34, SM36, SM38, SM40, SM42, SM44, SM45, SM47, SM48, SM49, SM50, SM51, SM62, SM68, SM72, SM73, SM74, SM77, SM78, SM79, SM80, SM82, SM93, SM94, SM96, SM99, SM105, SM106, SM113, SM114, SM120, SM125)."
+        }
+      ],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Cowalinya preferred-material 45-composite diagnostic leach average",
+        "step": "DIAGNOSTIC_LEACH",
+        "feed": "UNDERSIZE_LEACH_FEED",
+        "product": "LEACH_LIQUOR",
+        "start": "UNDERSIZE_LEACH_FEED",
+        "end": "DIAGNOSTIC_LEACH_LIQUOR",
+        "scale": null,
+        "test_date": null,
+        "target_species": [
+          "HCl"
+        ],
+        "sample_representativeness": "CONDITION_SELECTED_45_COMPOSITES",
+        "procedure": null,
+        "intensity_denominator_stream": "FEED",
+        "conditions": [
+          [
+            "acid_solution",
+            "32% HCl"
+          ]
+        ]
+      },
+      "chemical_species": [
+        "HCl"
+      ],
+      "denominator_basis": "UNDERSIZE_LEACH_FEED_MASS",
+      "material": null,
+      "source_analyte_label": "32% hydrochloric acid solution",
+      "table": "Table 4",
+      "row": "AVERAGE",
+      "column": "ACID CONSUMPTION (kg HCl/t of leach feed)",
+      "unit_evidence": [
+        {
+          "page": 9,
+          "quote": "TREO TO EARTHS EXTRACTED CONSUMPTION EARTHS UPGRADE UNDERSIZE (MREO) MREO/TREO (kg HCl/t of EXTRACTED (% of total EXTRACTION leach feed)"
+        }
+      ]
+    },
+    {
+      "id": "nolans-design-acid-consumption",
+      "project_id": "AU-1345edd8165c10930e94",
+      "sample_family": "Nolans Project",
+      "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+      "edition_id": "ffe8568a851901e9e683110a0b284172145514463917785c969d7c39708f1bcb",
+      "receipt_sha256": "1fca3dec3a708ddea1a2719a7684bd0632a5b5e640d83f275953c6afc65f0e91",
+      "purpose": "T1C",
+      "quantity_kind": "REAGENT_INTENSITY",
+      "scope": "Nolans DFS concentrate composition equations",
+      "raw_value": "828.7",
+      "raw_unit": "kg/t",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 44,
+        "quote": "H2SO4 Consumption 828.7 kg/t concentrate"
+      },
+      "context_spans": [
+        {
+          "page": 44,
+          "quote": "The key concentrate composition equations have been defined below in Table 14. For personal use only Table 14 Key Concentrate Composition Equations by Material Type"
+        }
+      ],
+      "observation_role": "ENGINEERING_PLAN",
+      "process": {
+        "experiment_id": "Nolans DFS concentrate composition equations",
+        "step": "PAPL_CIRCUIT",
+        "feed": "CONCENTRATE",
+        "product": null,
+        "start": "PAPL_CONCENTRATE_FEED",
+        "end": null,
+        "scale": "ENGINEERING_DESIGN",
+        "test_date": null,
+        "target_species": [
+          "H2SO4"
+        ],
+        "sample_representativeness": null,
+        "procedure": "DFS_PROCESS_DESIGN_EQUATIONS",
+        "intensity_denominator_stream": "FEED",
+        "conditions": []
+      },
+      "chemical_species": [
+        "H2SO4"
+      ],
+      "denominator_basis": "CONCENTRATE_MASS",
+      "material": "CONCENTRATE",
+      "source_analyte_label": "H2SO4",
+      "table": "Table 14",
+      "row": "H2SO4 Consumption",
+      "column": "kg/t concentrate"
+    },
+    {
+      "id": "north-stanmore-beneficiated-feed-mree-extraction",
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "sample_family": "North Stanmore Heavy Rare Earth Project",
+      "source_sha256": "c5561e8d0d8c06d2c2579c3c44ce5906bb62841f5cd3b9e142f13e8160531f84",
+      "edition_id": "42f31779f3a56c69dfad798d86c57dafc921a8c8d72735236c17027602aad84a",
+      "receipt_sha256": "ccdcc6e78859e34ef362a8c41dea7e81d6e32060cf8039a959baed69642a6a47",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_EXTRACTION",
+      "scope": "North Stanmore diagnostic leach of beneficiated composite",
+      "raw_value": "93",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 5,
+        "quote": "The leach test work program involved diagnostic metallurgical testing on a composite blend of the beneficiated samples with a head grade of 1,283 ppm TREO. This was sourced from 23 samples and 13 drillholes from North Stanmore. The initial atmospheric leach test work program was trialled at elevated temperatures and variable leaching conditions compared to previous work. These test conditions yielded high recoveries of Pr (94%), Nd (94%) and heavy rare earth elements Tb (91%), and Dy (92%) with a combined recovery of 93% Magnet Rare Earth Elements (“MREE”)."
+      },
+      "context_spans": [],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "North Stanmore diagnostic leach of beneficiated composite",
+        "step": "ATMOSPHERIC_DIAGNOSTIC_LEACH",
+        "feed": "BENEFICIATED_COMPOSITE",
+        "product": "LEACH_LIQUOR",
+        "start": "BENEFICIATED_TEST_FEED",
+        "end": "DIAGNOSTIC_LEACH_LIQUOR",
+        "scale": null,
+        "test_date": null,
+        "target_species": [
+          "Pr",
+          "Nd",
+          "Tb",
+          "Dy"
+        ],
+        "sample_representativeness": "23_SAMPLES_FROM_13_DRILLHOLES",
+        "procedure": "ATMOSPHERIC_DIAGNOSTIC_LEACH",
+        "conditions": []
+      },
+      "chemical_species": [
+        "Pr",
+        "Nd",
+        "Tb",
+        "Dy"
+      ],
+      "denominator_basis": "MREE_IN_BENEFICIATED_FEED",
+      "material": "CONCENTRATE",
+      "source_analyte_label": "MREE"
+    },
+    {
+      "id": "circle-valley-magnet-extraction-average",
+      "project_id": "AU-785536db5ff12c25350d",
+      "sample_family": "Circle Valley",
+      "source_sha256": "b65a525000fb8d74d87024056f7c001df5ee466eb4cf4a8ccf9d6fd5ae08ce19",
+      "edition_id": "0bbe4e549260d2cfd3e5eb033e33c27cb7720f3fe885dd7b14b78c0984a00b97",
+      "receipt_sha256": "762a1f7eb2aadf3bb3f167d35ed4ef3230004d270c93701de065641812e098a1",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_EXTRACTION",
+      "scope": "Circle Valley ANSTO multiple extraction trials",
+      "raw_value": "82",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED_MEAN",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 1,
+        "quote": " Metallurgical testing by ANSTO using various extraction techniques demonstrates total rare earth extraction up to 82%, averaging 76%.  Extraction of high value magnet rare earths up to 86%, averaging 82%."
+      },
+      "context_spans": [
+        {
+          "page": 2,
+          "quote": "Figure 1: Extraction of rare earths using 10% concentration hydrochloric acid, 6-hour leach time at 50°C."
+        }
+      ],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Circle Valley ANSTO multiple extraction trials",
+        "step": "ACID_LEACH",
+        "feed": null,
+        "product": null,
+        "start": "LEACH_FEED",
+        "end": "LEACH_LIQUOR",
+        "scale": null,
+        "test_date": null,
+        "target_species": [],
+        "sample_representativeness": null,
+        "procedure": null,
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": null,
+      "material": null,
+      "source_analyte_label": "high value magnet rare earths"
+    },
+    {
+      "id": "brockman-scoping-product-purity-forecast",
+      "project_id": "AU-2a3a86a4d971e9f9838d",
+      "sample_family": "Brockman Project",
+      "source_sha256": "5fd9b7d443bb498f9d171bc5173d522f2038cbb0b686e9ff7020e87cc30a9c9e",
+      "edition_id": "879a27756e180eb39c3a268ef8ff3a5a4abc5d29e146e9a0be6176758aefde1f",
+      "receipt_sha256": "e7621a50b7ca38baf2af688cfdedc0c0137ae2c7e6067ef008042a769e35c490",
+      "purpose": "T1B",
+      "quantity_kind": "PRODUCT_PURITY",
+      "scope": "Brockman Scoping Study planned rare earths products",
+      "raw_value": "99",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 7,
+        "quote": "Production of saleable materials – The Scoping Study is based on producing a suite of high purity heavy rare earths and rare metals oxides. The rare earths products are of 99% purity and attractive to customers as they can be utilised with little further processing. They are significantly more refined than a carbonate product and of much higher rare earths content than a rare earths concentrate."
+      },
+      "context_spans": [],
+      "observation_role": "FORECAST",
+      "process": {
+        "experiment_id": "Brockman Scoping Study planned rare earths products",
+        "step": "FULL_FLOWSHEET",
+        "feed": null,
+        "product": "HIGH_PURITY_RARE_EARTH_PRODUCTS",
+        "start": null,
+        "end": null,
+        "scale": "ENGINEERING_DESIGN",
+        "test_date": null,
+        "target_species": [],
+        "sample_representativeness": null,
+        "procedure": null,
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "PRODUCT_MASS",
+      "material": "PRODUCT",
+      "source_analyte_label": "rare earths products"
+    }
+  ],
+  "pairs": [
+    {
+      "left": "yin-drill-composite-treo-recovery",
+      "right": "north-stanmore-beneficiated-feed-mree-extraction"
+    },
+    {
+      "left": "jupiter-pilot-treo-recovery",
+      "right": "jupiter-engineering-assumed-overall-recovery"
+    },
+    {
+      "left": "cowalinya-acid-consumption",
+      "right": "nolans-design-acid-consumption"
+    },
+    {
+      "left": "dubbo-west-pr-extraction",
+      "right": "dubbo-east-pr-extraction"
+    },
+    {
+      "left": "yin-drill-composite-concentrate-grade",
+      "right": "brockman-scoping-product-purity-forecast"
+    }
+  ]
+}

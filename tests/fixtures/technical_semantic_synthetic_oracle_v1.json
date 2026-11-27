@@ -1,0 +1,183 @@
+{
+  "schema": "synthetic-technical-use-oracle-v1",
+  "synthetic": true,
+  "purpose": "T1A",
+  "cases": [
+    {
+      "id": "SYN-ORE-A",
+      "raw_value": "70.0",
+      "annotated": "70.0% of Nd mass present in dry ore was measured in filtered pregnant leach liquor after a 120-minute batch HCl leach at 40°C and 0.5 mol/L. Representative project composite. Bench scale.",
+      "context": {
+        "quantity_kind": "PROCESS_EXTRACTION",
+        "material": "WHOLE_ORE",
+        "denominator_basis": "ND_MASS_IN_DRY_WHOLE_ORE_FEED",
+        "chemical_species": [
+          "Nd"
+        ],
+        "temporal_status": "ELIGIBLE",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "value_state": "PRESENT",
+        "comparison_group": "END_OF_2_HOUR_BATCH_TEST",
+        "unit": "%",
+        "project_id": "SYNTHETIC-PROJECT-A",
+        "scope_id": "SYN-ORE-A",
+        "temporal_decision_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "process": {
+          "test_date": "2026-02-08",
+          "feed": "DRY_WHOLE_ORE_PULP",
+          "product": "PREGNANT_LEACH_LIQUOR",
+          "feed_moisture_basis": "DRY_MASS",
+          "product_moisture_basis": "DISSOLVED_ANALYTE_MASS",
+          "step": "LEACHING",
+          "start": "DRY_ORE_BATCH_CHARGE",
+          "end": "FILTERED_PREGNANT_LEACH_LIQUOR",
+          "scale": "BENCH",
+          "target_species": [
+            "Nd"
+          ],
+          "sample_representativeness": "REPRESENTATIVE_COMPOSITE",
+          "procedure": "BENCH_BATCH_HCL_LEACH_V1",
+          "conditions": [
+            [
+              "TEMP_C",
+              "40"
+            ],
+            [
+              "TIME_MIN",
+              "120"
+            ],
+            [
+              "HCL_MOLAR",
+              "0.5"
+            ]
+          ],
+          "experiment_id": "synthetic-leach-a"
+        }
+      }
+    },
+    {
+      "id": "SYN-ORE-B",
+      "raw_value": "75.0",
+      "annotated": "75.0% of Nd mass present in dry ore was measured in filtered pregnant leach liquor after a 120-minute batch HCl leach at 40°C and 0.5 mol/L. Representative second-project composite. Same bench method.",
+      "context": {
+        "quantity_kind": "PROCESS_EXTRACTION",
+        "material": "WHOLE_ORE",
+        "denominator_basis": "ND_MASS_IN_DRY_WHOLE_ORE_FEED",
+        "chemical_species": [
+          "Nd"
+        ],
+        "temporal_status": "ELIGIBLE",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "value_state": "PRESENT",
+        "comparison_group": "END_OF_2_HOUR_BATCH_TEST",
+        "unit": "%",
+        "project_id": "SYNTHETIC-PROJECT-B",
+        "scope_id": "SYN-ORE-B",
+        "temporal_decision_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "process": {
+          "test_date": "2026-02-08",
+          "feed": "DRY_WHOLE_ORE_PULP",
+          "product": "PREGNANT_LEACH_LIQUOR",
+          "feed_moisture_basis": "DRY_MASS",
+          "product_moisture_basis": "DISSOLVED_ANALYTE_MASS",
+          "step": "LEACHING",
+          "start": "DRY_ORE_BATCH_CHARGE",
+          "end": "FILTERED_PREGNANT_LEACH_LIQUOR",
+          "scale": "BENCH",
+          "target_species": [
+            "Nd"
+          ],
+          "sample_representativeness": "REPRESENTATIVE_COMPOSITE",
+          "procedure": "BENCH_BATCH_HCL_LEACH_V1",
+          "conditions": [
+            [
+              "TEMP_C",
+              "40"
+            ],
+            [
+              "TIME_MIN",
+              "120"
+            ],
+            [
+              "HCL_MOLAR",
+              "0.5"
+            ]
+          ],
+          "experiment_id": "synthetic-leach-b"
+        }
+      }
+    },
+    {
+      "id": "SYN-PRODUCT-B",
+      "raw_value": "75.0",
+      "annotated": "75.0% of the dry-ore Nd mass was measured in final mixed rare-earth oxide product after the leach, purification and calcination. Same bench trial parameters and separate-project composite as B.",
+      "context": {
+        "quantity_kind": "PROCESS_RECOVERY",
+        "material": "WHOLE_ORE",
+        "denominator_basis": "ND_MASS_IN_DRY_WHOLE_ORE_FEED",
+        "chemical_species": [
+          "Nd"
+        ],
+        "temporal_status": "ELIGIBLE",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "value_state": "PRESENT",
+        "comparison_group": "END_OF_2_HOUR_BATCH_TEST",
+        "unit": "%",
+        "project_id": "SYNTHETIC-PROJECT-B",
+        "scope_id": "SYN-PRODUCT-B",
+        "temporal_decision_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "process": {
+          "test_date": "2026-02-08",
+          "feed": "DRY_WHOLE_ORE_PULP",
+          "product": "MIXED_RARE_EARTH_OXIDE",
+          "feed_moisture_basis": "DRY_MASS",
+          "product_moisture_basis": "DRY_MASS",
+          "step": "FULL_CIRCUIT",
+          "start": "DRY_ORE_BATCH_CHARGE",
+          "end": "FINAL_CALCINED_PRODUCT",
+          "scale": "BENCH",
+          "target_species": [
+            "Nd"
+          ],
+          "sample_representativeness": "REPRESENTATIVE_COMPOSITE",
+          "procedure": "BENCH_BATCH_HCL_LEACH_V1",
+          "conditions": [
+            [
+              "TEMP_C",
+              "40"
+            ],
+            [
+              "TIME_MIN",
+              "120"
+            ],
+            [
+              "HCL_MOLAR",
+              "0.5"
+            ]
+          ],
+          "experiment_id": "synthetic-whole-circuit-b"
+        }
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "left": "SYN-ORE-A",
+      "right": "SYN-ORE-B",
+      "expected": "COMPARABLE_DIRECT",
+      "annotation": "Independent projects, same material and elemental denominator, dry ore to liquor, actual scale, procedure and leach conditions."
+    },
+    {
+      "left": "SYN-ORE-A",
+      "right": "SYN-PRODUCT-B",
+      "expected": "NOT_COMPARABLE",
+      "incompatible_dimensions": [
+        "quantity_kind",
+        "process.step",
+        "process.end",
+        "process.product"
+      ],
+      "annotation": "Same percentage unit, but dissolved Nd extraction into liquor and full-circuit Nd recovery into final calcined product are different scientific measures."
+    }
+  ]
+}

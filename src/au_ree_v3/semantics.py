@@ -69,6 +69,7 @@ _COMPARABLE = {SemanticStatus.COMPARABLE_DIRECT, SemanticStatus.COMPARABLE_DERIV
 _DATA_STATES = {"PRESENT", "NOT_DISCLOSED", "NOT_LOCATED", "UNKNOWN", "NOT_APPLICABLE", "CONFLICT"}
 _ROLE_STATES = {"HISTORICAL_MEASUREMENT", "HISTORICAL_EVENT", "FORECAST", "ENGINEERING_PLAN"}
 _TEMPORAL_STATES = {"ELIGIBLE", "INELIGIBLE", "CANDIDATE", "CONFLICT"}
+_PROCESS_MASS_BASES = {"DRY_MASS", "WET_MASS", "AS_RECEIVED_MASS", "DISSOLVED_ANALYTE_MASS"}
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -110,7 +111,9 @@ class ProcessContext:
     procedure: str | None = None
     conditions: tuple[tuple[str, str], ...] = ()
     uncertainty_or_balance: str | None = None
+    feed_moisture_basis: str | None = None
     product_moisture_basis: str | None = None
+    intensity_denominator_stream: str | None = None
 
     def __post_init__(self):
         object.__setattr__(self, "target_species", _texts(self.target_species, "target species"))
@@ -247,6 +250,19 @@ class SemanticAssessment(Record):
     reason_codes: tuple[str, ...] = ()
     assessment_id: str | None = field(default=None)
 
+    def _serialized_fields(self) -> dict:
+        data = asdict(self)
+        process = data["normalized_context"]["process"]
+        if process is not None:
+            # Preserve the identity of v1 assessments stored before these optional fields.
+            for name in ("feed_moisture_basis", "intensity_denominator_stream"):
+                if process[name] is None:
+                    del process[name]
+        return data
+
+    def to_dict(self) -> dict:
+        return json.loads(canonical_json({"contract_version": self.contract_version, **self._serialized_fields()}))
+
     def __post_init__(self):
         if isinstance(self.normalized_context, dict):
             object.__setattr__(self, "normalized_context", SemanticContext(**self.normalized_context))
@@ -269,7 +285,7 @@ class SemanticAssessment(Record):
         if len(set(encoded)) != len(encoded):
             raise ContractViolation("semantic assessment repeats a transform")
         object.__setattr__(self, "transforms", tuple(json.loads(item) for item in sorted(encoded)))
-        data = asdict(self)
+        data = self._serialized_fields()
         supplied = data.pop("assessment_id")
         identity = _fingerprint({"schema": ASSESSMENT_SCHEMA, **data})
         if supplied is not None and supplied != identity:
@@ -331,8 +347,20 @@ def _process_context(context: SemanticContext, purpose: str) -> tuple[list[str],
         missing.append("process.conditions")
     if "TREO" in context.chemical_species and not context.treo_members:
         missing.append("treo_members")
-    if purpose == "T1B" and process.product_moisture_basis is None:
-        missing.append("process.product_moisture_basis")
+    mass_basis_fields = ()
+    if purpose == "T1A":
+        mass_basis_fields = ("feed_moisture_basis", "product_moisture_basis")
+    elif purpose == "T1B":
+        mass_basis_fields = ("product_moisture_basis",)
+    elif purpose == "T1C":
+        if process.intensity_denominator_stream in {"FEED", "PRODUCT"}:
+            mass_basis_fields = (process.intensity_denominator_stream.lower() + "_moisture_basis",)
+        else:
+            missing.append("process.intensity_denominator_stream")
+    for name in mass_basis_fields:
+        basis = getattr(process, name)
+        if not isinstance(basis, str) or basis not in _PROCESS_MASS_BASES:
+            missing.append(f"process.{name}")
     if purpose == "T1C" and context.quantity_kind == "COST_INTENSITY":
         missing.extend(_missing(context, ("cost_currency", "cost_year", "cost_price_basis")))
     incompatible = ["process.target_species"] if process.target_species and context.chemical_species and (
@@ -444,7 +472,8 @@ def compare_semantic_use(left: SemanticAssessment, right: SemanticAssessment) ->
     if first.process is not None and second.process is not None:
         process = (
             "step", "start", "end", "scale", "target_species", "feed", "product",
-            "product_moisture_basis", "conditions", "procedure", "sample_representativeness",
+            "feed_moisture_basis", "product_moisture_basis", "intensity_denominator_stream",
+            "conditions", "procedure", "sample_representativeness",
         )
         incompatible.update("process." + name for name in _differences(first.process, second.process, process))
     if first.quantity_kind == second.quantity_kind == "COST_INTENSITY":

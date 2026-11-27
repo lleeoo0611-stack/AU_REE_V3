@@ -102,6 +102,10 @@ def main(argv: list[str] | None = None) -> int:
     for argument in ("profile", "baseline", "sources", "assets", "out"):
         semantic.add_argument(f"--{argument}", type=Path, required=True)
     semantic.add_argument("--reread-bindings", type=Path)
+    technical = research_commands.add_parser("technical-pilot", help="Compare source-bound shadow process measurements")
+    for argument in ("profile", "sources", "assets", "bindings", "out"):
+        technical.add_argument(f"--{argument}", type=Path, required=True)
+    technical.add_argument("--oracle", type=Path)
     archive = research_commands.add_parser("archive", help="Archive a fresh research candidate by exact bytes")
     for argument in ("profile", "bindings", "sources", "build", "store", "out"):
         archive.add_argument(f"--{argument}", type=Path, required=True)
@@ -224,6 +228,10 @@ def _run_research(args) -> dict:
 
         return run_resource_ablation(args.profile, args.baseline, args.sources, args.assets, args.out,
                                      reread_bindings=args.reread_bindings)
+    if args.operation == "technical-pilot":
+        from .technical_processing import run_technical_pilot
+
+        return run_technical_pilot(args.profile, args.sources, args.assets, args.bindings, args.out, oracle=args.oracle)
     if args.operation == "compare":
         from .research_delta import compare_research_builds
         from .sources import ContentStore

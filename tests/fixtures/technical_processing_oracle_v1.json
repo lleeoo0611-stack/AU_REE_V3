@@ -1,0 +1,417 @@
+{
+  "schema": "technical-processing-oracle-v1",
+  "evidence_basis": "Manual original-PDF transcription and process context review, with predeclared cross-family comparison counterexamples",
+  "scope": "Reviewed cases help verify replay and do not estimate accuracy over the document corpus.",
+  "observations": [
+    {
+      "case_id": "yin-drill-composite-treo-recovery",
+      "expected_source": {
+        "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "physical_page": 13,
+        "source_family": "Mangaroon Project — Yin resource scope"
+      },
+      "reference_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-8f3fe174a998d20ee4cf",
+        "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "page": 13,
+        "raw_value": "85.9",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_RECOVERY",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Yin May 2023 drill-composite flotation",
+        "process_step": "FLOTATION",
+        "process_end": "FLOTATION_CONCENTRATE",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "yin-drill-composite-concentrate-grade",
+      "expected_source": {
+        "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "physical_page": 13,
+        "source_family": "Mangaroon Project — Yin resource scope"
+      },
+      "reference_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-8f3fe174a998d20ee4cf",
+        "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "page": 13,
+        "raw_value": "31.22",
+        "raw_unit": "%",
+        "purpose": "T1B",
+        "quantity_kind": "PRODUCT_GRADE",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Yin May 2023 drill-composite flotation",
+        "process_step": "FLOTATION",
+        "process_end": "FLOTATION_CONCENTRATE",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "yin-surface-composite-sample-mass",
+      "expected_source": {
+        "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "physical_page": 13,
+        "source_family": "Mangaroon Project — Yin resource scope"
+      },
+      "reference_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-8f3fe174a998d20ee4cf",
+        "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "page": 13,
+        "raw_value": "30",
+        "raw_unit": "kg",
+        "purpose": "T1D",
+        "quantity_kind": "EVIDENCE_APPLICABILITY",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Yin July 2021 surface bulk sample",
+        "process_step": "FLOTATION",
+        "process_end": "FLOTATION_CONCENTRATE",
+        "process_scale": null,
+        "applicability": {
+          "indicator": "SAMPLE_MASS",
+          "sample_representativeness": "ONE_30_KG_BULK_SURFACE_SAMPLE",
+          "scope": "Yin July 2021 surface bulk sample",
+          "target_kind": "PROCESS_RECOVERY",
+          "target_value": "92.8",
+          "target_unit": "%",
+          "target_page": 13,
+          "target_quote": "sample from Yin produced a high-grade monazite concentrate with 92.8% recovery into 3.55% of the original mass.",
+          "test_date": "2021-07",
+          "classification": "INSUFFICIENT_CONTEXT",
+          "same_source_anchor": true
+        }
+      }
+    },
+    {
+      "case_id": "jupiter-pilot-treo-recovery",
+      "expected_source": {
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "physical_page": 32,
+        "source_family": "Jupiter development study within Brothers"
+      },
+      "reference_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "page": 32,
+        "raw_value": "71",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_RECOVERY",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Jupiter GAVAQ pilot beneficiation",
+        "process_step": "BENEFICIATION",
+        "process_end": "BENEFICIATION_CONCENTRATE",
+        "process_scale": "PILOT"
+      }
+    },
+    {
+      "case_id": "jupiter-open-circuit-mass-yield",
+      "expected_source": {
+        "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+        "physical_page": 18,
+        "source_family": "Jupiter development study within Brothers"
+      },
+      "reference_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+        "page": 18,
+        "raw_value": "51",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_YIELD",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Jupiter initial GAVAQ 51 kg open-circuit flotation",
+        "process_step": "FLOTATION",
+        "process_end": "FLOTATION_CONCENTRATE",
+        "process_scale": "BENCH"
+      }
+    },
+    {
+      "case_id": "jupiter-engineering-assumed-overall-recovery",
+      "expected_source": {
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "physical_page": 18,
+        "source_family": "Jupiter development study within Brothers"
+      },
+      "reference_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "page": 18,
+        "raw_value": "58",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_RECOVERY",
+        "observation_role": "FORECAST",
+        "source_scope": "Jupiter Scoping Study financial-model recovery assumption",
+        "process_step": "FULL_FLOWSHEET",
+        "process_end": "DOWNSTREAM_HYDROMETALLURGICAL_PRODUCT",
+        "process_scale": "ENGINEERING_DESIGN"
+      }
+    },
+    {
+      "case_id": "dubbo-west-pr-extraction",
+      "expected_source": {
+        "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+        "physical_page": 6,
+        "source_family": "Dubbo Project"
+      },
+      "reference_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-2cfeb25aefee0c4f95fb",
+        "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+        "page": 6,
+        "raw_value": "84.9",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_EXTRACTION",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Dubbo Phase B HLC-West Pr bottle-roll test",
+        "process_step": "BOTTLE_ROLL_LEACH",
+        "process_end": "BOTTLE_ROLL_LEACH_SOLUTION",
+        "process_scale": "BENCH"
+      }
+    },
+    {
+      "case_id": "dubbo-east-pr-extraction",
+      "expected_source": {
+        "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+        "physical_page": 10,
+        "source_family": "Dubbo Project"
+      },
+      "reference_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-2cfeb25aefee0c4f95fb",
+        "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+        "page": 10,
+        "raw_value": "82.7",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_EXTRACTION",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Dubbo Phase B HLC-East Pr bottle-roll test",
+        "process_step": "BOTTLE_ROLL_LEACH",
+        "process_end": "BOTTLE_ROLL_LEACH_SOLUTION",
+        "process_scale": "BENCH"
+      }
+    },
+    {
+      "case_id": "dubbo-drill-core-recovery",
+      "expected_source": {
+        "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+        "physical_page": 3,
+        "source_family": "Dubbo Project"
+      },
+      "reference_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-2cfeb25aefee0c4f95fb",
+        "source_sha256": "4aeb63ac0341402bfc14f7b8021533a293790088865324cdc4e513f8f1554ee9",
+        "page": 3,
+        "raw_value": "98.5",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "DRILL_CORE_RECOVERY",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Dubbo Phase B metallurgical drill-hole core retrieval",
+        "process_step": "CORE_RETRIEVAL",
+        "process_end": "RECOVERED_CORE",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "cowalinya-mreo-leach-extraction",
+      "expected_source": {
+        "source_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+        "physical_page": 9,
+        "source_family": "Cowalinya Rare Earth Project"
+      },
+      "reference_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-4ec1fb08563b42352d29",
+        "source_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+        "page": 9,
+        "raw_value": "84.9",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_EXTRACTION",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Cowalinya preferred-material 45-composite diagnostic leach average",
+        "process_step": "DIAGNOSTIC_LEACH",
+        "process_end": "DIAGNOSTIC_LEACH_LIQUOR",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "cowalinya-acid-consumption",
+      "expected_source": {
+        "source_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+        "physical_page": 9,
+        "source_family": "Cowalinya Rare Earth Project"
+      },
+      "reference_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-4ec1fb08563b42352d29",
+        "source_sha256": "7019288dc068631c80101e6e89c15249f271fbfb5a946eb294bcfb94c7fe1513",
+        "page": 9,
+        "raw_value": "24.8",
+        "raw_unit": "kg/t",
+        "purpose": "T1C",
+        "quantity_kind": "REAGENT_INTENSITY",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Cowalinya preferred-material 45-composite diagnostic leach average",
+        "process_step": "DIAGNOSTIC_LEACH",
+        "process_end": "DIAGNOSTIC_LEACH_LIQUOR",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "nolans-design-acid-consumption",
+      "expected_source": {
+        "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+        "physical_page": 44,
+        "source_family": "Nolans Project"
+      },
+      "reference_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-1345edd8165c10930e94",
+        "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+        "page": 44,
+        "raw_value": "828.7",
+        "raw_unit": "kg/t",
+        "purpose": "T1C",
+        "quantity_kind": "REAGENT_INTENSITY",
+        "observation_role": "ENGINEERING_PLAN",
+        "source_scope": "Nolans DFS concentrate composition equations",
+        "process_step": "PAPL_CIRCUIT",
+        "process_end": null,
+        "process_scale": "ENGINEERING_DESIGN"
+      }
+    },
+    {
+      "case_id": "north-stanmore-beneficiated-feed-mree-extraction",
+      "expected_source": {
+        "source_sha256": "c5561e8d0d8c06d2c2579c3c44ce5906bb62841f5cd3b9e142f13e8160531f84",
+        "physical_page": 5,
+        "source_family": "North Stanmore Heavy Rare Earth Project"
+      },
+      "reference_sha256": "c5561e8d0d8c06d2c2579c3c44ce5906bb62841f5cd3b9e142f13e8160531f84",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-216d0983f6892f9b58f9",
+        "source_sha256": "c5561e8d0d8c06d2c2579c3c44ce5906bb62841f5cd3b9e142f13e8160531f84",
+        "page": 5,
+        "raw_value": "93",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_EXTRACTION",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "North Stanmore diagnostic leach of beneficiated composite",
+        "process_step": "ATMOSPHERIC_DIAGNOSTIC_LEACH",
+        "process_end": "DIAGNOSTIC_LEACH_LIQUOR",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "circle-valley-magnet-extraction-average",
+      "expected_source": {
+        "source_sha256": "b65a525000fb8d74d87024056f7c001df5ee466eb4cf4a8ccf9d6fd5ae08ce19",
+        "physical_page": 1,
+        "source_family": "Circle Valley"
+      },
+      "reference_sha256": "b65a525000fb8d74d87024056f7c001df5ee466eb4cf4a8ccf9d6fd5ae08ce19",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-785536db5ff12c25350d",
+        "source_sha256": "b65a525000fb8d74d87024056f7c001df5ee466eb4cf4a8ccf9d6fd5ae08ce19",
+        "page": 1,
+        "raw_value": "82",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_EXTRACTION",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Circle Valley ANSTO multiple extraction trials",
+        "process_step": "ACID_LEACH",
+        "process_end": "LEACH_LIQUOR",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "brockman-scoping-product-purity-forecast",
+      "expected_source": {
+        "source_sha256": "5fd9b7d443bb498f9d171bc5173d522f2038cbb0b686e9ff7020e87cc30a9c9e",
+        "physical_page": 7,
+        "source_family": "Brockman Project"
+      },
+      "reference_sha256": "5fd9b7d443bb498f9d171bc5173d522f2038cbb0b686e9ff7020e87cc30a9c9e",
+      "evidence_tier": "REVIEWED_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-2a3a86a4d971e9f9838d",
+        "source_sha256": "5fd9b7d443bb498f9d171bc5173d522f2038cbb0b686e9ff7020e87cc30a9c9e",
+        "page": 7,
+        "raw_value": "99",
+        "raw_unit": "%",
+        "purpose": "T1B",
+        "quantity_kind": "PRODUCT_PURITY",
+        "observation_role": "FORECAST",
+        "source_scope": "Brockman Scoping Study planned rare earths products",
+        "process_step": "FULL_FLOWSHEET",
+        "process_end": null,
+        "process_scale": "ENGINEERING_DESIGN"
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "left": "yin-drill-composite-treo-recovery",
+      "right": "north-stanmore-beneficiated-feed-mree-extraction",
+      "expected": "NOT_COMPARABLE",
+      "documentary_reason": "Yin measures TREO retained in floated concentrate. North Stanmore measures MREE leach extraction from already beneficiated feed."
+    },
+    {
+      "left": "jupiter-pilot-treo-recovery",
+      "right": "jupiter-engineering-assumed-overall-recovery",
+      "expected": "NOT_COMPARABLE",
+      "documentary_reason": "Measured pilot beneficiation and plant model overall recovery have distinct roles and final endpoints."
+    },
+    {
+      "left": "cowalinya-acid-consumption",
+      "right": "nolans-design-acid-consumption",
+      "expected": "NOT_COMPARABLE",
+      "documentary_reason": "32% HCl solution per tonne of screened leach feed and H2SO4 per tonne of concentrate measure different reagent masses and denominators."
+    },
+    {
+      "left": "dubbo-west-pr-extraction",
+      "right": "dubbo-east-pr-extraction",
+      "expected": "NOT_COMPARABLE",
+      "documentary_reason": "Same project and test method, Pr, 12.5 mm and 50 kg/t conditions. Separate within-project zones, not independent project alternatives."
+    },
+    {
+      "left": "yin-drill-composite-concentrate-grade",
+      "right": "brockman-scoping-product-purity-forecast",
+      "expected": "NOT_COMPARABLE",
+      "documentary_reason": "Actual concentrate grade and projected purity of potential saleable products use different product types and roles."
+    }
+  ],
+  "holdout": {
+    "development_use": "REVIEWED_REGRESSION_ONLY",
+    "status": "UNMEASURED",
+    "reason": "These exact issuer reports were used to develop reviewed bindings. No blinded technical process labels."
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "technical-processing-oracle-v1",
+  "evidence_basis": "Independent second-reviewer physical PDF transcription against the locked 144-source CAS",
+  "scope": "One actual test and one model claim from independent issuer/Project families. Two anchored observations and one independently negative T1A comparison. No positive-pair recall denominator.",
+  "observations": [
+    {
+      "case_id": "holdout-wolverine-variability-treo-recovery",
+      "expected_source": {
+        "source_sha256": "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075",
+        "physical_page": 175,
+        "source_family": "Northern Minerals Browns Range 2025 DFS"
+      },
+      "reference_sha256": "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075",
+      "evidence_tier": "INDEPENDENT_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-9bd8e5ed8408cd84d876",
+        "source_sha256": "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075",
+        "page": 175,
+        "raw_value": "84",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_RECOVERY",
+        "observation_role": "HISTORICAL_MEASUREMENT",
+        "source_scope": "Wolverine 2024 variability tests",
+        "process_step": "BENEFICIATION",
+        "process_end": "FLOTATION_CONCENTRATE",
+        "process_scale": null
+      }
+    },
+    {
+      "case_id": "holdout-goschen-central-scoping-overall-treo",
+      "expected_source": {
+        "source_sha256": "f1ce45037adea362e82497f6d1f8c73dbaa1dca6191873a92355b37ea28693a5",
+        "physical_page": 4,
+        "source_family": "ACDC Metals Goschen Central 2025 Scoping Study"
+      },
+      "reference_sha256": "f1ce45037adea362e82497f6d1f8c73dbaa1dca6191873a92355b37ea28693a5",
+      "evidence_tier": "INDEPENDENT_NATIVE_SOURCE_TRANSCRIPTION",
+      "values": {
+        "project_id": "AU-447261eed0e81eae88bf",
+        "source_sha256": "f1ce45037adea362e82497f6d1f8c73dbaa1dca6191873a92355b37ea28693a5",
+        "page": 4,
+        "raw_value": "85",
+        "raw_unit": "%",
+        "purpose": "T1A",
+        "quantity_kind": "PROCESS_RECOVERY",
+        "observation_role": "ENGINEERING_PLAN",
+        "source_scope": "Goschen Central phased scoping study base case",
+        "process_step": null,
+        "process_end": null,
+        "process_scale": null
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "left": "holdout-wolverine-variability-treo-recovery",
+      "right": "holdout-goschen-central-scoping-overall-treo",
+      "expected": "NOT_COMPARABLE",
+      "documentary_reason": "Wolverine is measured variability beneficiation from ore composites into flotation concentrate. Goschen Central is an engineering scoping model reporting overall TREO recovery across a phased design with an unanchored endpoint and denominator. Measured recovery and an engineering forecast cannot be ranked as one T1A use."
+    }
+  ],
+  "holdout": {
+    "development_use": "NOT_USED_IN_PILOT_RULE_DEVELOPMENT",
+    "status": "INDEPENDENT_REVIEWED_BOUND_CASES",
+    "observation_level": "Two manually transcribed positives. No unbound/source-negative case, so no sample corpus accuracy estimate.",
+    "compatibility_level": "One predeclared negative pair. No positive compatibility denominator.",
+    "evidence_limits": {
+      "holdout-wolverine-variability-treo-recovery": "This is the 2024 test-work statement on physical page 175. The separate approximate 84% plant design statement on the executive processing page was excluded. Feed is ore composites and endpoint is beneficiation flotation concentrate. Scale of this particular series and canonical TREO membership are not reported in the bound evidence.",
+      "holdout-goschen-central-scoping-overall-treo": "Scoping study model takeaway, with separate phase 1 concentrate and phase 2 MREO outputs. The 85% bullet does not assign a specific physical feed, denominator or product endpoint. It is not a measured test recovery and must not inherit the neighbouring production assumptions."
+    }
+  }
+}

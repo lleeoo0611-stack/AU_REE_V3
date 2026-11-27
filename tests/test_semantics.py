@@ -30,6 +30,7 @@ TECHNICAL = SemanticContext(
     process=ProcessContext(
         experiment_id="pilot-1", test_date="2025-06-01", feed="WHOLE_ORE", product="MIXED_REO",
         step="FULL_FLOWSHEET", start="ORE_FEED", end="MIXED_REO_PRODUCT", scale="PILOT",
+        feed_moisture_basis="DRY_MASS", product_moisture_basis="DRY_MASS",
         target_species=("Nd2O3", "Pr6O11"), procedure="declared standardized protocol",
         conditions=(("acid", "180 g/L"), ("temperature", "85 C")), sample_representativeness="replicate representative blend",
     ),

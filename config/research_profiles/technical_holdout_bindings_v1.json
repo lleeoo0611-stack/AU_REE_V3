@@ -1,0 +1,123 @@
+{
+  "schema": "technical-evidence-bindings-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "profile_id": "au-ree-2026-11-28",
+  "research_cutoff": "2026-11-28",
+  "expected_source_count": 144,
+  "bindings": [
+    {
+      "id": "holdout-wolverine-variability-treo-recovery",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "sample_family": "Northern Minerals Browns Range 2025 DFS",
+      "source_sha256": "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075",
+      "edition_id": "d34039d126b7a052b1b5c5599a501f3afbc7cd83ac472e688fe96c1fe40ed038",
+      "receipt_sha256": "baa27bfe1381b1dcbe18e40967e0bd2b942b96cda10bd27d5dda38613c2ea5fd",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_RECOVERY",
+      "scope": "Wolverine 2024 variability tests",
+      "raw_value": "84",
+      "raw_unit": "%",
+      "value_statistic": "REPORTED",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 175,
+        "quote": "work demonstrate an overall TREO recovery of 84%."
+      },
+      "context_spans": [
+        {
+          "page": 175,
+          "quote": "variability test work program for the Wolverine deposit"
+        },
+        {
+          "page": 175,
+          "quote": "was completed in 2024 with 27 composites selected"
+        },
+        {
+          "page": 175,
+          "quote": "The suite of assays on the flotation concentrate"
+        },
+        {
+          "page": 71,
+          "quote": "drill core samples f rom the Wolverine deposit"
+        },
+        {
+          "page": 74,
+          "quote": "separation and flotation to upgrade the plant feed"
+        }
+      ],
+      "observation_role": "HISTORICAL_MEASUREMENT",
+      "process": {
+        "experiment_id": "Wolverine 2024 variability tests",
+        "step": "BENEFICIATION",
+        "feed": "WOLVERINE_DRILL_CORE_COMPOSITES",
+        "product": "XENOTIME_MINERAL_CONCENTRATE",
+        "start": "BENEFICIATION_ORE_FEED",
+        "end": "FLOTATION_CONCENTRATE",
+        "scale": null,
+        "test_date": "2024",
+        "target_species": [],
+        "sample_representativeness": "TWENTY_SEVEN_SPATIALLY_AND_LITHOLOGICALLY_DISTRIBUTED_COMPOSITES",
+        "procedure": "VARIABILITY_TEST_WORK",
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": "FEED_TREO",
+      "material": "WHOLE_ORE",
+      "source_analyte_label": "TREO"
+    },
+    {
+      "id": "holdout-goschen-central-scoping-overall-treo",
+      "project_id": "AU-447261eed0e81eae88bf",
+      "sample_family": "ACDC Metals Goschen Central 2025 Scoping Study",
+      "source_sha256": "f1ce45037adea362e82497f6d1f8c73dbaa1dca6191873a92355b37ea28693a5",
+      "edition_id": "3ffde2a3849cdf42e3ffac0a3680bc6768caf83ef72fa0a410b261161bd4bffa",
+      "receipt_sha256": "567af8c7a873e3e37691662ff6df9e690e777dfe4e1315b4640659ed6b9359c2",
+      "purpose": "T1A",
+      "quantity_kind": "PROCESS_RECOVERY",
+      "scope": "Goschen Central phased scoping study base case",
+      "raw_value": "85",
+      "raw_unit": "%",
+      "value_statistic": "BASE_CASE",
+      "value_state": "PRESENT",
+      "source_span": {
+        "page": 4,
+        "quote": "Overall TREO recovery of 85%."
+      },
+      "context_spans": [
+        {
+          "page": 4,
+          "quote": "Base case assumes that phase 2 integration commences in year 3 of operation."
+        },
+        {
+          "page": 4,
+          "quote": "3,225 dmt/a of MREO (phase 2)"
+        }
+      ],
+      "observation_role": "ENGINEERING_PLAN",
+      "process": {
+        "experiment_id": "Goschen Central phased scoping study base case",
+        "step": null,
+        "feed": null,
+        "product": null,
+        "start": null,
+        "end": null,
+        "scale": null,
+        "test_date": null,
+        "target_species": [],
+        "sample_representativeness": null,
+        "procedure": "SCOPING_STUDY_BASE_CASE",
+        "conditions": []
+      },
+      "chemical_species": [],
+      "denominator_basis": null,
+      "material": null,
+      "source_analyte_label": "TREO"
+    }
+  ],
+  "pairs": [
+    {
+      "left": "holdout-wolverine-variability-treo-recovery",
+      "right": "holdout-goschen-central-scoping-overall-treo"
+    }
+  ]
+}
