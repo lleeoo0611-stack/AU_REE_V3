@@ -22,6 +22,9 @@ from .research_inputs import CENSUS_RESOURCE_RULE, CENSUS_RESOURCE_USE, Research
 SCHEMA = "census-science-views-v1"
 POLICY_VERSION = "census-composition-shadow-v1"
 RESOURCE_PRESENCE_COLUMN = "有TREO資源估計"
+MAGNET_DISCLOSURE_COLUMN = "四項磁性元素皆公布"
+MAGNET_DISCLOSURE_REASON = "FOUR_MAGNET_OXIDES_IN_SCOPED_ORIGINAL"
+MAGNET_DISCLOSURE_ROLE = "SCOPED_MAGNET_OXIDE_PUBLICATION"
 MASS_FORMULA = "ore_mass_Mt × concentration_ppm × 0.001"
 COMPONENT_FACTOR = Decimal("0.001")
 MAGNET = tuple(sorted(OXIDE_VARIABLES))
@@ -223,6 +226,35 @@ def _reviewed_precision_conflict(item, grade, species):
     return None
 
 
+def _magnet_disclosure(by_variable, grade):
+    """Verify presence of four native measurements for disclosure metadata."""
+    if not set(MAGNET).issubset(resource_semantic_context(grade).treo_members):
+        return None
+    inputs, precision_holds = [], {}
+    for species in MAGNET:
+        rows = by_variable.get(OXIDE_VARIABLES[species], ())
+        if len(rows) != 1:
+            return None
+        item = rows[0]
+        if _eligible_component(item, species, grade) or _amount(item, "ppm")[0] is None:
+            return None
+        inputs.append(_lineage(item))
+        if review := _reviewed_precision_conflict(item, grade, species):
+            precision_holds[species] = review
+    return {
+        "value": "是", "release_id": grade.accepted.release_id, "display_only": True,
+        "evidence_type": MAGNET_DISCLOSURE_ROLE,
+        "statement": {**scientific_context(grade), "scope": grade.scope.name},
+        "inputs": inputs, "numerical_precision_holds": precision_holds,
+        "precision_review": "; ".join(
+            f"{species}: " + " / ".join(
+                f"{reading['token']} {reading['unit']} (p. {reading['physical_page']}, {reading['table']})"
+                for reading in (review["selected"], review["companion"])
+            ) for species, review in precision_holds.items()
+        ),
+    }
+
+
 def _reported_group(grade, entries, matches, grade_numbers, *, computed):
     if len(entries) != 1:
         return None, "AMBIGUOUS_REPORTED_GROUP_SELECTION", None
@@ -379,7 +411,7 @@ def census_science_views(store, release: ResearchRelease, columns: tuple[str, ..
 
 
 def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRelease,
-                          columns: tuple[str, ...]) -> dict:
+                          columns: tuple[str, ...], *, member_disclosure: bool = False) -> dict:
     """Use the immutable selections to describe statements and derive shadow evidence."""
     formal = release.release_mode == "FORMAL" and release.validation_status == "PASS"
     grouped = defaultdict(lambda: defaultdict(list))
@@ -391,6 +423,7 @@ def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRe
     comparisons = evaluate_comparability(sorted(grouped), decision_inputs, policy=policy)
     statements, projections, derived, rejected = [], {}, [], []
     scoped_reports = {}
+    magnet_disclosures = {}
     for project_id in sorted(grouped):
         values = grouped[project_id]
         for group in sorted({resource_context(item) for rows in values.values() for item in rows}, key=str):
@@ -418,6 +451,8 @@ def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRe
         projections[project_id] = {"value": "是", "release_id": release.release_id,
                                    "statement": {**scientific_context(grade), "scope": grade.scope.name},
                                    "inputs": [_lineage(item) for item in resource.inputs]}
+        if member_disclosure and (disclosure := _magnet_disclosure(values, grade)):
+            magnet_disclosures[project_id] = disclosure
         if any(variable not in RESOURCE_VARIABLES for variable in values):
             results, failures = _derive_components(values, resource, comparisons[project_id]["S1"], columns,
                                                    policy["s1_admission"])
@@ -444,32 +479,43 @@ def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRe
     }
     if scoped_reports:
         view["scoped_reported_resources"] = scoped_reports
+    if member_disclosure:
+        view["verified_magnet_oxide_disclosure"] = magnet_disclosures
     return json.loads(canonical_json(view))
+
+
+def _disclosure_cell(evidence, anchor, reason):
+    statement = evidence["statement"]
+    trace = anchor["temporal_decision"]
+    return {
+        "value": evidence["value"], "value_state": "PRESENT", "reason": reason,
+        "evidence_state": "DESCRIPTIVE_ONLY", "value_origin": "EVIDENCE_REFERENCE",
+        "release_id": evidence["release_id"], "source_key": anchor["source_key"],
+        "source_sha256": anchor["source_sha256"], "source_url": anchor["source_url"],
+        "scope_id": statement["scope_id"], "scope": statement["scope"], "statement_id": statement["statement_id"],
+        "effective_date": statement["effective_date"], "category": statement["category"],
+        "physical_page": anchor["physical_page"], "source_table": anchor["table"], "source_row": anchor["row"],
+        "source_column": anchor["column"], "anchor_id": anchor["anchor_id"], "locator": anchor["locator"],
+        "temporal_policy_version": trace["policy_version"], "temporal_status": trace["status"],
+        "temporal_decision_id": trace["decision_id"],
+        "temporal_evidence_ids": canonical_json(trace["matching_evidence_ids"]),
+        "input_observation_ids": canonical_json([item["observation_id"] for item in evidence["inputs"]]),
+        "metadata_evidence": canonical_json(evidence),
+    }
 
 
 def resource_presence_cells(science_views: dict) -> dict:
     """Project affirmative resource evidence with all three selected inputs."""
-    rows = {}
-    for project_id, evidence in science_views["verified_resource_presence"].items():
-        ore, grade, contained = evidence["inputs"]
-        statement = evidence["statement"]
-        trace = grade["temporal_decision"]
-        rows[project_id, RESOURCE_PRESENCE_COLUMN] = {
-            "value": evidence["value"], "value_state": "PRESENT", "reason": "VERIFIED_TREO_RESOURCE_STATEMENT",
-            "evidence_state": "DESCRIPTIVE_ONLY", "value_origin": "EVIDENCE_REFERENCE",
-            "release_id": evidence["release_id"], "source_key": grade["source_key"],
-            "source_sha256": grade["source_sha256"], "source_url": grade["source_url"],
-            "scope_id": statement["scope_id"], "scope": statement["scope"], "statement_id": statement["statement_id"],
-            "effective_date": statement["effective_date"], "category": statement["category"],
-            "physical_page": grade["physical_page"], "source_table": grade["table"], "source_row": grade["row"],
-            "source_column": grade["column"], "anchor_id": grade["anchor_id"], "locator": grade["locator"],
-            "temporal_policy_version": trace["policy_version"], "temporal_status": trace["status"],
-            "temporal_decision_id": trace["decision_id"],
-            "temporal_evidence_ids": canonical_json(trace["matching_evidence_ids"]),
-            "input_observation_ids": canonical_json([item["observation_id"] for item in (ore, grade, contained)]),
-            "metadata_evidence": canonical_json(evidence),
-        }
-    return rows
+    return {(project, RESOURCE_PRESENCE_COLUMN): _disclosure_cell(
+        evidence, evidence["inputs"][1], "VERIFIED_TREO_RESOURCE_STATEMENT",
+    ) for project, evidence in science_views["verified_resource_presence"].items()}
+
+
+def magnet_disclosure_cells(science_views: dict) -> dict:
+    """Project native publication presence under the opt-in Census display policy."""
+    return {(project, MAGNET_DISCLOSURE_COLUMN): _disclosure_cell(
+        evidence, evidence["inputs"][0], MAGNET_DISCLOSURE_REASON,
+    ) for project, evidence in science_views.get("verified_magnet_oxide_disclosure", {}).items()}
 
 
 def validate_resource_presence(cell, definition, census_receipt, observations, ledger):
@@ -504,3 +550,47 @@ def validate_resource_presence(cell, definition, census_receipt, observations, l
     if (len(cutoff_contexts) != 1 or cell["anchor_id"] != lineage[1]["anchor_id"]
             or cell["temporal_decision_id"] != lineage[1]["temporal_decision"]["decision_id"]):
         raise ValueError("Resource disclosure flag lacks a shared resource context")
+
+
+def validate_magnet_disclosure(cell, definition, census_receipt, observations):
+    """Reconcile descriptive publication lineage against the governed raw records."""
+    project = cell["project_id"]
+    science = census_receipt.get("science_views", {})
+    evidence = science.get("verified_magnet_oxide_disclosure", {}).get(project)
+    if (not evidence or definition["projection_method"] != "approved_member_presence"
+            or definition["mcda_use"] or evidence["display_only"] is not True
+            or evidence["evidence_type"] != MAGNET_DISCLOSURE_ROLE or evidence["value"] != "是"
+            or census_receipt["release_mode"] != "FORMAL" or evidence["release_id"] != census_receipt["release_id"]):
+        raise ValueError("Magnet oxide disclosure is outside its descriptive use")
+    inputs = evidence["inputs"]
+    ids = [item["observation_id"] for item in inputs]
+    if len(ids) != len(MAGNET) or len(set(ids)) != len(MAGNET):
+        raise ValueError("Magnet oxide disclosure requires four distinct selected observations")
+    expected = _disclosure_cell(evidence, inputs[0], MAGNET_DISCLOSURE_REASON)
+    if any(cell[key] != str(value) for key, value in expected.items()):
+        raise ValueError("Magnet oxide disclosure differs from its projected evidence")
+    statement = evidence["statement"]
+    basis = science.get("verified_resource_presence", {}).get(project, {}).get("statement")
+    if statement != basis or statement["material_basis"] != "WHOLE_ORE" or statement["reporting_standard"] != "JORC 2012":
+        raise ValueError("Magnet oxide disclosure lacks the governed resource statement")
+    governed = {item["observation_id"]: item for record in science["resource_statements"]
+                if record["project_id"] == project for item in record["observations"]}
+    context = ("source_sha256", "scope_id", "statement_id", "effective_date", "category",
+               "cutoff_grade", "cutoff_unit", "cutoff_analyte", "material_basis")
+    for species, item in zip(MAGNET, inputs, strict=True):
+        raw = observations.get(item["observation_id"])
+        trace = item["temporal_decision"]
+        accepted_proofs = ("anchor_id", "selection_id", "validation_id", "candidate_id")
+        if (raw is None or raw["project_id"] != project or raw["variable"] != OXIDE_VARIABLES[species]
+                or raw["chemical_basis"] != species or item["chemical_basis"] != species
+                or item != governed.get(item["observation_id"]) or item["project_id"] != project
+                or item["release_id"] != cell["release_id"] or item["denominator_basis"] != "WHOLE_ORE"
+                or any(raw[key] != statement[key] for key in context)
+                or not all(len(item[key]) == 64 for key in accepted_proofs)
+                or (raw["page"], raw["table"], raw["row"], raw["column"], raw["raw_value"], raw["raw_unit"]) != (
+                    item["physical_page"], item["table"], item["row"], item["column"], item["raw_token"], item["raw_unit"],
+                ) or (raw["value"], raw["unit"]) != (item["normalized_value"], item["normalized_unit"])
+                or trace["status"] != "ELIGIBLE" or trace["source_sha256"] != raw["source_sha256"]
+                or trace["effective_date"] != raw["effective_date"] or trace["cutoff"] != census_receipt["research_cutoff"]
+                or not trace["matching_evidence_ids"]):
+            raise ValueError("Magnet oxide disclosure contains an ungoverned constituent or mismatched resource context")

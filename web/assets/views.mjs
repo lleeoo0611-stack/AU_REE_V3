@@ -91,6 +91,7 @@ export function evidenceDetails(entry, cell, t, status) {
   append("denominator", entry.denominator_basis);
   append("formula", entry.formula ?? entry.derivation);
   append("precision", cell.precision);
+  append("sourcePrecisionReview", entry.metadata?.precision_review);
   append("inputs", entry.input_observation_ids ?? entry.observation_ids);
   append("observationId", entry.observation_id, true);
   append("temporal", entry.temporal_decision_id, true);
