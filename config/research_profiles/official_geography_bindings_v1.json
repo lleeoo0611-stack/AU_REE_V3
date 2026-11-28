@@ -1,0 +1,122 @@
+{
+  "schema": "government-native-point-candidates-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "expanded_manifest_sha256": "226c08be42beea1f085760f3fc7a0c0647b77eeb1bd361cdc7414fd582efee23",
+  "cases": [
+    {
+      "case_id": "mt-weld-cld-mine",
+      "dataset": "WA_MINEDEX",
+      "project_id": "AU-efff91a06cf344122d88",
+      "native_id": "S0001709",
+      "receipt_sha256": "f59a2e45a8d2f6a6b57ef8f0c9a80400751a1465fe1a539142671772198097cd",
+      "native_project_id": "J00772",
+      "expected_commodity_token": "REE",
+      "issuer_point_link": {
+        "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+        "page": 3,
+        "project_quote": "Mt Weld open pit",
+        "distinctive_subsite_quote": "Central Lanthanide Deposit (CLD)",
+        "same_site_marker": "CLD"
+      }
+    },
+    {
+      "case_id": "mt-weld-resource-group-wa",
+      "dataset": "WA_MINEDEX",
+      "project_id": "AU-efff91a06cf344122d88",
+      "native_id": "S0237005",
+      "receipt_sha256": "f59a2e45a8d2f6a6b57ef8f0c9a80400751a1465fe1a539142671772198097cd",
+      "native_project_id": "J00772",
+      "expected_commodity_token": "REE"
+    },
+    {
+      "case_id": "mt-weld-gold-homonym-wa",
+      "dataset": "WA_MINEDEX",
+      "project_id": "AU-efff91a06cf344122d88",
+      "native_id": "S0012302",
+      "receipt_sha256": "f59a2e45a8d2f6a6b57ef8f0c9a80400751a1465fe1a539142671772198097cd",
+      "native_project_id": "J00772",
+      "expected_commodity_token": "REE"
+    },
+    {
+      "case_id": "mt-weld-road-wa",
+      "dataset": "WA_MINEDEX",
+      "project_id": "AU-efff91a06cf344122d88",
+      "native_id": "S0021959",
+      "receipt_sha256": "f59a2e45a8d2f6a6b57ef8f0c9a80400751a1465fe1a539142671772198097cd",
+      "native_project_id": "J00772",
+      "expected_commodity_token": "REE"
+    },
+    {
+      "case_id": "north-stanmore-deposit-wa",
+      "dataset": "WA_MINEDEX",
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "native_id": "S0240894",
+      "receipt_sha256": "18c4d18262cb73bd3f2f92a945fd5673af63eca44fc2c19eba8f734dae29956a",
+      "native_project_id": "J06272",
+      "expected_commodity_token": "REE"
+    },
+    {
+      "case_id": "jupiter-deposit-wa",
+      "dataset": "WA_MINEDEX",
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "native_id": "S0242502",
+      "receipt_sha256": "18c4d18262cb73bd3f2f92a945fd5673af63eca44fc2c19eba8f734dae29956a",
+      "native_project_id": "J06523",
+      "expected_commodity_token": "REE"
+    },
+    {
+      "case_id": "jupiter-prospect-wa",
+      "dataset": "WA_MINEDEX",
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "native_id": "S0244130",
+      "receipt_sha256": "18c4d18262cb73bd3f2f92a945fd5673af63eca44fc2c19eba8f734dae29956a",
+      "native_project_id": "J06523",
+      "expected_commodity_token": "REE"
+    },
+    {
+      "case_id": "mt-weld-resource-group-ga",
+      "dataset": "GA_OZMIN",
+      "project_id": "AU-efff91a06cf344122d88",
+      "native_id": 763335,
+      "receipt_sha256": "dd30f75c40467717c3160eabe92d386db4315dea001f38e0cc5a972e27ccf2ed",
+      "expected_commodity_token": "REE"
+    },
+    {
+      "case_id": "aileron-deposit-ga",
+      "dataset": "GA_CRITICAL_DEPOSITS",
+      "project_id": "AU-af44c2bd1173b453953f",
+      "native_id": 2419,
+      "receipt_sha256": "cd9dcd8629ff783dd9094f8d8d73d39084a2d8a1b651ba0ec98f632fef7dd438"
+    },
+    {
+      "case_id": "wim150-deposit-ga",
+      "dataset": "GA_CRITICAL_DEPOSITS",
+      "project_id": "AU-fb4e914f86102baa414a",
+      "native_id": 2282,
+      "receipt_sha256": "cd9dcd8629ff783dd9094f8d8d73d39084a2d8a1b651ba0ec98f632fef7dd438"
+    },
+    {
+      "case_id": "copi-deposit-ga",
+      "dataset": "GA_CRITICAL_DEPOSITS",
+      "project_id": "AU-fe65cb1bd28eacb7a67f",
+      "native_id": 2303,
+      "receipt_sha256": "cd9dcd8629ff783dd9094f8d8d73d39084a2d8a1b651ba0ec98f632fef7dd438"
+    }
+  ],
+  "cross_authority_comparisons": [
+    [
+      "mt-weld-resource-group-ga",
+      "mt-weld-resource-group-wa"
+    ]
+  ],
+  "layer_metadata": [
+    {
+      "dataset": "WA_MINEDEX",
+      "receipt_sha256": "d2ef4bdb75c988631111b87fc174418c0a1a5d21209ae00a42aec759c3e17e64"
+    },
+    {
+      "dataset": "GA_CRITICAL_DEPOSITS",
+      "receipt_sha256": "8df47a82683c9a5a4841043092be8592265c6a12d1e66872f5d7087abf172632"
+    }
+  ]
+}
