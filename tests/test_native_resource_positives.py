@@ -12,6 +12,7 @@ import unittest
 from au_ree_v3.contracts import ResearchRelease, canonical_json
 from au_ree_v3.documents import DocumentCache, DocumentError
 from au_ree_v3.fresh_observations import extract_sources
+from au_ree_v3.native_table_discovery import discover_page_rows
 from au_ree_v3.research_inputs import CENSUS_RESOURCE_RULE, checked_research_inputs
 from au_ree_v3.resource_table_binding import bind_page_row
 from au_ree_v3.sources import ContentStore
@@ -40,6 +41,25 @@ EXPECTED = {
 @unittest.skipUnless(os.environ.get("AU_REE_NATIVE_RESOURCE_ASSETS") and shutil.which("pdftotext")
                      and shutil.which("pdfimages"), "exact ASX originals and Poppler required")
 class NativeResourcePositiveTests(unittest.TestCase):
+    def test_native_discovery_distinguishes_issuer_vintage_and_row_marker(self):
+        source_sha = "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e"
+        bases = Path(os.environ["AU_REE_NATIVE_RESOURCE_ASSETS"])
+        source = next(path for path in (bases / source_sha, bases / "objects" / source_sha) if path.is_file())
+        original = source.read_bytes()
+        self.assertEqual(sha256(original).hexdigest(), source_sha)
+        document = DocumentCache().pdf(original, source_sha, 4)
+        row, = discover_page_rows(document, page=4)
+        self.assertEqual(row.strategy, "NUMBERED_RESOURCE_TABLE")
+        self.assertEqual([(c.variable, c.value.text, c.unit, c.parent_header and c.parent_header.text) for c in row.cells], [
+            (None, "1,000", None, None),
+            ("ore_mt", "1.8", "Bt", "MRE - 2025"), ("grade", "1,700", "ppm", "MRE - 2025"),
+            ("ore_mt", "1.7", "Bt", "MRE - 2026"), ("grade", "1,700", "ppm", "MRE - 2026"),
+        ])
+        marker = row.cells[2].footnote_marker
+        self.assertEqual(marker.text, "*")
+        self.assertEqual(document.locate(4, line=marker.line, column=marker.start_column,
+                                         end_column=marker.end_column).text, "*")
+
     def test_exact_issuer_total_uses_same_table_alignment_witnesses(self):
         source_sha = "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb"
         bases = Path(os.environ["AU_REE_NATIVE_RESOURCE_ASSETS"])
