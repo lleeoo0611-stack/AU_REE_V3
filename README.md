@@ -2,6 +2,10 @@
 
 AU_REE_V3 is rebuilding the Australian rare-earth research pipeline against three fixed AU_REE_V2 commits. The [implementation report](docs/migration/implementation_report.md) records the current acceptance status. The [scientific contract](docs/migration/scientific_contract.md) defines evidence, identity, dates, precision and release semantics.
 
+## Development governance
+
+All human and automated contributions must follow the [AU_REE Development Governance v3.0](docs/development/au_ree_development_governance_v3.0.txt). The [repository instructions for Codex](AGENTS.md) apply across the repository. Use the [pull request template](.github/pull_request_template.md) to record the change's risk and actual verification results. The governance check verifies that both entries are present. Section 6 of the policy defines the scope of verification for each risk level.
+
 ## Run migration checks
 
 Use Python 3.11 or later and Git. From the repository root:
