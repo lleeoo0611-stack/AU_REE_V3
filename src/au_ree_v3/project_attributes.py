@@ -12,7 +12,10 @@ from .attribute_batches import (
     DEPOSIT_TYPES as NATIVE_DEPOSIT_TYPES, POLICY_SHA as NATIVE_POLICY_SHA,
     POLICY_VERSION as NATIVE_POLICY_VERSION, NativeClaimDeclined, load_routes, native_claim_matches, read_native_claim,
 )
-from .development import SCHEMA as MILESTONES_SCHEMA, bind_native_quote, read_milestone_evidence, reported_calendar_date
+from .development import (
+    DATED_STUDY_POLICY_VERSION, SCHEMA as MILESTONES_SCHEMA, STUDY_RESULTS_RELEASED, STUDY_STAGES, bind_native_quote,
+    calendar_precedes, dated_study_matches, dated_study_policy_definition, read_milestone_evidence, reported_calendar_date,
+)
 from .documents import DocumentCache, DocumentError
 from .semantics import ConceptMapping, MatchRelation, resolve_concept
 from .sources import ContentStore, IntegrityError, validate_edition_proofs
@@ -30,10 +33,12 @@ _STAGE_TERMS = {
 _ROLES = {
     "DEPOSIT_TYPE": {"EXPLORATION_MODEL", "HOST_DESCRIPTION", "CONFIRMED_DEPOSIT_TYPE"},
     "DEVELOPMENT_STAGE": {"MENTIONED", "PLANNED", "ONGOING", "COMPLETED", "ATTAINED",
-                          "CURRENT_AS_OF_CUTOFF", "NOT_COMPLETED", "INSUFFICIENT_CONTEXT"},
+                          "CURRENT_AS_OF_CUTOFF", "NOT_COMPLETED", "INSUFFICIENT_CONTEXT", "EARLY_WORKS",
+                          STUDY_RESULTS_RELEASED},
 }
 _SUPPORTED_ROLES = {"DEPOSIT_TYPE": {"CONFIRMED_DEPOSIT_TYPE"}, "DEVELOPMENT_STAGE": {"COMPLETED", "ATTAINED"}}
 _SUPPORTED_STAGES = {"PFS", "DFS"}
+_STUDY_RELEASE_LABELS = {"Scoping": "已公布範疇研究結果", "PFS": "已公布預可行性研究結果", "DFS": "已公布最終可行性研究結果"}
 _DEPOSIT_PATTERNS = {
     "CARBONATITE_SUPERGENE_REGOLITH":
         r"rare earth deposit is hosted within a supergene enriched zone of the [^.]{1,90}Carbonatite[^.]{0,30} regolith",
@@ -42,6 +47,9 @@ _PROJECT_SCOPE = {"DEPOSIT_TYPE": "NAMED_PROJECT_DEPOSIT", "DEVELOPMENT_STAGE": 
 _PROGRESS = re.compile(r"\b(?:underway|in progress|ongoing)\b", re.I)
 _CURRENT = re.compile(r"\bcurrent\s+as\s+(?:of|at)\b", re.I)
 _PHASE = re.compile(r"\b(?:phase|stage)\s+(?:[IVX]+|[0-9]+)\b", re.I)
+_DATED_STUDY_NARROW = re.compile(
+    r"\b(?:(?:phase|stage)\s+(?:[IVX]+|[0-9]+|one|two|three)|pilot|bench-scale|demonstration)\b", re.I,
+)
 _TENTATIVE = re.compile(r"\b(?:may|might|could|interpreted|potential|target|exploration model)\b", re.I)
 _POLICY = {"policy_version": POLICY_VERSION, "purpose": _DECISION_SCOPE, "roles": {
     key: sorted(roles) for key, roles in _SUPPORTED_ROLES.items()
@@ -50,7 +58,17 @@ _POLICY = {"policy_version": POLICY_VERSION, "purpose": _DECISION_SCOPE, "roles"
 _POLICY.update(progress_pattern=_PROGRESS.pattern, current_pattern=_CURRENT.pattern,
                tentative_pattern=_TENTATIVE.pattern)
 POLICY_SHA = sha256(canonical_json(_POLICY).encode()).hexdigest()
-_ATTRIBUTE_POLICIES = {POLICY_SHA: POLICY_VERSION, NATIVE_POLICY_SHA: NATIVE_POLICY_VERSION}
+DATED_STUDY_POLICY_SHA = sha256(canonical_json({
+    "policy_version": DATED_STUDY_POLICY_VERSION,
+    "purpose": _DECISION_SCOPE, "scope": _PROJECT_SCOPE["DEVELOPMENT_STAGE"],
+    "code_labels": _STUDY_RELEASE_LABELS, "completion_labels": {key: _STAGE_TERMS[key] for key in STUDY_STAGES},
+    "roles": ["COMPLETED", STUDY_RESULTS_RELEASED], "phase_scope_pattern": _DATED_STUDY_NARROW.pattern,
+    "native_rules": dated_study_policy_definition(),
+}).encode()).hexdigest()
+_ATTRIBUTE_POLICIES = {
+    POLICY_SHA: POLICY_VERSION, NATIVE_POLICY_SHA: NATIVE_POLICY_VERSION,
+    DATED_STUDY_POLICY_SHA: DATED_STUDY_POLICY_VERSION,
+}
 _DEPOSIT_LABELS = {**_DEPOSIT_TERMS, **{term: labels[0] for term, labels in NATIVE_DEPOSIT_TYPES.items()}}
 
 
@@ -99,7 +117,8 @@ class AttributeAssertion(Record):
         if self.entity_kind == "PROJECT" and self.entity_id != self.project_id:
             raise ContractViolation("Project assertion entity and Project identities differ")
         terms = _DEPOSIT_LABELS if self.attribute_kind == "DEPOSIT_TYPE" else _STAGE_TERMS
-        if self.role not in _ROLES.get(self.attribute_kind, ()) or self.controlled_term not in terms:
+        if (self.role not in _ROLES.get(self.attribute_kind, ()) or self.controlled_term not in terms
+                or self.role == STUDY_RESULTS_RELEASED and self.controlled_term not in STUDY_STAGES):
             raise ContractViolation("Attribute assertion has an unsupported role or vocabulary term")
         if not all(isinstance(value, str) and value.strip() for value in (self.source_term, self.scope, self.scope_kind)):
             raise ContractViolation("Attribute assertion requires native text and scope")
@@ -184,16 +203,21 @@ def _verdict(assertion, temporal, native_role_reason, policy_sha=POLICY_SHA):
         return {"CONFLICT": "SCIENTIFIC_CONFLICT", "INELIGIBLE": "TEMPORAL_INELIGIBLE"}.get(
             temporal.status, "EVIDENCE_INSUFFICIENT",
         ), temporal.reason
-    if assertion.role not in _SUPPORTED_ROLES[assertion.attribute_kind]:
+    roles = _SUPPORTED_ROLES[assertion.attribute_kind]
+    if policy_sha == DATED_STUDY_POLICY_SHA and assertion.attribute_kind == "DEVELOPMENT_STAGE":
+        roles = {"COMPLETED", STUDY_RESULTS_RELEASED}
+    if assertion.role not in roles:
         return "CANDIDATE", native_role_reason
     if assertion.attribute_kind == "DEPOSIT_TYPE":
         terms = NATIVE_DEPOSIT_TYPES if policy_sha == NATIVE_POLICY_SHA else _DEPOSIT_TERMS
         if assertion.controlled_term not in terms:
             return "CANDIDATE", "DEPOSIT_TYPE_OUTSIDE_CENSUS_DISPLAY_POLICY"
     if assertion.attribute_kind == "DEVELOPMENT_STAGE":
-        if assertion.controlled_term not in _SUPPORTED_STAGES:
+        stages = STUDY_STAGES if policy_sha == DATED_STUDY_POLICY_SHA else _SUPPORTED_STAGES
+        if assertion.controlled_term not in stages:
             return "CANDIDATE", "STAGE_OUTSIDE_CENSUS_DISPLAY_POLICY"
-        if _PHASE.search(assertion.scope) or _PHASE.search(assertion.source_term):
+        narrow = _DATED_STUDY_NARROW if policy_sha == DATED_STUDY_POLICY_SHA else _PHASE
+        if narrow.search(assertion.scope) or narrow.search(assertion.source_term):
             return "EVIDENCE_INSUFFICIENT", "NARROWER_REPORT_SCOPE_THAN_CENSUS_PROJECT"
     if assertion.scope_kind != _PROJECT_SCOPE[assertion.attribute_kind]:
         return "EVIDENCE_INSUFFICIENT", "NARROWER_REPORT_SCOPE_THAN_CENSUS_PROJECT"
@@ -266,6 +290,8 @@ def _attribute_evidence(binding, kind, entity, edition, document, proofs, cutoff
             binding, edition, document, proofs, cutoff,
         )
     else:
+        if binding.get("event_policy") == DATED_STUDY_POLICY_VERSION:
+            policy = DATED_STUDY_POLICY_SHA
         role, reason, _, event, token, publication, anchors, temporal = read_milestone_evidence(
             binding, edition, document, proofs, cutoff,
         )
@@ -315,11 +341,30 @@ def _eligible_cases(spec, milestones):
     return cases
 
 
-def _select_attributes(evidence_by_case, release, profile_sha, manifest_sha):
+def _retained_earlier_studies(cases, evidence_by_case):
+    retained = {}
+    for kind, binding in cases:
+        if (kind != "DEVELOPMENT_STAGE" or binding.get("event_policy") != DATED_STUDY_POLICY_VERSION
+                or not binding.get("later_study_case_id") or binding["case_id"] not in evidence_by_case):
+            continue
+        earlier_case, later_case = binding["case_id"], binding["later_study_case_id"]
+        first, second = evidence_by_case[earlier_case], evidence_by_case.get(later_case)
+        if second is None or any(item.assessment.verdict != "VALIDATED" for item in (first, second)):
+            continue
+        old, new = first.assertion, second.assertion
+        old_scope = (old.project_id, old.scope_kind, old.scope, old.controlled_term)
+        new_scope = (new.project_id, new.scope_kind, new.scope, new.controlled_term)
+        if (old_scope == new_scope and old.role == new.role == "COMPLETED"
+                and calendar_precedes(old.event_date, new.event_date)):
+            retained[earlier_case] = later_case
+    return retained
+
+
+def _select_attributes(evidence_by_case, release, profile_sha, manifest_sha, historical_cases=()):
     choices = defaultdict(list)
     for case_id, evidence in evidence_by_case.items():
         assertion = evidence.assertion
-        if evidence.assessment.verdict == "VALIDATED":
+        if evidence.assessment.verdict == "VALIDATED" and case_id not in historical_cases:
             choices[assertion.project_id, assertion.attribute_kind].append((case_id, evidence))
     selected, unresolved = [], {}
     for (project, kind), candidates in sorted(choices.items()):
@@ -340,8 +385,22 @@ def _attribute_values(assertion):
     code = assertion.controlled_term
     if assertion.attribute_kind == "DEPOSIT_TYPE":
         return {"deposit_type_code": code, "deposit_type": _DEPOSIT_LABELS[code]}
-    return {"development_stage_code": code, "development_stage_category": _STAGE_TERMS[code],
-            "development_stage": f"{_STAGE_TERMS[code]}（{assertion.event_date_token} · {assertion.scope}）"}
+    labels = _STUDY_RELEASE_LABELS if assertion.role == STUDY_RESULTS_RELEASED else _STAGE_TERMS
+    return {"development_stage_code": code, "development_stage_category": labels[code],
+            "development_stage": f"{labels[code]}（{assertion.event_date_token} · {assertion.scope}）"}
+
+
+def _dated_attribute_matches(assertion, anchors, temporal):
+    publication = next((anchor for anchor in anchors if anchor.role == "DEVELOPMENT_PUBLICATION_DATE"), None)
+    return (
+        assertion.attribute_kind == "DEVELOPMENT_STAGE"
+        and anchors[0].role == "DEVELOPMENT_STAGE_CLAIM"
+        and assertion.event_date == reported_calendar_date(assertion.event_date_token) == temporal["event_date"]
+        and temporal["observation_role"] == "HISTORICAL_EVENT"
+        and not calendar_precedes(assertion.publication_date, assertion.event_date)
+        and dated_study_matches(assertion.controlled_term, assertion.role,
+                                assertion.event_date_token, anchors[0], publication)
+    )
 
 
 def _project_attribute(evidence, selection, receipt_sha):
@@ -413,6 +472,7 @@ def validate_attribute_cell(cell):
         and assessment.verdict == "VALIDATED" and not cell.get("observation_id")
         and _verdict(assertion, TemporalDecision(**temporal), "", policy)[0] == "VALIDATED"
         and (policy != NATIVE_POLICY_SHA or native_claim_matches(assertion, anchors))
+        and (policy != DATED_STUDY_POLICY_SHA or _dated_attribute_matches(assertion, anchors, temporal))
         and cell.get("comparable") in (None, "", "NO")
         and saved["source_manifest_sha256"] == selection.source_manifest_sha256
         and saved["attribute_kind"] == assertion.attribute_kind and saved["attribute_role"] == assertion.role
@@ -482,14 +542,20 @@ def review_attributes(settings, registry, manifest, manifest_sha, source_receipt
                           source=item.source.to_dict(), temporal_decision=item.temporal.to_dict(),
                           evidence=[anchor.to_dict() for anchor in item.anchors])
         results.append(result)
-    selected, unresolved = _select_attributes(evidence_by_case, release_id, settings.sha256, manifest_sha)
+    historical_cases = _retained_earlier_studies(cases, evidence_by_case)
+    selected, unresolved = _select_attributes(
+        evidence_by_case, release_id, settings.sha256, manifest_sha, historical_cases,
+    )
     selections = {case: selection.to_dict() for case, _, selection in selected}
     cells = {key: cell for case, evidence, selection in selected
              for key, cell in _project_attribute(evidence, selection, captures[case]).items()}
     for row in results:
         row["selection"] = selections.get(row["case_id"])
+        if row["case_id"] in historical_cases and row["verdict"] == "VALIDATED":
+            row["selection_blocker"] = "HISTORICAL_MILESTONE_RETAINED"
+            row["later_study_case_id"] = historical_cases[row["case_id"]]
         conflict = unresolved.get((row["project_id"], row["attribute_kind"]))
-        if conflict and row["verdict"] == "VALIDATED":
+        if conflict and row["verdict"] == "VALIDATED" and row["case_id"] not in historical_cases:
             row["selection_blocker"] = conflict
     receipt = {
         "schema": SCHEMA, "policy_version": POLICY_VERSION, "policy_sha256": POLICY_SHA,

@@ -2,6 +2,7 @@ from dataclasses import replace
 from hashlib import sha256
 from pathlib import Path
 from types import SimpleNamespace
+from tempfile import TemporaryDirectory
 import json
 import os
 import unittest
@@ -173,3 +174,61 @@ class ExactAttributeEvidenceTests(unittest.TestCase):
             self.assertEqual(cases[case]["reason"], reason)
             self.assertIsNone(cases[case]["selection"])
             self.assertNotIn((cases[case]["project_id"], "開發階段代碼"), metadata.cells)
+
+
+class DatedStudyEventsTests(unittest.TestCase):
+    @unittest.skipUnless(os.getenv("AU_REE_FILL_T7_CAS"), "Stage 6 exact archive CAS is required")
+    def test_fixed_issuer_events_and_old_attributes(self):
+        assets = Path(os.environ["AU_REE_FILL_T7_CAS"])
+        store = ContentStore(assets)
+        manifest_sha = "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a"
+        baseline = store.read("dc50a0fe07adc957b05c8990a77b3b4c77d1a479bb6319d6a74296f5d5482dbd")
+        manifest = json.loads(store.read(manifest_sha))
+        names = {"attribute_bindings": "census_attribute_bindings_v3.json",
+                 "attribute_milestones": "development_milestone_bindings_v3.json"}
+        with TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            baseline_path = workspace / "baseline.json"
+            baseline_path.write_bytes(baseline)
+            profile = json.loads(baseline)
+            for pin in profile["inputs"].values():
+                (workspace / pin["path"]).write_bytes(store.read(pin["sha256"]))
+            for kind, name in names.items():
+                data = (PROFILE_DIR / name).read_bytes()
+                (workspace / name).write_bytes(data)
+                profile["inputs"][kind] = {"path": name, "sha256": sha256(data).hexdigest()}
+            current_path = workspace / "candidate.json"
+            current_path.write_text(json.dumps(profile))
+            settings = load_profile(current_path)
+            registry = load_registry(settings.registry_path)
+            source_receipt = verify_source_manifest(settings, manifest, registry, store)
+            previous, current = (
+                prepare_census_metadata(path, manifest, source_receipt, attribute_assets=assets,
+                                        source_manifest_sha256=manifest_sha, release_id="b" * 64)
+                for path in (baseline_path, current_path)
+            )
+        expected = {
+            "north-stanmore-pfs-results-released": ("VALIDATED", "STUDY_RESULTS_RELEASED", "2026-08", 8, True, None),
+            "nolans-dfs-results-released": ("VALIDATED", "STUDY_RESULTS_RELEASED", "2019-02-07", 1, True, None),
+            "cummins-range-scoping-completed-august-2023": ("VALIDATED", "COMPLETED", "2023-08", 12, True, None),
+            "cummins-range-scoping-completed-september-2022": (
+                "VALIDATED", "COMPLETED", "2022-09", 13, False, "HISTORICAL_MILESTONE_RETAINED",
+            ),
+            "north-stanmore-prior-pfs-planned": ("CANDIDATE", "PLANNED", None, 1, False, None),
+            "nolans-early-construction-works": ("CANDIDATE", "EARLY_WORKS", None, 1, False, None),
+        }
+        actual = {
+            item["case_id"]: (
+                item["verdict"], item["assertion"]["role"], item["assertion"]["event_date"], item["page"],
+                item["selection"] is not None, item.get("selection_blocker"),
+            )
+            for item in current.attribute_receipt["cases"] if item["case_id"] in expected
+        }
+        self.assertEqual(actual, expected)
+        self.assertEqual((previous.attribute_receipt["display_cells"], current.attribute_receipt["display_cells"]),
+                         (27, 36))
+        self.assertEqual(current.attribute_receipt["mcda_inputs_added"], 0)
+        for key, row in previous.cells.items():
+            after = current.cells[key]
+            self.assertEqual({field: after.get(field) for field in ("value", "source_sha256", "anchor_id")},
+                             {field: row.get(field) for field in ("value", "source_sha256", "anchor_id")})

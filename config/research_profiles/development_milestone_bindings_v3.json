@@ -1,0 +1,267 @@
+{
+  "bindings": [
+    {
+      "case_id": "koppamurra-pfs-asserted-date-unreported",
+      "page": 1,
+      "project_id": "AU-49b538453133bd968e8d",
+      "publication": {
+        "date_token": "25 June 2026",
+        "page": 1,
+        "quote": "ASX Release: 25 June 2026"
+      },
+      "quote": "Australian Rare Earths Limited (AR3 or the Company) has completed a Pre-Feasibility Study (PFS) for its flagship 100%- owned Koppamurra Rare Earths Project (Koppamurra or the Project) in South Australia",
+      "receipt_sha256": "e0dc32af19f3f36aba6282dd7883bd00f5cdadb5cf2a379bef02f0604c194512",
+      "scope": "Koppamurra Rare Earths Project",
+      "scope_quote": "owned Koppamurra Rare Earths Project (Koppamurra or the Project) in South Australia",
+      "source_sha256": "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01",
+      "stage": "PFS"
+    },
+    {
+      "case_id": "koppamurra-dfs-engineering-plan",
+      "page": 51,
+      "project_id": "AU-49b538453133bd968e8d",
+      "publication": {
+        "date_token": "25 June 2026",
+        "page": 1,
+        "quote": "ASX Release: 25 June 2026"
+      },
+      "quote": "Detailed engineering to support the Definitive Feasibility Study (DFS) will commence upon completion of the pilot plant at ANSTO in late 2026.",
+      "receipt_sha256": "e0dc32af19f3f36aba6282dd7883bd00f5cdadb5cf2a379bef02f0604c194512",
+      "scope": "Koppamurra Rare Earths Project",
+      "scope_quote": "Figure 14 Koppamurra Milestone Schedule",
+      "source_sha256": "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01",
+      "stage": "DFS"
+    },
+    {
+      "case_id": "donald-phase-one-dfs-completed",
+      "event_date_token": "April 2023",
+      "page": 56,
+      "project_id": "AU-2fc429d0556dfa0b95c4",
+      "publication": {
+        "date_token": "27 February 2026",
+        "page": 1,
+        "quote": "27 February 2026"
+      },
+      "quote": "Astron completed a “definitive feasibility study” in April 2023 for the Phase 1 operation within MIN5532",
+      "receipt_sha256": "aa6c4b5a9364ed561b7ed3de91ffd31148540d4a3ec196fba76fa3c0834c096c",
+      "scope": "Donald Phase 1 · MIN5532",
+      "scope_quote": "Donald Project Pty Ltd (DPPL). Astron completed a “definitive feasibility study” in April 2023 for the Phase 1 operation within MIN5532",
+      "source_sha256": "82a4a37bf3a073c799b49bf5ff67d55add185d88a26485e322d64d86f7374097",
+      "stage": "DFS"
+    },
+    {
+      "case_id": "donald-phase-two-pfs-completed",
+      "event_date_token": "June 2023",
+      "page": 239,
+      "project_id": "AU-2fc429d0556dfa0b95c4",
+      "publication": {
+        "date_token": "27 February 2026",
+        "page": 1,
+        "quote": "27 February 2026"
+      },
+      "quote": "Astron completed the Phase 2 – RL2002 “pre-feasibility study” for the Donald project in June 2023.",
+      "receipt_sha256": "aa6c4b5a9364ed561b7ed3de91ffd31148540d4a3ec196fba76fa3c0834c096c",
+      "scope": "Donald Phase 2 · RL2002",
+      "scope_quote": "Phase 2 – RL2002 “pre-feasibility study” for the Donald project",
+      "source_sha256": "82a4a37bf3a073c799b49bf5ff67d55add185d88a26485e322d64d86f7374097",
+      "stage": "PFS"
+    },
+    {
+      "case_id": "balranald-dfs-completed",
+      "event_date_token": "late 2022",
+      "page": 1,
+      "project_id": "AU-524c37fc04cf47bf8dca",
+      "publication": {
+        "date_token": "21 February 2023",
+        "page": 1,
+        "quote": "21 February 2023"
+      },
+      "quote": "The definitive feasibility study (DFS) for Balranald was completed in late 2022",
+      "receipt_sha256": "2ce00387b5f8aed2a71fbf489ab6cf69764f5cc8324c6b0a74306bf0cdcedeae",
+      "scope": "Balranald critical minerals development",
+      "scope_quote": "definitive feasibility study (DFS) for Balranald",
+      "source_sha256": "94a57655d74ead667ce7adbbb0923b68b011641b9249992ff12a017c2e96252f",
+      "stage": "DFS"
+    },
+    {
+      "case_id": "avonbank-dfs-completed",
+      "event_date_token": "2021",
+      "page": 46,
+      "project_id": "AU-329908ab8d4c1d1d3e03",
+      "publication": {
+        "date_token": "March 2026",
+        "page": 2,
+        "quote": "Publication date: March 2026"
+      },
+      "quote": "The Avonbank Project Definitive Feasibility Study completed in 2021 demonstrated attractive economics for the Project.",
+      "receipt_sha256": "c75bd82388ad8a43e12a337a7f232298106b5220195901f4be66fe6904dd5179",
+      "scope": "Avonbank Mineral Sands Project",
+      "scope_quote": "The Avonbank Project Definitive Feasibility Study",
+      "source_sha256": "af0a8ff9a1b194a45f16dc56dd3b71c04c5f426f15dd23d0511de087f9ec8ac5",
+      "stage": "DFS"
+    },
+    {
+      "case_id": "copi-dfs-completed",
+      "event_date_token": "January 2024",
+      "page": 47,
+      "project_id": "AU-fe65cb1bd28eacb7a67f",
+      "publication": {
+        "date_token": "March 2026",
+        "page": 2,
+        "quote": "Publication date: March 2026"
+      },
+      "quote": "Attractive returns are demonstrated by the Copi DFS completed in January 2024",
+      "receipt_sha256": "c75bd82388ad8a43e12a337a7f232298106b5220195901f4be66fe6904dd5179",
+      "scope": "Copi Mineral Sands Project",
+      "scope_quote": "the Copi DFS completed in January 2024",
+      "source_sha256": "af0a8ff9a1b194a45f16dc56dd3b71c04c5f426f15dd23d0511de087f9ec8ac5",
+      "stage": "DFS"
+    },
+    {
+      "case_id": "goschen-dfs-explicit-completion-date-unreported",
+      "page": 8,
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "publication": {
+        "date_token": "15 October 2025",
+        "page": 1,
+        "quote": "ASX Release 15 October 2025"
+      },
+      "quote": "the 2023 Definitive Feasibility Study completed for Area 1 by VHM.",
+      "receipt_sha256": "7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92",
+      "scope": "Goschen Area 1",
+      "scope_quote": "Definitive Feasibility Study completed for Area 1 by VHM",
+      "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "stage": "DFS"
+    },
+    {
+      "case_id": "dubbo-dfs-project-scope-not-local",
+      "event_date_token": "2013",
+      "page": 23,
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "publication": {
+        "date_token": "11 July 2025",
+        "page": 1,
+        "quote": "ASX Release 11 July 2025"
+      },
+      "quote": "A Definitive Feasibility Study based on a flowsheet to recover the above products, was completed in 2013 by TZ Minerals International Pty Ltd (TZMI)",
+      "receipt_sha256": "b6818686e177845967d3311bfa5511ee62c7499036ff6767bc7e7014ac5036f2",
+      "scope": "Dubbo Project",
+      "scope_quote": "The Dubbo Project was originally developed by Alkane Resources Limited (Alkane)",
+      "source_sha256": "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab",
+      "stage": "DFS"
+    },
+    {
+      "case_id": "north-stanmore-pfs-results-released",
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "source_sha256": "e3ece5b0173dae538cf610486f76b2815d1830abd1dfbf7f29039955a4db224c",
+      "receipt_sha256": "9fd623ec7f91689b7c670688805863aec8be7f36637a16ebac0c9d5bbab86070",
+      "page": 8,
+      "quote": "In August 2026, Victory released a Pre-Feasibility Study",
+      "scope": "North Stanmore Heavy Rare Earth Project",
+      "scope_quote": "updated Mineral Resource Estimate for North Stanmore",
+      "stage": "PFS",
+      "event_policy": "census-dated-study-event-v1",
+      "publication": {
+        "page": 1,
+        "quote": "ASX ANNOUNCEMENT 30 October 2026",
+        "date_token": "30 October 2026"
+      },
+      "event_date_token": "August 2026",
+      "event_date_role": "STUDY_RESULTS_RELEASED"
+    },
+    {
+      "case_id": "nolans-dfs-results-released",
+      "project_id": "AU-1345edd8165c10930e94",
+      "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+      "receipt_sha256": "1fca3dec3a708ddea1a2719a7684bd0632a5b5e640d83f275953c6afc65f0e91",
+      "page": 1,
+      "quote": "is pleased to announce the results of the Definitive Feasibility Study (DFS) for its 100%-owned Nolans Neodymium-Praseodymium (NdPr) Project (the Project)",
+      "scope": "Nolans Project",
+      "scope_quote": "100%-owned Nolans Neodymium-Praseodymium (NdPr) Project (the Project)",
+      "stage": "DFS",
+      "event_policy": "census-dated-study-event-v1",
+      "publication": {
+        "page": 1,
+        "quote": "ASX Announcement Nolans DFS Delivers Robust Project Economics 7 February 2019",
+        "date_token": "7 February 2019"
+      },
+      "event_date_role": "STUDY_RESULTS_RELEASED",
+      "event_date_source": "SAME_ISSUER_NOTICE"
+    },
+    {
+      "case_id": "cummins-range-scoping-completed-august-2023",
+      "project_id": "AU-9b667066e6eb66753005",
+      "source_sha256": "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9",
+      "receipt_sha256": "4cfb9eb5aace38326d4b6bf2017fd09aac25689d818a211e01723f16be1cfd7b",
+      "page": 12,
+      "quote": "an enhanced Scoping Study was completed in August 2023",
+      "scope": "Cummins Range Rare Earths-Phosphate Project",
+      "scope_quote": "The Cummins Range MRE is expected to have reasonable prospects for eventual economic extraction",
+      "stage": "Scoping",
+      "event_policy": "census-dated-study-event-v1",
+      "publication": {
+        "page": 1,
+        "quote": "ASX Release 25 January 2024",
+        "date_token": "25 January 2024"
+      },
+      "event_date_token": "August 2023",
+      "scope_section_quote": "The Cummins Range MRE is expected to have reasonable prospects for eventual economic extraction (RPEEE) on the following basis: • the resource is situated in a favourable mining jurisdiction, with no known impediments to land access or tenure status; • the volume, orientation and grade of the resource is amenable to mining extraction via open pit or underground mining methods; • preliminary metallurgical test work shows extraction and concentration of rare earths and phosphate can be achieved with traditional processing techniques; and • an enhanced Scoping Study was completed in August 2023"
+    },
+    {
+      "case_id": "cummins-range-scoping-completed-september-2022",
+      "project_id": "AU-9b667066e6eb66753005",
+      "source_sha256": "e85d5345b06dc42448cee9fba03d0a667b8d698bc7b408521357edfb88e3c053",
+      "receipt_sha256": "c555ab2e3cf5d8055ee7ccec9f68a774bf88c92ad31a9b8f273e0c739078aed9",
+      "page": 13,
+      "quote": "a Scoping Study was completed in September, 2022",
+      "scope": "Cummins Range Rare Earths-Phosphate Project",
+      "scope_quote": "The Cummins Range MRE is expected to have reasonable prospects for eventual economic extraction",
+      "stage": "Scoping",
+      "event_policy": "census-dated-study-event-v1",
+      "publication": {
+        "page": 1,
+        "quote": "ASX Release 1 May 2023",
+        "date_token": "1 May 2023"
+      },
+      "event_date_token": "September, 2022",
+      "scope_section_quote": "The Cummins Range MRE is expected to have reasonable prospects for eventual economic extraction (RPEEE) on the following basis: • the resource is situated in a favourable mining jurisdiction, with no known impediments to land access or tenure status; • the volume, orientation and grade of the resource is amenable to mining extraction via open pit or For personal use only underground mining methods; • preliminary metallurgical test work shows extraction and concentration of rare earths and phosphate can be achieved with traditional processing techniques; and • a Scoping Study was completed in September, 2022",
+      "later_study_case_id": "cummins-range-scoping-completed-august-2023"
+    },
+    {
+      "case_id": "north-stanmore-prior-pfs-planned",
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "source_sha256": "c5561e8d0d8c06d2c2579c3c44ce5906bb62841f5cd3b9e142f13e8160531f84",
+      "receipt_sha256": "ccdcc6e78859e34ef362a8c41dea7e81d6e32060cf8039a959baed69642a6a47",
+      "page": 1,
+      "quote": "2025 Prefeasibility study planned for release later in 2025.",
+      "scope": "North Stanmore Heavy Rare Earth Project",
+      "scope_quote": "North Stanmore Heavy Rare Earth Element Project in Western Australia",
+      "stage": "PFS",
+      "event_policy": "census-dated-study-event-v1",
+      "publication": {
+        "page": 1,
+        "quote": "11 August 2025",
+        "date_token": "11 August 2025"
+      }
+    },
+    {
+      "case_id": "nolans-early-construction-works",
+      "project_id": "AU-1345edd8165c10930e94",
+      "source_sha256": "1015a12c4459f8a43c0dd735ddd1603971b6785997a9c7955dfcbf9ce1e84fc2",
+      "receipt_sha256": "8c69cbd544f088833f749bf204f04050aa963f75b3b4c3eb4023b89e62cfbde8",
+      "page": 1,
+      "quote": "with early construction works commencing, preparing the team for the work that lies ahead.",
+      "scope": "Nolans Project",
+      "scope_quote": "marks another milestone for Arafura and our Nolans Project",
+      "stage": "Construction",
+      "event_policy": "census-dated-study-event-v1",
+      "publication": {
+        "page": 1,
+        "quote": "ENDING 30 SEPTEMBER 2026 30 October 2026",
+        "date_token": "30 October 2026"
+      }
+    }
+  ],
+  "schema": "source-bound-development-events-v1",
+  "source_manifest_sha256": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a"
+}
