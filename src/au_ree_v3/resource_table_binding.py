@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 import re
 import unicodedata
 
@@ -11,6 +11,7 @@ from .normalization import KNOWN_OXIDE_SPECIES, reported_interval
 from .observations import NUMBER
 
 RULE = "native-resource-table-layout-v1"
+DETECTION_RULE = "native-resource-table-detection-v2"
 _CAPTION = re.compile(r"^\s*(?:table|figure)\s+[A-Z]?\d+(?:[.-]\d+)*\b", re.I)
 _RESOURCE = re.compile(r"\bmineral\s+resources?\b", re.I)
 _REVIEWED_RESOURCE_HEADING = re.compile(r"\s*mineral resource estimate\s*", re.I)
@@ -39,6 +40,18 @@ _UNITS = {
     "billion tonne": "Bt", "billion tonnes": "Bt", "m tonne": "Mt", "m tonnes": "Mt", "%": "%", "ppm": "ppm", "kg/t": "kg/t",
 }
 _OXIDE_GRADE_UNITS = {"%", "ppm", "kg/t"}
+_CATEGORY_LABEL = re.compile(
+    r"(?:mineral resource |resource |jorc )?(?:classification|category|class)|"
+    r"block(?: id)?|deposit|prospect|domain|formation|zone|area|resource type|material type", re.I,
+)
+_VINTAGE_LABEL = re.compile(r"\b(?:MRE|estimate|resource|update)\b.*\b(?:19|20)\d{2}\b", re.I)
+_INCOMPATIBLE_PARENT = re.compile(
+    r"(?:%\s*of\s*(?:total\s+)?HM|\bHEAVY[- ]MINERAL\b|"
+    r"\b(?:HM|THM)\s+assemblage\b|\bconcentrate\b)", re.I,
+)
+_RATIO_HEADER = re.compile(r"\b(?:ratio|share|recovery|yield)\b|\b(?:MREO|HREO|LREO)\s*/\s*TREO\b", re.I)
+_SAME_TABLE_CONTINUED = re.compile(r"\b(?:cont\.?|continued|continuation)\b", re.I)
+_CELL_UNKNOWN = re.compile(r"(?:[-–—]|n/?a|not reported|\.\.)", re.I)
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,6 +78,7 @@ class Column:
     unit_label: Span | None
     chemical_basis: str | None
     parent_header: Span | None = None
+    header_tiers: tuple[Span, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -79,6 +93,9 @@ class CellBinding:
     reason: str
     raw_rounding_interval: tuple[str, str] | None = None
     parent_header: Span | None = None
+    header_tiers: tuple[Span, ...] = ()
+    layout_method: str | None = None
+    alignment_offsets: tuple[int, ...] = ()
 
     def to_dict(self) -> dict:
         return {
@@ -88,6 +105,9 @@ class CellBinding:
             "unit_anchor": self.unit_label.to_dict() if self.unit_label else None,
             "reason": self.reason, "raw_rounding_interval": self.raw_rounding_interval,
             **({"parent_header_anchor": self.parent_header.to_dict()} if self.parent_header else {}),
+            **({"detection_rule": DETECTION_RULE, "layout_method": self.layout_method,
+                "header_tier_anchors": [span.to_dict() for span in self.header_tiers],
+                "source_alignment_offsets": self.alignment_offsets} if self.layout_method else {}),
         }
 
 
@@ -141,7 +161,9 @@ def _role(label: str, unit: str) -> tuple[str, str | None] | None:
     label = _plain(label)
     treo = bool(_TREO.search(label))
     species = {_OXIDES[item[0].upper()] for item in _OXIDE.finditer(label)}
-    if _NON_ORE_HEADER.search(label) or _TREO_MODIFIER.search(label) or (treo and species):
+    aggregate = re.search(r"\b(?:MREO|HREO|LREO|NdPr)\b", label, re.I)
+    if (_NON_ORE_HEADER.search(label) or _TREO_MODIFIER.search(label) or _RATIO_HEADER.search(label)
+            or treo and (species or aggregate)):
         return None
     if unit in _MASS:
         if treo and (_CONTAINED.search(label) or not re.search(r"\b(?:grade|average)\b", label, re.I)):
@@ -229,24 +251,268 @@ def _automatic_columns(lines, page, header_indices):
     return tuple(dict.fromkeys(columns))
 
 
+def _center(span: Span) -> int:
+    return span.start_column + span.end_column
+
+
+def _lexical_role(text):
+    return bool(_ORE.search(text) or _TREO.search(text) or _OXIDE.search(text))
+
+
+def _nearest_group(rail, groups):
+    distances = [(abs(_center(rail) - _center(group)), group) for group in groups]
+    closest = min(distance for distance, _ in distances)
+    nearest = [group for distance, group in distances if distance == closest]
+    return nearest[0] if len(nearest) == 1 else None
+
+
+def _native_column_unit(anchor: Span, tiers: tuple[Span, ...]):
+    # Keep the exact unit-bearing source span. A preliminary class word such as
+    # "Tonnes" cannot override a physically paired explicit "(Mt)".
+    combined = _plain(" ".join(span.text for span in tiers))
+    explicit = [(span, unit) for span in tiers if (unit := _unit_label(span.text)) is not None
+                and not re.fullmatch(r"tonnes?", _plain(span.text), re.I)]
+    if len({unit for _, unit in explicit}) > 1:
+        return None
+    if explicit:
+        unit = explicit[0][1]
+        return unit, explicit[-1][0]
+    unit = _unit_label(combined)
+    if unit:
+        source = next((span for span in reversed(tiers) if _unit_label(span.text) == unit), anchor)
+        return unit, source
+    return None
+
+
+def _layered_columns(lines, page, header_indices):
+    rows = tuple(_spans(lines[index - 1], page, index) for index in header_indices)
+    rows = tuple(row for row in rows if row)
+    if not rows:
+        return (), ()
+    rails = max(rows, key=lambda row: (len(row), sum(_lexical_role(span.text) for span in row), -row[0].line))
+    if len(rails) < 2:
+        return (), ()
+    stacks = {rail: [rail] for rail in rails}
+    parents = next((row for row in rows if len(row) >= 2 and
+                    sum(bool(_VINTAGE_LABEL.search(span.text)) for span in row) >= 2), ())
+    for row in rows:
+        if row == rails or row == parents:
+            continue
+        for span in row:
+            hits = [rail for rail in rails if _overlap(span, rail)]
+            if len(hits) == 1:
+                stacks[hits[0]].append(span)
+    columns = []
+    for rail, entries in stacks.items():
+        tiers = tuple(sorted(entries, key=lambda span: (span.line, span.start_column)))
+        label = " ".join(span.text for span in tiers)
+        declared = _native_column_unit(rail, tiers)
+        if not declared:
+            continue
+        unit, unit_span = declared
+        role = _role(label, unit)
+        if not role:
+            continue
+        parent = _nearest_group(rail, parents) if parents else None
+        if parents and (parent is None or not _VINTAGE_LABEL.search(parent.text)):
+            continue
+        if any(_INCOMPATIBLE_PARENT.search(note.text) and _overlap(note, rail)
+               for row in rows for note in row):
+            continue
+        semantic = next((span for span in tiers if _lexical_role(span.text)), rail)
+        # The leaf rail remains the geometry anchor. Preserve words separately
+        # when the analyte or unit is printed on a different line.
+        columns.append((rail, Column(role[0], unit, semantic, unit_span, role[1], parent, tiers)))
+    multiplicity = {}
+    for _, column in columns:
+        key = column.variable, column.parent_header
+        multiplicity[key] = multiplicity.get(key, 0) + 1
+    return rails, tuple((rail, column) for rail, column in columns
+                        if multiplicity[column.variable, column.parent_header] == 1)
+
+
+def _body_cells(raw, page, index):
+    spans = _spans(raw, page, index)
+    start = next((pos for pos, span in enumerate(spans) if _VALUE.fullmatch(span.text) or _CELL_UNKNOWN.fullmatch(span.text)), len(spans))
+    label = _plain(" ".join(span.text for span in spans[:start])).casefold()
+    cells = spans[start:]
+    if not label or any(not (_CELL_UNKNOWN.fullmatch(span.text) or _VALUE.fullmatch(span.text)) for span in cells):
+        return "", ()
+    return label, cells
+
+
+def _numeric_rails(rails):
+    """Discard only explicit label columns, retaining unknown numeric lanes."""
+    return tuple(rail for rail in rails if not _CATEGORY_LABEL.fullmatch(_plain(rail.text)))
+
+
+def _columns_at_offset(rails, cells, offset):
+    matches = []
+    for span in cells:
+        shifted_start, shifted_end = span.start_column - offset, span.end_column - offset
+        eligible = [index for index, rail in enumerate(rails)
+                    if max(shifted_start, rail.start_column) <= min(shifted_end, rail.end_column)]
+        if len(eligible) != 1 or eligible[0] in matches:
+            return None
+        matches.append(eligible[0])
+    return tuple(matches)
+
+
+def _witnessed_alignment(rails, row, witnesses):
+    if len(rails) < 3 or len(row) != len(rails) or len(witnesses) < 2:
+        return None
+    candidates = {}
+    for offset in range(-14, 15):
+        if all(_columns_at_offset(rails, values, offset) is not None for values in witnesses):
+            found = _columns_at_offset(rails, row, offset)
+            if found is not None:
+                candidates.setdefault(found, []).append(offset)
+    if len(candidates) != 1:
+        return None
+    assignment, offsets = next(iter(candidates.items()))
+    return assignment, tuple(offsets)
+
+
+def _layout_value(column, number, unit, caption, method, offsets=()):
+    if unit and _unit_label(unit.text) != column.unit:
+        return None
+    _, lower, upper = reported_interval(number.text)
+    return CellBinding(
+        column.variable, column.unit, column.chemical_basis, number, caption, column.header,
+        unit or column.unit_label, "ORIGINAL_HEADER_UNIT_AND_ROW_BOUND",
+        (format(lower, "f"), format(upper, "f")), column.parent_header,
+        column.header_tiers, method, offsets,
+    )
+
+
+def _direct_layered_values(rails, columns, parsed, caption):
+    by_rail = dict(columns)
+    assigned = {}
+    for number, inline in parsed:
+        alternatives = [rail for rail in rails if _overlap(rail, number)]
+        if len(alternatives) != 1:
+            continue
+        rail = alternatives[0]
+        column = by_rail.get(rail)
+        if column is None or sum(_overlap(rail, value) for value, _ in parsed) != 1:
+            continue
+        bound = _layout_value(column, number, inline, caption, "MULTI_TIER_HEADER_EXACT_ALIGNMENT")
+        if bound:
+            assigned[number.start_column] = bound
+    return assigned
+
+
+def _layered_values(lines, page, row_line, first_header, first_data, caption, *, cross_page=False):
+    headers = range(first_header, first_data)
+    rails, columns = _layered_columns(lines, page, headers)
+    raw = lines[row_line - 1]
+    direct = _direct_layered_values(rails, columns, [_parsed_value(span) for span in _numbers(raw, page, row_line)], caption)
+    if cross_page:
+        return direct
+    numeric_rails = _numeric_rails(rails)
+    label, body = _body_cells(raw, page, row_line)
+    measured = {}
+    for line in range(first_data, row_line):
+        name, values = _body_cells(lines[line - 1], page, line)
+        if name and name != label and len(values) == len(numeric_rails):
+            measured.setdefault(name, values)
+    fit = _witnessed_alignment(numeric_rails, body, tuple(measured.values()))
+    if not fit:
+        return direct
+    arrangement, offsets = fit
+    by_rail = dict(columns)
+    for span, number in zip(body, arrangement, strict=True):
+        column = by_rail.get(numeric_rails[number])
+        if not column or not _VALUE.fullmatch(span.text):
+            continue
+        value, inline = _parsed_value(span)
+        item = _layout_value(column, value, inline, caption, "TABLE_WIDE_ROW_ALIGNMENT", offsets)
+        if item:
+            direct[value.start_column] = item
+    return direct
+
+
+def _header_start(lines, page, start, end):
+    return next((line for line in range(start, end) if len(_spans(lines[line - 1], page, line)) >= 2), end)
+
+
+def _first_body(lines, page, start, end):
+    return next((index for index in range(start, end) if len(_numbers(lines[index - 1], page, index)) >= 2), end)
+
+
+def _source_caption(document, lines, page, caption_line, first_header):
+    local = _caption_block(lines, page, caption_line, first_header - 1)
+    continued = _SAME_TABLE_CONTINUED.search(" ".join(span.text for span in local))
+    if not continued and _resource_type(local) == "MINERAL_RESOURCE":
+        return local, False
+    marker = _CAPTION.match(lines[caption_line - 1])
+    if page <= 1 or not continued or _resource_type(local) in {"ORE_RESERVE", "EXPLORATION_TARGET"}:
+        raise DocumentError("SCIENTIFIC_CONFLICT", "MINERAL_RESOURCE_SCOPE_REQUIRED")
+    earlier = _lines(document, page - 1)
+    candidates = [index for index, line in enumerate(earlier, start=1) if _CAPTION.match(line)]
+    if not candidates:
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "CONTINUED_RESOURCE_CAPTION_UNAVAILABLE")
+    start = candidates[-1]
+    previous_marker = _CAPTION.match(earlier[start - 1])
+    if _plain(previous_marker[0]).casefold() != _plain(marker[0]).casefold():
+        raise DocumentError("SCIENTIFIC_CONFLICT", "CROSS_PAGE_TABLE_CONTINUATION_MISMATCH")
+    prior = _caption_block(earlier, page - 1, start, _header_start(earlier, page - 1, start + 1, len(earlier) + 1) - 1)
+    if _resource_type(prior) != "MINERAL_RESOURCE":
+        raise DocumentError("SCIENTIFIC_CONFLICT", "MINERAL_RESOURCE_SCOPE_REQUIRED")
+    return (*prior, *local), True
+
+
+def _continued_values(document, page, row, row_line, caption):
+    """Carry the immediate prior header only if the full native grid is unchanged."""
+    earlier = _lines(document, page - 1)
+    start = _header_start(earlier, page - 1, caption[0].line + 1, len(earlier) + 1)
+    first_data = _first_body(earlier, page - 1, start, len(earlier) + 1)
+    rails, columns = _layered_columns(earlier, page - 1, range(start, first_data))
+    numeric_rails = _numeric_rails(rails)
+    _, selected = _body_cells(row, page, row_line)
+    if len(numeric_rails) < 3 or len(selected) != len(numeric_rails):
+        return {}
+    witnessed = any(
+        len(cells) == len(numeric_rails) and _columns_at_offset(numeric_rails, cells, 0) is not None
+        for index in range(first_data, len(earlier) + 1)
+        for _, cells in (_body_cells(earlier[index - 1], page - 1, index),)
+    )
+    if not witnessed or _columns_at_offset(numeric_rails, selected, 0) is None:
+        return {}
+    values = _direct_layered_values(
+        rails, columns, [_parsed_value(span) for span in _numbers(row, page, row_line)], caption,
+    )
+    return {key: replace(value, layout_method="CONTINUED_TABLE_ORIGINAL_HEADER") for key, value in values.items()}
+
+
 def bind_page_row(document: PDFDocument, *, page: int, row_line: int, caption_line: int) -> tuple[CellBinding, ...]:
-    """Type only physically resolved same-page original cells. No scientific admission."""
+    """Bind proven native heading tiers and value cells without research admission."""
     lines = _lines(document, page)
     _line_span(lines, row_line, page)
     if not 1 <= caption_line < row_line or not _CAPTION.match(lines[caption_line - 1]):
         raise DocumentError("EVIDENCE_INSUFFICIENT", "NATIVE_TABLE_CAPTION_UNBOUND")
     if any(_CAPTION.match(item) for item in lines[caption_line:row_line - 1]):
         raise DocumentError("SCIENTIFIC_CONFLICT", "ROW_OUTSIDE_SOURCE_TABLE")
-    first_header = next((line for line in range(caption_line + 1, row_line)
-                         if len(_spans(lines[line - 1], page, line)) >= 2), row_line)
-    caption = _caption_block(lines, page, caption_line, first_header - 1)
-    if _resource_type(caption) != "MINERAL_RESOURCE":
-        raise DocumentError("SCIENTIFIC_CONFLICT", "MINERAL_RESOURCE_SCOPE_REQUIRED")
-    first_data = next((index for index in range(first_header, row_line)
-                       if len(_numbers(lines[index - 1], page, index)) >= 2), row_line)
+    first_header = _header_start(lines, page, caption_line + 1, row_line)
+    caption, continued = _source_caption(document, lines, page, caption_line, first_header)
+    first_data = _first_body(lines, page, first_header, row_line)
     headers = range(first_header, first_data)
     values = _numbers(lines[row_line - 1], page, row_line)
-    return tuple(_classified(_automatic_columns(lines, page, headers), values, caption))
+    legacy = tuple(_classified(_automatic_columns(lines, page, headers), values, caption))
+    layered = _layered_values(lines, page, row_line, first_header, first_data, caption, cross_page=continued)
+    if continued and first_header == first_data:
+        layered = _continued_values(document, page, lines[row_line - 1], row_line, caption)
+    result = []
+    for cell in legacy:
+        alternative = layered.get(cell.value.start_column)
+        if alternative and cell.variable and (alternative.variable, alternative.unit, alternative.chemical_basis) != (
+            cell.variable, cell.unit, cell.chemical_basis,
+        ):
+            result.append(replace(cell, variable=None, unit=None, chemical_basis=None, header=None,
+                                  unit_label=None, reason="NATIVE_LAYOUT_METHODS_DISAGREE"))
+        else:
+            result.append(alternative if alternative and (cell.variable is None or alternative.parent_header) else cell)
+    return tuple(result)
 
 
 def _selected_header(document, page, expected, *, after, through):
@@ -485,10 +751,14 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
         if case["kind"] == "NATIVE_TABLE_TOTAL_ROW":
             native[case["source_sha256"]].append(case)
         else:
+            existing = case["kind"] == "REVIEWED_BINDING_ORIGINAL_TOKEN"
             lineage.append({
                 "case_id": case["case_id"], "project_id": case["project_id"], "source_sha256": case["source_sha256"],
                 "candidate_only": True, "formal_admission": False, "source_position_id": case.get("source_position_id"),
-                "status": "EXISTING_REVIEWED_TOKEN" if case["kind"] == "REVIEWED_BINDING_ORIGINAL_TOKEN" else "NO_TABLE_STRUCTURE",
+                "status": "EXISTING_REVIEWED_TOKEN" if existing else "NO_TABLE_STRUCTURE",
+                **({"reason": "INVENTORY_HAS_NO_ORIGINAL_TABLE_ROW_ANCHOR", "edition_id": case["edition_id"],
+                    "prior_route_status": case.get("prior_route_status"),
+                    "physical_pages_inspected": case.get("physical_pages_inspected", [])} if not existing else {}),
             })
     catalog = defaultdict(list)
     for edition in manifest["editions"]:
@@ -593,7 +863,7 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
         "value_evidence_lineage.jsonl": lineage,
     }
     report = {
-        "schema": RULE, "profile_id": identity[0], "cutoff": identity[1], "timezone": identity[2],
+        "schema": RULE, "detection_rule": DETECTION_RULE, "profile_id": identity[0], "cutoff": identity[1], "timezone": identity[2],
         "candidate_only": True, "formal_scientific_values_added": 0, "inputs": hashes,
         "status": "FAIL" if any(row["status"] == "SCIENTIFIC_CONFLICT" for row in unbound) else
                   "BLOCKED" if len(sources_read) != len(native) else "PASS",
@@ -607,6 +877,9 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
         "unresolved_baseline_row_lexeme_matches": sum(row["status"] == "BASELINE_ROW_LEXEME_MATCH_UNRESOLVED" for row in overlaps),
         "distinct_project_candidates": len({row["candidate_id"] for row in typed}),
         "unbound_candidate_sightings": len(unbound),
+        "resolved_by_layout_method": dict(Counter(row.get("layout_method", "BASELINE_NATIVE_ALIGNMENT")
+                                                 for row in (*typed, *overlaps))),
+        "work_items_without_table_structure": sum(row["status"] == "NO_TABLE_STRUCTURE" for row in lineage),
         "status_by_case": dict(Counter(row["status"] for row in lineage)),
         "issue_by_case": dict(Counter(row["reason"] for row in unbound)),
     }
