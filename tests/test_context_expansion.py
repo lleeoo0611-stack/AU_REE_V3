@@ -24,6 +24,18 @@ GOVERNMENT_FIXTURE = ROOT / "tests/fixtures/government_point_expansion_v1.zip"
 
 
 class NativePointSchemaTest(unittest.TestCase):
+    def test_comparison_ignores_release_ids_only_with_exact_scientific_content(self):
+        rebound = runpy.run_path(str(ROOT / "tools/verify_context_expansion.py"))["_rebound_record"]
+        before = {"release_id": "a" * 64, "selection_id": "b" * 64, "observation_id": "c" * 64,
+                  "scope_id": "d" * 64, "source_sha256": "e" * 64, "value": "279.3"}
+        after = {**before, "release_id": "f" * 64, "selection_id": "0" * 64}
+        expected = rebound(before, before["release_id"])
+        self.assertEqual(expected, rebound(after, after["release_id"]))
+        for field, value in (("value", "279.4"), ("scope_id", "1" * 64), ("observation_id", "2" * 64),
+                             ("source_sha256", "3" * 64), ("release_id", "4" * 64)):
+            with self.subTest(field=field):
+                self.assertNotEqual(expected, rebound({**after, field: value}, after["release_id"]))
+
     def test_point_role_is_never_inferred_from_an_invalid_crs_or_geometry(self):
         fixture = {"type": "FeatureCollection", "crs": {"properties": {"name": "urn:ogc:def:crs:EPSG::4283"}},
                    "numberMatched": 1, "features": [{"properties": {"ENO": 99},
@@ -64,6 +76,26 @@ class NativePointSchemaTest(unittest.TestCase):
     "AU_REE_CONTEXT_EXPANDED_CAS",
 )), "fixed and separately expanded exact source assets required")
 class ExactContextExpansionTest(unittest.TestCase):
+    def test_independent_origin_readback_refuses_accuracy_date_crs_and_role_leakage(self):
+        verify = runpy.run_path(str(ROOT / "tools/verify_context_expansion.py"))["verify_government_origins"]
+        fixed = tuple(Path(os.environ[key]) for key in ("AU_REE_CONTEXT_FIXED_MANIFEST", "AU_REE_CONTEXT_FIXED_CAS"))
+        expanded = tuple(Path(os.environ[key]) for key in ("AU_REE_CONTEXT_EXPANDED_MANIFEST", "AU_REE_CONTEXT_EXPANDED_CAS"))
+        report = review_official_point_candidates(PROFILES / "official_geography_bindings_v1.json", *fixed, *expanded)
+        review = verify(report, *expanded, *fixed)
+        self.assertEqual((review["review_candidates"], review["rejected_controls"], review["native_rows"]), (8, 3, 91))
+        self.assertEqual(review["representative_origins"], 0)
+        self.assertEqual(review["cases"]["mt-weld-cld-mine"]["known_temporal_metadata_fields"], ["extract_da"])
+        self.assertTrue(all(value["distance_km"] is None and value["status"] == "NOT_RUN"
+                            for value in review["distance_computation"].values()))
+        for field, value in (("crs", "EPSG:4283"), ("feature_effective_date", "2026-11-26"),
+                             ("raw_role", "Deposit"), ("precision", {"positional_accuracy_m": 5})):
+            with self.subTest(field=field):
+                corrupted = deepcopy(report)
+                target, = (row for row in corrupted["cases"] if row["case_id"] == "mt-weld-cld-mine")
+                target[field] = value
+                with self.assertRaisesRegex(ValueError, "Independent original government"):
+                    verify(corrupted, *expanded, *fixed)
+
     def test_government_shape_role_and_precision_remain_shadow(self):
         with tempfile.TemporaryDirectory() as tmp:
             report = review_official_point_candidates(

@@ -14,7 +14,7 @@ from tempfile import TemporaryDirectory
 from zoneinfo import ZoneInfo
 
 from .contracts import canonical_json
-from .contracts.temporal import evaluate_temporal
+from .contracts.temporal import _date_bounds, evaluate_temporal
 from .documents import DocumentCache, DocumentError
 from .sources import ContentStore, IntegrityError, SCHEMA as SOURCE_MANIFEST, validate_edition_proofs
 
@@ -182,12 +182,24 @@ def inventory_tenements(bindings_path: Path, sources_path: Path, store: Path, ou
     return result
 
 
+def _date_upper_bound(value):
+    """Preserve a feature's original date precision at the cutoff."""
+    try:
+        return _date_bounds(value)[1]
+    except ValueError:
+        return None
+
+
 def infrastructure_site_compatibility(location: dict) -> dict:
     """Assess a geographic feature's suitability as a mine or deposit origin."""
     role = location.get("location_role")
     geometry = location.get("geometry") or {}
     locator = location.get("locator") or {}
     temporal = location.get("temporal_decision") or {}
+    effective_token = location.get("feature_effective_date")
+    effective = _date_upper_bound(effective_token)
+    cutoff_token = temporal.get("cutoff")
+    cutoff = _date_upper_bound(cutoff_token) if isinstance(cutoff_token, str) and len(cutoff_token) == 10 else None
     coordinates = geometry.get("coordinates")
     point_coordinates = (
         isinstance(coordinates, (tuple, list)) and len(coordinates) in {2, 3}
@@ -202,8 +214,12 @@ def infrastructure_site_compatibility(location: dict) -> dict:
             ("crs", location.get("crs")),
             ("geometry", geometry.get("type")),
             ("point_coordinates", point_coordinates),
+            ("feature_effective_date", effective),
             ("eligible_temporal_decision", temporal.get("status") == "ELIGIBLE" and temporal.get("decision_id")
-             and temporal.get("source_sha256") == location.get("source_sha256")),
+             and temporal.get("source_sha256") == location.get("source_sha256")
+             and temporal.get("observation_role") == "HISTORICAL_MEASUREMENT"
+             and effective is not None and cutoff is not None and effective <= cutoff
+             and temporal.get("effective_date") == effective_token),
             ("positional_precision", type(precision) in (int, float) and math.isfinite(precision) and precision >= 0),
             ("verified_project_location_link", location.get("project_link")),
         ) if not present

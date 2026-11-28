@@ -33,16 +33,36 @@ class InfrastructureCompatibilityTests(unittest.TestCase):
                 self.assertEqual(result["status"], "NOT_COMPARABLE")
 
     def test_verified_role_and_fields_reach_candidate_review_results(self):
+        feature_date = "2025-08-29"
+        feature_decision = {**DECISION, "observation_role": "HISTORICAL_MEASUREMENT", "effective_date": feature_date}
         valid = {
             "location_role": "OFFICIAL_DEPOSIT_POINT",
             "geometry": {"type": "Point", "coordinates": [123, -25]}, "source_sha256": DIGEST,
             "crs": "EPSG:7844", "locator": {"native_id": "W123"},
-            "precision": {"positional_accuracy_m": 20}, "temporal_decision": DECISION,
+            "precision": {"positional_accuracy_m": 20}, "temporal_decision": feature_decision,
+            "feature_effective_date": feature_date,
             "project_link": {"source_sha256": DIGEST},
         }
         self.assertEqual(infrastructure_site_compatibility(valid)["status"], "SITE_CANDIDATE")
-        contaminated = {**valid, "temporal_decision": {**DECISION, "source_sha256": "wrong"}}
-        self.assertIn("eligible_temporal_decision", infrastructure_site_compatibility(contaminated)["missing_dimensions"])
+        for decision in ({**feature_decision, "source_sha256": "wrong"},
+                         {**feature_decision, "effective_date": "2025-08-28"},
+                         {**feature_decision, "observation_role": "DOCUMENT"}, DECISION):
+            with self.subTest(decision=decision):
+                contaminated = {**valid, "temporal_decision": decision}
+                self.assertIn("eligible_temporal_decision",
+                              infrastructure_site_compatibility(contaminated)["missing_dimensions"])
+        undated = infrastructure_site_compatibility({**valid, "feature_effective_date": None})
+        self.assertEqual(undated["status"], "INSUFFICIENT_CONTEXT")
+        self.assertIn("feature_effective_date", undated["missing_dimensions"])
+        late_date = "2026-11-29"
+        late = {**valid, "feature_effective_date": late_date,
+                "temporal_decision": {**feature_decision, "effective_date": late_date}}
+        self.assertEqual(infrastructure_site_compatibility(late)["status"], "INSUFFICIENT_CONTEXT")
+        for month, expected in (("2025-08", "SITE_CANDIDATE"), ("2026-11", "INSUFFICIENT_CONTEXT")):
+            with self.subTest(month=month):
+                precise_as_reported = {**valid, "feature_effective_date": month,
+                                       "temporal_decision": {**feature_decision, "effective_date": month}}
+                self.assertEqual(infrastructure_site_compatibility(precise_as_reported)["status"], expected)
         unknown = infrastructure_site_compatibility({})
         self.assertEqual(unknown["status"], "INSUFFICIENT_CONTEXT")
 
