@@ -1,0 +1,367 @@
+{
+  "adapter_code_commit": "08dd2f30835eee38616f7ce24105c6a3cae52d47",
+  "approved_scoped_statements": 6,
+  "binding_spec_sha256": "cb4f92a8cc50c03decb2c1923e04818b9d3e87848f05d39625be680273bdd17c",
+  "census_extension_facts": 28,
+  "census_receipt_sha256": "7be86ffe89a5a1a71da82a2149ec3eed4ca0cdbed062c64195ecc910817a0e29",
+  "checks": [
+    {
+      "actual": true,
+      "case_id": "wudinna-statement",
+      "expected": true,
+      "purpose": "scoped_resource_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "wudinna-statement",
+      "expected": true,
+      "purpose": "native_cutoff_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "wudinna-statement",
+      "expected": true,
+      "purpose": "estimate_date_or_vintage_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "wudinna-statement",
+      "expected": true,
+      "purpose": "reported_classification_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "wudinna-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "wudinna-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "wudinna-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "north-main-statement",
+      "expected": true,
+      "purpose": "scoped_resource_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "north-main-statement",
+      "expected": true,
+      "purpose": "native_cutoff_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "north-main-statement",
+      "expected": true,
+      "purpose": "estimate_date_or_vintage_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "north-main-statement",
+      "expected": true,
+      "purpose": "reported_classification_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "north-main-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "north-main-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": false,
+      "case_id": "north-main-statement",
+      "expected": false,
+      "purpose": "derived_as_reported_refusal",
+      "status": "TN"
+    },
+    {
+      "actual": false,
+      "case_id": "north-higher-grade-subset",
+      "expected": false,
+      "purpose": "distinct_scope_or_reserve_refusal",
+      "status": "TN"
+    },
+    {
+      "actual": true,
+      "case_id": "jupiter-current-statement",
+      "expected": true,
+      "purpose": "scoped_resource_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "jupiter-current-statement",
+      "expected": true,
+      "purpose": "native_cutoff_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "jupiter-current-statement",
+      "expected": true,
+      "purpose": "estimate_date_or_vintage_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "jupiter-current-statement",
+      "expected": true,
+      "purpose": "reported_classification_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "jupiter-current-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "jupiter-current-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": false,
+      "case_id": "jupiter-historical-statement",
+      "expected": false,
+      "purpose": "distinct_scope_or_reserve_refusal",
+      "status": "TN"
+    },
+    {
+      "actual": true,
+      "case_id": "mt-weld-resource-statement",
+      "expected": true,
+      "purpose": "scoped_resource_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "mt-weld-resource-statement",
+      "expected": true,
+      "purpose": "native_cutoff_display",
+      "status": "TP"
+    },
+    {
+      "actual": false,
+      "case_id": "mt-weld-resource-statement",
+      "expected": true,
+      "purpose": "estimate_date_or_vintage_display",
+      "status": "FN"
+    },
+    {
+      "actual": true,
+      "case_id": "mt-weld-resource-statement",
+      "expected": true,
+      "purpose": "reported_classification_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "mt-weld-resource-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "mt-weld-resource-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "mt-weld-resource-statement",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": false,
+      "case_id": "mt-weld-reserve-counterexample",
+      "expected": false,
+      "purpose": "distinct_scope_or_reserve_refusal",
+      "status": "TN"
+    },
+    {
+      "actual": true,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": true,
+      "purpose": "scoped_resource_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": true,
+      "purpose": "native_cutoff_display",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": true,
+      "purpose": "estimate_date_or_vintage_display",
+      "status": "TP"
+    },
+    {
+      "actual": false,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": false,
+      "purpose": "reported_classification_display",
+      "status": "TN"
+    },
+    {
+      "actual": true,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": true,
+      "purpose": "unresolved_category_review",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    },
+    {
+      "actual": true,
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": true,
+      "purpose": "original_measurement_token_in_context",
+      "status": "TP"
+    }
+  ],
+  "cold_runs": [
+    {
+      "measured_peak_rss_kib": 80528,
+      "measured_total_cpu_seconds": 2.148722,
+      "measured_wall_seconds": 1.976666,
+      "ocr_opens": 0,
+      "pdf_opens": 6,
+      "pdf_pages_decoded": 198,
+      "sqlite_writes": 0
+    },
+    {
+      "measured_peak_rss_kib": 80780,
+      "measured_total_cpu_seconds": 1.935408,
+      "measured_wall_seconds": 1.718335,
+      "ocr_opens": 0,
+      "pdf_opens": 6,
+      "pdf_pages_decoded": 198,
+      "sqlite_writes": 0
+    }
+  ],
+  "confusion": {
+    "derived_as_reported_refusal": {
+      "TN": 1
+    },
+    "distinct_scope_or_reserve_refusal": {
+      "TN": 3
+    },
+    "estimate_date_or_vintage_display": {
+      "FN": 1,
+      "TP": 4
+    },
+    "native_cutoff_display": {
+      "TP": 5
+    },
+    "original_measurement_token_in_context": {
+      "TP": 13
+    },
+    "reported_classification_display": {
+      "TN": 1,
+      "TP": 4
+    },
+    "scoped_resource_display": {
+      "TP": 5
+    },
+    "unresolved_category_review": {
+      "TP": 1
+    }
+  },
+  "exact_fresh_process_runs": 2,
+  "facts_per_field": {
+    "ree_grade_or_chemistry_basis": 6,
+    "resource_cutoff_as_reported": 6,
+    "resource_estimate_effective_date": 5,
+    "resource_jorc_class_as_reported": 5,
+    "resource_scope_or_deposit_name": 6
+  },
+  "known_blockers": {
+    "goschen_jorc_category": "SOURCE_ROW_AND_GOVERNED_CATEGORY_DIFFER",
+    "mt_weld_effective_date": "COVER_COMPARISON_AND_TABLE_CONTEXT_NOT_LINKED_FOR_DISPLAY"
+  },
+  "local_tests": {
+    "executed": 6,
+    "passed": 6,
+    "skipped": 0
+  },
+  "observed_overlay_facts_sha256": "724b8755aa08ae23f48e872ff9f331199099f3b587a661a0afd7a1be8e7bec0f",
+  "original_oracle_fixture": "tests/fixtures/census_resource_display_v2_oracle.json",
+  "original_oracle_sha256": "e4095aed984cc4276bae5f5e36416e6346ec8291bdf6f617fb8b6af9772b9c47",
+  "projects": 6,
+  "recall_status": "KNOWN_FALSE_NEGATIVE_FOR_MT_WELD_EXACT_DAY",
+  "replay_output_sha256": {
+    "resource_display_facts.jsonl": "724b8755aa08ae23f48e872ff9f331199099f3b587a661a0afd7a1be8e7bec0f",
+    "resource_display_holds.jsonl": "206da1e9928254dc9d5f699f6b5190333d9166d0295c6c1e2cc7a5f3a5894341"
+  },
+  "same_scope_legacy_display_baseline": "NOT_APPLICABLE",
+  "schema": "census-resource-display-verification-v1",
+  "scientific_cells_changed": 0,
+  "scope": "Independent named-case source audit. Generalization and formal scientific admission precision are unmeasured.",
+  "scope_separation": {
+    "core_51_new_cells": 0,
+    "new_accepted_scientific_values": 0,
+    "new_independent_observations": 0
+  },
+  "source_editions": 6,
+  "stage3_source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "static_adapter_metrics": {
+    "ast_branch_max": 23,
+    "ast_branch_p90": 23,
+    "function_count": 19,
+    "internal_imports": 7
+  },
+  "status": "PASS"
+}

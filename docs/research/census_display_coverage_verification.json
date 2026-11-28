@@ -1,0 +1,440 @@
+{
+  "schema": "census-display-coverage-verification-v1",
+  "research_cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "starting_main": "293cdfedea31874e0d757a7513695aaa77da30f0",
+  "candidate_code_commit": "69a111dd56420d364c1ddf2547fe81888b4e51ed",
+  "historical_candidate": "47bcd58e568dc912f78c887ad83377adc891f81a472b3e71a266cf2e5abd60dd",
+  "candidate": "a1805f68b22d73ab070be50f6d2a110edfcb30230e21778b6b62513ccbcc96ee",
+  "release_status": "RESEARCH_CANDIDATE",
+  "profile_input_artifacts": {
+    "bindings": "cb4f92a8cc50c03decb2c1923e04818b9d3e87848f05d39625be680273bdd17c",
+    "profile": "51940a4baeb0660d4e46b69696b2ad9cf619612a1e0389efb5e05c1c2c212cd0",
+    "sources": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "display_contract_sha256": "3cdc2e496fad9df321ca3e4cc8ff91a8734f6ea04b8f31dad7eda27e68e4f13e",
+  "scientific_output_hashes": {
+    "census/cell_status.csv": "891edda1706eb8bb4b9967496bdbdae149e5f4844b700e0bb4c5029638249ed3",
+    "census/census.csv": "7f5ec7fa3d741c19c5569ac1fb470d6eea27ba7bfae97e6cc85dbd4214b2e1cb",
+    "census/census_receipt.json": "3f36724d0e5d736a5339376d250fd382ed6d88824da7cc32bb460f94890ef51d",
+    "decision/decision_receipt.json": "bab8e9b9c76da2f7d889b80f9dc6e2c93f4f0ab4a24eaec2f295aaeb69e5dd72",
+    "decision/mcda_inputs.json": "87ed95a4340f54a2d3847cc57216a048f8c72139477e9848a63b4cf64bdd250b",
+    "decision/mcda_results.json": "68964d1160a940daccc45cdcf9586fade0dd1d86db326d128e692c7aca591b8c",
+    "observations/extraction.json": "e8d43a7b679a2e8aa930d1f6e098826264e7783272b5237b0f5f9b341b7c2382",
+    "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+  },
+  "environment": {
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "python": "3.12.14",
+    "python_implementation": "CPython",
+    "sqlite": "3.53.1",
+    "tools": {
+      "pdfimages": {
+        "sha256": "213eba4a36ef021f49a0abc94292a7566baba8dfafef5017467166d9f06074f5",
+        "version": "pdfimages version 25.03.0"
+      },
+      "pdftotext": {
+        "sha256": "7fe3559cac3ba61dd93650a1ba90499b9fc488184ef8d0f2f1305ddf52c0378b",
+        "version": "pdftotext version 25.03.0"
+      },
+      "tesseract": {
+        "sha256": "74b76a5b994adcc18be362bf64ed5118082b2401d5d9a35242e92fc4c62e2b4b",
+        "version": "tesseract 5.5.0"
+      }
+    }
+  },
+  "gates": {
+    "C4-0": "PASS",
+    "C4-1": "PASS",
+    "C4-2": "PASS",
+    "C4-3": "PASS",
+    "C4-4": "PASS",
+    "C4-5": "PASS",
+    "C4-6": "PASS",
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "O2_HISTORICAL": "FAIL"
+  },
+  "coverage": {
+    "core_published_axis": {
+      "present": [
+        1122,
+        1138
+      ],
+      "verified_display": [
+        30,
+        46
+      ],
+      "denominator": 4743,
+      "independent_new_attribute_assertions": 7,
+      "new_attribute_project_count": 7,
+      "new_attribute_source_sha_count": 7,
+      "first_extension_corpus_reach": [
+        9,
+        12
+      ]
+    },
+    "extension_axis": {
+      "fields": 9,
+      "present": 39,
+      "denominator": 837,
+      "fields_by_role": {
+        "forecast_annual_rate_as_reported": {
+          "not_applicable": 0,
+          "present": 2,
+          "unknown": 91
+        },
+        "forecast_product_and_basis": {
+          "not_applicable": 0,
+          "present": 2,
+          "unknown": 91
+        },
+        "forecast_scenario_or_period": {
+          "not_applicable": 0,
+          "present": 2,
+          "unknown": 91
+        },
+        "ree_grade_or_chemistry_basis": {
+          "not_applicable": 0,
+          "present": 6,
+          "unknown": 87
+        },
+        "resource_cutoff_as_reported": {
+          "not_applicable": 0,
+          "present": 6,
+          "unknown": 87
+        },
+        "resource_estimate_effective_date": {
+          "not_applicable": 0,
+          "present": 5,
+          "unknown": 88
+        },
+        "resource_jorc_class_as_reported": {
+          "not_applicable": 0,
+          "present": 5,
+          "unknown": 88
+        },
+        "resource_scope_or_deposit_name": {
+          "not_applicable": 0,
+          "present": 6,
+          "unknown": 87
+        },
+        "study_effective_or_completion_date": {
+          "not_applicable": 0,
+          "present": 5,
+          "unknown": 88
+        }
+      },
+      "fact_roles": {
+        "COMPLETED_STUDY": 5,
+        "ENGINEERING_PLAN": 3,
+        "FORECAST": 6,
+        "REPORTED_RESOURCE": 28
+      },
+      "fact_records": 42,
+      "distinct_original_subjects": 14,
+      "distinct_editions": 11,
+      "project_count": 10,
+      "review_only_records": 9
+    },
+    "science_axis": {
+      "formal_direct": 16,
+      "formal_derived": 3,
+      "new_raw_numeric_observations": 0,
+      "new_accepted_science_values": 0,
+      "comparable_keys": 6,
+      "new_comparable_keys": 0,
+      "complete_r1_s1_cohort": 2,
+      "new_panel_samples": 0
+    }
+  },
+  "expanded_manifest": {
+    "sha256": "eba8121e65d5654ef9abc23dcfa2b2d03961d4af618e11c0794496dad537a544",
+    "new_source_versions": 5,
+    "attempt_urls": 7,
+    "exact_requested_editions_recovered": 0,
+    "new_fixed_corpus_sources": 0,
+    "new_display_cells": 0,
+    "missing_historical_editions": "BLOCKED"
+  },
+  "limits": {
+    "unseen_family_generalization": "UNMEASURED",
+    "ocr": "NOT_RUN",
+    "ci_billing": "UNMEASURED",
+    "old_edition_recovery": "BLOCKED",
+    "official_coordinate_admission": "BLOCKED"
+  },
+  "full_fixed_source_tests": {
+    "passed": 363,
+    "skipped": 0,
+    "unittest_seconds": 109.381,
+    "exit_status": 0,
+    "elapsed_s": 110.11881326200091,
+    "user_cpu_s": 93.744096,
+    "sys_cpu_s": 15.004409,
+    "peak_rss_kib": 157672
+  },
+  "candidate_rollback_and_corruption": {
+    "status": "PASS",
+    "release_id": "a1805f68b22d73ab070be50f6d2a110edfcb30230e21778b6b62513ccbcc96ee",
+    "baseline_release_id": "47bcd58e568dc912f78c887ad83377adc891f81a472b3e71a266cf2e5abd60dd",
+    "source_corruption": {
+      "outcome": "REFUSED",
+      "reason": "build-display: Display package source verification did not pass for the fixed manifest",
+      "exit_code": 1
+    },
+    "source_sha256": "af0a8ff9a1b194a45f16dc56dd3b71c04c5f426f15dd23d0511de087f9ec8ac5",
+    "display_json_corruption": {
+      "outcome": "REFUSED",
+      "reason": "build-site: Web artifact differs from its manifest: census_display.json",
+      "exit_code": 1
+    },
+    "previous_pointer_retained": true,
+    "candidate_rollback": "PASS",
+    "formal_pointer_absent": true,
+    "publish_gate": {
+      "operation": "publish",
+      "status": "BLOCKED",
+      "receipt_directory": "/workspace/AU_REE_V3/work/census-stage4/final/fault-verification/publish-blocked",
+      "reason": "REPLICA_UNAVAILABLE",
+      "release_id": "a1805f68b22d73ab070be50f6d2a110edfcb30230e21778b6b62513ccbcc96ee",
+      "F5": "BLOCKED"
+    },
+    "formal_website_gate": {
+      "operation": "build-site",
+      "status": "BLOCKED",
+      "receipt_directory": "/workspace/AU_REE_V3/work/census-stage4/final/fault-verification/formal-blocked",
+      "reason": "FORMAL_RELEASE_NOT_AUTHORIZED"
+    }
+  },
+  "a_through_c_ci": [
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "5fd58b3ff08f847e0416900bfaec2acea3e1c525",
+        "mergeCommit": {
+          "oid": "d74f74cf22a335e30be8e422667fcd1ba5f6b734"
+        },
+        "number": 41,
+        "state": "MERGED",
+        "title": "Verify the Census display baseline and versioned field contract",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/41"
+      },
+      "jobs": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:49:42Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46141664785/job/140968729188",
+          "name": "Static and unit",
+          "startedAt": "2026-11-28T11:49:19Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:49:16Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46141664785/job/140968730432",
+          "name": "Frozen reference integrity",
+          "startedAt": "2026-11-28T11:49:16Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:50:14Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46141664785/job/140968729338",
+          "name": "Exact resource integration",
+          "startedAt": "2026-11-28T11:49:19Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        }
+      ],
+      "successful_runner_seconds": 78
+    },
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "bc117e47aeacb218d661b0bc09188b1a90951702",
+        "mergeCommit": {
+          "oid": "877c73f1a2a8f5bb44602c8f4450d76bc7c91ef4"
+        },
+        "number": 42,
+        "state": "MERGED",
+        "title": "Recover scoped batch evidence for core Census display",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/42"
+      },
+      "jobs": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:58:24Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142338657/job/140970829381",
+          "name": "Static and unit",
+          "startedAt": "2026-11-28T11:58:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:58:22Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142338707/job/140970829248",
+          "name": "verify",
+          "startedAt": "2026-11-28T11:58:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Research website"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:58:08Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142338657/job/140970830460",
+          "name": "Frozen reference integrity",
+          "startedAt": "2026-11-28T11:58:08Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:58:08Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142338707/job/140970830756",
+          "name": "deployment-authorization",
+          "startedAt": "2026-11-28T11:58:08Z",
+          "status": "COMPLETED",
+          "workflowName": "Research website"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:58:22Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142338707/job/140970886816",
+          "name": "stage-formal",
+          "startedAt": "2026-11-28T11:58:23Z",
+          "status": "COMPLETED",
+          "workflowName": "Research website"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:59:16Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142338657/job/140970829138",
+          "name": "Exact resource integration",
+          "startedAt": "2026-11-28T11:58:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T11:58:22Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142338707/job/140970887618",
+          "name": "deploy-formal",
+          "startedAt": "2026-11-28T11:58:23Z",
+          "status": "COMPLETED",
+          "workflowName": "Research website"
+        }
+      ],
+      "successful_runner_seconds": 92
+    },
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "4a1c6509897ef29e4765685aace7123674a4d83e",
+        "mergeCommit": {
+          "oid": "aa1e715443476d7cfd0ccb8c2ea9abff0b2d2f21"
+        },
+        "number": 43,
+        "state": "MERGED",
+        "title": "Add documented engineering display and separate geographic review evidence",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/43"
+      },
+      "jobs": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T12:00:48Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142511133/job/140971373647",
+          "name": "Static and unit",
+          "startedAt": "2026-11-28T12:00:27Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T12:00:24Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142511133/job/140971375536",
+          "name": "Frozen reference integrity",
+          "startedAt": "2026-11-28T12:00:24Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-11-28T12:01:26Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46142511133/job/140971373910",
+          "name": "Exact resource integration",
+          "startedAt": "2026-11-28T12:00:27Z",
+          "status": "COMPLETED",
+          "workflowName": "Migration verification"
+        }
+      ],
+      "successful_runner_seconds": 80
+    }
+  ],
+  "other_verification_artifact_sha256": {
+    "work/census-stage4/verification/authoritative-research-69a111d.json": "57fa6718faa85966fcfccd82ae4a5f0f094df051e0ab02cca9942b2c44b03f77",
+    "work/census-stage4/verification/authoritative-display-69a111d.json": "3df5498a4ceef017922d11c962f3abffc8312d2f2af62705d70bae02880416ea",
+    "work/census-stage4/verification/engineering-final-69a111d/engineering.json": "6552a065dc789ce51f925b569c2208bf32faadfb79a3801530044e50964e73bf",
+    "work/census-stage4/verification/display-final-69a111d/display_performance.json": "7c51d596b16a992f48a2d4dc2d3c19a61ee4b85e98fa717a5a91e1713e49c986",
+    "work/census-stage4/verification/frozen_stage3_identities.json": "c97f7fd6c03130f7f6627722cd5cd631959b01311b5b1ff9984dc761b02dcd9b",
+    "work/census-stage4/verification/final-forecast-oracle.json": "3db34d7949618bf2a27fde25fbd5d17d17fb2952c82fc7a3d27dc519c1bde3c9",
+    "work/census-stage4/verification/293cdfe-full-exact-tests-confirmed.log": "f65f6c19030773c82ebc76e06241b25d316fffe1858835f16acd75fe49576354",
+    "work/census-stage4/resource-independent/original_resource_oracle.json": "e4095aed984cc4276bae5f5e36416e6346ec8291bdf6f617fb8b6af9772b9c47",
+    "work/census-stage4/attributes-commit-oracle.json": "a9deef0364667577fd1abfe7aa8c8f534195d2f27b9093b049b7835b7a19c04b",
+    "work/stage4-context/edition-recovery-final/source_edition_recovery.json": "3a876957b3660921ebb212335dde765690fce4d5c66368cf9465c60762f6f846",
+    "work/stage4-context/edition-recovery-final/source_manifest.json": "eba8121e65d5654ef9abc23dcfa2b2d03961d4af618e11c0794496dad537a544",
+    "work/census-stage4/coverage/coverage_baseline_receipt.json": "6a83fd9a08c961e215a4e10e5d7e5deb66de4c16ff3dbade8129cf404c7aa246",
+    "work/census-stage4/coverage/core51_coverage_by_role.csv": "0afda061a12eec7b4689df7d9ab46ce49e3249d0c1e3323c41a745608ad92ef8",
+    "work/census-stage4/coverage/project_display_reach.csv": "ac5856ee77dcab2a0f8caba62fb085ac0504883903e554f2084894ec12e90e81",
+    "work/census-stage4/coverage/source_attribute_work_queue.jsonl": "3edfd3a5cfbc3da1374ddfb222de25b6b5cee0dff99ad01be867931746458036",
+    "work/census-stage4/coverage/core51_v2_v3_cell_comparison.csv": "56e4d46ddc5c5c0eb0fe8e2db66589d94ca8bee38ba87fbfcb09870c45eabdeb",
+    "work/census-stage4/coverage/source_evidence_review_bounds.csv": "7b1460a5cc47ca1fa289cf5d4070580f4d30d15b50e948bdbbf68baf94f13dcd",
+    "work/census-stage4/final/display/census_display.json": "eb80fb668570ed69c26b6b76d4591c63148017e596dca3ffd34b4ca7378d8702",
+    "work/census-stage4/final/display/census_display_extended.csv": "c3d942016df2711d3a87cff6c09cd3b0c52396836f4d828b336461b57f77209b",
+    "work/census-stage4/final/display/census_display_facts.jsonl": "67e8c966314df567fa4b713b4461baaab6ca9abe9bdeae515ef66f398d0600f2",
+    "work/census-stage4/final/display/display_package_receipt.json": "d759e05b7f2bbe48d65b0904b6fb5c3a2b7e3e3a9b16f5997834b92f802e13b1",
+    "work/census-stage4/final/archive.json": "aa46fe35c89e2f1a0746b312d6b475317fb74b7cab1a0b5ce9786041a3ae36e5",
+    "work/census-stage4/final/archive/releases/a1805f68b22d73ab070be50f6d2a110edfcb30230e21778b6b62513ccbcc96ee.json": "a1805f68b22d73ab070be50f6d2a110edfcb30230e21778b6b62513ccbcc96ee",
+    "work/census-stage4/final/build/build_receipt.json": "112dfedece1f2fedbcb466229895c113a1ab3ae73e4e2d9121762bc571c9681b",
+    "work/census-stage4/final/delta/census_delta.csv": "cc4cf87533f2fbb7d6807d363498f8f08e5c95e94c46ebf43f58350a39e918b9",
+    "work/census-stage4/final/delta/comparison_receipt.json": "6fd320db72d661e42aba1d3a5daf9c1fa1d14aaa34cf346dada26ceeaa75befe",
+    "work/census-stage4/final/delta/cohort_and_mcda.json": "24650c6db70ba0834fb39b8fce5e982baab4cb6ac87cab926c23b18c8155f33d",
+    "work/census-stage4/final/delta/comparability_delta.json": "fbf7254f44b07a4d471e5c10af44d05d928fd936178a45136c428798f2f937aa",
+    "work/census-stage4/final/cold-a/replay_receipt.json": "45445fc408d36e6aae773c5d22d172a46c9ea8166d1edd773f75040224c4bd0c",
+    "work/census-stage4/final/cold-b/replay_receipt.json": "0ad3147878ff2ef603c42b8dfd8e176d47a8cc0dd1d68e257b7f1fabdda2dc85",
+    "work/census-stage4/final/browser.json": "4e38d6c6b09d6248931b4a2d401b5490b01cd50c74896db02f713f8f700a9dcf",
+    "work/census-stage4/final/full-exact-tests.log": "ab968456845be54792e16436339deb9325f8d0e5bc0bc0bc9469c56a22268652",
+    "work/census-stage4/final/verify-site/site_verification.json": "45de3dff697d82f04287f53d563dfb32517de250137c29be237178ce91e53ac6",
+    "work/census-stage4/final/preview-archive-check/site_verification.json": "45de3dff697d82f04287f53d563dfb32517de250137c29be237178ce91e53ac6",
+    "work/census-stage4/final/stage3-site-recheck/site_verification.json": "e85d7af72faeb340d1e3d482c1c38066f7b5b95129717ef03c7ad2ed2619669b",
+    "work/census-stage4/final/fault-verification/verification.json": "579032793709f365307a588cf16b0fa0b1953aafca2f0cad2dbbe8d627d8b917",
+    "work/census-stage4/final/census-stage4-candidate-preview.zip": "0793f97586a7598b339e165967ee6b9826303c12fdde69818cf1242e1752e51b",
+    "work/census-stage4/final/census-stage4-source-recovery.zip": "1df7f64a6378ebe33de900309433b9d555bc3d1b10d79d7848e7e046daea021c",
+    "work/census-stage4/final/git-integration-units.json": "6bf48b51415a58aed1a39f39f89d6799e9ab27572e583cefc223c483c1ab0ce6",
+    "work/census-stage4/final/build-cost.json": "ec1b9cc02c2bdf2dedfcbf53df61f8aa45b697cba6e2505914668977669bcd54",
+    "work/census-stage4/final/cold-a-cost.json": "11f548229fb6fd12177b116590b27c2bcd5ea7462e6fa780d35e9784bf0f4468",
+    "work/census-stage4/final/cold-b-cost.json": "7750b65d6cc5b8bc0a7d1750311d137b934b8cb0318b2e3a26d731d23b4462a5",
+    "work/census-stage4/final/display-live-cost.json": "a0edffba5eba6c84a6f1cdf9917e8837c8070acd17cf05fd75871336fac9929a"
+  }
+}

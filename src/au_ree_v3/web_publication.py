@@ -26,6 +26,7 @@ from .registry import PROJECT_ID, PROJECT_ID_COLUMN, SHA256, load_census_columns
 from .research_artifacts import ARTIFACTS
 
 if TYPE_CHECKING:
+    from .display_package import DisplayPackage
     from .publication import FormalPublicationAuthorization
 
 MANIFEST_SCHEMA = "web-research-manifest-v1"
@@ -39,6 +40,7 @@ _SCHEMAS = {
     "gis.geojson": "web-gis-v1",
 }
 FILES = (*_SCHEMAS, "census.csv")
+_DISPLAY_FILES = ("census_display.json", "census_display_extended.csv")
 _STATES = ("PRESENT", "UNKNOWN", "NOT_APPLICABLE")
 _COMPOSITION = {*OXIDE_VARIABLES.values(), "mreo_ppm"}
 _COORDINATES = ("經度", "緯度")
@@ -636,18 +638,30 @@ def _document(schema, release_id, **fields):
 def export_web(
     *, profile: Path, research_build: Path, release_id: str, out: Path,
     release_root: Path | None = None, authorization: FormalPublicationAuthorization | None = None,
+    display: DisplayPackage | None = None,
 ) -> dict:
     """Project one verified build into a content-checked, immutable view without changing a pointer."""
     try:
         return _export_web(
             profile=profile, research_build=research_build, release_id=release_id, out=out,
-            release_root=release_root, authorization=authorization,
+            release_root=release_root, authorization=authorization, display=display,
         )
     except (KeyError, TypeError, UnicodeError, OverflowError) as error:
         raise WebPublicationError("Invalid research build or projected data schema") from error
 
 
-def _export_web(*, profile, research_build, release_id, out, release_root, authorization):
+def _display_payloads(display, release_id, receipt_sha, status, release_root):
+    if display is None:
+        return {}
+    from .display_package import DisplayPackage
+
+    if (not isinstance(display, DisplayPackage) or status != CANDIDATE or release_root is None
+            or (display.release_id, display.build_receipt_sha256) != (release_id, receipt_sha)):
+        raise WebPublicationError("Display package requires its exact archived candidate and research build")
+    return {_DISPLAY_FILES[0]: display.public_view, _DISPLAY_FILES[1]: display.public_csv}
+
+
+def _export_web(*, profile, research_build, release_id, out, release_root, authorization, display):
     settings, registry, headings, receipt, receipt_sha, artifacts, status = _research_inputs(
         profile, Path(research_build), release_id, release_root, authorization,
     )
@@ -670,6 +684,7 @@ def _export_web(*, profile, research_build, release_id, out, release_root, autho
     }
     files = {name: _encode(_document(_SCHEMAS[name], release_id, **value)) for name, value in views.items()}
     files["census.csv"] = artifacts["census/census.csv"]
+    files.update(_display_payloads(display, release_id, receipt_sha, status, release_root))
     manifest = _document(
         MANIFEST_SCHEMA, release_id,
         release_status=status, cutoff=settings.research_cutoff.isoformat(), timezone=settings.timezone.key,
@@ -927,13 +942,22 @@ def verify_web_release(
 
 
 def _verify_web_release(directory, expected_release_id, expected_manifest_sha256):
-    if directory.is_symlink() or not directory.is_dir() or {path.name for path in directory.iterdir()} != {*FILES, "manifest.json"}:
+    if directory.is_symlink() or not directory.is_dir():
         raise WebPublicationError("Web release has missing, unexpected, or unsafe assets")
     payload = _file(directory, "manifest.json")
     if expected_manifest_sha256 is not None and _digest(payload) != expected_manifest_sha256:
         raise WebPublicationError("Web manifest digest differs from its authorized pointer")
     manifest = _read_json(payload, canonical=True)
     release_id = manifest.get("release_id")
+    artifacts = set(manifest.get("artifacts", {}))
+    core = set(FILES)
+    optional = set(_DISPLAY_FILES)
+    if (
+        artifacts not in (core, core | optional)
+        or {path.name for path in directory.iterdir()} != artifacts | {"manifest.json"}
+        or optional <= artifacts and manifest.get("release_status") != CANDIDATE
+    ):
+        raise WebPublicationError("Web release has missing, unexpected, or unsafe assets")
     digest_fields = {
         "profile_sha256", "project_registry_sha256", "census_column_contract_sha256", "census_sha256", "decision_policy_sha256",
         "research_mcda_inputs_sha256", "research_mcda_results_sha256", "research_build_receipt_sha256",
@@ -957,15 +981,16 @@ def _verify_web_release(directory, expected_release_id, expected_manifest_sha256
         or not re.fullmatch(r"[a-f0-9]{40}", manifest["research_code_commit"])
         or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_+-]*(?:/[A-Za-z0-9_+-]+)*", manifest["timezone"])
         or date.fromisoformat(manifest["cutoff"]).isoformat() != manifest["cutoff"]
-        or set(manifest["artifacts"]) != set(FILES)
     ):
         raise WebPublicationError("Web manifest schema or release identity is invalid")
-    docs = {}
-    for name in FILES:
+    docs, extra = {}, {}
+    for name in sorted(artifacts):
         value = _file(directory, name)
         if manifest["artifacts"][name] != {"path": name, "sha256": _digest(value)}:
             raise WebPublicationError(f"Web artifact differs from its manifest: {name}")
-        if name in _SCHEMAS:
+        if name in optional:
+            extra[name] = value
+        elif name in _SCHEMAS:
             document = _read_json(value, canonical=True)
             if (document.get("schema_version"), document.get("release_id")) != (_SCHEMAS[name], release_id):
                 raise WebPublicationError(f"Web document mixes release identities: {name}")
@@ -984,8 +1009,28 @@ def _verify_web_release(directory, expected_release_id, expected_manifest_sha256
     if any(set(doc) != fields | envelope for doc, fields in known):
         raise WebPublicationError("Unexpected public data document fields")
     projects = _check_census(manifest, census, entries["entries"], csv_payload)
+    if extra:
+        _verify_public_display(extra, release_id, census)
     _check_mcda(mcda, manifest, projects)
     _check_coverage(coverage, census, entries["entries"], mcda)
     if gis != _document(_SCHEMAS["gis.geojson"], release_id, **_gis_view(census["columns"], census["projects"], entries["entries"])):
         raise WebPublicationError("Map contains unverified points or differs from the published Census")
     return manifest
+
+
+def _verify_public_display(payloads, release_id, census):
+    from .census_display import WEB_ARTIFACTS, verify_display_document
+
+    document = _read_json(payloads[WEB_ARTIFACTS[0]], canonical=True)
+    try:
+        verified = verify_display_document(
+            document, payloads[WEB_ARTIFACTS[1]], release_id=release_id,
+            project_ids=tuple(row["id"] for row in census["projects"]),
+            core_columns=tuple(row["id"] for row in census["columns"]),
+        )
+    except ValueError as error:
+        raise WebPublicationError(str(error)) from error
+    for record in (*verified["facts"].values(), *verified["review_only"]):
+        scalars = [value for key, value in record.items() if key != "context"]
+        if any(not _safe_text(value) for value in (*scalars, *record["context"].values())) or not _public_url(record["source_url"]):
+            raise WebPublicationError("Public display evidence contains unsafe text or a private source link")

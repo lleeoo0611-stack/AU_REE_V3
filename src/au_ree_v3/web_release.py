@@ -21,10 +21,12 @@ from .replica import ContentReplica
 POINTER_SCHEMA = "web-release-pointer-v1"
 SITE_SCHEMA = "web-site-mode-v1"
 LINK_SCHEMA = "web-formal-research-link-v1"
-STATIC_FILES = (
+_LEGACY_STATIC_FILES = (
     "index.html", "assets/app.js", "assets/labels.mjs", "assets/release.mjs", "assets/views.mjs",
     "assets/styles.css", "assets/australia.geojson",
 )
+_DISPLAY_MODULE = "assets/display.mjs"
+STATIC_FILES = (*_LEGACY_STATIC_FILES, _DISPLAY_MODULE)
 MODES = {"candidate": ("preview.json", "RESEARCH_CANDIDATE"), "formal": ("latest.json", "FORMAL_CURRENT")}
 
 
@@ -146,10 +148,18 @@ def _check_layout(site: Path, mode: str) -> None:
             raise WebsiteReleaseError("site contains the other channel's pointer")
 
 
+def _static_files(frontend: Path) -> tuple[str, ...]:
+    module = frontend / _DISPLAY_MODULE
+    imports_display = any(b"display.mjs" in _read(frontend / path) for path in ("assets/app.js", "assets/release.mjs"))
+    if module.exists() or module.is_symlink() or imports_display:
+        return STATIC_FILES
+    return _LEGACY_STATIC_FILES
+
+
 def _frontend_payloads(frontend: Path) -> dict[str, bytes]:
     _plain_dir(frontend)
     _plain_dir(frontend / "assets")
-    return {name: _read(frontend / name) for name in STATIC_FILES}
+    return {name: _read(frontend / name) for name in _static_files(frontend)}
 
 
 def _build_static(site: Path, frontend: Path, mode: str) -> None:
@@ -369,7 +379,7 @@ def verify_site(*, site: Path, mode: str) -> dict:
     """Validate the complete static upload tree before external deployment."""
     _check_layout(site, mode)
     current = _pointer(site, mode)
-    expected = set(STATIC_FILES) | {"data/publication_mode.json"}
+    expected = set(_static_files(site)) | {"data/publication_mode.json"}
     if current:
         name, status = MODES[mode]
         expected.add(f"data/{name}")

@@ -83,6 +83,7 @@ export function evidenceDetails(entry, cell, t, status) {
   append("page", entry.physical_page);
   append("locator", entry.locator);
   append("raw", nativeValue(entry));
+  append("sourceQuote", entry.quote);
   append("scope", entry.scope ?? entry.scope_id);
   append("effective", entry.effective_date);
   append("chemical", entry.chemical_basis);
@@ -95,14 +96,36 @@ export function evidenceDetails(entry, cell, t, status) {
   append("temporal", entry.temporal_decision_id, true);
   append("registry", entry.registry_sha256, true);
   append("projection", entry.projection_policy_sha256 ?? entry.policy_sha256, true);
+  append("reportingRole", entry.reporting_role && t(entry.reporting_role));
+  append("publicationDate", entry.publication_date);
+  append("captureSha", entry.source_capture_sha256, true);
+  append("displayContract", entry.display_contract, true);
+  append("fieldVersion", entry.field_version);
+  append("displayContext", entry.context && Object.keys(entry.context).length ? entry.context : null);
   if (entry.evidence_state === "VALIDATED_DESCRIPTIVE") {
     append("attributeRole", entry.metadata?.attribute_role);
     append("sourceStatement", entry.metadata?.native_value);
-    append("publicationDate", entry.metadata?.publication_date);
+    if (!entry.publication_date) append("publicationDate", entry.metadata?.publication_date);
     append("eventDate", entry.metadata?.event_date_token);
     append("attributePolicy", entry.metadata?.policy_sha256, true);
   }
   return details;
+}
+
+export function displayEvidence(records, cell, column, t, status, contractSha) {
+  const container = node("div", null, "display-evidence");
+  for (const fact of records) {
+    const pages = [...fact.locator.matchAll(/\b(?:physical (?:pdf )?|pdf )?page\s+([1-9]\d*)\b/gi)];
+    const page = pages.length === 1 ? Number(pages[0][1]) : null;
+    const entry = {
+      ...fact, raw_value: fact.raw_token, physical_page: page, evidence_state: fact.state ? t(fact.state) : t("SOURCE_REPORTED_DISPLAY"),
+      reporting_role: fact.data_role, display_contract: contractSha, field_version: column.definition?.version,
+      publication_date: fact.publication_date || t("missing"),
+    };
+    container.append(evidenceDetails(entry, {...cell, value: fact.value ?? cell.value}, t, status));
+  }
+  if (!records.length) container.append(node("p", status));
+  return container;
 }
 
 function coordinates([x, y], canvas) {
