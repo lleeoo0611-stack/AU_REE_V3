@@ -195,6 +195,13 @@ class NativeLayoutTests(unittest.TestCase):
         native, = native_resource_table((PAGE.replace(cue, amended),), plain, plain["publication_date"])
         self.assertIsNone(native.cutoff)
 
+    def test_numbered_prose_does_not_establish_a_measured_classification_row(self):
+        measured = PAGE.splitlines()[3]
+        page = PAGE.replace(measured, "Measured resources were not estimated in 2025.")
+        statement, = native_resource_table((page,), BINDING, BINDING["publication_date"])
+        self.assertEqual(statement.category, "INDICATED_INFERRED_TOTAL")
+        self.assertFalse(statement.primary)
+
     def test_exact_baseline_measurement_is_distinct_from_row_lexeme_hint(self):
         # A single occurrence per row distinguishes the raw source position.
         row = "Total                        1,225                  1,000               1,226"
