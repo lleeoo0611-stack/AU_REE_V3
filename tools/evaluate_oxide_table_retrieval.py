@@ -328,8 +328,79 @@ def _dataset(args, db):
     for split, origin, reference in panels:
         panel = _checked_json(*reference)
         _row_panel(db, panel, split, origin, captures, cas, cache, timezone, documents)
-    table = db.execute("SELECT * FROM nlp_rows ORDER BY split,origin,family,source,page,line").fetchall()
-    return table, proof, documents
+    query = "SELECT * FROM nlp_rows ORDER BY split,origin,family,source,page,line"
+    baseline = db.execute(query).fetchall()
+    if args.recovered_sqlite:
+        proof["recovered_training"] = _recovered_training(db, baseline, args.recovered_sqlite, args.recovery_registry)
+    return db.execute(query).fetchall(), proof, documents, baseline
+
+
+def _recovery_row(payload, evidence, row_source, project_metadata):
+    from au_ree_v3.native_table_work import COHORT_RECOVERY_SCHEMA
+
+    raw = json.loads(payload)
+    cell = json.loads(raw["original_payload"])
+    anchor = json.loads(evidence)
+    if raw["status"] != "CANDIDATE" or raw["transform_version"] != COHORT_RECOVERY_SCHEMA:
+        raise ValueError("Recovery SQLite contains a different observation contract")
+    if not cell["legacy_hint_ids"] or cell["variable"] not in _RESOURCE_FIELDS:
+        return None
+    if (cell["source_sha256"], cell["value_anchor"]["text"], cell["physical_page"], cell["value_anchor"]["locator"]) != (
+        row_source, raw["raw_value"], anchor["page"], anchor["locator"]
+    ):
+        raise ValueError("Recovered observation differs from its original anchor")
+    location = re.fullmatch(r"PDF page (\d+), line (\d+)", cell["row_anchor"]["locator"])
+    if not location or int(location[1]) != cell["physical_page"]:
+        raise ValueError("Recovered row has no exact native locator")
+    issuer = _issuer(project_metadata.get("developer") or "")
+    context = "\n".join(dict.fromkeys(a["text"] for a in (*cell["caption_anchors"], cell["header_anchor"])))
+    if not issuer or not _RESOURCE_HEADER.search(context) or _EXCLUDED_HEADER.search(context):
+        return None
+    return {"origin": "recovered_native", "family": f"{issuer}/recovered_resource",
+            "issuer": issuer, "project": raw["project_id"], "source": row_source, "page": int(location[1]),
+            "line": int(location[2]), "context": context, "row_text": cell["row_anchor"]["text"]}
+
+
+def _recovered_training(db, baseline, reference, registry_ref):
+    from au_ree_v3.store import APPLICATION_ID
+
+    archive, pin = reference
+    inventory = {row["project_id"]: row for row in _checked_json(*registry_ref)["projects"]}
+    held = [row for row in baseline if row["split"] == "held"]
+    keys = ("issuer", "project", "source")
+    groups = {key: {row[key] for row in held if row[key]} for key in keys}
+    held_features = {_features(row) for row in held}
+    seen = {(r["source"], r["page"], r["line"]) for r in baseline}
+    path = Path(archive).resolve()
+    with path.open("rb") as stream:
+        if file_digest(stream, "sha256").hexdigest() != pin:
+            raise ValueError("Recovered SQLite SHA differs")
+    query = """SELECT r.payload,a.payload,r.source_sha,r.project_id FROM raw_observations r
+               JOIN anchors a ON a.anchor_id=r.anchor_id AND a.source_sha=r.source_sha AND a.source_key=r.source_key
+               JOIN verified_sources s ON s.sha256=r.source_sha AND s.source_key=r.source_key
+               ORDER BY r.source_sha,r.raw_record_id"""
+    counts = Counter()
+    with closing(sqlite3.connect(path.as_uri() + "?mode=ro&immutable=1", uri=True)) as recovered:
+        if recovered.execute("PRAGMA application_id").fetchone()[0] != APPLICATION_ID:
+            raise ValueError("Recovered data is not a V3 SQLite Store")
+        for payload, anchor, sha, project in recovered.execute(query):
+            counts["raw_candidates_read"] += 1
+            candidate = _recovery_row(payload, anchor, sha, inventory[project])
+            if candidate is None:
+                counts["no_reviewed_resource_row_label"] += 1
+                continue
+            key = (candidate["source"], candidate["page"], candidate["line"])
+            if key in seen:
+                counts["original_row_already_counted"] += 1
+                continue
+            if any(candidate[group] in groups[group] for group in keys) or _features(candidate) in held_features:
+                counts["held_group_or_text_overlap_excluded"] += 1
+                continue
+            _insert_row(db, "train", candidate["origin"], candidate["family"], candidate["issuer"], candidate["project"],
+                        sha, candidate["page"], candidate["line"], True, candidate["context"], candidate["row_text"])
+            seen.add(key)
+            counts["included_training_rows"] += 1
+    return {"sqlite_sha256": pin, "registry_sha256": registry_ref[1], "counts": dict(counts)}
 
 
 def _grouped_report(args):
@@ -349,7 +420,7 @@ def _grouped_report(args):
         db.execute("""CREATE TEMP TABLE nlp_rows(split TEXT, origin TEXT, family TEXT, issuer TEXT, project TEXT, source TEXT,
                       page INTEGER, line INTEGER, label INTEGER, context TEXT, row_text TEXT, UNIQUE(source,page,line))""")
         db.row_factory = sqlite3.Row
-        rows, proof, documents = _dataset(args, db)
+        rows, proof, documents, baseline = _dataset(args, db)
     training, held = ([row for row in rows if row["split"] == phase] for phase in ("train", "held"))
     for key in ("family", "issuer", "project", "source"):
         if ({row[key] for row in training} - {""}) & ({row[key] for row in held} - {""}):
@@ -359,6 +430,14 @@ def _grouped_report(args):
     loaded = perf_counter()
     probabilities, vocabulary = _learn_probabilities(training, held)
     fitted = perf_counter()
+    comparison = None
+    if args.recovered_sqlite:
+        original = [r for r in baseline if r["split"] == "train"]
+        baseline_start = perf_counter()
+        old_predictions, _ = _learn_probabilities(original, held)
+        comparison = {"training_rows": len(original),
+                      "model": _classification_metrics(held, [p >= .5 for p in old_predictions]),
+                      "fit_predict_seconds": perf_counter() - baseline_start}
     locator = {(source, page): {entry.row_line for entry in discover_page_rows(documents[source], page=page)}
                for source, page in {(r["source"], r["page"]) for r in held}}
     metrics = {}
@@ -390,6 +469,7 @@ def _grouped_report(args):
         "model": {"method": "stdlib character TF-IDF (3–5) class-balanced L2 logistic regression", "vocabulary": vocabulary,
                   "iterations": 150, "threshold": 0.5},
         "holdout": metrics, "formal_admission": "UNMEASURED", "scientific_admissions": 0,
+        **({"without_recovered_sqlite": comparison} if comparison else {}),
         "candidate_use_gate": {"status": "PASS" if qualifies else "FAIL",
                                "reason": None if qualifies else "HYPOTHESIS_NOT_SUPPORTED",
                                "criterion": "Exact original and archive proof, holdout precision and recall at least the lexical baseline"},
@@ -405,7 +485,12 @@ def grouped_nlp(argv):
     for argument in ("manifest", "bindings", "archive-sqlite", "train-rows", "assay-negatives"):
         parser.add_argument(f"--{argument}", required=True, nargs=2, metavar=("PATH", "SHA256"))
     parser.add_argument("--holdout", required=True, action="append", nargs=2, metavar=("PATH", "SHA256"))
-    print(json.dumps(_grouped_report(parser.parse_args(argv)), sort_keys=True, indent=2))
+    for argument in ("recovered-sqlite", "recovery-registry"):
+        parser.add_argument(f"--{argument}", nargs=2, metavar=("PATH", "SHA256"))
+    args = parser.parse_args(argv)
+    if bool(args.recovered_sqlite) != bool(args.recovery_registry):
+        parser.error("The recovered SQLite and its exact registry are required together")
+    print(json.dumps(_grouped_report(args), sort_keys=True, indent=2))
 
 
 if __name__ == "__main__":

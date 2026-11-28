@@ -4,9 +4,12 @@ import os
 from pathlib import Path
 import unittest
 
-from au_ree_v3.documents import PDFDocument
+from au_ree_v3.documents import DocumentError, PDFDocument
 from au_ree_v3.native_table_discovery import discover_page_rows
-from au_ree_v3.native_table_work import _legacy_cell, _legacy_page_cells, replay_legacy_source_lanes
+from au_ree_v3.native_table_work import (
+    _cohort_formula_checks, _cohort_quote_anchors, _legacy_cell, _legacy_page_cells, _recovered_cell,
+    replay_legacy_source_lanes,
+)
 from au_ree_v3.resource_table_binding import bind_page_row
 
 
@@ -22,6 +25,33 @@ def document(*pages):
 
 
 class LegacySourceLaneTests(unittest.TestCase):
+    def test_repeated_marker_requires_a_unique_original_block(self):
+        text = ("Example issue heading", "", "Example issue published its Scoping Study", "as approved.")
+        pdf = document(text)
+        anchor, = _cohort_quote_anchors(pdf, "source", 1, ("Example issue", "Scoping Study"))
+        self.assertEqual(anchor.quote, "Example issue published its Scoping Study as approved.")
+        self.assertEqual(anchor.role, "ARCHIVED_TEXT_COLOCATED_QUOTE")
+        with self.assertRaises(DocumentError):
+            _cohort_quote_anchors(document((*text, "", *text)), "source", 1, ("Example issue", "Scoping Study"))
+
+    def test_formula_check_retains_its_same_native_row_and_shadow_role(self):
+        pdf = document(("Table 1 Synthetic Mineral Resource Estimate", HEADER, *BODY))
+        edition = {"url": "https://publisher.invalid/resource.pdf", "edition_id": "historical",
+                   "receipt_sha256": None, "temporal_decision": {"decision_id": "pending"}}
+        cells = {}
+        for located in _legacy_page_cells(pdf, [1]).values():
+            for native_row, cell in located.values():
+                result = _recovered_cell("AU-A", pdf, native_row, cell, edition)
+                cells[result["candidate_id"]] = result
+        formula, = _cohort_formula_checks(cells)
+        self.assertEqual((formula["value"], formula["unit"], formula["layer"]), ("49.500", "kt", "SHADOW"))
+        self.assertEqual(formula["formula_id"], "contained-treo-from-mt-ppm-v1")
+        self.assertEqual(len(formula["input_observation_ids"]), 2)
+        for raw in cells.values():
+            if raw["variable"] == "ore_mt":
+                raw["row_anchor"]["locator"] = "PDF page 1, line 99"
+        self.assertEqual(_cohort_formula_checks(cells), [])
+
     def test_nominated_token_is_bound_to_a_native_lane_without_legacy_value(self):
         pdf = document(("Table 1 Synthetic Mineral Resource Estimate", HEADER, *BODY))
         index = _legacy_page_cells(pdf, [1])
