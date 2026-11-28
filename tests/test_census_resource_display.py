@@ -21,6 +21,7 @@ from au_ree_v3.documents import DocumentCache, PDFDocument
 from au_ree_v3.publication import _extract_code, load_release
 from au_ree_v3.registry import load_profile
 from au_ree_v3.resource_extraction import ResourceStatement
+from au_ree_v3.resource_table_binding import Span
 from au_ree_v3.sources import ContentStore
 
 
@@ -93,21 +94,26 @@ class ResourceDisplayContextTests(unittest.TestCase):
         self.assertEqual((matched.value, matched.token, matched.unit), ("250 ppm TREO-CeO2", "250", "ppm"))
 
     def test_named_table_scope_requires_local_exact_name_and_preserves_reported_date_role(self):
-        cell = {"caption_anchors": [{"text": "Table 5: Wolverine Inferred Mineral Resource estimate at 15 January 2025",
-                                     "physical_page": 6, "locator": "PDF page 6, line 16"}],
-                "row_anchor": {"text": "Total Inferred       40      4.1", "locator": "PDF page 6, line 29"}}
+        title = "Table 5: Wolverine Inferred Mineral Resource estimate at 15 January 2025"
+        caption = (Span(6, 16, 1, len(title), title),)
+        raw = "Total Inferred       40      4.1"
+        cell = {"caption_anchors": [caption[0].to_dict()], "physical_page": 6,
+                "row_anchor": {"text": raw, "locator": "PDF page 6, line 29"}}
+        document = PDFDocument("a" * 64, (*("",) * 5, "\n".join((*("",) * 15, title, *("",) * 12, raw))), "test")
         project = SimpleNamespace(name="Browns Range Project — Wolverine scope")
         phrase = _scope_phrase(cell, project)
-        self.assertEqual(phrase.locator, "PDF page 6, line 16")
+        self.assertEqual(phrase.locator, caption[0].locator)
         self.assertIsNone(_scope_phrase(cell, SimpleNamespace(name="Browns Range Project — Wolverine South scope")))
         self.assertIsNone(_scope_phrase(cell, SimpleNamespace(name="Browns Range Project")))
-        context = _cohort_table_context(cell, {"publication_date": "2025-01-15"}, phrase)
+        context = _cohort_table_context(cell, {"publication_date": "2025-01-15"}, phrase, document, caption, 29)
         self.assertEqual(context["reported_resource_category"], "Inferred")
         self.assertEqual(context["estimate_effective_date"], "2025-01-15")
-        self.assertNotIn("estimate_effective_date", _cohort_table_context(cell, {"publication_date": "2025-01-14"}, phrase))
+        self.assertNotIn("estimate_effective_date", _cohort_table_context(
+            cell, {"publication_date": "2025-01-14"}, phrase, document, caption, 29,
+        ))
         self.assertNotIn("reported_resource_category", _cohort_table_context(
             {**cell, "row_anchor": {**cell["row_anchor"], "text": "Total Measured     40     4.1"}},
-            {"publication_date": "2025-01-15"}, phrase))
+            {"publication_date": "2025-01-15"}, phrase, document, caption, 29))
         mixed = deepcopy(cell)
         mixed["caption_anchors"][0]["text"] += " and Exploration Target"
         self.assertIsNone(_scope_phrase(mixed, project))
@@ -220,6 +226,14 @@ class HistoricalCohortDisplayTests(unittest.TestCase):
                 self.assertTrue(row["locator"].startswith(f"PDF page {page}, line "))
                 self.assertTrue(row["source_sha256"].startswith(original_sha))
                 self.assertRegex(context["candidate_id"], "^[a-f0-9]{64}$")
+        circle = [row["context"] for row in records if row["project_id"] == "AU-785536db5ff12c25350d"
+                  and row["context"].get("census_column_id") in {"ore_mt", "treo_grade_pct"}]
+        self.assertEqual(len(circle), 2)
+        for context in circle:
+            self.assertEqual(context["reported_cutoff"], "430 ppm TREO-CeO2")
+            self.assertEqual(context["reported_cutoff_locator"], "PDF page 2, lines 38-39")
+            self.assertEqual(context["reported_resource_category"], "Inferred")
+            self.assertEqual(context["reported_category_locator"], "PDF page 2, lines 24-25")
 
 
 @unittest.skipUnless(all(os.environ.get(key) for key in (

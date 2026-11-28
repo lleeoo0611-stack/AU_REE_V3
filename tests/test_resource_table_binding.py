@@ -172,6 +172,29 @@ class NativeLayoutTests(unittest.TestCase):
         value, = native_resource_table((wrong,), BINDING, BINDING["publication_date"])
         self.assertTrue(all(cell.conflict == "TONNAGE_GRADE_CONTAINED_MISMATCH" for cell in value.measurements))
 
+    def test_cutoff_uses_the_whole_literal_and_local_table_region(self):
+        spec = deepcopy(BINDING)
+        cue = "The table was reported at 500 ppm TREO cut-off grade."
+        amended = "Above 500 ppm TREO-CeO₂ cut-off."
+        spec["cutoff"].update(analyte="TREO-CeO2", reported="500 ppm TREO-CeO2")
+        next(item for item in spec["context"] if item["role"] == "CUTOFF")["quote"] = amended
+        native, = native_resource_table((PAGE.replace(cue, amended),), spec, spec["publication_date"])
+        self.assertEqual((native.cutoff, native.cutoff_unit, native.cutoff_analyte), ("500", "ppm", "TREO-CeO2"))
+
+        scenarios = (
+            ("The average is 500 ppm TREO-CeO₂ at a cut-off of 400 ppm TREO-CeO₂.", ""),
+            (amended, "Table 2 Another Hill Mineral Resource\n"),
+        )
+        for different, preceding in scenarios:
+            next(item for item in spec["context"] if item["role"] == "CUTOFF")["quote"] = different
+            native, = native_resource_table((PAGE.replace(cue, preceding + different),), spec, spec["publication_date"])
+            self.assertIsNone(native.cutoff)
+
+        plain = deepcopy(BINDING)
+        next(item for item in plain["context"] if item["role"] == "CUTOFF")["quote"] = amended
+        native, = native_resource_table((PAGE.replace(cue, amended),), plain, plain["publication_date"])
+        self.assertIsNone(native.cutoff)
+
     def test_exact_baseline_measurement_is_distinct_from_row_lexeme_hint(self):
         # A single occurrence per row distinguishes the raw source position.
         row = "Total                        1,225                  1,000               1,226"

@@ -979,6 +979,35 @@ def _row_label(line, page, index):
     return _plain(line[:first_number.start_column - 1]) if first_number else ""
 
 
+def _same_source_span(outer, inner):
+    return (outer is not None and inner is not None
+            and (outer.physical_page, outer.line) == (inner.physical_page, inner.line) and _contains(outer, inner))
+
+
+def _reviewed_values(document, page, row_line, caption, columns, aligned):
+    """Complete a reviewed row using an independently bound original header and unit."""
+    bound = {cell.variable: cell for cell in aligned if cell.variable}
+    if len(bound) == len(columns) or caption[0].physical_page != page or not _CAPTION.match(caption[0].text):
+        return bound
+    try:
+        discovered = bind_page_row(document, page=page, row_line=row_line, caption_line=caption[0].line)
+    except DocumentError:
+        return bound
+    occupied = {cell.value for cell in bound.values()}
+    for column, header, unit in columns:
+        if column.variable in bound or unit is None:
+            continue
+        matches = [cell for cell in discovered
+                   if cell.variable == column.variable and cell.unit == column.unit
+                   and cell.chemical_basis == column.chemical_basis and cell.parent_header == column.parent_header
+                   and cell.value not in occupied and _same_source_span(cell.header, header)
+                   and _same_source_span(cell.unit_label, unit)]
+        if len(matches) == 1:
+            bound[column.variable] = matches[0]
+            occupied.add(matches[0].value)
+    return bound
+
+
 def reviewed_table_rows(document: PDFDocument, binding: dict):
     """Read a reviewed exact table arrangement, retaining physical offsets and membership."""
     table, page = binding["table"], binding["page"]
@@ -1027,13 +1056,14 @@ def reviewed_table_rows(document: PDFDocument, binding: dict):
         index, = found
         values = _numbers(row_lines[index - 1], page, index)
         aligned = tuple(_classified([column for column, _, _ in columns], values, caption))
-        by_variable = {cell.variable: cell for cell in aligned if cell.variable}
+        by_variable = _reviewed_values(document, page, index, caption, columns, aligned)
         if not by_variable:
             raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_NUMERIC_COLUMN_ALIGNMENT_UNBOUND")
         anchors = {column.variable: (header, unit) for column, header, unit in columns}
+        used = {cell.value for cell in by_variable.values()}
         yield request, index, caption, tuple(
             (cell, anchors[cell.variable][0], anchors[cell.variable][1] or cell.unit_label) for cell in by_variable.values()
-        ), tuple(cell for cell in aligned if cell.variable is None), row_lines[start:index], _resource_type(caption)
+        ), tuple(cell for cell in aligned if cell.variable is None and cell.value not in used), row_lines[start:index], _resource_type(caption)
 
 
 def _baseline_overlap(case, bound, reviewed):

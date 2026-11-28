@@ -9,6 +9,10 @@ description = "Reproducible Australian rare-earth research migration tools"
 requires-python = ">=3.11"
 dependencies = []
 
+[project.optional-dependencies]
+resource-tables = ["PyMuPDF==1.26.6", "pdfplumber==0.11.9", "pdfminer.six==20251230"]
+table-transformer-cpu = ["PyMuPDF==1.26.6", "onnxruntime==1.21.1", "numpy==2.3.5", "Pillow==13.0.0"]
+
 [project.scripts]
 au-ree-v3 = "au_ree_v3.cli:main"
 
