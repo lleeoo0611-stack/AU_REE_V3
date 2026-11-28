@@ -2,7 +2,7 @@
 
 from collections import Counter
 import csv
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from hashlib import sha256
 from io import StringIO
@@ -16,8 +16,8 @@ from .census_metadata import METADATA_ORIGINS, coverage_report, load_projection_
 from .census_science import RESOURCE_PRESENCE_COLUMN, validate_resource_presence
 from .comparability import census_quantity
 from .contracts import canonical_json
-from .decision import leave_one_out, rank_panel
 from .fresh_census import FORMAL_CENSUS_ORIGINS, PROJECTION_SCHEMA, STATUS_FIELDS, validate_projected_cell
+from .fresh_decision import _scenario_weights, _score_panel
 from .publication import ContentReplica, load_release
 from .registry import PROJECT_ID_COLUMN
 from .research_artifacts import ARTIFACTS
@@ -341,6 +341,9 @@ def _checked_panel(panel, result, criteria, policy, name):
     if (panel["eligible_projects"] != sorted(matrix) or panel["benefit_matrix"] != matrix
             or panel["project_exclusions"] != exclusions):
         raise ValueError(f"Panel does not contain the exact complete-case cohort: {name}")
+    weights = panel["scenario_weights"]
+    if weights != _scenario_weights(codes, policy):
+        raise ValueError(f"Panel weights diverge from the pinned decision policy: {name}")
     minimum = policy["minimum_cohort"]
     enough = len(matrix) >= minimum
     status = "PASS" if enough else "INSUFFICIENT_COHORT"
@@ -351,23 +354,8 @@ def _checked_panel(panel, result, criteria, policy, name):
         if rankings or sensitivity:
             raise ValueError(f"Insufficient panel must contain no rankings or sensitivity output: {name}")
         return
-    scenarios = set(panel["scenario_weights"])
-    if set(rankings) != scenarios or set(sensitivity) != scenarios:
-        raise ValueError(f"Ranked panel does not cover its exact scenarios: {name}")
-    domains = {code: policy["criteria"][code]["domain"] for code in codes}
-    threshold = policy["promethee_threshold"]
-    for scenario, weights in panel["scenario_weights"].items():
-        recalculated = {
-            method: {project: asdict(score) for project, score in scores.items()}
-            for method, scores in rank_panel(matrix, weights, threshold).items()
-        }
-        changes = [
-            {"type": kind, "removed": removed,
-             "projects": {project: asdict(change) for project, change in ranks.items()}}
-            for (kind, removed), ranks in leave_one_out(matrix, weights, domains, threshold).items()
-        ]
-        if rankings[scenario] != recalculated or sensitivity[scenario] != changes:
-            raise ValueError(f"MCDA rankings or sensitivity disagree with recomputation: {name}/{scenario}")
+    if (rankings, sensitivity) != _score_panel(matrix, weights, codes, policy):
+        raise ValueError(f"MCDA rankings or sensitivity disagree with recomputation: {name}")
 
 
 def _decision(artifacts, receipt, projects, observations):
@@ -519,8 +507,68 @@ def _ranking_changes(before, after):
     return changes
 
 
+def _project_rankings(rankings, project_ids):
+    return {
+        scenario: {method: {project: point for project, point in values.items() if project in project_ids}
+                   for method, values in methods.items()}
+        for scenario, methods in rankings.items()
+    }
+
+
+def _sensitivity_changes(before, after, project_ids):
+    def index(results):
+        return {(scenario, row["type"], row["removed"], project): effect
+                for scenario, rows in results.items() for row in rows
+                for project, effect in row["projects"].items() if project in project_ids}
+
+    old, new = index(before), index(after)
+    changes = []
+    for key in sorted(old.keys() | new.keys()):
+        if old.get(key) != new.get(key):
+            scenario, kind, item, project = key
+            changes.append({"scenario": scenario, "type": kind, "removed": item, "project_id": project,
+                            "before": old.get(key), "after": new.get(key)})
+    return changes
+
+
+def _fixed_cohort(old, new, before, after, policy):
+    """Recompute current inputs on the complete baseline panel to isolate membership effects."""
+    prior = old["benefit_matrix"]
+    full = new["benefit_matrix"]
+    projects = set(prior)
+    missing = sorted(projects - full.keys())
+    fixed = {project: full[project] for project in sorted(projects & full.keys())}
+    result = {"baseline_projects": sorted(projects), "missing_current_projects": missing,
+              "before_benefit_matrix": prior, "current_benefit_matrix": fixed}
+    if before["status"] != "PASS":
+        return {**result, "status": "INSUFFICIENT_COHORT", "reason": "BASELINE_PANEL_BELOW_MINIMUM"}
+    if missing:
+        return {**result, "status": "BLOCKED", "reason": "BASELINE_PROJECT_LOST_CURRENT_COMPLETENESS"}
+    if fixed == full:
+        rankings, sensitivity = after["point_rankings"], after["leave_one_out"]
+    else:
+        rankings, sensitivity = _score_panel(fixed, new["scenario_weights"], new["criterion_codes"], policy)
+    return {
+        **result, "status": "PASS", "reason": None,
+        "before_point_rankings": before["point_rankings"], "before_sensitivity": before["leave_one_out"],
+        "current_point_rankings": rankings, "current_sensitivity": sensitivity,
+        "same_cohort_input_effect": {
+            "utility_changes": [{"project_id": project, "criterion_id": code, "before": prior[project][code], "after": value}
+                                for project, row in fixed.items() for code, value in row.items()
+                                if prior[project][code] != value],
+            "ranking_changes": _ranking_changes(before["point_rankings"], rankings),
+            "sensitivity_changes": _sensitivity_changes(before["leave_one_out"], sensitivity, projects),
+        },
+        "cohort_membership_effect": {
+            "ranking_changes": _ranking_changes(rankings, _project_rankings(after["point_rankings"], projects)),
+            "sensitivity_changes": _sensitivity_changes(sensitivity, after["leave_one_out"], projects),
+        },
+    }
+
+
 def _cohort_and_mcda(baseline, current):
     result = {}
+    policy = current.decision_inputs["policy"]
     for name, old in baseline.decision_inputs["panels"].items():
         new = current.decision_inputs["panels"][name]
         if old["scenario_weights"] != new["scenario_weights"]:
@@ -543,6 +591,7 @@ def _cohort_and_mcda(baseline, current):
             "scenario_weights": new["scenario_weights"], "after_benefit_matrix": new["benefit_matrix"],
             "ranking_changes": _ranking_changes(before["point_rankings"], after["point_rankings"]),
             "after_rankings": after["point_rankings"], "after_sensitivity": after["leave_one_out"],
+            "fixed_cohort": _fixed_cohort(old, new, before, after, policy),
         }
     return {"schema": SCHEMA, "panels": result}
 

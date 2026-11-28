@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 from dataclasses import asdict
+from decimal import Decimal
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -9,11 +10,13 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from au_ree_v3.decision import leave_one_out, rank_panel
+from au_ree_v3.fresh_decision import _score_panel
 from au_ree_v3.research_artifacts import ARTIFACTS
 from au_ree_v3.research_delta import (
     ResearchBuild, _census_delta, _checked_criterion, _checked_panel, _comparability_delta, _replay_readback,
-    _same_census_quantity,
+    _fixed_cohort, _same_census_quantity,
 )
+from tools.verify_panel_cohorts import _match, _verify_effects, decimal_scenario
 
 
 PROJECT = "synthetic-project"
@@ -97,6 +100,7 @@ class ResearchDeltaTest(unittest.TestCase):
         policy = {
             "criteria": {code: {"domain": domain} for code, domain in domains.items()},
             "panels": {"panel": codes}, "minimum_cohort": 2, "promethee_threshold": 0.2,
+            "scenarios": {"balanced": {"Resource": 0.5, "Strategic": 0.5}},
         }
         matrix = {project: {code: values[code]["utility"] for code in codes} for project, values in criteria.items()}
         panel = {
@@ -119,12 +123,66 @@ class ResearchDeltaTest(unittest.TestCase):
         fabricated["point_rankings"]["balanced"]["saw"][PROJECT]["score"] = 0.999
         with self.assertRaisesRegex(ValueError, "disagree with recomputation"):
             _checked_panel(panel, fabricated, criteria, policy, "panel")
+        swapped = {**panel, "scenario_weights": {"balanced": {"R1": 0.6, "S1": 0.4}}}
+        with self.assertRaisesRegex(ValueError, "weights diverge"):
+            _checked_panel(swapped, result, criteria, policy, "panel")
         criteria[OTHER]["S1"] = UNKNOWN
         incomplete = {**panel, "eligible_projects": [PROJECT], "benefit_matrix": {PROJECT: matrix[PROJECT]},
                       "project_exclusions": {OTHER: {"S1": UNKNOWN["reason"]}}}
         with self.assertRaisesRegex(ValueError, "must contain no rankings"):
             _checked_panel(incomplete, {**result, "status": "INSUFFICIENT_COHORT", "eligible_count": 1},
                            criteria, policy, "panel")
+
+    def test_fixed_cohort_separates_input_stability_from_membership_effect(self):
+        codes = ["R1", "S1"]
+        policy = {"criteria": {"R1": {"domain": "Resource"}, "S1": {"domain": "Strategic"}},
+                  "promethee_threshold": 0.2}
+        weights = {"balanced": {"R1": 0.5, "S1": 0.5}}
+        matrix = {"A": {"R1": 0.2, "S1": 0.8}, "B": {"R1": 0.7, "S1": 0.4}}
+
+        def bundle(rows):
+            rankings, sensitivity = _score_panel(rows, weights, codes, policy)
+            return {"benefit_matrix": rows, "criterion_codes": codes, "scenario_weights": weights}, {
+                "status": "PASS", "point_rankings": rankings, "leave_one_out": sensitivity,
+            }
+
+        old, before = bundle(matrix)
+        new, after = bundle({**matrix, "C": {"R1": 0.95, "S1": 0.45}})
+        report = _fixed_cohort(old, new, before, after, policy)
+        self.assertEqual(report["current_benefit_matrix"], matrix)
+        self.assertEqual(report["status"], "PASS")
+        self.assertTrue(all(not rows for rows in report["same_cohort_input_effect"].values()))
+        impact = {(row["project_id"], row["method"]): row for row in report["cohort_membership_effect"]["ranking_changes"]}
+        self.assertEqual(impact["B", "promethee"]["before"], {"score": 0, "rank": 1.5})
+        self.assertAlmostEqual(impact["B", "promethee"]["after"]["score"], -0.3125)
+        self.assertEqual(impact["B", "saw"]["before"]["score"], impact["B", "saw"]["after"]["score"])
+        self.assertEqual(impact["B", "saw"]["after"]["rank"], 2)
+        self.assertTrue(report["cohort_membership_effect"]["sensitivity_changes"])
+        _verify_effects(report, after)
+        tampered = deepcopy(report)
+        tampered["cohort_membership_effect"]["ranking_changes"].pop()
+        with self.assertRaisesRegex(ValueError, "cohort effect differs"):
+            _verify_effects(tampered, after)
+        restricted, result = bundle({"A": matrix["A"], "C": new["benefit_matrix"]["C"]})
+        blocked = _fixed_cohort(old, restricted, before, result, policy)
+        self.assertEqual((blocked["status"], blocked["missing_current_projects"]), ("BLOCKED", ["B"]))
+        self.assertNotIn("current_point_rankings", blocked)
+
+    def test_independent_decimal_three_case_oracle(self):
+        matrix = {"A": {"R1": 0.2, "S1": 0.8}, "B": {"R1": 0.7, "S1": 0.4},
+                  "C": {"R1": 0.95, "S1": 0.45}}
+        weights = {"R1": 0.5, "S1": 0.5}
+        domains = {"R1": "Resource", "S1": "Strategic"}
+        scored, sensitivity = decimal_scenario(matrix, weights, domains, 0.2)
+        self.assertEqual(scored["promethee"]["B"], {"score": Decimal("-0.3125"), "rank": 3})
+        self.assertEqual(scored["saw"]["C"], {"score": Decimal("0.70"), "rank": 1})
+        self.assertEqual(sensitivity["domain", "Resource"]["A"], {"rank": 1, "rank_change": -1})
+        actual = {method: {project: asdict(point) for project, point in points.items()}
+                  for method, points in rank_panel(matrix, weights, 0.2).items()}
+        _match(actual, scored)
+        actual["topsis"]["A"]["score"] += 0.001
+        with self.assertRaisesRegex(ValueError, "numerical result differs"):
+            _match(actual, scored)
 
     def test_replay_pass_requires_actual_rebuilt_bytes(self):
         with TemporaryDirectory() as folder:
