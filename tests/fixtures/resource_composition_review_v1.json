@@ -1,0 +1,169 @@
+{
+  "schema": "resource-composition-review-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "expanded_manifest_sha256": "c594129be54b565fdf2b6aec85b23ab72234f63ff0cfff2df96da1dffdaacfc8",
+  "archive_release_id": "bdb9e868e5cb2a514e608231db35cdb27c3e77b2fc9427f7dbb444409f511c78",
+  "mcda_inputs_sha256": "d58ab88c664e013fde904f45a38dfe29ffb3b31b3c955dd4a2aab1f4368a6955",
+  "policy_sha256": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+  "wudinna_archived_control": {
+    "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+    "tokens_ppm": {"MREO":"112"},
+    "denominator_ppm": "470",
+    "unit_evidence_page": 15,
+    "unit_evidence_image_sha256": "f776a023a5a7f96c8ef90aeb52ce3a05427b609603a01064d4e100bd440447f0"
+  },
+  "cases": [
+    {
+      "case_id": "mt-weld-in-situ-resource",
+      "project_id": "AU-efff91a06cf344122d88",
+      "r1_value_kt": "4389",
+      "effective_date": "2024-06-30",
+      "cutoff": ["2.5", "%", "TREO"],
+      "s1_state": "UNKNOWN",
+      "evidence_outcome": "EVIDENCE_INSUFFICIENT",
+      "reasons": ["PARTIAL_REPORTED_DY_TB_ONLY", "ORE_RESERVE_SCOPE_AND_CUTOFF_INCOMPATIBLE", "LATER_EDITION_LACKS_RESOURCE_OXIDES"],
+      "next_evidence": "Whole-ore concentrations for the four oxides or an explicitly defined total, bound to an eligible in-situ Mineral Resource edition including its R1 inputs and TREO definition."
+    },
+    {
+      "case_id": "goschen-area-1-bulk-resource",
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "r1_value_kt": "74",
+      "effective_date": "2025-10-15",
+      "cutoff": ["1", "%", "THM"],
+      "s1_state": "UNKNOWN",
+      "evidence_outcome": "EVIDENCE_INSUFFICIENT",
+      "reasons": ["OXIDES_USE_THM_DENOMINATOR", "EXACT_15_SPECIES_TREO_DENOMINATOR_UNBOUND", "RESOURCE_CATEGORY_LABEL_CONFLICT", "CONCENTRATE_FORECAST_INCOMPATIBLE"],
+      "next_evidence": "Issuer-reviewed same-estimate JORC classification reconciliation, directly reported whole-ore four-oxide concentration or total, and the exact TREO species definition."
+    },
+    {
+      "case_id": "wolverine-mre-original-and-restatements",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "r1_value_kt": "70.5",
+      "effective_date": "2025-01-15",
+      "cutoff": ["0.15", "%", "TREO"],
+      "s1_state": "COMPARABLE",
+      "archived_s1_tokens": {"Pr6O11":"60","Nd2O3":"280","Dy2O3":"840","Tb4O7":"120"},
+      "archived_denominator_ppm": "9600",
+      "evidence_outcome": "SCIENTIFIC_CONFLICT",
+      "reasons": ["DY_ORIGINAL_TABLES_PRECISION_CONFLICT", "Y_THREE_NONOVERLAPPING_NOMINAL_INTERVALS", "ISSUER_RESTATEMENT_NOT_EXPLICIT_CORRECTION", "RESERVE_ROUNDING_RULE_NOT_APPLICABLE_TO_MRE"],
+      "next_evidence": "Issuer versioned correction or underlying January 2025 Wolverine-only master table with units, unambiguous grade rounding, and explicit relation to January Tables 2 and 5."
+    }
+  ],
+  "documents": [
+    {
+      "case_id": "mt-weld-in-situ-resource",
+      "source_set": "fixed",
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "capture_sha256": "3907e6a5a17ff84b2d630601b535c04bf671a0f3b5b1253d7c1d513fb76c07c0",
+      "witnesses": [
+        [2, "MINERAL_RESOURCE", "Total 106.6 4.1 4,389"],
+        [10, "PARTIAL_RESOURCE_COMPOSITION", "The Mt Weld Rare Earth deposit mineral resource now contains 29,800 combined tonnes of terbium and dysprosium oxides."],
+        [23, "ORE_RESERVE", "Table 7: Mt Weld Rare Earth Deposit Ore Reserve June 2024 at 2.8% TREO* cut-off grade"],
+        [23, "ORE_RESERVE_PR_ND", "TOTAL 32.0 6.4 1.5 2.9 3,250 11,730 1,680 400 910"],
+        [23, "ORE_RESERVE_TB_DY", "TOTAL 32.0 100 400 57 117 13 50 5 1,360"]
+      ]
+    },
+    {
+      "case_id": "mt-weld-in-situ-resource",
+      "source_set": "expanded",
+      "source_sha256": "92e83bc8c398ca0f78677151ff1a207bd4faa7a719603330c1b17b67d9befdbf",
+      "capture_sha256": "e9e2dcf7857aad032c913a0b1297fac9d8812ba9ad082c4cd24a96573a6c8cdc",
+      "witnesses": [
+        [120, "SEPARATE_ESTIMATE_DATE", "The Mineral Resource estimation for the Mt Weld Rare Earth Deposit is as of 30 June 2025."],
+        [120, "SEPARATE_IN_SITU_ESTIMATE", "Subtotal 106.0 4.09 4,337"],
+        [120, "WITH_STOCKPILES_AND_TAILINGS", "Total 109.6 4.24 4,645"]
+      ]
+    },
+    {
+      "case_id": "mt-weld-in-situ-resource",
+      "source_set": "expanded",
+      "source_sha256": "3ccd2d999b157cbaa4ecdec38e9f01b4e0cd02198b2ab437aed77e07d83274ba",
+      "capture_sha256": "641d551667447df38d07da367c4d53844f2f27316b7a1b9e04f2bb6c619c9be0",
+      "witnesses": [
+        [136, "SEPARATE_ESTIMATE_DATE", "The Mineral Resource estimation for the Mt Weld Rare Earth Deposit is as of June 30, 2026."],
+        [136, "SEPARATE_IN_SITU_ESTIMATE", "Subtotal 105.2 4.1 4,287"],
+        [136, "WITH_STOCKPILES_AND_TAILINGS", "Total 109.2 4.2 4,610"]
+      ]
+    },
+    {
+      "case_id": "goschen-area-1-bulk-resource",
+      "source_set": "fixed",
+      "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "capture_sha256": "7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92",
+      "witnesses": [
+        [9, "CLASS_DESCRIPTION", "The classification of the Measured and Indicated Mineral Resource was supported by the"],
+        [12, "BULK_RESOURCE_AND_SOURCE_ROW_CLASS", "Area 1 Mineral Resource (M+Ind+Inf) 94,200,000 0.08 74,000"],
+        [12, "THM_OXIDE_COMPOSITION", "TOTAL(1) 0.48 1.00 0.12 0.43 0.08 0.004 0.06 0.01 0.07 0.05 0.007 0.04 0.46 2.8"],
+        [12, "THM_DENOMINATOR", "Mineral assemblage, via QEMScan Particle Analysis, is reported as a percentage of in situ THM content"],
+        [12, "BULK_CONVERSION_CONTEXT", "In-situ TREO + Y2O3 Grade is calculated by the THM Grade (2.8%) multiplied by TREO + Y2O3 Grade (2.8%)"]
+      ]
+    },
+    {
+      "case_id": "goschen-area-1-bulk-resource",
+      "source_set": "fixed",
+      "source_sha256": "8a70d4ca8cdc287da19cd6a50060e0496f84c5f153c62b452870aed1ff92497c",
+      "capture_sha256": "b5879e521dcc8d3b12167164b781d52a215841317bf333a6b21f91f54c3378b5",
+      "witnesses": [
+        [23, "UNSEPARATED_RESTATEMENT_IN_THM", "In-Situ TREO Grade is calculated by THM Grade (2.95%) multiplied by TREO Grade (2.43%)."],
+        [24, "RESERVE_THM_DENOMINATOR", "THM Assemblage and Rare Earth Oxides are reported as a percentage of in-situ THM content."]
+      ]
+    },
+    {
+      "case_id": "goschen-area-1-bulk-resource",
+      "source_set": "expanded",
+      "source_sha256": "94570d42f50dd86cace6dda4d49d70071fdeec502b4f2a8bccc2980589e936f3",
+      "capture_sha256": "72d9c2712659f9d4c548fe3b7e9d00e99a16f3c1f3bf64eaaaf8bf8136f816f0",
+      "witnesses": [
+        [12, "GLOBAL_THM_ASSEMBLAGE", "Total 890 2.9 21 11 12 19 3.4 0.67"],
+        [12, "GLOBAL_THM_DENOMINATOR", "THM Assemblages are reported as a percentage of in-situ THM content"]
+      ]
+    },
+    {
+      "case_id": "wolverine-mre-original-and-restatements",
+      "source_set": "fixed",
+      "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+      "capture_sha256": "3bba027e86b4d930cf903aee0dc6560453cdfbfe6ecf70ddb30a4e5421afe2e7",
+      "witnesses": [
+        [5, "ORIGINAL_TABLE_2_WOLVERINE_TOTAL", "Total 7.3 0.96 0.85 5.68 0.12 89 70,500"],
+        [6, "ORIGINAL_TABLE_5_WOLVERINE_TOTAL", "Total 7,300 170 420 60 280 200 40 560 120 840 170 490 70 380 50 5,700"]
+      ]
+    },
+    {
+      "case_id": "wolverine-mre-original-and-restatements",
+      "source_set": "fixed",
+      "source_sha256": "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075",
+      "capture_sha256": "f8075722a2b4bfca380083f59d83e46f638bdcad17dc749a89838bdbc412cac6",
+      "witnesses": [
+        [13, "DFS_RESOURCE_CUTOFF_AND_DAY", "Table 5: Mineral Resource estimate (informing the Ore Reserve) as at 15 January 2025 reported above a 0.15 % TREO cut-off grade."],
+        [13, "DFS_WOLVERINE_ONLY_SUBTOTAL", "Subtotal 7.3 0.96 0.84 5.66 0.12 90 70,500"],
+        [13, "DFS_CITATION_TO_PRIMARY_MRE", "ASX Announcement 16 January 2025, “2025 – Wolverine Mineral Resource Estimate”"]
+      ]
+    },
+    {
+      "case_id": "wolverine-mre-original-and-restatements",
+      "source_set": "expanded",
+      "source_sha256": "67220f3f72d04ca64d66caaba6964b4ad5c04968f40c32770987c180c24623f9",
+      "capture_sha256": "d35974c03da97e8cf9934de500febadccae4dd3d3e66f7f43a306eabe952e2dc",
+      "witnesses": [
+        [36, "RESERVE_AND_PRODUCTION_TARGET_SCOPE", "Appendix A: Ore Reserves and Production Target"],
+        [36, "RESERVE_ROUNDING_ONLY", "Ore tonnes rounded to nearest 10,000 tonnes. Dy2O3, Tb4O7 and Y2O3 grades rounded to nearest 0.01 kg/t."],
+        [37, "PRESENTATION_WOLVERINE_SUBTOTAL_REPRINT", "Subtotal3 7.3 0.96 0.84 5.66 0.12 90 70,500"],
+        [37, "PRESENTATION_CITATION_TO_PRIMARY_MRE", "Mineral Resource based on the Company’s ASX announcement titled “2025 - Wolverine Mineral Resource Estimate” dated 16 January 2025"]
+      ]
+    }
+  ],
+  "wolverine_interval_readings": {
+    "Dy2O3": [
+      ["ORIGINAL_TABLE_2_WOLVERINE_TOTAL", "0.85", "kg/t"],
+      ["ORIGINAL_TABLE_5_WOLVERINE_TOTAL", "840", "ppm"],
+      ["DFS_WOLVERINE_ONLY_SUBTOTAL", "0.84", "kg/t"],
+      ["PRESENTATION_WOLVERINE_SUBTOTAL_REPRINT", "0.84", "kg/t"]
+    ],
+    "Y2O3": [
+      ["ORIGINAL_TABLE_2_WOLVERINE_TOTAL", "5.68", "kg/t"],
+      ["ORIGINAL_TABLE_5_WOLVERINE_TOTAL", "5,700", "ppm"],
+      ["DFS_WOLVERINE_ONLY_SUBTOTAL", "5.66", "kg/t"],
+      ["PRESENTATION_WOLVERINE_SUBTOTAL_REPRINT", "5.66", "kg/t"]
+    ]
+  }
+}
