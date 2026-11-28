@@ -1,0 +1,188 @@
+{
+  "schema_version": "census-display-columns-v2",
+  "columns": [
+    {
+      "field_id": "resource_jorc_class_as_reported",
+      "label_zh": "資源類別（原報告）",
+      "label_en": "Reported resource categories",
+      "group": "resource",
+      "data_type": "TEXT",
+      "unit": "as reported",
+      "basis": "report category",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "same issue and estimate statement",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "REPORTED_RESOURCE"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "resource_estimate_effective_date",
+      "label_zh": "資源估算有效日",
+      "label_en": "Resource estimate effective date",
+      "group": "resource",
+      "data_type": "PARTIAL_DATE",
+      "unit": "calendar date",
+      "basis": "as stated in estimate",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "original effective date distinctly disclosed",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "REPORTED_RESOURCE"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "resource_cutoff_as_reported",
+      "label_zh": "資源邊界品位（原報告）",
+      "label_en": "Reported resource cutoff",
+      "group": "resource",
+      "data_type": "TEXT",
+      "unit": "as reported",
+      "basis": "native analyte and unit",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "same resource estimate and exact cutoff",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "REPORTED_RESOURCE"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "resource_scope_or_deposit_name",
+      "label_zh": "資源聲明範圍",
+      "label_en": "Resource statement scope",
+      "group": "resource",
+      "data_type": "TEXT",
+      "unit": "as reported",
+      "basis": "issuer's named resource domain",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "applicable resource statement with native scope evidence",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "REPORTED_RESOURCE"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "ree_grade_or_chemistry_basis",
+      "label_zh": "稀土品位化學與材料基準",
+      "label_en": "Reported grade chemistry and material basis",
+      "group": "resource",
+      "data_type": "TEXT",
+      "unit": "as reported",
+      "basis": "same assertion and material denominator",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "explicit source definition or header of the same resource estimate",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "REPORTED_RESOURCE"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "study_effective_or_completion_date",
+      "label_zh": "研究完成日期（原報告）",
+      "label_en": "Reported study completion date",
+      "group": "study",
+      "data_type": "PARTIAL_DATE",
+      "unit": "calendar date",
+      "basis": "historical event, native precision",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "completed whole-project study with date evidence",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "COMPLETED_STUDY"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "forecast_product_and_basis",
+      "label_zh": "工程情境產品與材料基準",
+      "label_en": "Forecast product and material basis",
+      "group": "forecast",
+      "data_type": "TEXT",
+      "unit": "as reported",
+      "basis": "product endpoint and material basis",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "issuer's verified engineering scenario only",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "FORECAST",
+        "ENGINEERING_PLAN"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "forecast_scenario_or_period",
+      "label_zh": "工程情境及期間",
+      "label_en": "Reported forecast scenario and period",
+      "group": "forecast",
+      "data_type": "TEXT",
+      "unit": "as reported",
+      "basis": "design, base or life-of-mine role",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "issuer's independently verified scenario or period",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "FORECAST",
+        "ENGINEERING_PLAN"
+      ],
+      "version": "v2"
+    },
+    {
+      "field_id": "forecast_annual_rate_as_reported",
+      "label_zh": "年產情境數值（原報告）",
+      "label_en": "Reported annual forecast rate",
+      "group": "forecast",
+      "data_type": "REPORTED_QUANTITY",
+      "unit": "as reported",
+      "basis": "native annual rate and basis",
+      "purpose": "CENSUS_DISPLAY_ONLY",
+      "source_priority": "Capture-backed exact original. Preserve distinct statement editions.",
+      "applicability": "each exact source scenario, separate from operating production",
+      "missing_semantics": "UNKNOWN if applicable original evidence is absent or unresolved.",
+      "validation_rule": "display-evidence-and-role-v2",
+      "precision": "Native written tokens, units and date precision.",
+      "display_label": "SOURCE_REPORTED_DISPLAY",
+      "evidence_roles": [
+        "FORECAST",
+        "ENGINEERING_PLAN"
+      ],
+      "version": "v2"
+    }
+  ]
+}
