@@ -1,0 +1,517 @@
+{
+  "schema": "census-evidence-breadth-verification-v1",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "starting_main": "2fc644dc3fadca64cf9cb75db921bd728ea4160a",
+  "repository_code_at_candidate": "1c44cab28602a5bcf15745f11f293dfb2b3f3aee",
+  "prior_candidate": "b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da",
+  "candidate": "47bcd58e568dc912f78c887ad83377adc891f81a472b3e71a266cf2e5abd60dd",
+  "candidate_status": "RESEARCH_CANDIDATE",
+  "input_artifacts": {
+    "bindings": "cb4f92a8cc50c03decb2c1923e04818b9d3e87848f05d39625be680273bdd17c",
+    "profile": "6379e0b436d0697649ab9809e0b10868c223fdd0ab38436c26e51529d4d921ef",
+    "sources": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "selection_rules_hash": "2253754a3736492e0293b8e84bb7acf6433cb322c4648528f87b0790eddbc2a5",
+  "census_projection_policy_sha256": "68d0d3739a9ab73bce108f9fe37831c4874703467d57f2f9b2d32a079acddcba",
+  "formula_registries": {
+    "census_derivation_registry_sha256": "d4e62e21483385eff64ef429938589a055fda86db39affc6da1843dd603ae9a5",
+    "census_oxide_derivation_registry_sha256": "c0fdb9d4748a588adddea77264f2581628efc57cf855bc6d968f253b682919c4"
+  },
+  "environment": {
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "python": "3.12.14",
+    "python_implementation": "CPython",
+    "sqlite": "3.53.1",
+    "tools": {
+      "pdfimages": {
+        "sha256": "213eba4a36ef021f49a0abc94292a7566baba8dfafef5017467166d9f06074f5",
+        "version": "pdfimages version 25.03.0"
+      },
+      "pdftotext": {
+        "sha256": "7fe3559cac3ba61dd93650a1ba90499b9fc488184ef8d0f2f1305ddf52c0378b",
+        "version": "pdftotext version 25.03.0"
+      },
+      "tesseract": {
+        "sha256": "74b76a5b994adcc18be362bf64ed5118082b2401d5d9a35242e92fc4c62e2b4b",
+        "version": "tesseract 5.5.0"
+      }
+    }
+  },
+  "scientific_artifacts": {
+    "census/cell_status.csv": "2c86999d9ab8c10aa26a817dde8071d68b6efa89a27c2bc77c1d46c7407d4d3d",
+    "census/census.csv": "5c3b155cd1cb6cde45c019b4e430bebea1dc492c8d18b8a4d8971f07f9ab7fc6",
+    "census/census_receipt.json": "7be86ffe89a5a1a71da82a2149ec3eed4ca0cdbed062c64195ecc910817a0e29",
+    "decision/decision_receipt.json": "990ab518ebd4d89e3c41d2cbdf2c6eff1ac7915cb1f1bbdf55eb726ca0380006",
+    "decision/mcda_inputs.json": "b60f4c8c901621efccfa70b1f7aea6225b984bf2e521e12d102dc3682fd5f48c",
+    "decision/mcda_results.json": "a7433a8ea7371c0d97f1450c9c2f1100224ca8a7175f75c1f5320c032e9efb5b",
+    "observations/extraction.json": "8bb3217e15660320fe7840650166a9cc1c5941a424162384e7982b6b970d6dba",
+    "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+  },
+  "gates": {
+    "S3-0": "PASS",
+    "S3-1": "PASS",
+    "S3-2": "PASS",
+    "S3-3": "PASS",
+    "S3-4": "PASS",
+    "S3-5": "PASS",
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "O2_HISTORICAL": "FAIL"
+  },
+  "formal_candidate_publication": "BLOCKED",
+  "fixed_source_results": {
+    "unique_sources": 144,
+    "eligible_captures": 148,
+    "new_numeric_observations": 0,
+    "new_assertions": 3,
+    "new_validated_attributes": 2,
+    "new_selected_attributes": 2,
+    "new_accepted_numeric_values": 0,
+    "new_derived_values": 1,
+    "new_descriptive_cells": 6,
+    "populated_before_after": [
+      1115,
+      1122
+    ],
+    "direct_before_after": [
+      16,
+      16
+    ],
+    "derived_before_after": [
+      2,
+      3
+    ],
+    "descriptive_before_after": [
+      5,
+      11
+    ],
+    "comparison_keys_before_after": [
+      6,
+      6
+    ],
+    "panel_cohort_before_after": [
+      2,
+      2
+    ],
+    "changed_values": 7,
+    "provenance_only_changes": 27
+  },
+  "separate_expansion": {
+    "new_sha_responses": 7,
+    "government_rows": 91,
+    "proposed_sites": 11,
+    "evidence_insufficient_sites": 8,
+    "rejected_sites": 3,
+    "accepted_sites": 0,
+    "formal_forecast_observations": 0,
+    "existing_forecast_roles_rechecked": 3
+  },
+  "limits": {
+    "fixed_queue_unresolved_positions": 142,
+    "fixed_queue_unresolved_structures": 15,
+    "isolated_family_gain_hypothesis": "FAIL",
+    "formal_detection_precision_recall": "UNMEASURED",
+    "new_ocr": "NOT_RUN",
+    "billing": "UNMEASURED",
+    "independent_failure_domain": "BLOCKED"
+  },
+  "replay": {
+    "cold_runs": 2,
+    "matched_artifacts_per_run": 8,
+    "closure_objects": 312,
+    "matched_historical_artifacts_per_run": 8,
+    "same_filesystem_local_copy": {
+      "verified_objects_including_release": 313,
+      "same_filesystem": true
+    }
+  },
+  "local_unit_and_integration": {
+    "pass": 340,
+    "skips": 0,
+    "seconds": 65.929
+  },
+  "phase_costs": {
+    "build": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 92424,
+      "system_seconds": 1.5577329999999998,
+      "user_seconds": 7.523134,
+      "wall_seconds": 8.973834456002805
+    },
+    "archive": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 60236,
+      "system_seconds": 0.37657799999999997,
+      "user_seconds": 2.303216,
+      "wall_seconds": 2.685948849997658
+    },
+    "cold-a": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 91792,
+      "system_seconds": 2.176509,
+      "user_seconds": 9.793611,
+      "wall_seconds": 11.910021817995585
+    },
+    "cold-b": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 91664,
+      "system_seconds": 2.332017,
+      "user_seconds": 11.091955,
+      "wall_seconds": 13.42169384600129
+    }
+  },
+  "integration_evidence_units": [
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "a5949a5c8fb1d9414e972f013e07d203e7841e94",
+        "mergeCommit": {
+          "oid": "2fc644dc3fadca64cf9cb75db921bd728ea4160a"
+        },
+        "number": 34,
+        "state": "MERGED",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/34"
+      },
+      "checks": [
+        {
+          "name": "Static and unit",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46094462846/job/140822525160",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T01:42:30Z",
+          "completedAt": "2026-11-28T01:42:54Z"
+        },
+        {
+          "name": "Frozen reference integrity",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46094462846/job/140822527375",
+          "state": "SKIPPED",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T01:42:28Z",
+          "completedAt": "2026-11-28T01:42:27Z"
+        },
+        {
+          "name": "Exact resource integration",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46094462846/job/140822525446",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T01:42:31Z",
+          "completedAt": "2026-11-28T01:43:43Z"
+        }
+      ],
+      "successful_runner_seconds": 96
+    },
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "0bbc05b6dd7466f96fb4188b8d21994c9f1298a5",
+        "mergeCommit": {
+          "oid": "7f7721d325d55542614ab532b7fc1a4599a36b52"
+        },
+        "number": 35,
+        "state": "MERGED",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/35"
+      },
+      "checks": [
+        {
+          "name": "Static and unit",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46118881214/job/140898737124",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T06:56:15Z",
+          "completedAt": "2026-11-28T06:56:36Z"
+        },
+        {
+          "name": "Frozen reference integrity",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46118881214/job/140898738203",
+          "state": "SKIPPED",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T06:56:13Z",
+          "completedAt": "2026-11-28T06:56:13Z"
+        },
+        {
+          "name": "Exact resource integration",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46118881214/job/140898737314",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T06:56:16Z",
+          "completedAt": "2026-11-28T06:57:30Z"
+        }
+      ],
+      "successful_runner_seconds": 95
+    },
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "ed21bc1d9ca888f461f7d6d7fe9556698f2acd07",
+        "mergeCommit": {
+          "oid": "785aafd1c468369548e73cc61c81d2795cead1ea"
+        },
+        "number": 36,
+        "state": "MERGED",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/36"
+      },
+      "checks": [
+        {
+          "name": "Static and unit",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119413496/job/140900381307",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:03:22Z",
+          "completedAt": "2026-11-28T07:03:43Z"
+        },
+        {
+          "name": "Frozen reference integrity",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119413496/job/140900382388",
+          "state": "SKIPPED",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:03:20Z",
+          "completedAt": "2026-11-28T07:03:20Z"
+        },
+        {
+          "name": "Exact resource integration",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119413496/job/140900381144",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:03:23Z",
+          "completedAt": "2026-11-28T07:04:41Z"
+        }
+      ],
+      "successful_runner_seconds": 99
+    },
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "623a4ce2cc023956d04b07af0b891fd9cd4335bc",
+        "mergeCommit": {
+          "oid": "fa935dbca1c4bb02ecf1acb2289ce7df6c2dcd6d"
+        },
+        "number": 37,
+        "state": "MERGED",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/37"
+      },
+      "checks": [
+        {
+          "name": "Static and unit",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119608107/job/140900984508",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:05:52Z",
+          "completedAt": "2026-11-28T07:06:13Z"
+        },
+        {
+          "name": "verify",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119608082/job/140900984246",
+          "state": "SUCCESS",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:05:51Z",
+          "completedAt": "2026-11-28T07:06:03Z"
+        },
+        {
+          "name": "Frozen reference integrity",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119608107/job/140900985626",
+          "state": "SKIPPED",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:05:49Z",
+          "completedAt": "2026-11-28T07:05:49Z"
+        },
+        {
+          "name": "deployment-authorization",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119608082/job/140900985730",
+          "state": "SKIPPED",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:05:49Z",
+          "completedAt": "2026-11-28T07:05:49Z"
+        },
+        {
+          "name": "stage-formal",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119608082/job/140901042083",
+          "state": "SKIPPED",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:06:04Z",
+          "completedAt": "2026-11-28T07:06:04Z"
+        },
+        {
+          "name": "Exact resource integration",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119608107/job/140900984263",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:05:52Z",
+          "completedAt": "2026-11-28T07:06:43Z"
+        },
+        {
+          "name": "deploy-formal",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119608082/job/140901042632",
+          "state": "SKIPPED",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:06:04Z",
+          "completedAt": "2026-11-28T07:06:04Z"
+        }
+      ],
+      "successful_runner_seconds": 84
+    },
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "b0a02326e8fe7f9039fc788b7691ce44dc406a5f",
+        "mergeCommit": {
+          "oid": "0b93d64b6514ac2378f0fa4c3e90c579cff38f6f"
+        },
+        "number": 38,
+        "state": "MERGED",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/38"
+      },
+      "checks": [
+        {
+          "name": "Static and unit",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851143/job/140901749736",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:09:05Z",
+          "completedAt": "2026-11-28T07:09:26Z"
+        },
+        {
+          "name": "verify",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851098/job/140901749633",
+          "state": "SUCCESS",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:09:04Z",
+          "completedAt": "2026-11-28T07:09:15Z"
+        },
+        {
+          "name": "Browser interaction and release integrity",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851076/job/140901749327",
+          "state": "SUCCESS",
+          "workflow": "Static research web verification",
+          "startedAt": "2026-11-28T07:09:04Z",
+          "completedAt": "2026-11-28T07:09:45Z"
+        },
+        {
+          "name": "Frozen reference integrity",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851143/job/140901751109",
+          "state": "SKIPPED",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:09:02Z",
+          "completedAt": "2026-11-28T07:09:02Z"
+        },
+        {
+          "name": "deployment-authorization",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851098/job/140901750661",
+          "state": "SKIPPED",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:09:02Z",
+          "completedAt": "2026-11-28T07:09:02Z"
+        },
+        {
+          "name": "stage-formal",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851098/job/140901800814",
+          "state": "SKIPPED",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:09:15Z",
+          "completedAt": "2026-11-28T07:09:15Z"
+        },
+        {
+          "name": "Exact resource integration",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851143/job/140901749520",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:09:05Z",
+          "completedAt": "2026-11-28T07:10:06Z"
+        },
+        {
+          "name": "deploy-formal",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46119851098/job/140901801473",
+          "state": "SKIPPED",
+          "workflow": "Research website",
+          "startedAt": "2026-11-28T07:09:15Z",
+          "completedAt": "2026-11-28T07:09:15Z"
+        }
+      ],
+      "successful_runner_seconds": 134
+    },
+    {
+      "pr": {
+        "baseRefName": "main",
+        "headRefOid": "d23f61ed52abb3ae9f59b70e66e9474c51600c3c",
+        "mergeCommit": {
+          "oid": "1c44cab28602a5bcf15745f11f293dfb2b3f3aee"
+        },
+        "number": 39,
+        "state": "MERGED",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/39"
+      },
+      "checks": [
+        {
+          "name": "Static and unit",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46120035903/job/140902315462",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:11:24Z",
+          "completedAt": "2026-11-28T07:11:48Z"
+        },
+        {
+          "name": "Frozen reference integrity",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46120035903/job/140902316395",
+          "state": "SKIPPED",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:11:22Z",
+          "completedAt": "2026-11-28T07:11:21Z"
+        },
+        {
+          "name": "Exact resource integration",
+          "link": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46120035903/job/140902315763",
+          "state": "SUCCESS",
+          "workflow": "Migration verification",
+          "startedAt": "2026-11-28T07:11:25Z",
+          "completedAt": "2026-11-28T07:12:51Z"
+        }
+      ],
+      "successful_runner_seconds": 110
+    }
+  ],
+  "artifact_sha256": {
+    "work/census-stage3/final/build/build_receipt.json": "cca0033f5a0af4214abe15a44e49b519c638afaa9067c292414405545b595568",
+    "work/census-stage3/final/archive/releases/47bcd58e568dc912f78c887ad83377adc891f81a472b3e71a266cf2e5abd60dd.json": "47bcd58e568dc912f78c887ad83377adc891f81a472b3e71a266cf2e5abd60dd",
+    "work/census-stage3/final/archive.json": "65b329d1deb7f61597c8259a93ac5e91b97fe8259583771cb0f3c45a536d73c5",
+    "work/census-stage3/final/build/observations/extraction.json": "8bb3217e15660320fe7840650166a9cc1c5941a424162384e7982b6b970d6dba",
+    "work/census-stage3/final/build/census/census_receipt.json": "7be86ffe89a5a1a71da82a2149ec3eed4ca0cdbed062c64195ecc910817a0e29",
+    "work/census-stage3/final/delta/census_delta.csv": "bc30f997670e55f2caef160d128a68a6db7ba5d651def5fa415d8308397f4561",
+    "work/census-stage3/final/delta/cohort_and_mcda.json": "24650c6db70ba0834fb39b8fce5e982baab4cb6ac87cab926c23b18c8155f33d",
+    "work/census-stage3/final/delta/comparability_delta.json": "950578c1a7ee8be4e3aa44f5e2f179a8578ede597b9b4f214a99e46ba48175be",
+    "work/census-stage3/final/delta/comparison_receipt.json": "19feb79d523a927b77e0c6945f7a2499997fb4a06cd7508a21e457a521822f54",
+    "work/census-stage3/final/delta/release_and_replay.json": "0fdc21f78048c714477eb863a2ed11a31a47a8fbd88a788cc5b5c4e1d4f9442b",
+    "work/census-stage3/final/independent-release.json": "e334ee6e4e709a607101f9d5643b7936e1e0256a79ae455dfc7db8c48f72320b",
+    "work/census-stage3/final/independent-science/release_audit.json": "00282508901016fb69db1390a8fb7c5f2c96e4dc13aef13c3d8e3004cb16b911",
+    "work/census-stage3/final/reported-mreo-oracle.json": "0beb0940b23acf64ab657c84f4405612822f08a226f192d8662137a0b2f05068",
+    "work/census-stage3/final/browser.json": "f4861e6af2e62fe4e940c6f7aa2d64e2593d8345cac30acc30954d4b1b231cff",
+    "work/census-stage3/final/full-exact-tests.log": "f70d7c5d6f45028b2c4c4e40e8b881a1505858fb6e1413114c26537b19607de8",
+    "work/census-stage3/final/engineering/engineering.json": "ef1dcdeed381ddc32d06a3858f7dbfe98aab755c47a0f76254fa395fe2b99e07",
+    "work/census-stage3/final/verify-site/site_verification.json": "e85d7af72faeb340d1e3d482c1c38066f7b5b95129717ef03c7ad2ed2619669b",
+    "work/census-stage3/final/preview-archive-check/site_verification.json": "e85d7af72faeb340d1e3d482c1c38066f7b5b95129717ef03c7ad2ed2619669b",
+    "work/census-stage3/final/site-faults/candidate_faults_receipt.json": "5b1aeb6cfcbfc18fc50e1dff8cac39eb6dc356acb5fd8b1cc734ee9046ababc9",
+    "work/census-stage3/final/web-data/releases/47bcd58e568dc912f78c887ad83377adc891f81a472b3e71a266cf2e5abd60dd/manifest.json": "5bf410b2e907db491fb653ed5bda4aa6bf76c16d2636f9f7a850abeb1f2c6f18",
+    "work/census-stage3/final/web-data/releases/b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da/manifest.json": "fa2e0010f917cb7211b7d58ffe7c4051ff9ff86f37c3e25cc64356b30e60dd8f",
+    "work/census-stage3/final/census-stage3-candidate-preview.zip": "bebbeb648a06e969b91c6268cd0eb0695ba1833dbbe26cb40e0a444b537584c8",
+    "work/census-stage3/final/git-integration-units.json": "829fe8dfef94c53d63e6b0e2b1b6e7fcce2588e3d351fa9be269483ed8f42164",
+    "work/census-stage3/final/build-cost.json": "433b3f80a9861e4a97634db06fec72a47e53c32bc4bcfbb54d9cf7a43c8da6ab",
+    "work/census-stage3/final/archive-cost.json": "3373a1a2a0106d21d42669f9c4846e5086a859b896b329bb6fdf0166be93bf6f",
+    "work/census-stage3/final/cold-a-cost.json": "b0a94f3596e3f75f995d47b5c32adf3af177159ac3be0385699544ff6bd09ce9",
+    "work/census-stage3/final/cold-b-cost.json": "9886d0e78d02c7e60591b689bc0466240c6fcfac6010a6ee164eb5b558e6785c",
+    "work/census-stage3/final/cold-a/replay_receipt.json": "50a3c0ee57a9877acdea661d3076c767a21885558c7bce9b4aab9fdcdd6cba50",
+    "work/census-stage3/final/cold-b/replay_receipt.json": "02e7bbcebe1807fd539ad2d9f6b0a47b3348d591f49da119cece05c6844d3f23",
+    "work/census-stage3/a-final/stage3_baseline.json": "39c93d6dc12685005f5ba4db2fb6334a396bb94a295c21958819280ad5740b94",
+    "work/census-stage3/a-final/census_gap_queue.jsonl": "df390ceaec2f5e398e4c72a5f6b52b0c5180883f786276264b34f4f3d61d51cf",
+    "work/census-stage3/c-review-head/attribute-oracle.json": "e7ddadc295e499b5e9a519de9ca91d4739f5fd0a96f02572dabfd30ed13e90fe",
+    "work/census-stage3/independent-holdout/final-1c44cab-exact-binding.json": "23e369cd2002928ab6c14cd793791b84f7b5d988c8311721bb30bd47490ce04e",
+    "work/stage3-context/expanded-immutable/source_manifest.json": "226c08be42beea1f085760f3fc7a0c0647b77eeb1bd361cdc7414fd582efee23"
+  }
+}
