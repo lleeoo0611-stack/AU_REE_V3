@@ -187,6 +187,14 @@ class NativeLayoutTests(unittest.TestCase):
         self.assertEqual(_baseline_overlap(case, bound, {"old": {**old, "role_guess": "ore_mt"}})["status"],
                          "BASELINE_ROW_LEXEME_MATCH_UNRESOLVED")
 
+    def test_printed_thousands_marker_is_not_an_unscaled_tonne(self):
+        source = PAGE.replace("Contained TREO (t)", "TREO* (‘000 tonnes)")
+        original = PDFDocument(SHA, (source,), "test")
+        item = next(cell for cell in bind_page_row(original, page=1, row_line=7, caption_line=2)
+                    if cell.variable == "contained_treo_kt")
+        self.assertEqual(item.unit, "kt")
+        self.assertIn("‘000 tonnes", item.unit_label.text)
+
     def test_original_non_resource_category_and_mixed_scope_do_not_authorize(self):
         spec = deepcopy(BINDING)
         next_caption = CAPTION.replace("Mineral Resource Estimate", "Ore Reserve Estimate")

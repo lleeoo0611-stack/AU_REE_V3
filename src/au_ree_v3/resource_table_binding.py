@@ -22,14 +22,14 @@ _VALUE = re.compile(
     re.I,
 )
 _UNIT = re.compile(
-    r"(?<![\w.])(?:billion\s+tonnes?|million\s+tonnes?|(?-i:M)\s+tonnes?|thousand\s+tonnes?|kg\s*/\s*t|"
+    r"(?<![\w.])(?:(?:[‘’']\s*)?000\s+tonnes?|billion\s+tonnes?|million\s+tonnes?|(?-i:M)\s+tonnes?|thousand\s+tonnes?|kg\s*/\s*t|"
     r"ppm|Bt|Mt|kt|tonnes?|t)(?!\w)|%", re.I,
 )
 _OXIDES = {part.upper(): part for part in KNOWN_OXIDE_SPECIES}
 _OXIDE = re.compile(r"(?<![A-Za-z0-9])(?:" + "|".join(map(re.escape, sorted(_OXIDES))) + r")(?![A-Za-z0-9])", re.I)
 _TREO = re.compile(r"\b(?:TREO|total\s+rare\s+earth\s+oxides?)\b", re.I)
 _TREO_MODIFIER = re.compile(r"\bTREO\s*(?:[+−-]|plus\b|minus\b|including\b|excluding\b)\s*(?:Y(?:2O3)?|Sc(?:2O3)?|Ce(?:O2)?)\b", re.I)
-_NON_ORE_HEADER = re.compile(r"\b(?:HM|heavy[- ]mineral|concentrat(?:e|es|ion)|product|recoverable)\b", re.I)
+_NON_ORE_HEADER = re.compile(r"\b(?:HM|heavy[- ]mineral|concentrat(?:e|es|ion)|product|recoverable|annual|production|tpa|ktpa|per\s+year)\b", re.I)
 _ORE = re.compile(r"\b(?:ore(?:\s+mass)?|tonnage|tonnes?)\b", re.I)
 _CONTAINED = re.compile(r"\b(?:contained|content|mass|tonnage|tonnes?)\b", re.I)
 _MASS = {"t", "kt", "Mt", "Bt"}
@@ -119,8 +119,11 @@ def _contains(outer: Span, inner: Span) -> bool:
 
 
 def _units(label: str) -> set[str]:
-    normalized = _plain(label)
-    return {_UNITS[re.sub(r"\s*/\s*", "/", unit[0].casefold())] for unit in _UNIT.finditer(normalized)}
+    units = set()
+    for match in _UNIT.finditer(_plain(label)):
+        text = re.sub(r"\s*/\s*", "/", match[0].casefold())
+        units.add("kt" if re.fullmatch(r"[‘’']?\s*000\s+tonnes?", text) else _UNITS[text])
+    return units
 
 
 def _unit_label(label: str) -> str | None:
@@ -416,7 +419,7 @@ def _baseline_overlap(case, bound, reviewed):
         if old is None:
             continue
         unit = old.get("source_unit_as_reported") or ""
-        known_unit = "kt" if _plain(unit).startswith(("‘000 ", "’000 ", "'000 ")) else _unit_label(unit)
+        known_unit = _unit_label(unit)
         if (
             position_count == 1 and old.get("role_guess") == bound.variable and known_unit == bound.unit
             and all(old.get(key) == case[key] for key in ("source_sha256", "project_id", "physical_page", "source_token"))
