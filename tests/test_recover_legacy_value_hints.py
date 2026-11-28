@@ -1,6 +1,7 @@
 """Read-only regression cases for the legacy resource lead locator."""
 import importlib.util
 import json
+import os
 from pathlib import Path
 import sqlite3
 import tempfile
@@ -14,6 +15,22 @@ spec.loader.exec_module(recover)
 
 
 class LegacyResourceHintsTests(unittest.TestCase):
+    def test_pinned_provenance_matches_the_existing_census_contract(self):
+        contract = SCRIPT.parents[1] / "config/research_profiles/census_columns_v1.json"
+        reference = json.loads(contract.read_bytes())["historical_reference"]
+        self.assertEqual(recover.V2_REF, reference["artifact_commit"])
+        self.assertRegex(recover.V2_PROVENANCE_SHA256, r"^[0-9a-f]{64}$")
+        self.assertEqual(
+            recover.V2_PROVENANCE_SHA256,
+            reference["artifacts"][recover.V2_PROVENANCE_PATH]["sha256"],
+        )
+
+    @unittest.skipUnless(os.environ.get("AU_REE_V2_REFERENCE"), "the pinned V2 Git reference is required")
+    def test_actual_pinned_reference_has_complete_grid(self):
+        digest, rows = recover._read_v2(Path(os.environ["AU_REE_V2_REFERENCE"]))
+        self.assertEqual(digest, recover.V2_PROVENANCE_SHA256)
+        self.assertEqual(len(rows), 93 * 51)
+
     def test_fixed_page_first_and_secondary_queries(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "index.sqlite"

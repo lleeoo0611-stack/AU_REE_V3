@@ -21,7 +21,7 @@ import subprocess
 
 V2_REF = "2af6f611e51eb4ac9dda73419d1afeba70d1307e"
 V2_PROVENANCE_PATH = "results/ree-project-census/coverage-locked-20261125/field_provenance.csv"
-V2_PROVENANCE_SHA256 = "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6"
+V2_PROVENANCE_SHA256 = "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d"
 SCHEMA = "v2-resource-value-rediscovery-v1"
 INDEX_SCHEMA = "candidate-evidence-index-v1"
 SHA = re.compile(r"(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])")

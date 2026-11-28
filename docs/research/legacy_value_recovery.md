@@ -6,7 +6,7 @@ This read-only utility turns the pinned V2 Census source/page provenance into a 
 
 - Historical V2 Git ref: 2af6f611e51eb4ac9dda73419d1afeba70d1307e
 - Historical provenance path: results/ree-project-census/coverage-locked-20261125/field_provenance.csv
-- Required provenance SHA-256: f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6
+- Required provenance SHA-256: f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d
 - Reference V3 corpus: 144 exact source SHA-256 objects, 93 Project IDs, 12 scientific Census cells, six comparable R1/S1 keys
 - Current Census and research website baseline: 1,104 populated display cells; scientific values still 12
 - The previously counted 1,859 V2 value cells with source+Project edition overlap encompass *all Census roles*, not 1,859 independent reported measurements.
