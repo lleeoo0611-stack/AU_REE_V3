@@ -1,9 +1,12 @@
 """Candidate-only discovery across independently described native layouts."""
 
+import os
+from pathlib import Path
 import unittest
 
 from au_ree_v3.documents import PDFDocument
 from au_ree_v3.native_table_discovery import discover_page_rows
+from au_ree_v3.native_table_work import _legacy_cell, _legacy_page_cells, replay_legacy_source_lanes
 from au_ree_v3.resource_table_binding import bind_page_row
 
 
@@ -16,6 +19,56 @@ BODY = (
 
 def document(*pages):
     return PDFDocument("a" * 64, tuple("\n".join(page) for page in pages), "synthetic")
+
+
+class LegacySourceLaneTests(unittest.TestCase):
+    def test_nominated_token_is_bound_to_a_native_lane_without_legacy_value(self):
+        pdf = document(("Table 1 Synthetic Mineral Resource Estimate", HEADER, *BODY))
+        index = _legacy_page_cells(pdf, [1])
+        hint = {"observation_id": "legacy-hint", "source_sha256": pdf.source_sha256, "project_id": "AU-A",
+                "physical_page": "1", "variable": "grade", "basis": "TREO", "original_token": "1,100",
+                "original_unit": "ppm", "source_transform": "", "value": "irrelevant legacy value"}
+        edition = {"url": "https://publisher.invalid/resource.pdf", "edition_id": "original", "acquired_at": "day",
+                   "receipt_sha256": "receipt", "temporal_decision": {"decision_id": "time"}}
+        row, hold = _legacy_cell(hint, pdf, index, [edition])
+        self.assertIsNone(hold)
+        self.assertEqual((row["variable"], row["native_unit"], row["value_anchor"]["text"]), ("grade", "ppm", "1,100"))
+        self.assertIn("Total", row["row_anchor"]["text"])
+        self.assertEqual(row["scope_status"], "UNBOUND")
+        self.assertFalse(row["formal_admission"])
+        self.assertNotIn(hint["value"], str(row))
+        for changes, expected in (({"original_token": "1,200.0"}, "TYPED_LANE_NOT_LOCATED"),
+                                  ({"original_unit": "%"}, "TYPED_LANE_NOT_LOCATED"),
+                                  ({"source_transform": "{}"}, "HISTORICAL_TRANSFORM_REQUIRES_SEPARATE_REVIEW")):
+            with self.subTest(changes):
+                row, hold = _legacy_cell({**hint, **changes}, pdf, index, [edition])
+                self.assertIsNone(row)
+                self.assertEqual(hold["reason"], expected)
+
+
+_LANE_VARS = ("AU_REE_LEGACY_V2_ROOT", "AU_REE_LEGACY_LANE_MANIFEST", "AU_REE_LEGACY_LANE_CAS")
+
+
+@unittest.skipUnless(all(os.environ.get(key) for key in _LANE_VARS), "Pinned legacy statement corpus unavailable")
+class ExactLegacySourceLaneTests(unittest.TestCase):
+    def test_exact_source_batch_exposes_candidate_evidence_and_hold_denominator(self):
+        inputs = dict(zip(("v2_root", "sources", "assets"), (Path(os.environ[key]) for key in _LANE_VARS), strict=True))
+        receipt = replay_legacy_source_lanes(**inputs)
+        self.assertEqual(receipt["status"], "PASS")
+        counts = receipt["counts"]
+        self.assertEqual((counts["legacy_hints"], counts["exact_manifest_project_pdf_join"], counts["pdfs_read"]),
+                         (519, 448, 44))
+        self.assertEqual((counts["matching_legacy_hints"], counts["candidate_positions"], counts["candidate_projects"]),
+                         (55, 55, 11))
+        self.assertEqual(counts["matching_legacy_hints"] + len(receipt["holds"]), counts["legacy_hints"])
+        observations = receipt["observations"]
+        self.assertEqual(len({r["candidate_id"] for r in observations}), 55)
+        self.assertTrue(all(r["header_anchor"] and r["unit_anchor"] and r["scope_status"] == "UNBOUND"
+                            and r["temporal_decision_id"] and not r["formal_admission"] for r in observations))
+        match, = (r for r in observations if r["source_sha256"].startswith("5f8f642b") and r["variable"] == "ore_mt")
+        self.assertEqual(match["value_anchor"]["text"], "94,200,000")
+        self.assertIn("M+Ind+Inf", match["row_anchor"]["text"])
+        self.assertEqual(match["physical_page"], 12)
 
 
 class NativeTableDiscoveryTests(unittest.TestCase):

@@ -40,3 +40,18 @@ python -m au_ree_v3 research bind-native-tables \
   --prior-binding work/census-stage2/binding-benchmark/candidate-1 \
   --out work/census-stage3/binding/replay
 ```
+
+## V2 歷史線索的原件欄位讀回
+
+`native_table_work.replay_legacy_source_lanes` 從唯讀 V2 `2af6f611e51eb4ac9dda73419d1afeba70d1307e` 讀取固定觀測清冊。歷史值詞元只供同版、同 Project、實體頁、欄義與單位比對。回傳的原報詞元、位置、欄名、單位、列與表名錨點均從 V3 CAS 的 PDF 重新讀出，並附 V3 原件 SHA、網址、擷取資格與時間判定。辨識到位置仍需獨立查核專案範圍、分類、估算日、cutoff、材料與化學。輸出的 `scope_status` 是 `UNBOUND`，用途為候選核對。
+
+固定 Stage 6 擴展清冊使用 SHA-256 `4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a`，V2 清冊 SHA-256 為 `067e6bf1d8ba46426fb5f16ec7ab404606aa58c181b6ec57445ea6321e97aeb2`。519 筆線索中有 448 筆可聯結至這份清冊的 44 份 PDF，解碼 3,322 頁並分析 57 個指定頁。找到 55 個唯一原生位置，涵蓋 11 案，分別為礦量 6、TREO 品位 6、TREO 含量 2、個別氧化物 41。7 筆具有多個相符原生位置，繼續隔離。85 筆歷史衍生值走獨立公式審查，另有 71 筆缺少同版同案合資格 PDF。Goschen 第 12 頁讀出的 94,200,000 t 屬 M＋Ind＋Inf 列，與舊線索的 M＋Ind 分類不同。正式新增值為 0。
+
+兩份本機 CAS 的候選收據一致，canonical JSON SHA-256 為 `b992aba604df6b543a6f439a957c7fb73486a82317b5a064f91e6e39e75a6f72`。原始／獨立本機 CAS 的實測 wall time 約 21.8／24.7 秒，Python 程序的峰值 RSS 為 71,304／71,108 KiB。兩次使用相同原件與規則，未控制作業系統頁面快取。此流程沿用既有來源驗證、表格讀取及原生欄位契約。32 項直接與相依測試均通過，包含原件回歸及不同單位、詞元和衍生值負例。
+
+```bash
+export AU_REE_LEGACY_V2_ROOT=/workspace/AU_REE_V2_reference
+export AU_REE_LEGACY_LANE_MANIFEST=/workspace/AU_REE_V3/work/census-stage6/additional-sources/combined/source_manifest.json
+export AU_REE_LEGACY_LANE_CAS=/workspace/AU_REE_V3/work/census-stage6/verified/cas
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python -m unittest discover -s tests -p test_native_table_discovery.py -v
+```
