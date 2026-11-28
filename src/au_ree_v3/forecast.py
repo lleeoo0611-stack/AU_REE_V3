@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
 SCHEMA = "source-bound-production-forecasts-v1"
 _CONTEXT_ORACLE_SHA256 = "3db34d7949618bf2a27fde25fbd5d17d17fb2952c82fc7a3d27dc519c1bde3c9"
-_CONTEXT_ORACLE_a402d6af86f96ee1b815438fc945f1d5cfbf98f349f81dc8beb4d3ee0d35f09d = "a402d6af86f96ee1b815438fc945f1d5cfbf98f349f81dc8beb4d3ee0d35f09d"
+_CONTEXT_ORACLE_V2_SHA256 = "d2af32c8cc08509e7d8eeb58306c8427c65b38b611eb0a87c34b58715644a871"
 _ANNUAL_NDPR_TARGET = rf"\bAverage {NUMBER} tpa NdPr production during years [0-9]+-[0-9]+"
 
 
@@ -306,6 +306,10 @@ def verify_forecast_context(production, frozen_sources, assets, oracle_path):
                            for span in item["spans"])
             views[digest] = cache.pdf(content.read(digest), digest, required)
         row = cases[expected["case_id"]]
+        if scope == "FIXED_NATIVE_EDITION" and any(row[key] != expected[key] for key in (
+            "project_id", "study", "scenario", "receipt_sha256",
+        )):
+            raise ValueError(f"Original forecast project, study, scenario or edition disagrees: {expected['case_id']}")
         raw = row.get("raw_observation")
         if row["status"] != "VERIFIED_SHADOW" or raw is None:
             raise ValueError(f"Expected source forecast did not qualify: {expected['case_id']}")
@@ -325,7 +329,6 @@ def verify_forecast_context(production, frozen_sources, assets, oracle_path):
                 and canonical_json(temporal.to_dict()) == canonical_json(row["temporal_decision"])
                 and not row["formal_selection"] and not row["formal_mcda"]
                 and raw["status"] == "SHADOW" and raw["denominator_basis"] == "YEAR"
-                and row["scenario"] == expected.get("scenario", row["scenario"])
                 and raw["effective_date"] is None and raw["event_date"] is None):
             raise ValueError(f"Original forecast quantity, role, basis or date disagrees: {expected['case_id']}")
         confirmed.append({key: expected[key] for key in ("case_id", *pins, "period")} | {
@@ -384,7 +387,7 @@ def forecast_display_facts(profile: Path, sources: Path, assets: Path, bindings:
     """Project independently corroborated study context into display-only fields."""
     from .census_display import DisplayFact
 
-    if _file_sha256(oracle_path) not in {_CONTEXT_ORACLE_SHA256, _CONTEXT_ORACLE_a402d6af86f96ee1b815438fc945f1d5cfbf98f349f81dc8beb4d3ee0d35f09d}:
+    if _file_sha256(oracle_path) not in {_CONTEXT_ORACLE_SHA256, _CONTEXT_ORACLE_V2_SHA256}:
         raise ValueError("Forecast display requires the registered independent native context oracle")
     production = _production_forecast_review(profile, sources, assets, bindings)
     verified = verify_forecast_context(production, sources, assets, oracle_path)

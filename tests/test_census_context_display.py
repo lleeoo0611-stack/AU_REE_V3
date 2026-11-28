@@ -90,6 +90,18 @@ class CensusContextDisplayTest(unittest.TestCase):
                          and fact.project_id == "AU-2cfeb25aefee0c4f95fb"]
         self.assertTrue(all("PDF page 17" in fact.locator and "1,157 1,037" in fact.quote for fact in dubbo_product))
 
+    def test_original_rate_cannot_authorize_a_different_study_title(self):
+        sources, assets = map(Path, (os.environ["AU_REE_CONTEXT_FIXED_MANIFEST"], os.environ["AU_REE_CONTEXT_FIXED_CAS"]))
+        with tempfile.TemporaryDirectory() as folder:
+            bindings = Path(folder) / "wrong.json"
+            altered = json.loads((PROFILES / "production_forecast_bindings_v2.json").read_bytes())
+            row = next(row for row in altered["cases"] if row["case_id"] == "nolans-dfs-average-ndpr-oxide")
+            row["study"] = "Nolans Bankable Feasibility Study (2025)"
+            bindings.write_text(json.dumps(altered))
+            with self.assertRaisesRegex(ValueError, "Original forecast project, study, scenario or edition disagrees"):
+                forecast_display_facts(PROFILE, sources, assets, bindings,
+                                       oracle_path=FIXTURES / "production_forecast_context_oracle_v2.json")
+
 
 class EditionRecoveryTest(unittest.TestCase):
     def test_exact_bytes_are_required_and_tampered_capture_cannot_replay(self):

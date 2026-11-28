@@ -5,25 +5,25 @@
     "1": [
       {
         "display_sha256": "60ead8c1a044af5d00991874a6731b00d54d15682c1c783c25ade91b3ce63396",
-        "peak_rss_kib": 45160,
-        "wall_seconds": 2.1038875579979504
+        "peak_rss_kib": 46064,
+        "wall_seconds": 1.7318683019984746
       },
       {
         "display_sha256": "60ead8c1a044af5d00991874a6731b00d54d15682c1c783c25ade91b3ce63396",
-        "peak_rss_kib": 45160,
-        "wall_seconds": 1.4392900779930642
+        "peak_rss_kib": 46064,
+        "wall_seconds": 1.729944181002793
       }
     ],
     "2": [
       {
         "display_sha256": "e76cd05ba1f82eb32942c11275f0027bb7b706bb1ae0c1275f410a071674e874",
-        "peak_rss_kib": 45160,
-        "wall_seconds": 1.939028327993583
+        "peak_rss_kib": 46064,
+        "wall_seconds": 2.3672688280057628
       },
       {
         "display_sha256": "e76cd05ba1f82eb32942c11275f0027bb7b706bb1ae0c1275f410a071674e874",
-        "peak_rss_kib": 45160,
-        "wall_seconds": 1.8528668210055912
+        "peak_rss_kib": 46064,
+        "wall_seconds": 2.066257806000067
       }
     ]
   },
@@ -312,7 +312,7 @@
         }
       },
       "new_observations": 0,
-      "oracle_sha256": "a402d6af86f96ee1b815438fc945f1d5cfbf98f349f81dc8beb4d3ee0d35f09d",
+      "oracle_sha256": "d2af32c8cc08509e7d8eeb58306c8427c65b38b611eb0a87c34b58715644a871",
       "schema": "native-production-forecast-context-oracle-v2",
       "scope": "FIXED_NATIVE_EDITION",
       "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
