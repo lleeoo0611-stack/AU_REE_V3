@@ -9,10 +9,12 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from types import SimpleNamespace
 
 from au_ree_v3.census_resource_display import (
-    _Phrase, _cutoff, _effective_date, reported_resource_facts,
+    _Phrase, _cutoff, _effective_date, _linked_effective_date, reported_resource_facts,
 )
+from au_ree_v3.documents import DocumentCache, PDFDocument
 from au_ree_v3.resource_extraction import ResourceStatement
 
 
@@ -31,6 +33,17 @@ JUPITER = "AU-dac3c8e40326b8244cdb"
 MT_WELD = "AU-efff91a06cf344122d88"
 
 
+def _linked_date_fixture():
+    link = json.loads((ROOT / "tests/fixtures/mt_weld_linked_estimate_date_v1.json").read_bytes())
+    statement = ResourceStatement("Mt Weld Mineral Resource", "2.5", "2024-06-30", True, (),
+                                  cutoff_unit="%", cutoff_analyte="TREO")
+    measured = {
+        name: SimpleNamespace(anchor=SimpleNamespace(page=2), raw=SimpleNamespace(raw_value=token, raw_unit=unit))
+        for name, token, unit in (("ore_mt", "106.6", "million tonnes"), ("grade", "4.12", "%"))
+    }
+    return link, statement, measured
+
+
 def _phrase(text):
     return _Phrase(1, "PDF page 1, line 1", text)
 
@@ -40,6 +53,20 @@ class ResourceDisplayContextTests(unittest.TestCase):
         self.assertIsNone(_effective_date((_phrase("ASX Announcement 19 June 2026"),), "2026-06-19"))
         result = _effective_date((_phrase("The June 2026 Mineral Resource Estimate is reported herein"),), "2026-06")
         self.assertEqual((result.value, result.token), ("2026-06", "June 2026"))
+
+    def test_linked_estimate_day_requires_both_quantities_cutoff_and_edition(self):
+        link, statement, measured = _linked_date_fixture()
+        pages = (link["cover"]["quote"] + "\n" + link["cutoff_footnote"]["quote"], link["statement"]["quote"])
+        pdf = PDFDocument(link["source_sha256"], pages, "native-test")
+        fact, lineage = _linked_effective_date(pdf, statement, measured, link)
+        self.assertEqual((fact.value, fact.token, fact.phrase.page), ("2024-06-30", "30 June 2024", 1))
+        self.assertEqual(lineage["effective_date_role"], "SAME_EDITION_LINKED_ESTIMATE_DATE")
+        for subject in (replace(pdf, source_sha256="b" * 64), replace(pdf, pages=(pages[1], pages[0])),
+                        replace(pdf, pages=(pages[0].replace("106.6 Mt", "32.0 Mt"), pages[1])),
+                        replace(pdf, pages=(pages[0].replace("2.5% TREO", "2.8% TREO"), pages[1])),
+                        replace(pdf, pages=(pages[0] + " " + link["cover"]["quote"], pages[1]))):
+            self.assertIsNone(_linked_effective_date(subject, statement, measured, link))
+        self.assertIsNone(_linked_effective_date(pdf, replace(statement, effective_date="2018-06-30"), measured, link))
 
     def test_cutoff_analyte_must_not_be_truncated(self):
         estimate = ResourceStatement("Synthetic Project", "250", "2026-06", True, (), cutoff_unit="ppm")
@@ -111,6 +138,17 @@ class ExactResourceDisplayTests(unittest.TestCase):
         self.assertIn("M+Ind+Inf", conflict["review_evidence"]["quote"])
         self.assertEqual(self.cells[GOSCHEN, CUTOFF].context["jorc_category"], "UNKNOWN_CONTEXT")
         self.assertEqual(self.cells[MT_WELD, CUTOFF].context["effective_date"], "UNKNOWN_CONTEXT")
+
+    def test_mt_weld_original_cover_day_joins_the_exact_table_and_cutoff(self):
+        link, statement, measured = _linked_date_fixture()
+        source = self.kwargs["assets"] / "objects" / link["source_sha256"]
+        original = source.read_bytes()
+        self.assertEqual(sha256(original).hexdigest(), link["source_sha256"])
+        pdf = DocumentCache().pdf(original, link["source_sha256"], 2)
+        fact, context = _linked_effective_date(pdf, statement, measured, link)
+        self.assertEqual((fact.value, fact.token, fact.phrase.page), ("2024-06-30", "30 June 2024", 1))
+        self.assertIn("PDF page 2", context["date_link_statement_locator"])
+        self.assertIn("PDF page 1", context["date_link_cutoff_locator"])
 
     def test_altered_lineage_cannot_claim_display(self):
         changed = deepcopy(self.receipt)
