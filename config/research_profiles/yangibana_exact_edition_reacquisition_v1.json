@@ -1,0 +1,16 @@
+{
+  "schema": "source-edition-recovery-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "prior_manifest_sha256": ["8f43eb977bd54b34af7b1124d2c81ddd2f0b5919b3c9c10e1b528f14dd1f8b81"],
+  "cases": [
+    {
+      "case_id": "yangibana-revised-dfs-exact-reacquisition",
+      "project_id": "AU-908fd6f4461622e89548",
+      "kind": "pdf",
+      "expected_sha256": "99233befa81a1e193848122f00dfaa25079d0b2adbc2f19ef96326ca63c38f2a",
+      "routes": [
+        {"publisher": "Hastings Technology Metals Limited", "url": "https://announcements.asx.com.au/asxpdf/20260713/pdf/071n8v54p9pdql.pdf"}
+      ]
+    }
+  ]
+}

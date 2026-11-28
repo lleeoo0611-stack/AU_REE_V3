@@ -1,0 +1,19 @@
+{
+  "schema": "public-source-version-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "prior_manifest_sha256": ["eba8121e65d5654ef9abc23dcfa2b2d03961d4af618e11c0794496dad537a544"],
+  "cases": [
+    {
+      "case_id": "yttria-issuer-maiden-ree-resource-reacquisition",
+      "project_id": "AU-ee5ca893d12883df35f1",
+      "native_namespace": "ASX_ANNOUNCEMENT_ID",
+      "native_id": "6A1202739",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {"publisher": "Asra Minerals Limited", "url": "https://www.aspecthuntley.com.au/asxdata/20240416/pdf/02795766.pdf"},
+        {"publisher": "Asra Minerals Limited", "url": "https://wcsecure.weblink.com.au/pdf/ASR/02795766.pdf"}
+      ]
+    }
+  ]
+}

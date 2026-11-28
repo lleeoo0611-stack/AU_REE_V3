@@ -1,0 +1,26 @@
+{
+  "schema": "public-source-version-native-review-v1",
+  "expansion_manifest_sha256": "e0b6ab313ca876602f99180843c57f9ff1f8230f6046f6c02a277679e44db340",
+  "cases": [
+    {
+      "case_id": "yttria-issuer-maiden-ree-resource-reacquisition",
+      "statement_scope": "Yttria REE Deposit maiden combined Indicated and Inferred Mineral Resource within Mt Stirling Project",
+      "publication_date": "2024-04-16",
+      "estimate_date": null,
+      "reporting_category": "INDICATED_INFERRED_TOTAL",
+      "cutoff_analyte": "TREO-CeO2",
+      "cutoff_token": "200",
+      "cutoff_unit": "ppm",
+      "source_editions": ["339bb9ebcf737b2c5b30e0970aca49f31bf462a4384353ca1743f1ca85f6b811"],
+      "blockers": ["EXACT_PRIMARY_TREO_CUTOFF_REQUIRED", "ESTIMATE_EFFECTIVE_DATE_UNVERIFIED"],
+      "anchors": [
+        {"role": "PUBLICATION_DATE", "page": 1, "quote": "16 April 2024"},
+        {"role": "PROJECT_SCOPE", "page": 1, "quote": "Yttria Rare Earth Element (REE) Deposit, located on its Mt Stirling Project"},
+        {"role": "ESTIMATE_CATEGORY", "page": 2, "quote": "Yttria Mineral Resource Estimate in accordance with the JORC (2012) Code"},
+        {"role": "TOTAL_ROW", "page": 2, "quote": "Total 15.0 490 110 220 270 15 64 24 3.7 68 0.6 1.0"},
+        {"role": "PRIMARY_CUTOFF", "page": 2, "quote": "Rare Earth Mineral Resources reported above a cut-off grade of 200 ppm TREO-Ce"},
+        {"role": "CUTOFF_ANALYTE", "page": 18, "quote": "TREO-Ce (total REO minus CeO2)"}
+      ]
+    }
+  ]
+}

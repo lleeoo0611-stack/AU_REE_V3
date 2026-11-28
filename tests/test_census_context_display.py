@@ -159,3 +159,53 @@ class EditionRecoveryTest(unittest.TestCase):
             altered.write_text("project_id,column\nfiction,經度\n", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "exact 1,396-slot diagnostic"):
                 diagnostic["historical_source_gaps"](root, altered, root / "missing-manifest", root / "out")
+
+    def test_after_cutoff_reacquisition_reuses_verified_proof_only_for_identical_bytes(self):
+        tools = runpy.run_path(str(ROOT / "tools/recover_source_editions.py"))
+        profile = load_profile(PROFILE)
+        project = load_registry(profile.registry_path).projects[0].project_id
+        original = b"%PDF-1.4\nknown archival bytes"
+        replacement = b"%PDF-1.4\na distinct public edition"
+        website = "https://example.edu/"
+
+        def case(label):
+            return {"case_id": label, "project_id": project, "kind": "pdf", "native_namespace": "ISSUER_REPORT",
+                    "native_id": label, "access_basis": "PUBLIC_ANONYMOUS",
+                    "routes": [{"url": website + label, "publisher": "Public issuer"}]}
+
+        def early(url, method, timeout, max_bytes):
+            return HttpResult("FETCHED", url, "2026-11-28T15:59:00+00:00", 200, "application/pdf", original)
+
+        def late(url, method, timeout, max_bytes):
+            return HttpResult("FETCHED", url, "2026-11-28T16:01:00+00:00", 200, "application/pdf",
+                              original if url.endswith("same-edition") else replacement)
+
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            fixed = {"schema": SOURCE_SCHEMA, "profile_id": profile.profile_id, "cutoff": "2026-11-28",
+                     "timezone": "Asia/Taipei", "projects": [{"project_id": project}],
+                     "editions": [{"sha256": f"{index:064x}"} for index in range(144)]}
+            fixed_path = root / "fixed.json"
+            fixed_path.write_text(json.dumps(fixed))
+            spec = {"schema": tools["VERSION_SCHEMA"], "fixed_manifest_sha256": sha256(fixed_path.read_bytes()).hexdigest()}
+            early_bindings = root / "early.json"
+            early_bindings.write_text(json.dumps(spec | {"cases": [case("old-route")]}))
+            old_paths = {"profile_path": PROFILE, "fixed_manifest": fixed_path, "bindings": early_bindings,
+                         "store": root / "old-cas", "out": root / "old"}
+            old = tools["recover_public_editions"](**old_paths, fetcher=early)
+            bindings = root / "late.json"
+            bindings.write_text(json.dumps(spec | {"cases": [case("same-edition"), case("distinct-edition")],
+                                                   "prior_manifest_sha256": [old["expansion_manifest_sha256"]]}))
+            paths = {**old_paths, "bindings": bindings, "store": root / "new-cas", "out": root / "new"}
+            acquired = tools["recover_public_editions"](**paths, fetcher=late, prior_inputs=(
+                (old_paths["out"] / "source_manifest.json", old_paths["store"]),))
+            self.assertEqual([a["result"] for a in acquired["cases"]], ["NEW_PUBLIC_EDITION", "SOURCE_AFTER_CUTOFF"])
+            known, = acquired["restored_prior_proofs"]
+            self.assertEqual(known["public_on"], "2026-11-28")
+            post = acquired["cases"][0]["attempts"][0]["temporal_decision"]
+            self.assertEqual(post["reacquired_at"], "2026-11-28T16:01:00+00:00")
+            self.assertEqual(post["earliest_proven_public_date"], "2026-11-28")
+            self.assertEqual(tools["verify_recovered_editions"](**paths)["restored_prior_proofs"], [known])
+            (paths["store"] / "objects" / known["capture_sha256"]).write_bytes(b"changed")
+            with self.assertRaises(IntegrityError):
+                tools["verify_recovered_editions"](**paths)
