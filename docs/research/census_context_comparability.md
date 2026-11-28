@@ -31,7 +31,7 @@ I1–I4 距離為 NOT_RUN。本批缺少可驗證的代表起點，現行比較�
 | North Stanmore，第 62、66、143 頁 | 29,000 wet tpa，PFS 基準情境濕重浮選精礦。 | 年均區間未交代，缺少同一產品的 TREO 含量與換算依據。原件明示專案尚無生產。 |
 | Jupiter，第 21 頁 | 201,400 t，LOM 的 MREC 總產品量。 | 期間及產品基準皆不符合年度內含 TREO 指標。 |
 
-在相同來源、profile、選值規則與方法下，比對全部八件研究產物 SHA，涵蓋治理選值、MCDA 輸入、面板矩陣、權重、SAW／TOPSIS／PROMETHEE II 結果及敏感度。R1 四鍵、S1 兩鍵及兩個完整 R1+S1 專案維持一致。其餘面板樣本不足，狀態維持 INSUFFICIENT_COHORT。
+在相同來源、profile、選值規則與方法下，先對兩次建置各自驗證全部八件研究產物 SHA，再核對相同科學內容。程式提交改變會產生新 observation release ID，連帶更新選值與血緣識別碼。收據保留原始指紋，並以已驗證的版次交叉連結對帳這些變化。Census CSV 與逐筆數值觀測 JSONL 的位元組相同。治理選值、MCDA 矩陣、權重、SAW／TOPSIS／PROMETHEE II 結果及敏感度一致。R1 四鍵、S1 兩鍵及兩個完整 R1+S1 專案維持一致。其餘面板樣本不足，狀態維持 INSUFFICIENT_COHORT。
 
 ## 重播
 

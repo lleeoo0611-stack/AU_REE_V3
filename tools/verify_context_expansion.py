@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from hashlib import sha256
 import json
 from pathlib import Path
+import re
 import subprocess
 from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
@@ -52,6 +53,13 @@ _FORECAST_PERIODS = {
     "jupiter-base-case-annual-contained-treo": "LIFE_OF_MINE_ANNUAL_AVERAGE_INCLUDING_RAMP_UP_AND_SCHEDULING",
     "jupiter-nominal-design-annual-contained-treo": "NOMINAL_RATE_AT_8_0_MTPA_FEED_NOT_LIFE_OF_MINE_AVERAGE",
     "north-stanmore-pfs-base-case-annual-wet-concentrate": "PFS_ANNUAL_BASE_CASE_AVERAGING_WINDOW_UNSPECIFIED",
+}
+_RELEASE_IDENTITIES = {"selection_id", "lineage_id", "derived_value_id", "assessment_id", "derivation_id", "derived_id"}
+_RELEASE_HASH = re.compile(r"[a-f0-9]{64}")
+_DECISION_DIGEST_LINKS = {
+    "decision/decision_receipt.json": ("mcda_inputs_sha256", "mcda_results_sha256"),
+    "decision/mcda_results.json": ("mcda_inputs_sha256",),
+    "decision/mcda_inputs.json": (),
 }
 
 
@@ -214,14 +222,61 @@ def _origin_summary(geography, layers, observed):
     }
 
 
+def _rebound_record(value, release_id):
+    if isinstance(value, list):
+        return [_rebound_record(item, release_id) for item in value]
+    if isinstance(value, dict):
+        return {
+            field: "BUILD_RELEASE" if field == "release_id" and item == release_id else
+            "RELEASE_RECORD" if (field in _RELEASE_IDENTITIES and isinstance(item, str) and _RELEASE_HASH.fullmatch(item)) else
+            _rebound_record(item, release_id)
+            for field, item in value.items()
+        }
+    return value
+
+
+def _checked_scientific_content(build, root):
+    """Hash comparable content after the build verifier checked each actual artifact's linkage."""
+    receipt = build.receipt
+    release = receipt["observation_release_id"]
+    payloads = {}
+    cells = []
+    for cell in build.census.values():
+        evidence = cell["metadata_evidence"]
+        cells.append({**cell, "metadata_evidence": json.loads(evidence) if evidence else evidence})
+    payloads["census/cell_status.csv"] = cells
+    for relative in (*_DECISION_DIGEST_LINKS, "observations/extraction.json", "census/census_receipt.json"):
+        payload = json.loads((root / relative).read_bytes())
+        for key in _DECISION_DIGEST_LINKS.get(relative, ()):
+            del payload[key]
+        payloads[relative] = payload
+    del payloads["census/census_receipt.json"]["outputs"]["cell_status.csv"]
+    comparable = {relative: _rebound_record(payload, release) for relative, payload in payloads.items()}
+    science = comparable["census/census_receipt.json"]["science_views"]
+    for key, records in science.items():
+        if isinstance(records, list):
+            science[key] = sorted(records, key=canonical_json)
+    identities = {relative: sha256(canonical_json(payload).encode()).hexdigest()
+                  for relative, payload in comparable.items()}
+    identities.update({name: receipt["scientific_artifacts"][name]
+                       for name in ("census/census.csv", "observations/observations.jsonl")})
+    return identities
+
+
 def compare_context_isolation(baseline, reviewed, fixed_sha, government, forecast):
     """Use exact governed artifacts under one profile and distinguish contextual facts from formal inputs."""
     original, candidate = (ResearchBuild.load(path) for path in (baseline, reviewed))
     before, after = original.receipt, candidate.receipt
     if not (before["input_artifacts"] == after["input_artifacts"] and before["input_artifacts"]["sources"] == fixed_sha
             and before["selection_rules_hash"] == after["selection_rules_hash"]
-            and before["scientific_artifacts"] == after["scientific_artifacts"]):
-        raise ValueError("Context isolation requires identical research inputs, rules, and scientific outputs")
+            and original.census_projects == candidate.census_projects and original.census_columns == candidate.census_columns):
+        raise ValueError("Context isolation requires identical research inputs, rules, and grid")
+    physical = {"before": before["scientific_artifacts"], "after": after["scientific_artifacts"]}
+    if before["observation_release_id"] == after["observation_release_id"] and physical["before"] != physical["after"]:
+        raise ValueError("One research release has mixed scientific artifact bytes")
+    normalized = _checked_scientific_content(original, baseline)
+    if normalized != _checked_scientific_content(candidate, reviewed):
+        raise ValueError("Same-input scientific content differs beyond verified release lineage")
     criteria = candidate.decision_inputs["criteria_by_project"]
     for project in criteria.values():
         for criterion in INFRASTRUCTURE_LAYERS:
@@ -240,7 +295,10 @@ def compare_context_isolation(baseline, reviewed, fixed_sha, government, forecas
     return {
         "schema": "context-comparability-isolation-v1", "status": "PASS", "fixed_manifest_sha256": fixed_sha,
         "baseline_build_sha256": original.receipt_sha, "reviewed_build_sha256": candidate.receipt_sha,
-        "profile_sha256": after["input_artifacts"]["profile"], "scientific_artifacts_sha256": after["scientific_artifacts"],
+        "profile_sha256": after["input_artifacts"]["profile"], "scientific_artifacts_sha256": physical,
+        "scientific_content_sha256": normalized,
+        "exact_artifact_matches": [name for name, digest in physical["before"].items() if digest == physical["after"][name]],
+        "verified_release_identity_fields": sorted(_RELEASE_IDENTITIES | {"release_id"}),
         "decision_policy_sha256": candidate.decision_inputs["policy_sha256"],
         "point_method_version": candidate.decision_results["point_method_version"],
         "sensitivity_version": candidate.decision_results["deterministic_sensitivity_version"],

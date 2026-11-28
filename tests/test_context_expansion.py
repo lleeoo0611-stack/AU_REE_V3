@@ -24,6 +24,18 @@ GOVERNMENT_FIXTURE = ROOT / "tests/fixtures/government_point_expansion_v1.zip"
 
 
 class NativePointSchemaTest(unittest.TestCase):
+    def test_comparison_ignores_release_ids_only_with_exact_scientific_content(self):
+        rebound = runpy.run_path(str(ROOT / "tools/verify_context_expansion.py"))["_rebound_record"]
+        before = {"release_id": "a" * 64, "selection_id": "b" * 64, "observation_id": "c" * 64,
+                  "scope_id": "d" * 64, "source_sha256": "e" * 64, "value": "279.3"}
+        after = {**before, "release_id": "f" * 64, "selection_id": "0" * 64}
+        expected = rebound(before, before["release_id"])
+        self.assertEqual(expected, rebound(after, after["release_id"]))
+        for field, value in (("value", "279.4"), ("scope_id", "1" * 64), ("observation_id", "2" * 64),
+                             ("source_sha256", "3" * 64), ("release_id", "4" * 64)):
+            with self.subTest(field=field):
+                self.assertNotEqual(expected, rebound({**after, field: value}, after["release_id"]))
+
     def test_point_role_is_never_inferred_from_an_invalid_crs_or_geometry(self):
         fixture = {"type": "FeatureCollection", "crs": {"properties": {"name": "urn:ogc:def:crs:EPSG::4283"}},
                    "numberMatched": 1, "features": [{"properties": {"ENO": 99},
