@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import os
 from pathlib import Path
@@ -11,6 +12,8 @@ from au_ree_v3.table_geometry_review import SCHEMA, _matching_cell, _matching_ro
 
 CONFIG = Path(__file__).resolve().parents[1] / "config/research_profiles"
 TOWER_SHA = "0ae98cfd93d554b8d948267a50f9c821761fee97c5a230440055c06029fc9d63"
+REDLINGS_SHA = "1417f7495f8101992bd14719c42975d83eaba067b83dda56aa93187e030c9d43"
+KOPPAMURRA_SHA = "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01"
 
 
 class GeometryReviewTest(TestCase):
@@ -63,3 +66,35 @@ class GeometryReviewTest(TestCase):
         self.assertTrue(all(row["context"]["reported_cutoff"] == "300 ppm TREO-CeO2"
                             and row["scope"] == "Tower Mineral Resource Summary"
                             and row["state"] == "CANDIDATE" and "bbox" in row["locator"] for row in reviews))
+
+    @skipUnless(os.environ.get("AU_REE_POSITIONED_REVIEW_ASSETS"), "exact Redlings and Koppamurra PDFs required")
+    def test_replays_cited_tables_and_an_exact_header_without_promoting_either(self):
+        spec = json.loads((CONFIG / "resource_table_geometry_review_v2.json").read_bytes())
+        spec["cases"] = []
+        editions = {}
+        for case, sha in zip(spec["positioned_cases"], (REDLINGS_SHA, KOPPAMURRA_SHA), strict=True):
+            capture = case["capture_sha256"]
+            editions[capture] = {
+                "receipt_sha256": capture, "sha256": sha, "kind": "pdf", "project_ids": [case["project_id"]],
+                "publication_date": None, "url": "https://example.test/issuer.pdf",
+                "temporal_decision": {"status": "ELIGIBLE", "earliest_proven_public_date": "2026-11-28", "decision_id": capture},
+            }
+        assets = Path(os.environ["AU_REE_POSITIONED_REVIEW_ASSETS"])
+        registry = load_registry(CONFIG / "project_registry_2026-11-28.json")
+        def read(spec):
+            return geometry_resource_reviews(
+                spec, editions=editions, registry=registry, manifest_sha=spec["source_manifest_sha256"],
+                content=SimpleNamespace(read=lambda sha: (assets / sha).read_bytes()), cache=DocumentCache(), archived=(),
+            )
+
+        reviews = read(spec)
+        result = {(row["source_sha256"], row["context"]["census_column_id"]): row["context"]["display_value"] for row in reviews}
+        self.assertEqual(result, {(REDLINGS_SHA, "ore_mt"): "11 Mt", (REDLINGS_SHA, "treo_grade_pct"): "1130 ppm",
+                                  (REDLINGS_SHA, "contained_treo_kt"): "12,430 t", (KOPPAMURRA_SHA, "ore_mt"): "243 Mt"})
+        self.assertTrue(all(row["state"] == "CANDIDATE" for row in reviews))
+        self.assertTrue(all(row["context"]["reported_cutoff"] == "800 ppm TREO"
+                            for row in reviews if row["source_sha256"] == REDLINGS_SHA))
+        wrong = deepcopy(spec)
+        wrong["positioned_cases"][0]["cells"][0]["row_label"] = "700"
+        with self.assertRaisesRegex(ValueError, "row label differs"):
+            read(wrong)
