@@ -162,9 +162,10 @@ def compile_display_package(
     geography: tuple[Path, Path, Path] | None = None, geography_base: Path | None = None,
     include_reported_resources: bool = False,
     historical_tables: Path | None = None,
+    historical_cohort: tuple[Path, Path] | None = None,
 ) -> DisplayPackage:
     """Rebind display evidence to raw frozen bytes with no Store or decision write path."""
-    from .census_resource_display import historical_resource_reviews, reported_resource_facts
+    from .census_resource_display import historical_cohort_display, historical_resource_reviews, reported_resource_facts
 
     settings = load_profile(profile)
     archive = load_release(release_root, release_id)
@@ -191,7 +192,8 @@ def compile_display_package(
     cache = DocumentCache()
     resource_diagnostics = []
     reported_reviews = [] if include_reported_resources else None
-    observations = _display_observations(build, build_directory, include_reported_resources or historical_tables is not None)
+    observations = _display_observations(build, build_directory,
+                                         include_reported_resources or historical_tables is not None or historical_cohort is not None)
     resources = reported_resource_facts(
         census_receipt, observations, source_manifest, assets=assets, cache=cache,
         diagnostics=resource_diagnostics, bindings=binding_spec, manifest_sha=source_sha,
@@ -209,6 +211,17 @@ def compile_display_package(
             raise ValueError("Historical resource display requires a verified native source reread")
         historical_review = tuple(historical_resource_reviews(replayed, editions, observations))
         context_pins["historical_resource_reread"] = _sha(_json(replayed))
+    if historical_cohort is not None:
+        recovery_path, sqlite_path = historical_cohort
+        recovery, recovery_sha = _read(recovery_path)
+        cohort_review = historical_cohort_display(
+            recovery, sqlite_path.read_bytes(), settings=settings, registry=registry, editions=editions,
+            manifest_sha=source_sha, content=content, cache=cache, archived=observations,
+        )
+        candidate_ids = {item["context"]["candidate_id"] for item in cohort_review}
+        historical_review = (*cohort_review, *(item for item in historical_review
+                                              if item["context"]["candidate_id"] not in candidate_ids))
+        context_pins.update(historical_cohort_recovery=recovery_sha, historical_cohort_sqlite=recovery["database_sha256"])
     review = (*resource_review, *(reported_reviews or ()), *historical_review, *region_review)
     if reported_reviews is not None:
         if any(entry["source_capture_sha256"] not in editions for entry in reported_reviews):

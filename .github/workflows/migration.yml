@@ -3,8 +3,7 @@ name: Migration verification
 on:
   push:
     branches: [main]
-  pull_request:
-    paths:
+    paths: &migration_paths
       - "src/**"
       - "tests/**"
       - "tools/**"
@@ -12,6 +11,8 @@ on:
       - "docs/migration/*.csv"
       - "pyproject.toml"
       - ".github/workflows/migration.yml"
+  pull_request:
+    paths: *migration_paths
   workflow_dispatch:
     inputs:
       fresh_release:
@@ -83,7 +84,6 @@ jobs:
 
   resource-integration:
     name: Exact resource integration
-    if: github.event_name != 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:

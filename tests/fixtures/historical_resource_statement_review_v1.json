@@ -1,0 +1,751 @@
+{
+  "schema": "historical-resource-cohort-statement-review-v1",
+  "database_sha256": "812169bde2b625ae51e8af7a34fd431a38e8d487d37fd309644ead174a2aad84",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "records": [
+    {
+      "case_id": "nolans-bore-2019-dfs-repeated-2017-resource",
+      "project_id": "AU-1345edd8165c10930e94",
+      "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+      "physical_page": 36,
+      "row_locator": "PDF page 36, line 48",
+      "witnesses": {
+        "scope": [
+          36,
+          "Table 11 Statement of Mineral Resources for the Nolans Bore Rare Earth Deposit Announced 7 June 2017 – 1% TREO lower cut-off grade"
+        ],
+        "native_row": [
+          36,
+          "Total 56 2.6 11 26.4"
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "ESTIMATE_DATE": [
+          "BLOCKED",
+          "REPUBLISHED_PRIOR_STATEMENT_NOT_A_NEW_EFFECTIVE_DATE",
+          [
+            "scope"
+          ]
+        ],
+        "CUTOFF": [
+          "PASS",
+          "REPORTED_PRIMARY_TREO_CUTOFF",
+          [
+            "scope"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "splinter-rock-2024-table-one-total",
+      "project_id": "AU-2262a37ca19531f08da3",
+      "source_sha256": "56b1bb55bef057af81a1d31faa701e69bef70c9eb95fc7d46ffd1174f5186ca9",
+      "physical_page": 2,
+      "row_locator": "PDF page 2, line 56",
+      "witnesses": {
+        "scope": [
+          2,
+          "Table 1: Splinter Rock Rare Earth project Mineral Resource Estimate - by Prospect at 1,000ppm TREO cut off grade"
+        ],
+        "native_row": [
+          2,
+          "Total 682 1,338 64 226 3 14 307 22.9%"
+        ],
+        "class_summary": [
+          1,
+          "cut-off grade (Indicated + Inferred) including:"
+        ],
+        "conflicting_class": [
+          20,
+          "All the individual prospect Mineral Resources for Splinter Rock have been classified as Inferred"
+        ],
+        "dry": [
+          30,
+          "Tonnages are reported on a dry basis."
+        ],
+        "definition": [
+          2,
+          "TREO (Total Rare Earth Oxide) = La2O3 + CeO2 + Pr6O11 + Nd2O3 + Sm2O3 + Eu2O3 + Gd2O3 + Tb4O7 + Dy2O3 + Ho2O3 + Er2O3 + Tm2O3 + Yb2O3 + Lu2O3 + Y2O3"
+        ],
+        "publication": [
+          1,
+          "29 May 2024"
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "FAIL",
+          "SAME_DOCUMENT_PROSPECT_CLASSIFICATION_CONFLICT",
+          [
+            "scope",
+            "class_summary",
+            "conflicting_class"
+          ]
+        ],
+        "ESTIMATE_DATE": [
+          "BLOCKED",
+          "PUBLICATION_DATE_NOT_PROOF_OF_ESTIMATE_EFFECTIVE_DATE",
+          [
+            "publication",
+            "scope"
+          ]
+        ],
+        "CUTOFF": [
+          "PASS",
+          "REPORTED_PRIMARY_TREO_CUTOFF",
+          [
+            "scope"
+          ]
+        ],
+        "MATERIAL_BASIS": [
+          "PASS",
+          "JORC_RESOURCE_TONNAGES_REPORTED_DRY",
+          [
+            "dry",
+            "scope"
+          ]
+        ],
+        "CHEMICAL_BASIS": [
+          "PASS",
+          "EXACT_FIFTEEN_TREO_MEMBER_DEFINITION",
+          [
+            "definition"
+          ]
+        ],
+        "CONFLICT": [
+          "FAIL",
+          "SAME_DOCUMENT_PROSPECT_CLASSIFICATION_CONFLICT",
+          [
+            "class_summary",
+            "conflicting_class"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "brockman-annual-statement-table-four-total",
+      "project_id": "AU-2a3a86a4d971e9f9838d",
+      "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+      "physical_page": 14,
+      "row_locator": "PDF page 14, line 52",
+      "witnesses": {
+        "scope": [
+          14,
+          "Table 4: Updated JORC Code (2012) Brockman Project Mineral Resources. Lower cut-off grade is 700 ppm Nb2O5."
+        ],
+        "native_row": [
+          14,
+          "TOTAL 41.6 0.20 0.17 0.35 0.02 0.11 0.86"
+        ],
+        "inferred": [
+          14,
+          "Inferred M Tonnes % TREO % HREO % Nb2O5 % Ta2O5 % Y2O3 % ZrO2"
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "FAIL",
+          "INFERRED_ONLY_NOT_APPROVED_FOR_FORMAL_RESOURCE",
+          [
+            "inferred",
+            "native_row"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "NIOBIUM_OXIDE_CUTOFF_NOT_TREO",
+          [
+            "scope"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "mount-ridley-table-three-oxide-grade-total",
+      "project_id": "AU-3651cf8448b9227adcf5",
+      "source_sha256": "245f282102453bf6dc97056eba1ac4b889f8d506d07b5515bc354caec94ab170",
+      "physical_page": 6,
+      "row_locator": "PDF page 6, line 35",
+      "witnesses": {
+        "scope": [
+          6,
+          "Table 3 - Mount Ridley Global Rare Earth Oxide Deposits Inferred Mineral Resource Estimate by individual Rare Earth Oxide grades (using a >300 ppm TREO cut-off)"
+        ],
+        "native_row": [
+          6,
+          "Total 168.7 34.9 20.0 13.3 38.4 7.2 128.0 2.6 154.7 37.4 36.2 5.9 2.9 222.6 16.2"
+        ],
+        "printed_cerium": [
+          6,
+          "Block Id Ce2O3 Dy2O3 Er2O3 Eu2O3 Gd2O3 Ho2O3 La2O3 Lu2O3 Nd2O3 Pr6O11 Sm2O3 Tb4O7 Tm2O3 Y2O3 Yb2O3 ppm"
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "FAIL",
+          "INFERRED_ONLY_NOT_APPROVED_FOR_FORMAL_RESOURCE",
+          [
+            "scope"
+          ]
+        ],
+        "CUTOFF": [
+          "PASS",
+          "REPORTED_PRIMARY_TREO_CUTOFF",
+          [
+            "scope"
+          ]
+        ],
+        "CHEMICAL_BASIS": [
+          "BLOCKED",
+          "PRINTED_CE2O3_REQUIRES_EXACT_SPECIES_RECONCILIATION",
+          [
+            "printed_cerium"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "koppamurra-2026-pfs-global-resource-total",
+      "project_id": "AU-49b538453133bd968e8d",
+      "source_sha256": "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01",
+      "physical_page": 8,
+      "row_locator": "PDF page 8, line 9",
+      "witnesses": {
+        "scope": [
+          8,
+          "Table 2: Global Mineral Resource Estimate — Koppamurra Project (JORC 2012)"
+        ],
+        "native_row": [
+          8,
+          "Total 243 1.6 751 493 25.3 121 257 35 132 26 25"
+        ],
+        "cutoff": [
+          28,
+          "The Global Mineral Resource reported above a 325 ppm TREO-CeO2 (TREO minus cerium oxide) cut-off grade for the Project is presented below in Table 3."
+        ],
+        "parallel_table": [
+          28,
+          "Table 3 Global Mineral Resource estimate for the Koppamurra Project 2026"
+        ],
+        "parallel_total": [
+          28,
+          "Total 243 1.6 751 493 25.3 121 257 35 132 26 25"
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "CERIUM_EXCLUDED_TREO_CUTOFF_NOT_TREO",
+          [
+            "scope",
+            "cutoff",
+            "parallel_table",
+            "parallel_total"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "goschen-area-one-table-eight-resource",
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "physical_page": 12,
+      "row_locator": "PDF page 12, line 35",
+      "witnesses": {
+        "scope": [
+          12,
+          "Table 8: Area 1Mineral Resource Statement as of 15 October 2025"
+        ],
+        "native_row": [
+          12,
+          "Area 1 Mineral Resource (M+Ind+Inf) 94,200,000 0.08 74,000"
+        ],
+        "cutoff": [
+          12,
+          "Mineral resources reported at a cut-off grade of 1% THM"
+        ],
+        "material": [
+          12,
+          "Material In-Situ TREO + Y2O3 Grade(3) In-Situ TREO + Y2O3"
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "PASS",
+          "PRINTED_MEASURED_INDICATED_INFERRED_TOTAL",
+          [
+            "native_row"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "TOTAL_HEAVY_MINERAL_CUTOFF_NOT_TREO",
+          [
+            "scope",
+            "cutoff"
+          ]
+        ],
+        "CHEMICAL_BASIS": [
+          "FAIL",
+          "TREO_PLUS_Y2O3_DISTINCT_CHEMICAL_LABEL",
+          [
+            "material"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "circle-valley-primary-inferred-resource",
+      "project_id": "AU-785536db5ff12c25350d",
+      "source_sha256": "259ebe012c6b6e2048ca2f50f5b47e4c91d9a56e520c97f6deee554d069a54ad",
+      "physical_page": 2,
+      "row_locator": "PDF page 2, line 25",
+      "witnesses": {
+        "scope": [
+          2,
+          "Table 1 – Circle Valley Rare Earth Mineral Resource"
+        ],
+        "native_row": [
+          2,
+          "Total 98 890 660 220 25"
+        ],
+        "inferred": [
+          2,
+          "Inferred 98 890 660 220 25"
+        ],
+        "cutoff": [
+          2,
+          "430ppm TREO-CeO2 cut-off."
+        ],
+        "definition": [
+          2,
+          "TREO (Total Rare Earth Oxide) = La2O3 + CeO2 + Pr6O11 + Nd2O3 + Sm2O3 + Eu2O3 + Gd2O3 + Tb4O7 + Dy2O3 + Ho2O3 + Er2O3 + Tm2O3 + Yb2O3 + Lu2O3 + Y2O3"
+        ],
+        "dry": [
+          30,
+          "Tonnages are estimated on a dry basis."
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "FAIL",
+          "INFERRED_ONLY_NOT_APPROVED_FOR_FORMAL_RESOURCE",
+          [
+            "inferred",
+            "native_row"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "CERIUM_EXCLUDED_TREO_CUTOFF_NOT_TREO",
+          [
+            "cutoff"
+          ]
+        ],
+        "MATERIAL_BASIS": [
+          "PASS",
+          "JORC_RESOURCE_TONNAGES_REPORTED_DRY",
+          [
+            "dry",
+            "scope"
+          ]
+        ],
+        "CHEMICAL_BASIS": [
+          "PASS",
+          "EXACT_FIFTEEN_TREO_MEMBER_DEFINITION",
+          [
+            "definition"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "cummins-range-phosphate-cutoff-combined",
+      "project_id": "AU-9b667066e6eb66753005",
+      "source_sha256": "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9",
+      "physical_page": 2,
+      "row_locator": "PDF page 2, line 25",
+      "witnesses": {
+        "scope": [
+          2,
+          "Table 1. Cummins Range Mineral Resource Estimate, P2O5≥2.5%"
+        ],
+        "native_row": [
+          2,
+          "Total 524.3 4.6 3,120 190 520 150 580 70 50"
+        ],
+        "class": [
+          2,
+          "Mineral Resource is reported from all blocks, classiﬁed as either Indicated or Inferred, where interpolated block grade is >2.5%P2O5"
+        ],
+        "material": [
+          38,
+          "Tonnages are reported on a dry basis."
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "PASS",
+          "PRINTED_INDICATED_INFERRED_TOTAL",
+          [
+            "class",
+            "native_row"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "PHOSPHATE_CUTOFF_NOT_TREO",
+          [
+            "scope",
+            "class"
+          ]
+        ],
+        "MATERIAL_BASIS": [
+          "PASS",
+          "JORC_RESOURCE_TONNAGES_REPORTED_DRY",
+          [
+            "material",
+            "scope"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "wolverine-table-five-total-oxide-grades",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+      "physical_page": 6,
+      "row_locator": "PDF page 6, line 29",
+      "witnesses": {
+        "scope": [
+          6,
+          "Table 5: Wolverine Total Mineral Resource estimate at 15 January 2025 reported above a 0.15 % TREO cut-off grade – all TREO variables."
+        ],
+        "native_row": [
+          6,
+          "Total 7,300 170 420 60 280 200 40 560 120 840 170 490 70 380 50 5,700"
+        ],
+        "definition": [
+          5,
+          "TREO = Total Rare Earth Oxides – La2O3, CeO2, Pr6O11, Nd2O3, Sm2O3, Eu2O3, Gd2O3, Tb4O7, Dy2O3, Ho2O3, Er2O3, Tm2O3, Yb2O3, Lu2O3, Y2O3."
+        ],
+        "dry": [
+          39,
+          "Tonnage was estimated on a dry basis."
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "ESTIMATE_DATE": [
+          "PASS",
+          "SCOPED_ESTIMATE_AS_OF_2025_01_15",
+          [
+            "scope"
+          ]
+        ],
+        "CUTOFF": [
+          "PASS",
+          "REPORTED_PRIMARY_TREO_CUTOFF",
+          [
+            "scope"
+          ]
+        ],
+        "MATERIAL_BASIS": [
+          "PASS",
+          "JORC_RESOURCE_TONNAGES_REPORTED_DRY",
+          [
+            "dry",
+            "scope"
+          ]
+        ],
+        "CHEMICAL_BASIS": [
+          "PASS",
+          "EXACT_FIFTEEN_TREO_MEMBER_DEFINITION",
+          [
+            "definition"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "barkly-table-nine-two-resource",
+      "project_id": "AU-ad64122c217f0dbfabc8",
+      "source_sha256": "d77611858d4cc78ae86f757c789364934345f5dcf0d28a42ac7674fb75fc632e",
+      "physical_page": 189,
+      "row_locator": "PDF page 189, line 13",
+      "witnesses": {
+        "scope": [
+          189,
+          "Table 9-2: Barkly REE Inferred Mineral Resources – effective 17 November 2025"
+        ],
+        "native_row": [
+          189,
+          "Total Inferred 40 2,100 690 710 34% 130 3 7 82,000"
+        ],
+        "dry": [
+          223,
+          "Tonnages were estimated on an in-situ dry weight basis, and moisture was not considered."
+        ],
+        "summary_scope": [
+          189,
+          "Table 9-2: Barkly REE Inferred Mineral Resources – effective 17 November 2025"
+        ],
+        "definition": [
+          189,
+          "TREO = La2O3 + CeO2 + Pr6O11 + Nd2O3 + Sm2O3 + Eu2O3 + Gd2O3 + Tb4O7 + Dy2O3 + Ho2O3 + Er2O3 + Tm2O3 + Yb2O3 + Lu2O3 + Y2O3."
+        ],
+        "cutoff": [
+          189,
+          "2. Reported above a 430-ppm NdPr cut-off, and within a preliminary optimised pit shell."
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "FAIL",
+          "INFERRED_ONLY_NOT_APPROVED_FOR_FORMAL_RESOURCE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "ESTIMATE_DATE": [
+          "PASS",
+          "SCOPED_ESTIMATE_EFFECTIVE_2025_11_17",
+          [
+            "summary_scope",
+            "scope"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "NDPR_CUTOFF_NOT_TREO",
+          [
+            "cutoff"
+          ]
+        ],
+        "MATERIAL_BASIS": [
+          "PASS",
+          "JORC_RESOURCE_TONNAGES_REPORTED_IN_SITU_DRY",
+          [
+            "dry",
+            "scope"
+          ]
+        ],
+        "CHEMICAL_BASIS": [
+          "PASS",
+          "EXACT_FIFTEEN_TREO_MEMBER_DEFINITION",
+          [
+            "definition"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "barkly-table-nine-three-oxide-grades",
+      "project_id": "AU-ad64122c217f0dbfabc8",
+      "source_sha256": "d77611858d4cc78ae86f757c789364934345f5dcf0d28a42ac7674fb75fc632e",
+      "physical_page": 189,
+      "row_locator": "PDF page 189, line 38",
+      "witnesses": {
+        "scope": [
+          189,
+          "Table 9-3: Barkly REE Inferred Mineral Resources, individual REO grades"
+        ],
+        "native_row": [
+          189,
+          "Total Inferred 40 560 130 20 6 60 2 3 2 0.4 0.3 40 110 20 900 200"
+        ],
+        "dry": [
+          223,
+          "Tonnages were estimated on an in-situ dry weight basis, and moisture was not considered."
+        ],
+        "summary_scope": [
+          189,
+          "Table 9-2: Barkly REE Inferred Mineral Resources – effective 17 November 2025"
+        ],
+        "definition": [
+          189,
+          "TREO = La2O3 + CeO2 + Pr6O11 + Nd2O3 + Sm2O3 + Eu2O3 + Gd2O3 + Tb4O7 + Dy2O3 + Ho2O3 + Er2O3 + Tm2O3 + Yb2O3 + Lu2O3 + Y2O3."
+        ],
+        "cutoff": [
+          189,
+          "1. Reported above a 430-ppm NdPr cut-off, and within a preliminary optimised pit shell."
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "FAIL",
+          "INFERRED_ONLY_NOT_APPROVED_FOR_FORMAL_RESOURCE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "ESTIMATE_DATE": [
+          "PASS",
+          "SCOPED_ESTIMATE_EFFECTIVE_2025_11_17",
+          [
+            "summary_scope",
+            "scope"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "NDPR_CUTOFF_NOT_TREO",
+          [
+            "cutoff"
+          ]
+        ],
+        "MATERIAL_BASIS": [
+          "PASS",
+          "JORC_RESOURCE_TONNAGES_REPORTED_IN_SITU_DRY",
+          [
+            "dry",
+            "scope"
+          ]
+        ],
+        "CHEMICAL_BASIS": [
+          "PASS",
+          "EXACT_FIFTEEN_TREO_MEMBER_DEFINITION",
+          [
+            "definition"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "aileron-table-one-primary-inferred-total",
+      "project_id": "AU-af44c2bd1173b453953f",
+      "source_sha256": "88dfed30776b41d3739253fefaa1e5972a0b9969ec4db39dc1130efa2164775a",
+      "physical_page": 9,
+      "row_locator": "PDF page 9, line 57",
+      "witnesses": {
+        "scope": [
+          9,
+          "Table 1 – Aileron Project Inferred Mineral Resource Estimate (April 2026)1"
+        ],
+        "native_row": [
+          9,
+          "Total 120 0.77 919 0.36 433 5.7 6,858"
+        ],
+        "cutoff": [
+          9,
+          "is reported above a 0.25% Nb2O5 cut-off grade."
+        ]
+      },
+      "findings": {
+        "SCOPE": [
+          "PASS",
+          "REPORT_CAPTION_AND_CAPTURE_PROJECT_BIND_SAME_RESOURCE_SCOPE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "JORC_CATEGORY": [
+          "FAIL",
+          "INFERRED_ONLY_NOT_APPROVED_FOR_FORMAL_RESOURCE",
+          [
+            "scope",
+            "native_row"
+          ]
+        ],
+        "CUTOFF": [
+          "FAIL",
+          "NIOBIUM_OXIDE_CUTOFF_NOT_TREO",
+          [
+            "cutoff"
+          ]
+        ]
+      }
+    }
+  ]
+}

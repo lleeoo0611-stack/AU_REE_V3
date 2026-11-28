@@ -445,6 +445,26 @@ async function checkReportedCensus(page) {
     metrics.historical_table_candidates = review.length;
     metrics.historical_table_overlay_cells = historicalCells.size;
   }
+  if (flags.includes("--historical-cohort")) {
+    const rule = "historical-resource-cohort-recovery-v1";
+    const recovered = resources.filter(report => report.context.recovery_rule === rule);
+    const prior = JSON.parse(priorDisplay);
+    assert(recovered.length > 0 && recovered.every(report => report.state === "CANDIDATE"));
+    assert(!prior.review_only.some(report => report.context.recovery_rule === rule));
+    const named = recovered.filter(report => report.context.scope_status === "NAMED_REPORTED_TABLE");
+    const barkly = named.find(report => report.project_id === "AU-ad64122c217f0dbfabc8"
+      && report.context.quantity_role === "ore_mt" && report.context.display_value === "40 Mt");
+    assert(barkly && /^[a-f0-9]{64}$/.test(barkly.context.candidate_id));
+    const column = newCensus.columns.find(column => column.column_id === barkly.context.census_column_id);
+    await (await verify(barkly.project_id, column.id, /40 Mt/)).click();
+    for (const value of [barkly.locator, barkly.scope, barkly.source_sha256, barkly.context.temporal_decision_id]) {
+      assert((await dialog.textContent()).includes(value));
+    }
+    await page.keyboard.press("Escape");
+    metrics.historical_cohort_candidates = recovered.length;
+    metrics.historical_cohort_named_table_scope = named.length;
+    metrics.historical_cohort_origins = "PASS";
+  }
   await page.selectOption("#data-filter", "REPORTED_PREVIEW");
   await page.fill("#search", nolansId);
   await expectText(page, "#table-count", /^1 \/ 93/);

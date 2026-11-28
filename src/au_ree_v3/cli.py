@@ -108,6 +108,11 @@ def main(argv: list[str] | None = None) -> int:
     for argument in ("v2-root", "profile", "sources", "assets", "historical-assets", "database", "out"):
         cohort_recovery.add_argument(f"--{argument}", type=Path, required=True)
     cohort_recovery.add_argument("--geography", type=Path, nargs=2, metavar=("RECEIPT", "STORE"))
+    cohort_audit = research_commands.add_parser("audit-cohort-admission", help="Audit evidence gates for recovered Census cells")
+    for argument in ("recovery", "database", "baseline-recovery", "baseline-build", "current-build", "out"):
+        cohort_audit.add_argument(f"--{argument}", type=Path, required=True)
+    for argument in ("baseline-display", "current-display", "statement-review"):
+        cohort_audit.add_argument(f"--{argument}", type=Path)
     build = research_commands.add_parser("build", help="Build the fresh Census and decision inputs")
     build.add_argument("--profile", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
@@ -122,6 +127,8 @@ def main(argv: list[str] | None = None) -> int:
     display.add_argument("--forecast", type=Path, nargs=2, metavar=("BINDINGS", "ORACLE"))
     display.add_argument("--reported-resources", action="store_true", help="Include source-bound unselected resource values for display")
     display.add_argument("--historical-tables", type=Path, metavar="V2_ROOT", help="Include original historical table candidates")
+    display.add_argument("--historical-cohort", type=Path, nargs=2, metavar=("RECEIPT", "SQLITE"),
+                         help="Include exact native resource values reread across the historical Census")
     display.add_argument("--geography", type=Path, nargs=3, metavar=("BINDINGS", "MANIFEST", "STORE"))
     display.add_argument("--geography-base", type=Path, help="Exact parent source manifest for an expanded candidate")
     display.add_argument("--web-out", type=Path, help="Write an immutable candidate web release with the same verified display")
@@ -316,6 +323,15 @@ def _run_research(args) -> dict:
             v2_root=args.v2_root, profile=args.profile, sources=args.sources, assets=args.assets,
             historical_assets=args.historical_assets, database=args.database, geography=args.geography,
         ))
+    if args.operation == "audit-cohort-admission":
+        from .cohort_admission import audit_cohort_admission
+
+        result = audit_cohort_admission(
+            recovery=args.recovery, database=args.database, baseline_recovery=args.baseline_recovery,
+            baseline_build=args.baseline_build, current_build=args.current_build, baseline_display=args.baseline_display,
+            current_display=args.current_display, statement_review=args.statement_review,
+        )
+        return _write_reference_receipt(args, result)
     if args.operation == "review-development":
         from .development import review_milestones
 
@@ -337,7 +353,7 @@ def _run_research(args) -> dict:
             release_root=args.release_root, release_id=args.release_id, sources=args.sources,
             assets=args.assets, bindings=args.bindings, forecast=args.forecast, geography=args.geography,
             geography_base=args.geography_base, include_reported_resources=args.reported_resources,
-            historical_tables=args.historical_tables,
+            historical_tables=args.historical_tables, historical_cohort=args.historical_cohort,
         )
         receipt = write_display_package(bundle, args.out)
         if args.web_out is not None:

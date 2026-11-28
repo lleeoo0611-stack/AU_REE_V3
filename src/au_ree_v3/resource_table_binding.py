@@ -920,28 +920,37 @@ def _in_group(document, headers, entry, terms):
     return filtered, requested
 
 
+def _reviewed_column_options(document, headers, entry, header_terms):
+    if entry.get("unit_inline") is True:
+        return [(term, None, segment, None) for term, segment in header_terms]
+    unit_terms = _heading_terms(document, headers, entry["unit_line"], entry["unit_label"])
+    return [
+        (header, unit_label, header_segment, unit_segment)
+        for header, header_segment in header_terms for unit_label, unit_segment in unit_terms
+        if _overlap(header_segment, unit_segment) and _unit_label(unit_label.text) == entry["unit"]
+    ]
+
+
 def _reviewed_columns(document, headers, entries):
     columns = []
     for entry in entries:
         header_terms = _heading_terms(document, headers, entry["header_line"], entry["header"])
         header_terms, parent = _in_group(document, headers, entry, header_terms)
-        if entry.get("unit_inline") is True:
-            units = [(term, None, segment, None) for term, segment in header_terms]
-        else:
-            unit_terms = _heading_terms(document, headers, entry["unit_line"], entry["unit_label"])
-            units = [
-                (header, unit_label, header_segment, unit_segment)
-                for header, header_segment in header_terms for unit_label, unit_segment in unit_terms
-                if _overlap(header_segment, unit_segment) and _unit_label(unit_label.text) == entry["unit"]
-            ]
-        if len(units) != 1:
-            raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_COLUMN_OR_UNIT_NOT_UNIQUE")
-        header, unit_label, header_segment, unit_segment = units[0]
-        label = " ".join((header_segment.text, unit_segment.text)) if unit_segment and header_segment != unit_segment else header_segment.text
-        role = _role(label, entry["unit"])
-        if role is None or role[0] != entry["variable"]:
+        options = _reviewed_column_options(document, headers, entry, header_terms)
+        compatible = []
+        for header, unit_label, header_segment, unit_segment in options:
+            label = (f"{header_segment.text} {unit_segment.text}"
+                     if unit_segment and header_segment != unit_segment else header_segment.text)
+            role = _role(label, entry["unit"])
+            if role and role[0] == entry["variable"]:
+                compatible.append((
+                    Column(role[0], entry["unit"], header_segment, unit_segment, role[1], parent), header, unit_label,
+                ))
+        if len(options) == 1 and not compatible:
             raise DocumentError("SCIENTIFIC_CONFLICT", "REVIEWED_COLUMN_QUANTITY_OR_CHEMISTRY_MISMATCH")
-        columns.append((Column(entry["variable"], entry["unit"], header_segment, unit_segment, role[1], parent), header, unit_label))
+        if len(compatible) != 1:
+            raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_COLUMN_OR_UNIT_NOT_UNIQUE")
+        columns.extend(compatible)
     if not columns or len({column.variable for column, _, _ in columns}) != len(columns):
         raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_COLUMN_VARIABLE_NOT_UNIQUE")
     return tuple(columns)
