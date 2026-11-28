@@ -402,6 +402,7 @@ class DerivedValue(Record):
     denominator_basis: str
     material_basis: str | None = None
     chemical_basis: str | None = None
+    assessment: dict | None = None
 
     def __post_init__(self) -> None:
         _required_text(
@@ -417,6 +418,14 @@ class DerivedValue(Record):
         object.__setattr__(self, "input_observation_ids", tuple(self.input_observation_ids))
         _decimal("value", self.value)
         _decimal("factor", self.factor)
+        if self.assessment is not None and not isinstance(self.assessment, dict):
+            raise ContractViolation("derivation assessment must be a structured receipt")
+
+    def to_dict(self) -> dict:
+        payload = super().to_dict()
+        if self.assessment is None:
+            del payload["assessment"]
+        return payload
 
 
 @dataclass(frozen=True, kw_only=True)

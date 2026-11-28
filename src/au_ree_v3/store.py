@@ -235,6 +235,18 @@ class Store:
         rows = self._db.execute(f"SELECT payload FROM {table} ORDER BY {', '.join(keys)}")
         return [record_type.from_dict(json.loads(payload)) for (payload,) in rows]
 
+    def derivations_for_release(self, release_id: str) -> tuple[DerivedValue, ...]:
+        rows = self._db.execute(
+            "SELECT payload FROM derived_values WHERE release_id = ? ORDER BY derived_id", (release_id,)
+        )
+        return tuple(DerivedValue.from_dict(json.loads(payload)) for (payload,) in rows)
+
+    def derivation_input_keys(self, derived_id: str) -> tuple[str, ...]:
+        rows = self._db.execute(
+            "SELECT raw_record_id FROM derived_inputs WHERE derived_id = ? ORDER BY position", (derived_id,)
+        )
+        return tuple(key for (key,) in rows)
+
     def raw_for_candidate(self, candidate_id: str) -> RawObservation:
         """Follow the immutable source-edition binding selected at insertion."""
         row = self._db.execute(
@@ -606,6 +618,11 @@ class Store:
         release = self._required(ResearchRelease, derived.release_id)
         if scope.project_id != derived.project_id or derived.project_id not in release.cohort:
             raise ContractViolation("derived value is outside its Project scope or release cohort")
+        if derived.assessment is not None or release.release_mode == "FORMAL":
+            from .derivations import validate_census_derivation
+
+            validate_census_derivation(self, release, derived)
+            return
         accepted_inputs = {
             self.raw_for_candidate(self._required(ValidatedObservation, accepted.validation_id).candidate_id).raw_record_id
             for accepted in self.accepted_for_release(derived.release_id)

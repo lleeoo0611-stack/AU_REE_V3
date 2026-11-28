@@ -23,6 +23,7 @@ SCHEMA = "fresh-census-v1"
 PROJECTION_SCHEMA = "fresh-census-v2"
 IDENTITY_COLUMN = PROJECT_ID_COLUMN
 _CENSUS_ONLY_REASON = "GOVERNED_CENSUS_RESOURCE_OBSERVATION"
+FORMAL_CENSUS_ORIGINS = frozenset(("FORMAL_SELECTION", "FORMAL_DERIVED"))
 STATUS_FIELDS_V1 = (
     "project_id", "column", "value", "value_state", "reason", "value_origin", "source_search_status",
     "registry_sha256", "release_id", "selection_id", "validation_id", "candidate_id", "observation_id",
@@ -153,6 +154,14 @@ def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxe
     scientific_views = project_science_views(release_inputs, release, axes.columns) if science else None
     if scientific_views is not None:
         projected.update(resource_presence_cells(scientific_views))
+        from .census_derivations import governed_derived_projection
+
+        derived_cells, assessed = governed_derived_projection(store, release, release_inputs)
+        if derived_cells:
+            if projected.keys() & derived_cells.keys():
+                raise ContractViolation("A Census derivation overlaps an existing scientific selection")
+            projected.update(derived_cells)
+            scientific_views["formal_derivations"] = assessed
     return release.release_mode, projected, decisions, scientific_views
 
 
@@ -250,7 +259,7 @@ def _rows(axes, searches, selected, decisions, metadata):
     definitions = metadata.policy.by_name if metadata is not None else {}
     resource_projects = {
         project for (project, column), row in selected.items()
-        if column in COLUMNS.values() and row.get("value_origin") == "FORMAL_SELECTION"
+        if column in COLUMNS.values() and row.get("value_origin") in FORMAL_CENSUS_ORIGINS
     }
     for project in axes.project_ids:
         cells = [
@@ -320,10 +329,15 @@ def validate_projected_cell(cell, definition):
             cell[key] for key in ("selection_id", "observation_id", "anchor_id")
         ):
             raise ValueError("direct Census cell requires formal selection lineage")
-        if cell["evidence_state"] == "FORMAL_DERIVED" and not all(
-            cell[key] for key in ("formula_id", "formula_sha256", "input_observation_ids", "precision")
-        ):
-            raise ValueError("derived Census cell requires pinned formula and input lineage")
+        if cell["evidence_state"] == "FORMAL_DERIVED":
+            inputs = json.loads(cell["input_observation_ids"] or "[]")
+            if (
+                cell["value_origin"] != "FORMAL_DERIVED" or cell["comparable"] != "NO"
+                or not cell["formula_id"] or not SHA256.fullmatch(cell["formula_sha256"])
+                or not isinstance(inputs, list) or len(inputs) != 2 or len(set(inputs)) != 2
+                or any(not SHA256.fullmatch(item) for item in inputs) or not cell["precision"]
+            ):
+                raise ValueError("derived Census cell requires an approved formula and two distinct inputs")
     elif not cell["metadata_evidence"]:
         raise ValueError("display Census cell requires its bounded metadata evidence")
 
@@ -375,7 +389,7 @@ def _prepared(profile, store, release_id, project_statuses, metadata):
 
 def _receipt(out, axes, release_id, release_mode, cells, metadata, science_views):
     origins = Counter(row["value_origin"] for row in cells if row["value_state"] == "PRESENT")
-    values_by_column = Counter(row["column"] for row in cells if row["value_origin"] == "FORMAL_SELECTION")
+    values_by_column = Counter(row["column"] for row in cells if row["value_origin"] in FORMAL_CENSUS_ORIGINS)
     states = Counter(row["value_state"] for row in cells)
     unknown = Counter(row["reason"] for row in cells if row["value_state"] == "UNKNOWN")
     source_statuses = Counter(row["source_search_status"] for row in cells if row["column"] == IDENTITY_COLUMN)
@@ -388,8 +402,8 @@ def _receipt(out, axes, release_id, release_mode, cells, metadata, science_views
         "projects": len(axes.project_ids), "columns": len(axes.columns), "cells": len(cells),
         "cell_states": {label: states[label] for label in ("PRESENT", "UNKNOWN", "NOT_APPLICABLE")},
         "identity_cells": origins["IDENTITY"],
-        "formal_scientific_cells": origins["FORMAL_SELECTION"],
-        "formal_projects": len({row["project_id"] for row in cells if row["value_origin"] == "FORMAL_SELECTION"}),
+        "formal_scientific_cells": sum(origins[origin] for origin in FORMAL_CENSUS_ORIGINS),
+        "formal_projects": len({row["project_id"] for row in cells if row["value_origin"] in FORMAL_CENSUS_ORIGINS}),
         "formal_scientific_cells_by_column": dict(values_by_column),
         "unknown_reasons": dict(unknown), "project_source_search_statuses": dict(source_statuses),
         "outputs": {name: _sha(out / name) for name in ("census.csv", "cell_status.csv")},
@@ -401,6 +415,8 @@ def _receipt(out, axes, release_id, release_mode, cells, metadata, science_views
         )
     if science_views is not None:
         receipt["science_views"] = science_views
+    if origins["FORMAL_DERIVED"]:
+        receipt["formal_derived_cells"] = origins["FORMAL_DERIVED"]
     return receipt
 
 

@@ -1,0 +1,299 @@
+{
+  "artifacts": [
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/oracle.json",
+      "sha256": "1e65e330fed9027a2be1cac0556e5dbacc56f241723259a6f9201516f98f3d62"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/build/build_receipt.json",
+      "sha256": "f97472aa2ede611054772dbb76c087ca85b8c260818563c0152df8144f955221"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/build/census/census_receipt.json",
+      "sha256": "d971e128ea5b02270aaff0d337094bb51dd1d50a8591b17fb6948a0e61715843"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/delta/census_delta.csv",
+      "sha256": "390c7f315bd38f20927b30da4cdcb0ee8882cfce26ebc1fbe939b1f241cb469d"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/delta/comparison_receipt.json",
+      "sha256": "dd3d6cbf2fcdbad0ab24a8af61517c1489d4ffe36e3dea9c3f57a085826268cd"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/cold-a/replay_receipt.json",
+      "sha256": "0ad8a46e4cd617ef109b9a02409a0e97bd697228a77c4def63d23d182de512ee"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/cold-b/replay_receipt.json",
+      "sha256": "08b28bbc8fd46e33a4b63521309a8c86824c4fbfdc358567f27777a8cd3a81ea"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/verify-site/site_verification.json",
+      "sha256": "033df0fe1a642474e34e78cefe7c64cb572bcedbea475a04b179e8e9b1c71e44"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/browser.json",
+      "sha256": "f7be417eb7c064509d25f2ee01de9fe4205b3f47fa28285ee0746579b826d4b9"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/independent-science/release_audit.json",
+      "sha256": "cdaa3c22290fc3a7158dc25246eb4fd22f58d1b53d8d3d35dc3cc7960e9894b9"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/full-exact-tests.log",
+      "sha256": "135845c0fb2d6a18e25e6f508dbce8a6776780873548246391c2b0b5fe629567"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb-faults/candidate_faults_receipt.json",
+      "sha256": "db7d83cd14b440269d579759c293423192deaa177c26865f036d0b1c10eedcbb"
+    }
+  ],
+  "baseline_shadow_comparison": {
+    "formal_derivation_count": 0,
+    "release_id": "9c00929a37e64e1a22f4d53aa03210a2f91de5fc34b47e5eca42a8a04370174d",
+    "shadow_checks": [
+      {
+        "outcome": "COMPARABLE_DERIVED",
+        "project_id": "AU-216d0983f6892f9b58f9",
+        "shadow_id": "71f37b943287b568223584ad2e02748524b586fa3d10985cdc79a6ce1b76d569"
+      },
+      {
+        "outcome": "COMPARABLE_DERIVED",
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "shadow_id": "241649567c73e84f42ec5e6895b4488b1862f4830efe108c2eea598360eb69d3"
+      }
+    ],
+    "status": "PASS",
+    "write_rejection": "UNPINNED_BASELINE_RELEASE"
+  },
+  "browser": {
+    "chromium": "156.0.8078.79",
+    "corpus": "EXACT_RESEARCH_PREVIEWS",
+    "metrics": {
+      "browser_history_load_wall_ms": 219,
+      "browser_js_heap_used_bytes": 8669692,
+      "browser_load_census_wall_ms": 475,
+      "exact_derived_evidence_dialogs": 2,
+      "formal_pointer_rejects_candidate": "PASS",
+      "history_csv_update_link": "PASS",
+      "map_ree_mcda_language": "PASS",
+      "mixed_cache_missing_atomic": "PASS",
+      "mobile": "PASS",
+      "no_formal_pointer": "PASS",
+      "rehashed_unqualified_pin_rank_lineage": "PASS",
+      "search_filter_sort_columns_evidence": "PASS",
+      "xss_and_source_link": "PASS"
+    },
+    "runtime": "v24.22.3",
+    "status": "PASS",
+    "versions": [
+      "0410d7e7fe21a409645abe2c62cb3741abd1afa04d1e339f5f6028f888374de1",
+      "de50379f50e49fdd74ac536deb51b8b03dade8f442565644564c5cef1f2a17ef"
+    ]
+  },
+  "census": {
+    "delta_counts": {
+      "FORMAL_DERIVED_ADDED": 2,
+      "PROVENANCE_RECEIPT_CHANGED": 20,
+      "UNCHANGED": 4721
+    },
+    "derived": 2,
+    "direct": 16,
+    "present": 1110,
+    "source_observations_added": 0
+  },
+  "code_commit": "00e33cb9720b46a97023bfae022f58f11b750dab",
+  "costs": {
+    "build": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 92184,
+      "system_seconds": 0.7365349999999999,
+      "user_seconds": 2.55634,
+      "wall_seconds": 3.2860657130004256
+    },
+    "cold-a": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 91284,
+      "system_seconds": 1.717093,
+      "user_seconds": 4.696878,
+      "wall_seconds": 6.409813313999621
+    },
+    "cold-b": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 91032,
+      "system_seconds": 1.630096,
+      "user_seconds": 4.861645,
+      "wall_seconds": 6.484615813002165
+    }
+  },
+  "cutoff": "2026-11-28",
+  "formula_registry_sha256": "d4e62e21483385eff64ef429938589a055fda86db39affc6da1843dd603ae9a5",
+  "frozen_scientific_artifact_sha256": {
+    "census/cell_status.csv": "221e854bbe305892a5cad5a3b611d1cd93d0c71e55dbd18a67cf87ffba5e9efe",
+    "census/census.csv": "0ae26fdea76cdb91e3aeae601550fa418fd53b222f57047d215da6e826b0a6eb",
+    "census/census_receipt.json": "d971e128ea5b02270aaff0d337094bb51dd1d50a8591b17fb6948a0e61715843",
+    "decision/decision_receipt.json": "0b7cfb1e5dac9a0f7b1119d26e27b312340ee586483e5bddf31f1cf1fe759cbb",
+    "decision/mcda_inputs.json": "89dabd973f23b7c0ea9945dc96500233453eeb2665230897b0f30be3d5467caf",
+    "decision/mcda_results.json": "75ab97428674e3ebbc64a0a503496d6dce5840ba7cf55047e7388b11134b6af6",
+    "observations/extraction.json": "69056dba4e94a02baac9d21132b27cc6be8173a94981008fd314443f0ffbb76d",
+    "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+  },
+  "gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED"
+  },
+  "historical_O2": "FAIL",
+  "local_tests": {
+    "passed": 303,
+    "run": 303,
+    "skipped": 0,
+    "wall_seconds": 51.104
+  },
+  "mcda": {
+    "cohort": 2,
+    "comparable_criteria": 6,
+    "new_inputs": 0
+  },
+  "prior_composition_shadows": [
+    {
+      "formula": "mreo_kt",
+      "layer": "SHADOW",
+      "project_id": "AU-0098e17a63e7c05c213f",
+      "reason": "NO_APPROVED_CENSUS_MREO_MASS_FORMULA"
+    },
+    {
+      "formula": "Nd2O3_kt",
+      "layer": "SHADOW",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "reason": "NO_APPROVED_CENSUS_INDIVIDUAL_OXIDE_MASS_FORMULA"
+    },
+    {
+      "formula": "Pr6O11_kt",
+      "layer": "SHADOW",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "reason": "NO_APPROVED_CENSUS_INDIVIDUAL_OXIDE_MASS_FORMULA"
+    },
+    {
+      "formula": "Tb4O7_kt",
+      "layer": "SHADOW",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "reason": "NO_APPROVED_CENSUS_INDIVIDUAL_OXIDE_MASS_FORMULA"
+    },
+    {
+      "formula": "ndpr_kt",
+      "layer": "SHADOW",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "reason": "NO_APPROVED_CENSUS_COMBINED_NDPR_MASS_FORMULA"
+    }
+  ],
+  "profile_id": "au-ree-2026-11-28",
+  "raw_oracle": {
+    "AU-216d0983f6892f9b58f9": {
+      "evidence": [
+        {
+          "physical_page": 97,
+          "quote": "Total 278.80 482.64 171.40 311.24 7.04"
+        },
+        {
+          "physical_page": 97,
+          "quote": "Numbers have been rounded to reflect the appropriate precision of the estimate and may not sum due to rounding."
+        }
+      ],
+      "grade_ppm": [
+        "482.64",
+        "482.635",
+        "482.645"
+      ],
+      "interval": [
+        "134.556224825",
+        "134.563839225"
+      ],
+      "method": "independent-rational-arithmetic-v1",
+      "ore_mt": [
+        "278.8",
+        "278.795",
+        "278.805"
+      ],
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "value": "134.560032"
+    },
+    "AU-dac3c8e40326b8244cdb": {
+      "evidence": [
+        {
+          "physical_page": 4,
+          "quote": "Total 1,000 ppm 1.8 Bt 1,700* 1.7 Bt 1,700"
+        },
+        {
+          "physical_page": 19,
+          "quote": "Grades and tonnages are rounded to 2 significant figures in accordance with the JORC Code (2012 Edition)"
+        }
+      ],
+      "grade_ppm": [
+        "1700",
+        "1650",
+        "1750"
+      ],
+      "interval": [
+        "2722.5",
+        "3062.5"
+      ],
+      "method": "independent-rational-arithmetic-v1",
+      "ore_mt": [
+        "1700",
+        "1650",
+        "1750"
+      ],
+      "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "value": "2890"
+    }
+  },
+  "replays": [
+    {
+      "elapsed_seconds": 6.2894826299998385,
+      "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+      "receipt_sha256": "0ad8a46e4cd617ef109b9a02409a0e97bd697228a77c4def63d23d182de512ee",
+      "reported_F4": "PASS",
+      "status": "PASS",
+      "verified_output_count": 8,
+      "verified_outputs": {
+        "census/cell_status.csv": "221e854bbe305892a5cad5a3b611d1cd93d0c71e55dbd18a67cf87ffba5e9efe",
+        "census/census.csv": "0ae26fdea76cdb91e3aeae601550fa418fd53b222f57047d215da6e826b0a6eb",
+        "census/census_receipt.json": "d971e128ea5b02270aaff0d337094bb51dd1d50a8591b17fb6948a0e61715843",
+        "decision/decision_receipt.json": "0b7cfb1e5dac9a0f7b1119d26e27b312340ee586483e5bddf31f1cf1fe759cbb",
+        "decision/mcda_inputs.json": "89dabd973f23b7c0ea9945dc96500233453eeb2665230897b0f30be3d5467caf",
+        "decision/mcda_results.json": "75ab97428674e3ebbc64a0a503496d6dce5840ba7cf55047e7388b11134b6af6",
+        "observations/extraction.json": "69056dba4e94a02baac9d21132b27cc6be8173a94981008fd314443f0ffbb76d",
+        "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+      }
+    },
+    {
+      "elapsed_seconds": 6.353108269002405,
+      "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+      "receipt_sha256": "08b28bbc8fd46e33a4b63521309a8c86824c4fbfdc358567f27777a8cd3a81ea",
+      "reported_F4": "PASS",
+      "status": "PASS",
+      "verified_output_count": 8,
+      "verified_outputs": {
+        "census/cell_status.csv": "221e854bbe305892a5cad5a3b611d1cd93d0c71e55dbd18a67cf87ffba5e9efe",
+        "census/census.csv": "0ae26fdea76cdb91e3aeae601550fa418fd53b222f57047d215da6e826b0a6eb",
+        "census/census_receipt.json": "d971e128ea5b02270aaff0d337094bb51dd1d50a8591b17fb6948a0e61715843",
+        "decision/decision_receipt.json": "0b7cfb1e5dac9a0f7b1119d26e27b312340ee586483e5bddf31f1cf1fe759cbb",
+        "decision/mcda_inputs.json": "89dabd973f23b7c0ea9945dc96500233453eeb2665230897b0f30be3d5467caf",
+        "decision/mcda_results.json": "75ab97428674e3ebbc64a0a503496d6dce5840ba7cf55047e7388b11134b6af6",
+        "observations/extraction.json": "69056dba4e94a02baac9d21132b27cc6be8173a94981008fd314443f0ffbb76d",
+        "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+      }
+    }
+  ],
+  "research_candidate": "0410d7e7fe21a409645abe2c62cb3741abd1afa04d1e339f5f6028f888374de1",
+  "schema": "census-treo-derivation-verification-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+}
