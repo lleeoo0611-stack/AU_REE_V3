@@ -1,0 +1,277 @@
+{
+  "F": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED"
+  },
+  "S6-0": "PASS",
+  "baseline_dispositions": {
+    "R1": {
+      "INCOMPLETE_SELECTED_RESOURCE_BUNDLE": 89,
+      "RELEASE_BOUND_COMPARABLE_SELECTION": 4
+    },
+    "S1": {
+      "NO_COMPOSITION_SELECTION": 2,
+      "SAME_STATEMENT_FOUR_OXIDE_DERIVATION": 2,
+      "SAME_STATEMENT_RESOURCE_REQUIRED": 89
+    }
+  },
+  "candidate_code": "33587f23eda8243ad7713f2a5524f93ac9b2ce65",
+  "candidate_id": "bdb9e868e5cb2a514e608231db35cdb27c3e77b2fc9427f7dbb444409f511c78",
+  "capture_count": 148,
+  "cold_science": {
+    "artifacts_each": 8,
+    "fault_domain": "SHARED_LOCAL_FILESYSTEM",
+    "objects_each": 314,
+    "runs": 2,
+    "status": "PASS"
+  },
+  "companion_precision_conflicts": [
+    {
+      "native_tokens": [
+        [
+          "0.85",
+          "kg/t"
+        ],
+        [
+          "840",
+          "ppm"
+        ]
+      ],
+      "nominal_intervals_ppm": [
+        [
+          "845.000",
+          "855.000"
+        ],
+        [
+          "839.5",
+          "840.5"
+        ]
+      ],
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "species": "Dy2O3",
+      "status": "SCIENTIFIC_CONFLICT"
+    },
+    {
+      "native_tokens": [
+        [
+          "5.68",
+          "kg/t"
+        ],
+        [
+          "5,700",
+          "ppm"
+        ]
+      ],
+      "nominal_intervals_ppm": [
+        [
+          "5675.000",
+          "5685.000"
+        ],
+        [
+          "5699.5",
+          "5700.5"
+        ]
+      ],
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "species": "Y2O3",
+      "status": "SCIENTIFIC_CONFLICT"
+    }
+  ],
+  "complete_r1_s1_projects": 2,
+  "complete_six_domain_projects": 0,
+  "decision_policy_sha256": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+  "diagnostic_assessment": {
+    "rows": 6,
+    "scope": "Read-only audit of current inputs; no change to frozen comparator or persisted selection",
+    "status_counts": {
+      "COMPARABLE_DERIVED": 2,
+      "COMPARABLE_DIRECT": 3,
+      "INSUFFICIENT_CONTEXT": 1
+    }
+  },
+  "execution": {
+    "CI_billing": "UNMEASURED",
+    "RSS": "UNMEASURED",
+    "cold_science_wall_seconds": [
+      14.767,
+      14.848
+    ],
+    "ledger_hash_seeds": [
+      112,
+      641
+    ],
+    "ledger_output_byte_identity": "PASS",
+    "ledger_wall_time": {
+      "a": "0m4.202s",
+      "b": "0m4.200s"
+    },
+    "local_git_tracking_ref": "origin/main"
+  },
+  "fixed_formal_keys": [
+    [
+      "AU-0098e17a63e7c05c213f",
+      "R1"
+    ],
+    [
+      "AU-0098e17a63e7c05c213f",
+      "S1"
+    ],
+    [
+      "AU-6d807eb7caec9db0f35e",
+      "R1"
+    ],
+    [
+      "AU-9bd8e5ed8408cd84d876",
+      "R1"
+    ],
+    [
+      "AU-9bd8e5ed8408cd84d876",
+      "S1"
+    ],
+    [
+      "AU-efff91a06cf344122d88",
+      "R1"
+    ]
+  ],
+  "frozen_main": "c8bce8a893358a63bf2c587e44e0bc3f84523db7",
+  "gap_dimensions": {
+    "APPROVED_USE_UNWIRED": 2,
+    "CHEMICAL_DENOMINATOR": 92,
+    "COMPONENTS": 91,
+    "EDITION_MISMATCH": 9,
+    "ESTIMATE_DATE": 2,
+    "JORC_CLASSIFICATION": 2,
+    "MATERIAL": 2,
+    "NATIVE_LOCATOR": 149,
+    "NATIVE_LOCATOR_REVIEW": 21,
+    "PRECISION_OR_QUANTITY_CONFLICT": 2,
+    "PREREQUISITE_R1": 89,
+    "REVIEWED_SOURCE_CONFLICT": 8,
+    "STATEMENT_SCOPE": 3,
+    "TIME_ELIGIBILITY": 2
+  },
+  "generated_receipt_sha256": "2f853de3c6fd8d6dbb12579b0ce39c5a4b322c295c28915bd0c21088d51af8f1",
+  "grid": {
+    "core_census_keys": 4743,
+    "criteria": [
+      "R1",
+      "S1"
+    ],
+    "criterion_keys": 186,
+    "projects": 93
+  },
+  "historical_O2": "FAIL",
+  "input_artifact_sha256": {
+    "bindings": "b22ea3332a838cbb6f893d57029e9a31920561a4d50f6c0c2d443e9183965b20",
+    "profile": "51940a4baeb0660d4e46b69696b2ad9cf619612a1e0389efb5e05c1c2c212cd0",
+    "sources": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "ledger_sha256": "93ee7e8da1126af9064b80d2000a91e9617cb15ca6c08e200eb962c282dd54a4",
+  "local_work_files": [
+    "tools/census_criterion_evidence.py",
+    "tests/test_census_criterion_evidence.py",
+    "docs/research/criterion_original_evidence_v1.json",
+    "docs/research/census_criterion_evidence.md",
+    "docs/research/census_criterion_evidence_receipt.json"
+  ],
+  "new_comparable_keys": 0,
+  "new_scientific_observations": 0,
+  "observation_release_id": "10c7f11972891ecc18494cfdb6c94eb38d8b410f889a7ac212893ad8caf6bf26",
+  "original_evidence_readback": {
+    "native_page_extent": 82,
+    "unique_originals": 6,
+    "unique_page_quotes": 26
+  },
+  "original_fixture_sha256": "d4f7c435fd315a03e4c4a7eb9bf3fb6bb9aff81b0cf1e3cfd69c37adf8c90a50",
+  "priority_keys": [
+    [
+      "AU-6d807eb7caec9db0f35e",
+      "S1"
+    ],
+    [
+      "AU-efff91a06cf344122d88",
+      "S1"
+    ],
+    [
+      "AU-908fd6f4461622e89548",
+      "R1"
+    ],
+    [
+      "AU-0098e17a63e7c05c213f",
+      "S1"
+    ],
+    [
+      "AU-9bd8e5ed8408cd84d876",
+      "S1"
+    ]
+  ],
+  "received_recipes": {
+    "independent_display_package": {
+      "path": "work/census-stage5/final/independent-display-package.json",
+      "sha256": "c886ddadcf11f9345f8d53fca72b7a74532027e8afd35a1ccb1cd21c382340de"
+    },
+    "independent_new_science_comparison": {
+      "path": "work/census-stage5/final/independent-scientific-yield.json",
+      "sha256": "98b43e789829e37ee0ff2e0861406116f8eb6b3ce7ef74033aef654369e68429"
+    },
+    "original_statement_holds": {
+      "path": "work/census-stage5/final/resource-holds.json",
+      "sha256": "9ad62250d3b4e7eb5bc0c9ad90cf5d0bf4221b191cb1374d5bc09bf60b6d36a2"
+    },
+    "scoped_work_queue": {
+      "path": "work/census-stage5/priority-final/census_scientific_priority_queue.jsonl",
+      "sha256": "40c90794f302815c13e8cb22b2e98dee7f81b211a99164d41e39fc18b9cbcf25"
+    },
+    "separate_recovered_source_editions": {
+      "path": "work/census-stage5/sources/public-source-native-assessment-validated.json",
+      "sha256": "e560ef92d41cf392811914fa23efeea37493e0236f94e3bf752c4ee615d808c3"
+    }
+  },
+  "research_cutoff": "2026-11-28",
+  "schema": "census-criterion-evidence-gap-v1",
+  "science_output_sha256": {
+    "census/cell_status.csv": "8f9546c03ed03ec7979b58a39e558e903e9c2d7365cb00ac653948d0369f705a",
+    "census/census.csv": "7f5ec7fa3d741c19c5569ac1fb470d6eea27ba7bfae97e6cc85dbd4214b2e1cb",
+    "census/census_receipt.json": "ff2604ff57786adf6e0b2a5ba135837321180d052f29d48a4a5122c747fd30d8",
+    "decision/decision_receipt.json": "3ff3015000e84a9de0f18d98ae3c4b316ee460a7196009b74529a690e1e1332b",
+    "decision/mcda_inputs.json": "d58ab88c664e013fde904f45a38dfe29ffb3b31b3c955dd4a2aab1f4368a6955",
+    "decision/mcda_results.json": "bf64996937d0efa0ab84d37c3198c0a79029bc05d65a0e7825bc59f02453f567",
+    "observations/extraction.json": "d6e5cf5dc7453d2c9c4e6b6424bbff77a1913060199da74119d069bbf724d770",
+    "observations/observations.jsonl": "11c5bf726b8818593aa8185f6e34a322a850225e9a83bbb3691a65d8c40de660"
+  },
+  "sealed_display_recheck": {
+    "extension_denominator": 837,
+    "extension_fields": 9,
+    "extension_present_cells": 40,
+    "source": "STAGE5_INDEPENDENT_RECEIPT"
+  },
+  "source_count": 144,
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "sqlite": {
+    "foreign_key_check": "PASS",
+    "integrity_check": "PASS",
+    "rows": {
+      "accepted_values": 31,
+      "anchors": 53,
+      "candidates": 53,
+      "derived_values": 3,
+      "raw_observations": 53,
+      "sources": 8,
+      "validations": 53
+    },
+    "schema": 3
+  },
+  "status": "PASS",
+  "store_readback": {
+    "mcda_eligible_purpose_rows": 27,
+    "numeric_accepted": 31,
+    "numeric_validated": 37,
+    "persisted_semantic_assessments": 0,
+    "raw_observations": 53
+  },
+  "timezone": "Asia/Taipei"
+}

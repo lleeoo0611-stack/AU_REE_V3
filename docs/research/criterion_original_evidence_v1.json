@@ -1,0 +1,209 @@
+{
+  "schema": "criterion-original-evidence-v1",
+  "cutoff": "2026-11-28",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "criterion": "S1",
+      "priority": 1,
+      "role": "PANEL_GAP",
+      "gaps": [
+        "STATEMENT_SCOPE",
+        "JORC_CLASSIFICATION",
+        "MATERIAL",
+        "CHEMICAL_DENOMINATOR",
+        "COMPONENTS"
+      ],
+      "minimum_original": "同一 Area 1、2025-10-15 資源與 1% THM 截品下的全礦四種氧化物或明示合計、完整 TREO 成員及有效日期。",
+      "falsification": "QEMScan 的 THM 百分比、公司合併多區與 TVHM 截品、不同 JORC 分級，均無法證成同一 S1。",
+      "next_action": "先驗證發行人同一估算的材料批次、分類勘誤與全礦成分表。缺其一就維持 UNKNOWN。",
+      "originals": [
+        {
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "physical_page": 12,
+          "quote": "Area 1 Mineral Resource (M+Ind+Inf) 94,200,000 0.08 74,000"
+        },
+        {
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "physical_page": 12,
+          "quote": "Mineral resources reported at a cut-off grade of 1% THM"
+        },
+        {
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "physical_page": 2,
+          "quote": "a revised Measured and Indicated Resource of 94 Mt at 2.8% THM"
+        },
+        {
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "physical_page": 12,
+          "quote": "Mineral assemblage, via QEMScan Particle Analysis, is reported as a percentage of in situ THM content"
+        },
+        {
+          "source_sha256": "8a70d4ca8cdc287da19cd6a50060e0496f84c5f153c62b452870aed1ff92497c",
+          "physical_page": 23,
+          "quote": "Area 1, Area 2, Area 3, Area 4, Cannie, Nowie 890,000,000 0.071 630,000"
+        },
+        {
+          "source_sha256": "8a70d4ca8cdc287da19cd6a50060e0496f84c5f153c62b452870aed1ff92497c",
+          "physical_page": 23,
+          "quote": "Combined mineral resource at a cut-off grade of 1% THM for Area1 and Area 3 and 1% TVHM for Nowie, Area 2 and Area 4."
+        }
+      ]
+    },
+    {
+      "project_id": "AU-efff91a06cf344122d88",
+      "criterion": "S1",
+      "priority": 2,
+      "role": "PANEL_GAP",
+      "gaps": [
+        "STATEMENT_SCOPE",
+        "JORC_CLASSIFICATION",
+        "MATERIAL",
+        "COMPONENTS"
+      ],
+      "minimum_original": "同一 Mt Weld 2024-06-30、2.5% TREO Mineral Resource 全礦總列的四種磁性氧化物或明示一致合計。",
+      "falsification": "2024 年資源與儲量公告 p23 Table 7 屬 2.8% TREO Ore Reserve，包含礦堆與尾礦，不可接到 p2 Mineral Resource。",
+      "next_action": "向同版資源技術附表尋找四種氧化物或發行人側同聲明附件。保留 Reserve 原用途。",
+      "originals": [
+        {
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "physical_page": 2,
+          "quote": "Table 1: Mt Weld Rare Earth Deposit Mineral Resource summary June 2024 at 2.5% TREO cut-off grade"
+        },
+        {
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "physical_page": 2,
+          "quote": "Total 106.6 4.1 4,389"
+        },
+        {
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "physical_page": 9,
+          "quote": "Table 4: Mt Weld Rare Earth Deposit Mineral Resource detailed summary June 2024 at 2.5% TREO cut-off grade"
+        },
+        {
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "physical_page": 23,
+          "quote": "Table 7: Mt Weld Rare Earth Deposit Ore Reserve June 2024 at 2.8% TREO* cut-off grade"
+        }
+      ]
+    },
+    {
+      "project_id": "AU-908fd6f4461622e89548",
+      "criterion": "R1",
+      "priority": 3,
+      "role": "CROSS_ISSUER_RESOURCE_CANDIDATE",
+      "gaps": [
+        "CHEMICAL_DENOMINATOR",
+        "STATEMENT_SCOPE"
+      ],
+      "minimum_original": "證實 Hastings 十礦床、100% Project、2023-10 Table 2 與 0.24% TREO cutoff 的完整化學成員及材料基準。",
+      "falsification": "2023-02 Reserve、40% 股權口徑及 0.32% NdPr 不能取代同聲明的 100% Project 礦量、TREO 品位或含量。",
+      "next_action": "保留 29.93 Mt、0.93% 與 276,955 t 的原列。追查精確同一聲明的完整 TREO 定義。",
+      "originals": [
+        {
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+          "physical_page": 14,
+          "quote": "The Mineral Resources shown in Table 2 are presented on a 100% Yangibana Project basis."
+        },
+        {
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+          "physical_page": 14,
+          "quote": "Table 2: Total Yangibana Project JORC Code (2012) Mineral Resource, October 2023."
+        },
+        {
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+          "physical_page": 14,
+          "quote": "TOTAL 29.93 0.93 0.32 276,955"
+        },
+        {
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+          "physical_page": 15,
+          "quote": "Figure 1. Mineral Resources are reported at a 0.24% TREO cut-off grade."
+        }
+      ]
+    },
+    {
+      "project_id": "AU-0098e17a63e7c05c213f",
+      "criterion": "S1",
+      "priority": 4,
+      "role": "EXISTING_REGRESSION",
+      "gaps": [
+        "REGRESSION_ONLY"
+      ],
+      "minimum_original": "維持原具四種氧化物定義的 MREO 和全礦 TREO，並核回原件第 15 頁的圖像原單位。",
+      "falsification": "排除不同 Pidinga ISR cut-over、把 TREO-Ce 截品當純 TREO，或用不同材料的百分比分母。",
+      "next_action": "重讀 p3 原列與 p15 同聲明原表，獨立核算 112／470。",
+      "originals": [
+        {
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "physical_page": 3,
+          "quote": "Total 150 470 101 10 112"
+        },
+        {
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "physical_page": 3,
+          "quote": "MREO = Magnet Rare Earth Oxide(Nd2O3, Pr6O11, Dy2O3, Tb4O7)"
+        }
+      ]
+    },
+    {
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "criterion": "S1",
+      "priority": 5,
+      "role": "EXISTING_REGRESSION_AND_CONFLICT_HOLD",
+      "gaps": [
+        "PRECISION_CONFLICT",
+        "STATEMENT_SCOPE"
+      ],
+      "minimum_original": "維持已採用的同一 Wolverine Total 原表路徑。新用途須有同資源聲明的獨立原表或發行者勘誤處理 Dy／Y。",
+      "falsification": "露天、地下、Browns Range 區域總量及不同版次不得替代 Wolverine Total。不同末位精度區間未重疊時保留衝突。",
+      "next_action": "重讀 p5 Table 2 與 p6 Table 5，維持原採納的 S1。較精細用途待發行人勘誤。",
+      "originals": [
+        {
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "physical_page": 5,
+          "quote": "Wolverine Total Mineral Resource estimate"
+        },
+        {
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "physical_page": 5,
+          "quote": "Total 7.3 0.96 0.85 5.68 0.12 89 70,500"
+        },
+        {
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "physical_page": 6,
+          "quote": "Total 7,300 170 420 60 280 200 40 560 120 840 170 490 70 380 50 5,700"
+        }
+      ],
+      "precision_conflicts": [
+        {
+          "species": "Dy2O3",
+          "native_tokens": [
+            [
+              "0.85",
+              "kg/t"
+            ],
+            [
+              "840",
+              "ppm"
+            ]
+          ]
+        },
+        {
+          "species": "Y2O3",
+          "native_tokens": [
+            [
+              "5.68",
+              "kg/t"
+            ],
+            [
+              "5,700",
+              "ppm"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
