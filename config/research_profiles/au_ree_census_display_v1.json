@@ -1,0 +1,39 @@
+{
+  "census_column_count": 51,
+  "inputs": {
+    "attribute_batches": {
+      "path": "census_attribute_batches_v1.json",
+      "sha256": "5503c3521c8eec1418257577fa5feb9d053cd632e02756ab58e6afc5785336f0"
+    },
+    "attribute_bindings": {
+      "path": "census_attribute_bindings_v2.json",
+      "sha256": "fd883f7dc15abd0e05bad38286bc42c9ba8932e8274a032b103aab4258ea9c58"
+    },
+    "attribute_milestones": {
+      "path": "development_milestone_bindings_v2.json",
+      "sha256": "7db4f6d8e065b95de34f1e32bd74f245214421eee9e8470436ee8e6724e95d2c"
+    },
+    "census_columns": {
+      "path": "census_columns_v1.json",
+      "sha256": "c7f4ea7bbb49191559b611f1afc88ebbac2f262680f1cfa48d3d014b4f183058"
+    },
+    "oxide_derivation_policy": {
+      "path": "census_oxide_derivations_v1.json",
+      "sha256": "418b56a5e4af35f94a3b07bbc5d2309e30a175554b5c086a64faa6ecb82ec7ef"
+    },
+    "project_registry": {
+      "path": "project_registry_2026-11-28.json",
+      "sha256": "2262fa68e84e5ddedb72103bf7191fb09da95d1d3bad56b927d73af358c71e7c"
+    },
+    "source_seed_catalog": {
+      "path": "source_seeds_2026-11-28.json",
+      "sha256": "7663487064e05992519298df832018b83b2cd6fe3baf70cda060530c9cc964ed"
+    }
+  },
+  "legacy_replay": "LEGACY_DIAGNOSTIC_ONLY",
+  "profile_id": "au-ree-2026-11-28",
+  "project_count": 93,
+  "research_cutoff": "2026-11-28",
+  "schema_version": "fresh-research-baseline-v1",
+  "timezone": "Asia/Taipei"
+}

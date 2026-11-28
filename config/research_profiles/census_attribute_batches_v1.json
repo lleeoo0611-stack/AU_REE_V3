@@ -1,0 +1,305 @@
+{
+  "schema": "native-attribute-routes-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "batches": [
+    {
+      "adapter": "JORC_CLASSIFICATION",
+      "sources": [
+        {
+          "project_id": "AU-d9fb1b1e3e2ec9fa0851",
+          "source_sha256": "40b378004d36b7b852cb7990438a126a84b0827a0ec4042ad3f7524923622f70",
+          "receipt_sha256": "341933ba78e6a6265984208863662372498f2aaa5a327ba45342db61dc55cbf5",
+          "subject": {
+            "label": "Charley Creek alluvial REE deposit",
+            "page": 1,
+            "lines": [
+              15,
+              15
+            ],
+            "alias": "Charley Creek Rare Earths Project"
+          },
+          "regions": [
+            {
+              "page": 26,
+              "lines": [
+                32,
+                33
+              ],
+              "column": 114,
+              "row_line": 32
+            }
+          ]
+        },
+        {
+          "project_id": "AU-216d0983f6892f9b58f9",
+          "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+          "receipt_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+          "subject": {
+            "label": "North Stanmore REO deposit",
+            "page": 1,
+            "lines": [
+              18,
+              20
+            ],
+            "alias": "North Stanmore"
+          },
+          "regions": [
+            {
+              "page": 129,
+              "lines": [
+                18,
+                20
+              ],
+              "column": 81,
+              "row_page": 128,
+              "row_line": 73,
+              "local_subject": "North Stanmore"
+            }
+          ]
+        },
+        {
+          "project_id": "AU-9b667066e6eb66753005",
+          "source_sha256": "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9",
+          "receipt_sha256": "4cfb9eb5aace38326d4b6bf2017fd09aac25689d818a211e01723f16be1cfd7b",
+          "subject": {
+            "label": "Cummins Range REO deposit",
+            "page": 1,
+            "lines": [
+              4,
+              4
+            ],
+            "alias": "Cummins Range"
+          },
+          "regions": [
+            {
+              "page": 30,
+              "lines": [
+                15,
+                16
+              ],
+              "column": 82,
+              "row_line": 15,
+              "local_subject": "The Cummins Range REO deposit"
+            }
+          ]
+        },
+        {
+          "project_id": "AU-524c37fc04cf47bf8dca",
+          "source_sha256": "94a57655d74ead667ce7adbbb0923b68b011641b9249992ff12a017c2e96252f",
+          "receipt_sha256": "2ce00387b5f8aed2a71fbf489ab6cf69764f5cc8324c6b0a74306bf0cdcedeae",
+          "subject": {
+            "label": "West Balranald deposit",
+            "page": 1,
+            "lines": [
+              13,
+              14
+            ],
+            "alias": "West Balranald deposit"
+          },
+          "regions": [
+            {
+              "page": 33,
+              "lines": [
+                21,
+                22
+              ],
+              "column": 131,
+              "row_line": 21,
+              "local_subject": "The West Balranald deposit"
+            }
+          ]
+        },
+        {
+          "project_id": "AU-6d807eb7caec9db0f35e",
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "receipt_sha256": "7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92",
+          "subject": {
+            "label": "Goschen Area 1 deposit",
+            "page": 1,
+            "lines": [
+              7,
+              9
+            ],
+            "alias": "Goschen Project"
+          },
+          "regions": [
+            {
+              "page": 23,
+              "lines": [
+                49,
+                52
+              ],
+              "column": 82,
+              "row_line": 49,
+              "local_subject": "Area 1 Project"
+            }
+          ]
+        },
+        {
+          "project_id": "AU-4ec1fb08563b42352d29",
+          "source_sha256": "39699576fe9ebe47225c083dc285d7a561b732ab357a9050a67472e89a5512aa",
+          "receipt_sha256": "bc2112c5df39e07161b8df0a8c7d0c6e6afe8983d6f6b1256669feb532700e2f",
+          "subject": {
+            "label": "Cowalinya Rare Earth Project",
+            "page": 1,
+            "lines": [
+              6,
+              8
+            ],
+            "alias": "Cowalinya Project"
+          },
+          "regions": [
+            {
+              "page": 44,
+              "lines": [
+                2,
+                4
+              ],
+              "column": 105,
+              "row_line": 2
+            }
+          ]
+        },
+        {
+          "project_id": "AU-b2dadf9c8046c3c68a02",
+          "source_sha256": "246dea894d0044a3ca5a35ff838389a463409dd9131ffbace4753b1e0b67240e",
+          "receipt_sha256": "5d5b84b2215fb5b32df8660dd276d3eb0b9807b89448b88fbfd2ec0ea6fe04b1",
+          "subject": {
+            "label": "Cascade REE Project",
+            "page": 1,
+            "lines": [
+              7,
+              7
+            ],
+            "alias": "Cascade REE Project"
+          },
+          "regions": [
+            {
+              "page": 23,
+              "lines": [
+                12,
+                16
+              ],
+              "column": 64,
+              "row_line": 12
+            }
+          ]
+        },
+        {
+          "project_id": "AU-176852ef1348ac10d154",
+          "source_sha256": "77097e83c9434efe3ce797b8400aa1b5159d152a66994db3425a5ad86e03f4e4",
+          "receipt_sha256": "e6d7a5a60e0f7db3458da2b590b8e05046fdeacdcf99bbf615afd866a39df029",
+          "subject": {
+            "label": "Nowie drill program",
+            "page": 28,
+            "lines": [
+              42,
+              44
+            ],
+            "alias": "Nowie drill program"
+          },
+          "regions": [
+            {
+              "page": 28,
+              "lines": [
+                42,
+                45
+              ],
+              "column": 97,
+              "row_line": 42,
+              "publication_lines": [
+                4,
+                4
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "adapter": "JORC_STUDY_STATUS",
+      "sources": [
+        {
+          "project_id": "AU-d9fb1b1e3e2ec9fa0851",
+          "source_sha256": "40b378004d36b7b852cb7990438a126a84b0827a0ec4042ad3f7524923622f70",
+          "receipt_sha256": "341933ba78e6a6265984208863662372498f2aaa5a327ba45342db61dc55cbf5",
+          "subject": {
+            "label": "Charley Creek Project",
+            "page": 1,
+            "lines": [
+              15,
+              15
+            ],
+            "alias": "Charley Creek Rare Earths Project"
+          },
+          "regions": [
+            {
+              "page": 36,
+              "lines": [
+                18,
+                21
+              ],
+              "column": 117,
+              "row_line": 18
+            }
+          ]
+        },
+        {
+          "project_id": "AU-9bd8e5ed8408cd84d876",
+          "source_sha256": "5aad631c770a3a73dc1ff86e1bd3ae97f6972700f9ca9ca018dae65895fc8075",
+          "receipt_sha256": "f8075722a2b4bfca380083f59d83e46f638bdcad17dc749a89838bdbc412cac6",
+          "subject": {
+            "label": "Browns Range Project — Wolverine scope",
+            "page": 7,
+            "lines": [
+              7,
+              8
+            ],
+            "alias": "Wolverine, forms the basis of the DFS"
+          },
+          "regions": [
+            {
+              "page": 171,
+              "lines": [
+                28,
+                30
+              ],
+              "column": 79,
+              "row_line": 28,
+              "local_subject": "Browns Range HRE Project"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "adapter": "PROJECT_HISTORY",
+      "sources": [
+        {
+          "project_id": "AU-2cfeb25aefee0c4f95fb",
+          "source_sha256": "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab",
+          "receipt_sha256": "b6818686e177845967d3311bfa5511ee62c7499036ff6767bc7e7014ac5036f2",
+          "subject": {
+            "label": "Dubbo Project",
+            "page": 1,
+            "lines": [
+              5,
+              5
+            ],
+            "alias": "Dubbo Project"
+          },
+          "regions": [
+            {
+              "page": 23,
+              "lines": [
+                16,
+                29
+              ],
+              "local_subject": "The Dubbo Project"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

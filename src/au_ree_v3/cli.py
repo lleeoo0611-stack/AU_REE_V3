@@ -98,6 +98,10 @@ def main(argv: list[str] | None = None) -> int:
     build.add_argument("--assets", type=Path, required=True)
     build.add_argument("--out", type=Path, required=True)
     build.add_argument("--code-commit", required=True)
+    display = research_commands.add_parser("build-display", help="Compile exact display-only evidence for a research candidate")
+    for argument in ("profile", "columns", "research-build", "release-root", "sources", "assets", "bindings", "out"):
+        display.add_argument(f"--{argument}", type=Path, required=True)
+    display.add_argument("--release-id", required=True)
     export_web = research_commands.add_parser("export-web", help="Export immutable candidate web data")
     for argument in ("profile", "research-build", "out"):
         export_web.add_argument(f"--{argument}", type=Path, required=True)
@@ -256,6 +260,15 @@ def _run_research(args) -> dict:
         from .technical_processing import run_technical_pilot
 
         return run_technical_pilot(args.profile, args.sources, args.assets, args.bindings, args.out, oracle=args.oracle)
+    if args.operation == "build-display":
+        from .display_package import compile_display_package, write_display_package
+
+        bundle = compile_display_package(
+            profile=args.profile, columns_path=args.columns, build_directory=args.research_build,
+            release_root=args.release_root, release_id=args.release_id, sources=args.sources,
+            assets=args.assets, bindings=args.bindings,
+        )
+        return write_display_package(bundle, args.out)
     if args.operation in {"export-web", "verify-web"}:
         return _run_web_data(args)
     if args.operation == "compare":

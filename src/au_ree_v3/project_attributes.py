@@ -8,6 +8,10 @@ import re
 
 from .contracts import ContractViolation, Entity, EvidenceAnchor, Record, Source, canonical_json
 from .contracts.temporal import TemporalDecision, evaluate_temporal
+from .attribute_batches import (
+    DEPOSIT_TYPES as NATIVE_DEPOSIT_TYPES, POLICY_SHA as NATIVE_POLICY_SHA,
+    POLICY_VERSION as NATIVE_POLICY_VERSION, NativeClaimDeclined, load_routes, native_claim_matches, read_native_claim,
+)
 from .development import SCHEMA as MILESTONES_SCHEMA, bind_native_quote, read_milestone_evidence, reported_calendar_date
 from .documents import DocumentCache, DocumentError
 from .semantics import ConceptMapping, MatchRelation, resolve_concept
@@ -46,6 +50,8 @@ _POLICY = {"policy_version": POLICY_VERSION, "purpose": _DECISION_SCOPE, "roles"
 _POLICY.update(progress_pattern=_PROGRESS.pattern, current_pattern=_CURRENT.pattern,
                tentative_pattern=_TENTATIVE.pattern)
 POLICY_SHA = sha256(canonical_json(_POLICY).encode()).hexdigest()
+_ATTRIBUTE_POLICIES = {POLICY_SHA: POLICY_VERSION, NATIVE_POLICY_SHA: NATIVE_POLICY_VERSION}
+_DEPOSIT_LABELS = {**_DEPOSIT_TERMS, **{term: labels[0] for term, labels in NATIVE_DEPOSIT_TYPES.items()}}
 
 
 def _digest(value):
@@ -92,7 +98,7 @@ class AttributeAssertion(Record):
             raise ContractViolation("Attribute assertion lacks Project or Deposit identity")
         if self.entity_kind == "PROJECT" and self.entity_id != self.project_id:
             raise ContractViolation("Project assertion entity and Project identities differ")
-        terms = _DEPOSIT_TERMS if self.attribute_kind == "DEPOSIT_TYPE" else _STAGE_TERMS
+        terms = _DEPOSIT_LABELS if self.attribute_kind == "DEPOSIT_TYPE" else _STAGE_TERMS
         if self.role not in _ROLES.get(self.attribute_kind, ()) or self.controlled_term not in terms:
             raise ContractViolation("Attribute assertion has an unsupported role or vocabulary term")
         if not all(isinstance(value, str) and value.strip() for value in (self.source_term, self.scope, self.scope_kind)):
@@ -118,7 +124,7 @@ class ValidatedAttribute(Record):
 
     def __post_init__(self):
         _sha_fields(self.assertion_id, self.policy_sha256, self.temporal_decision_id)
-        if self.policy_sha256 != POLICY_SHA or self.verdict not in {
+        if self.policy_sha256 not in _ATTRIBUTE_POLICIES or self.verdict not in {
             "VALIDATED", "CANDIDATE", "TEMPORAL_INELIGIBLE", "EVIDENCE_INSUFFICIENT", "SCIENTIFIC_CONFLICT",
         } or not self.reason:
             raise ContractViolation("Attribute assessment requires an approved policy and verdict")
@@ -145,7 +151,7 @@ class AttributeSelection(Record):
     def __post_init__(self):
         _sha_fields(self.release_id, self.assertion_id, self.validation_id, self.policy_sha256,
                     self.profile_sha256, self.source_manifest_sha256)
-        if (self.purpose != _DECISION_SCOPE or self.policy_sha256 != POLICY_SHA
+        if (self.purpose != _DECISION_SCOPE or self.policy_sha256 not in _ATTRIBUTE_POLICIES
                 or self.attribute_kind not in _ROLES or not self.project_id):
             raise ContractViolation("Attribute selection is restricted to approved Census display")
         _identity(self, "selection_id")
@@ -173,13 +179,17 @@ class AttributeEvidence:
             raise ContractViolation("Attribute assertion, evidence and validation belong to different identities")
 
 
-def _verdict(assertion, temporal, native_role_reason):
+def _verdict(assertion, temporal, native_role_reason, policy_sha=POLICY_SHA):
     if temporal.status != "ELIGIBLE":
         return {"CONFLICT": "SCIENTIFIC_CONFLICT", "INELIGIBLE": "TEMPORAL_INELIGIBLE"}.get(
             temporal.status, "EVIDENCE_INSUFFICIENT",
         ), temporal.reason
     if assertion.role not in _SUPPORTED_ROLES[assertion.attribute_kind]:
         return "CANDIDATE", native_role_reason
+    if assertion.attribute_kind == "DEPOSIT_TYPE":
+        terms = NATIVE_DEPOSIT_TYPES if policy_sha == NATIVE_POLICY_SHA else _DEPOSIT_TERMS
+        if assertion.controlled_term not in terms:
+            return "CANDIDATE", "DEPOSIT_TYPE_OUTSIDE_CENSUS_DISPLAY_POLICY"
     if assertion.attribute_kind == "DEVELOPMENT_STAGE":
         if assertion.controlled_term not in _SUPPORTED_STAGES:
             return "CANDIDATE", "STAGE_OUTSIDE_CENSUS_DISPLAY_POLICY"
@@ -189,7 +199,7 @@ def _verdict(assertion, temporal, native_role_reason):
         return "EVIDENCE_INSUFFICIENT", "NARROWER_REPORT_SCOPE_THAN_CENSUS_PROJECT"
     mapping = ConceptMapping(
         original=assertion.source_term, canonical=assertion.controlled_term, relation=MatchRelation.EXACT,
-        mapping_version=POLICY_VERSION, source_sha256=assertion.source_sha256,
+        mapping_version=_ATTRIBUTE_POLICIES[policy_sha], source_sha256=assertion.source_sha256,
         evidence_anchor_ids=assertion.evidence_anchor_ids,
         applicable_context=(("kind", assertion.attribute_kind), ("role", assertion.role),
                             ("scope_kind", assertion.scope_kind)),
@@ -237,7 +247,21 @@ def _deposit_claim(binding, edition, document, proofs, cutoff):
 
 
 def _attribute_evidence(binding, kind, entity, edition, document, proofs, cutoff):
-    if kind == "DEPOSIT_TYPE":
+    policy, scope, scope_kind = POLICY_SHA, binding.get("scope"), binding.get("scope_kind")
+    term = binding.get("term", binding.get("stage"))
+    if "adapter" in binding:
+        claim = read_native_claim(binding, edition, document)
+        policy, scope, scope_kind = NATIVE_POLICY_SHA, claim.scope, claim.scope_kind
+        term, role = claim.term, claim.role
+        reason = "SOURCE_CONFIRMED_NATIVE_ATTRIBUTE"
+        event, token, publication, anchors = claim.event_date, claim.event_token, claim.publication_date, claim.anchors
+        temporal = evaluate_temporal(
+            source_sha256=edition["sha256"], cutoff=cutoff,
+            observation_role="HISTORICAL_EVENT" if kind == "DEVELOPMENT_STAGE" else "DOCUMENT",
+            publication_date=publication, reported_publication_date=publication, event_date=event,
+            acquired_at=edition["acquired_at"], reacquired_at=edition["reacquired_at"], evidence=proofs,
+        )
+    elif kind == "DEPOSIT_TYPE":
         role, reason, event, token, publication, anchors, temporal = _deposit_claim(
             binding, edition, document, proofs, cutoff,
         )
@@ -256,13 +280,12 @@ def _attribute_evidence(binding, kind, entity, edition, document, proofs, cutoff
     assertion = AttributeAssertion(
         entity_id=entity.entity_id, entity_kind=entity.kind, project_id=entity.entity_id, attribute_kind=kind,
         source_sha256=source.sha256, source_edition_id=edition["edition_id"], source_term=anchors[0].quote,
-        controlled_term=binding["term"] if kind == "DEPOSIT_TYPE" else binding["stage"], role=role,
-        scope=binding["scope"], scope_kind=binding["scope_kind"], publication_date=publication,
+        controlled_term=term, role=role, scope=scope, scope_kind=scope_kind, publication_date=publication,
         event_date=event, event_date_token=token, evidence_anchor_ids=tuple(anchor.anchor_id for anchor in anchors),
     )
-    verdict, reason = _verdict(assertion, temporal, reason)
+    verdict, reason = _verdict(assertion, temporal, reason, policy)
     validation = ValidatedAttribute(
-        assertion_id=assertion.assertion_id, policy_sha256=POLICY_SHA, temporal_decision_id=temporal.decision_id,
+        assertion_id=assertion.assertion_id, policy_sha256=policy, temporal_decision_id=temporal.decision_id,
         temporal_status=temporal.status, verdict=verdict, reason=reason,
     )
     return AttributeEvidence(assertion, source, tuple(anchors), temporal, validation)
@@ -306,7 +329,7 @@ def _select_attributes(evidence_by_case, release, profile_sha, manifest_sha):
             continue
         case_id, evidence = min(candidates, key=lambda pair: pair[0])
         selected.append((case_id, evidence, AttributeSelection(
-            release_id=release, project_id=project, attribute_kind=kind, policy_sha256=POLICY_SHA,
+            release_id=release, project_id=project, attribute_kind=kind, policy_sha256=evidence.assessment.policy_sha256,
             assertion_id=evidence.assertion.assertion_id, validation_id=evidence.assessment.validation_id,
             profile_sha256=profile_sha, source_manifest_sha256=manifest_sha,
         )))
@@ -316,7 +339,7 @@ def _select_attributes(evidence_by_case, release, profile_sha, manifest_sha):
 def _attribute_values(assertion):
     code = assertion.controlled_term
     if assertion.attribute_kind == "DEPOSIT_TYPE":
-        return {"deposit_type_code": code, "deposit_type": _DEPOSIT_TERMS[code]}
+        return {"deposit_type_code": code, "deposit_type": _DEPOSIT_LABELS[code]}
     return {"development_stage_code": code, "development_stage_category": _STAGE_TERMS[code],
             "development_stage": f"{_STAGE_TERMS[code]}（{assertion.event_date_token} · {assertion.scope}）"}
 
@@ -324,8 +347,9 @@ def _attribute_values(assertion):
 def _project_attribute(evidence, selection, receipt_sha):
     assertion, source, temporal = evidence.assertion, evidence.source, evidence.temporal
     anchor = evidence.anchors[0]
+    policy = evidence.assessment.policy_sha256
     provenance = {
-        "evidence_type": "SOURCE_BOUND_TEXT_ATTRIBUTE", "policy_sha256": POLICY_SHA, "display_only": True,
+        "evidence_type": "SOURCE_BOUND_TEXT_ATTRIBUTE", "policy_sha256": policy, "display_only": True,
         "source_capture_sha256": receipt_sha, "source_manifest_sha256": selection.source_manifest_sha256,
         "attribute_kind": assertion.attribute_kind, "attribute_role": assertion.role,
         "publication_date": assertion.publication_date, "event_date_token": assertion.event_date_token,
@@ -339,7 +363,7 @@ def _project_attribute(evidence, selection, receipt_sha):
         "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY", "source_sha256": source.sha256,
         "source_key": source.source_key, "source_url": source.url, "anchor_id": anchor.anchor_id,
         "locator": anchor.locator, "physical_page": anchor.page, "scope": assertion.scope,
-        "rules_sha256": POLICY_SHA, "release_id": selection.release_id,
+        "rules_sha256": policy, "release_id": selection.release_id,
         "selection_id": selection.selection_id, "validation_id": evidence.assessment.validation_id,
         "temporal_decision_id": temporal.decision_id, "temporal_status": temporal.status,
         "temporal_evidence_ids": canonical_json(temporal.matching_evidence_ids),
@@ -358,13 +382,14 @@ def validate_attribute_cell(cell):
     selection = AttributeSelection.from_dict(saved["selection"])
     anchors = tuple(EvidenceAnchor.from_dict(row) for row in saved["anchors"])
     temporal = saved["temporal_decision"]
+    policy = assessment.policy_sha256
     if not anchors or len({a.anchor_id for a in anchors}) != len(anchors):
         raise ContractViolation("Census attribute lacks unique source anchors")
     _sha_fields(saved["source_capture_sha256"])
     matched = {
         "project_id": assertion.project_id, "source_sha256": assertion.source_sha256,
         "scope": assertion.scope, "value": _attribute_values(assertion).get(cell["column_id"]),
-        "rules_sha256": POLICY_SHA, "value_origin": "SOURCE_EVIDENCE", "evidence_state": ATTRIBUTE_EVIDENCE_STATE,
+        "rules_sha256": policy, "value_origin": "SOURCE_EVIDENCE", "evidence_state": ATTRIBUTE_EVIDENCE_STATE,
         "selection_id": selection.selection_id, "validation_id": assessment.validation_id,
         "release_id": selection.release_id, "anchor_id": anchors[0].anchor_id, "locator": anchors[0].locator,
         "temporal_decision_id": assessment.temporal_decision_id, "temporal_status": "ELIGIBLE",
@@ -374,7 +399,7 @@ def validate_attribute_cell(cell):
     if not (
         all(cell[key] == value for key, value in matched.items())
         and str(cell["physical_page"]) == str(anchors[0].page)
-        and saved["policy_sha256"] == POLICY_SHA
+        and saved["policy_sha256"] == policy == selection.policy_sha256
         and assertion.source_term == anchors[0].quote
         and assertion.source_sha256 == temporal["source_sha256"]
         and {anchor.anchor_id for anchor in anchors} == set(assertion.evidence_anchor_ids)
@@ -386,7 +411,8 @@ def validate_attribute_cell(cell):
             key: value for key, value in temporal.items() if key != "decision_id"
         }) and temporal["status"] == "ELIGIBLE" and temporal["matching_evidence_ids"]
         and assessment.verdict == "VALIDATED" and not cell.get("observation_id")
-        and _verdict(assertion, TemporalDecision(**temporal), "")[0] == "VALIDATED"
+        and _verdict(assertion, TemporalDecision(**temporal), "", policy)[0] == "VALIDATED"
+        and (policy != NATIVE_POLICY_SHA or native_claim_matches(assertion, anchors))
         and cell.get("comparable") in (None, "", "NO")
         and saved["source_manifest_sha256"] == selection.source_manifest_sha256
         and saved["attribute_kind"] == assertion.attribute_kind and saved["attribute_role"] == assertion.role
@@ -412,11 +438,17 @@ def review_attributes(settings, registry, manifest, manifest_sha, source_receipt
     content = ContentStore(assets)
     cache = DocumentCache()
     documents, proofs_by_receipt, results, evidence_by_case, captures = {}, {}, [], {}, {}
-    for kind, binding in _eligible_cases(spec, milestones):
+    cases = _eligible_cases(spec, milestones)
+    batch_data = settings.attribute_batches_path.read_bytes() if settings.attribute_batches_path else None
+    if batch_data:
+        cases += load_routes(batch_data, manifest_sha)
+    for kind, binding in cases:
         case_id, project, digest, capture = (binding[key] for key in
                                              ("case_id", "project_id", "source_sha256", "receipt_sha256"))
         result = {"case_id": case_id, "project_id": project, "attribute_kind": kind, "source_sha256": digest,
                   "capture_sha256": capture, "page": binding["page"], "selection": None}
+        if "adapter" in binding:
+            result["adapter"] = binding["adapter"]
         if project not in projects:
             raise ContractViolation("Attribute binding Project ID lies outside the pinned cohort")
         try:
@@ -433,6 +465,9 @@ def review_attributes(settings, registry, manifest, manifest_sha, source_receipt
                             native_id=project, name=projects[project].name)
             item = _attribute_evidence(binding, kind, entity, edition, documents[digest], proofs_by_receipt[capture],
                                        settings.research_cutoff.isoformat())
+        except NativeClaimDeclined as error:
+            result.update(verdict=error.outcome, reason=str(error), review_source_url=edition["url"],
+                          review_evidence=[anchor.to_dict() for anchor in error.anchors])
         except DocumentError as error:
             result.update(verdict=error.outcome, reason=str(error))
         except OSError:
@@ -464,4 +499,6 @@ def review_attributes(settings, registry, manifest, manifest_sha, source_receipt
         "roles": dict(Counter(row["assertion"]["role"] for row in results if "assertion" in row)),
         "selected_attributes": len(selected), "display_cells": len(cells), "mcda_inputs_added": 0,
     }
+    if batch_data:
+        receipt.update(batch_routes_sha256=sha256(batch_data).hexdigest(), batch_policy_sha256=NATIVE_POLICY_SHA)
     return cells, receipt

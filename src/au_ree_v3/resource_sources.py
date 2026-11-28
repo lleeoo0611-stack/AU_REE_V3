@@ -78,21 +78,26 @@ def plan_sources(bindings: Path, receipt: Path, database: Path, out: Path) -> So
     spec = json.loads(bindings.read_bytes())
     manifest_bytes = receipt.read_bytes()
     manifest = json.loads(manifest_bytes)
+    if database.resolve() in {(out / name).resolve() for name in ("extraction.json", "observations.jsonl")}:
+        raise ValueError("Database path overlaps extraction outputs")
+    return plan_source_editions(spec, manifest, sha256(manifest_bytes).hexdigest())
+
+
+def plan_source_editions(spec: dict, manifest: dict, manifest_sha: str) -> SourcePlan:
+    """Bind an already read resource contract to its exact captured editions."""
     if spec["schema"] != SCHEMA or manifest["schema"] != ACQUISITION_SCHEMA:
         raise ValueError("Unsupported extraction bindings or acquisition manifest")
     if any(spec[key] != manifest[key] for key in ("profile_id", "cutoff", "timezone")):
         raise ValueError("The extraction and acquisition research profiles disagree")
     if not spec["bindings"]:
         raise ValueError("No reviewed structure bindings")
-    if database.resolve() in {(out / name).resolve() for name in ("extraction.json", "observations.jsonl")}:
-        raise ValueError("Database path overlaps extraction outputs")
     if len({row["case_id"] for row in spec["bindings"]}) != len(spec["bindings"]):
         raise ValueError("Extraction binding case IDs must be unique")
     native = [binding for binding in spec["bindings"] if binding["strategy"] == NATIVE_STRATEGY]
     for binding in native:
         _validate_native_binding(binding)
     rules_sha = digest([RESOURCE_RULE, CENSUS_RESOURCE_RULE, spec] if native else [RESOURCE_RULE, spec])
-    return SourcePlan(spec, sha256(manifest_bytes).hexdigest(), rules_sha, native, matched_editions(spec, manifest))
+    return SourcePlan(spec, manifest_sha, rules_sha, native, matched_editions(spec, manifest))
 
 
 def _last_pages(matches: list[tuple[dict, dict, Entity]]) -> dict[str, int]:

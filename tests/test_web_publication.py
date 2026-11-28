@@ -249,7 +249,10 @@ class RealResearchWebTests(unittest.TestCase):
             reference_rows = [row for row in rows if row["value_origin"] == "EVIDENCE_REFERENCE"]
             attributes = [row for row in rows if row.get("evidence_state") == "VALIDATED_DESCRIPTIVE"]
             attribute_counts = {None: 0, "census_attribute_bindings_v1.json": 5, "census_attribute_bindings_v2.json": 11}
-            self.assertEqual(len(attributes), attribute_counts[attribute_bindings.name if attribute_bindings else None])
+            expected_attributes = attribute_counts[attribute_bindings.name if attribute_bindings else None]
+            if settings.attribute_batches_path:
+                expected_attributes += 16
+            self.assertEqual(len(attributes), expected_attributes)
             for row in attributes:
                 cell = projects[row["project_id"]][columns[row["column"]]]
                 anchor = evidence[cell["lineage_id"]]
