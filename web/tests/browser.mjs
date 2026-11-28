@@ -401,6 +401,34 @@ try {
   }
   metrics.search_filter_sort_columns_evidence="PASS";
   if (extended) await checkDisplay(page);
+  if (flags.includes("--census-fill")) {
+    assert(!synthetic, "Census Fill regressions require the exact original candidate and baseline");
+    const project = "AU-9bd8e5ed8408cd84d876", heading = "四項磁性元素皆公布";
+    const column = newCensus.columns.findIndex(entry => entry.id === heading);
+    const current = newCensus.projects.find(entry => entry.id === project).cells[column];
+    const oldCensus = JSON.parse(served.get(art(priorId, "census.json")));
+    assert.equal(oldCensus.projects.find(entry => entry.id === project).cells[column].state, "UNKNOWN");
+    assert.equal(current.value, "是");
+    assert.equal(current.origin, "EVIDENCE_REFERENCE");
+    const entries = JSON.parse(served.get(exactEvidencePath)).entries;
+    const evidence = entries[current.lineage_id];
+    assert.equal(evidence.evidence_state, "DESCRIPTIVE_ONLY");
+    assert.equal(evidence.input_observation_ids.length, 4);
+    assert.deepEqual(evidence.input_observation_ids.map(id => entries[`observation:${id}`].source_column).sort(),
+      ["Dy2O3", "Nd2O3", "Pr6O11", "Tb4O7"]);
+    await page.click("#columns summary");
+    await page.getByRole("button", {name: "顯示全部 51 欄"}).click();
+    await page.fill("#search", project);
+    await page.locator("#census-table tbody").getByRole("button", {name: new RegExp(`^${heading}.*是`)}).click();
+    const dialog = page.locator("#evidence-detail");
+    assert.match(await dialog.textContent(), /840 ppm.*p\. 6.*0\.85 kg\/t.*p\. 5/);
+    assert.match(await dialog.locator("a").getAttribute("href"), /#page=6$/);
+    await page.keyboard.press("Escape");
+    await page.fill("#search", "");
+    await page.getByRole("button", {name: "恢復預設欄位"}).click();
+    await page.click("#columns summary");
+    metrics.scoped_magnet_oxide_disclosure = "PASS";
+  }
   if (flags.includes("--stage3")) {
     assert(!synthetic, "Stage 3 regressions require exact archived candidate data");
     const expectedProducts = [

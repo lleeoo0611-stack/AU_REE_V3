@@ -1,0 +1,67 @@
+{
+  "schema": "census-applicability-oracle-v1",
+  "source_manifest_sha256": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a",
+  "research_cutoff": "2026-11-28",
+  "cases": [
+    {
+      "case_id": "cape-issuer-report-date",
+      "project_ids": ["AU-41ee0148c804293cfc39"],
+      "reviewed_assertion": "AFFIRMATIVE_AT_SOURCE_DATE",
+      "date": "2024-03-21",
+      "reason": "REPORT_DATED_SCOPE_ONLY",
+      "documents": [{"source_sha256": "eba3ca8ecb4a5a29f0db08fd4432585f3ea31bd34ec1950ea8e06735c90ec24c", "capture_sha256": "cac7b485ef78c45bd44236b9fc7b84162fe50d729058e163ffa070b9b21f533e", "witnesses": [[1, "Project within the New Goldfield tenement, EPM 26646."], [10, "There are no reported Mineral Resources or Reserves - the sample results"]]}]
+    },
+    {
+      "case_id": "rankin-dome-issuer-report-date",
+      "project_ids": ["AU-9d967ecaac6e02fc76a5"],
+      "reviewed_assertion": "AFFIRMATIVE_AT_SOURCE_DATE",
+      "date": "2023-12-04",
+      "reason": "REPORT_DATED_SCOPE_ONLY",
+      "documents": [{"source_sha256": "f6f127c62e9c4ddcab67c5f01552f21cc9ee1c17095451b963e7b66e757981b3", "capture_sha256": "c3c0a32da2b0d68fb5b8b29a8c438e9a9d56d22532ac2e24cea132572034b568", "witnesses": [[1, "4 December 2023"], [12, "No mineral resource has been estimated as current"], [12, "program is at an early exploration stage"]]}]
+    },
+    {
+      "case_id": "southern-cross-report-and-tenement-relinquishment",
+      "project_ids": ["AU-d99cf357d160df73387c"],
+      "reviewed_assertion": "AFFIRMATIVE_AT_SOURCE_DATE",
+      "date": "2023-08-31",
+      "reason": "LATER_TENEMENT_RELINQUISHMENT_DOES_NOT_VERIFY_ESTIMATE_CHRONOLOGY",
+      "documents": [
+        {"source_sha256": "aeb46f66fa72d0bb9003a61b01356fc65151db75185f91d980adcd86b21dbbf5", "capture_sha256": "03b8d41f4fd50db2e5b28c89c2c67f84f1dffb728d7713292c651ed3f10d1a79", "witnesses": [[52, "At 31 August 2023, the Company had no reported Mineral Resources or Ore Reserves for its exploration projects."], [52, "Southern Cross Li-REE Project, E77/3009 100% Granted"]]},
+        {"source_sha256": "dd29b311224f3e25692592f23d7efedec24b356fccc8513a7022f9534dfad1b1", "capture_sha256": "2cb0c64fa3a99b9bb52074742d1b7d83867fe46a4beb62dcfc2c4a87ea16845a", "witnesses": [[4, "the Company relinquished its interest in non-core tenements E77/3009, E77/3010, E77/3011 and E77/3012 (Southern Cross project)"]]}
+      ]
+    },
+    {
+      "case_id": "north-stanmore-target-1-only",
+      "project_ids": ["AU-216d0983f6892f9b58f9"],
+      "reviewed_assertion": "AFFIRMATIVE_FOR_DIFFERENT_SCOPE",
+      "date": "2026-08-18",
+      "reason": "TARGET_SUBAREA_AND_PROJECT_RESOURCE_COEXIST",
+      "resource_present": true,
+      "documents": [{"source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491", "capture_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322", "witnesses": [[36, "There is no existing Mineral Resource within the Target 1 area."], [97, "Total 278.80 482.64 171.40 311.24 7.04"]]}]
+    },
+    {
+      "case_id": "pomme-disclaimer-in-australian-project-source",
+      "project_ids": ["AU-557f0c9ad81bf84bbb6d", "AU-ee34781b030807146e64"],
+      "reviewed_assertion": "AFFIRMATIVE_FOR_DIFFERENT_SCOPE",
+      "date": "2023-04-28",
+      "reason": "CANADIAN_POMME_PROJECT_IS_THE_REFERENT",
+      "documents": [{"source_sha256": "c70e72f9257f4eef7f8c9254b5be1d29cafe019ce89d6c11766c3bc567254ae0", "capture_sha256": "a2faad78d23d107b598c09f682ceb9a4d6775a8a1d621c3cc3ee2c3d65716bd4", "witnesses": [[7, "The Pomme project vendor, Geomega Resources Inc. (Geomega), is a listed Canadian"], [7, "Investors are cautioned that the Project has no reported mineral resources or ore reserves and that the proximity"]]}]
+    },
+    {
+      "case_id": "durack-document-beachcomber-disclaimer",
+      "project_ids": ["AU-75fe0f1a81005bd19586"],
+      "reviewed_assertion": "AFFIRMATIVE_FOR_DIFFERENT_SCOPE",
+      "date": "2026-07-16",
+      "reason": "BEACHCOMBER_GOLD_SCOPE_IS_THE_REFERENT",
+      "documents": [{"source_sha256": "5ebb04f84564bebc1f8e96073fe45b1e3792b6b6115414c28be94d4886bcea28", "capture_sha256": "5ef61f2aebfd75c0e74deb6b549026b68f9d5e8945e56c8c17ed0f3c14802e5a", "witnesses": [[6, "no Mineral Resource has yet been estimated at Beachcomber"], [6, "DURACK REE–TI–ZR PROJECT (WESTERN AUSTRALIA)"]]}]
+    },
+    {
+      "case_id": "barkly-document-buntine-disclaimer",
+      "project_ids": ["AU-ad64122c217f0dbfabc8"],
+      "reviewed_assertion": "AFFIRMATIVE_FOR_DIFFERENT_SCOPE",
+      "date": "2026-01-28",
+      "reason": "BUNTINE_PROJECT_IS_THE_REFERENT",
+      "documents": [{"source_sha256": "d77611858d4cc78ae86f757c789364934345f5dcf0d28a42ac7674fb75fc632e", "capture_sha256": "7a1b7b30c3bbaa04597541c1d64b95911b882ff5b93765e4d3f052f2943d3072", "witnesses": [[124, "No mineral resource estimates have been completed for the Buntine Project, which is considered an Early-Stage Exploration"]]}]
+    }
+  ]
+}
