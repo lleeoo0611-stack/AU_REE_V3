@@ -2,15 +2,21 @@
 
 import argparse
 from collections import Counter
-from hashlib import sha256
+from contextlib import closing
+from hashlib import file_digest, sha256
 import json
+import math
 from pathlib import Path
+import re
 import resource
+import sqlite3
+import sys
 from time import perf_counter
+from zoneinfo import ZoneInfo
 
 from au_ree_v3.candidate_search import search_candidates
 from au_ree_v3.documents import DocumentCache
-from au_ree_v3.sources import ContentStore
+from au_ree_v3.sources import ContentStore, validate_edition_proofs
 
 
 def _measures(counts):
@@ -127,5 +133,278 @@ def main():
         stream.write("\n")
 
 
+_NUMERIC_TOKEN = re.compile(r"(?<![A-Za-z0-9])\d+(?:[,.]\d+)*(?![A-Za-z0-9])")
+_RESOURCE_HEADER = re.compile(r"\b(?:mineral resources?|resource estimate|MRE)\b", re.I)
+_REE_HEADER = re.compile(r"\b(?:TREO|REO|REE|rare earths?|Nd2O3)\b", re.I)
+_EXCLUDED_HEADER = re.compile(r"\b(?:ore reserves?|exploration targets?|drill(?:ing)? intercepts?|rock chips?|scandium)\b", re.I)
+_RESOURCE_FIELDS = {"ore_mt", "grade", "contained_treo_kt"}
+
+
+def _checked_json(path, pin):
+    payload = Path(path).read_bytes()
+    if sha256(payload).hexdigest() != pin:
+        raise ValueError("Frozen input SHA differs for " + Path(path).name)
+    return json.loads(payload)
+
+
+def _fold(text):
+    return " ".join(text.split())
+
+
+def _insert_row(db, split, origin, family, issuer, project, source, page, line, label, context, row):
+    if type(label) is not bool:
+        raise ValueError("An original row requires an explicit reviewed label")
+    db.execute("INSERT INTO nlp_rows VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+               (split, origin, family, issuer, project, source, page, line, label, context, row))
+
+
+def _archive_training(db, manifest, bindings, cached, assets, manifest_sha, bound_sha):
+    from au_ree_v3.resource_context import bind_context
+    from au_ree_v3.resource_sources import ResourceSourceReader, plan_source_editions
+
+    joined = db.execute("""SELECT r.payload,a.payload,v.payload,t.payload FROM raw_observations r
+        JOIN anchors a USING(anchor_id) JOIN candidates c USING(raw_record_id) JOIN validations v USING(candidate_id)
+        JOIN validation_anchors e ON e.validation_id=v.validation_id AND e.anchor_id=a.anchor_id
+        JOIN temporal_decisions t ON t.validation_id=v.validation_id AND t.raw_record_id=r.raw_record_id""")
+    originals = {raw["observation_id"]: (raw, anchor, val, time) for raw, anchor, val, time in
+                 (tuple(map(json.loads, row)) for row in joined)}
+    plan = plan_source_editions(bindings, manifest, manifest_sha)
+    reader = ResourceSourceReader(assets, plan, cached)
+    rebound = set()
+    used_rows = set()
+    nonunique = set()
+    for binding, edition, project in plan.matches:
+        case, capture = reader.read(binding, edition, project)
+        if capture is None or case["proof_status"] != "EXACT_CAPTURE_PROOF":
+            raise ValueError("Archived training source could not be read with exact capture proof")
+        statements = bind_context(binding, project, capture, case, cutoff=plan.cutoff, rules_sha=bound_sha)
+        for cell in (cell for statement in statements for cell in statement.measurements):
+            identity = cell.raw.observation_id
+            raw, anchor, validation, decision = originals[identity]
+            if (anchor["quote"], anchor["page"], raw["raw_value"], raw["raw_unit"]) != (
+                cell.anchor.quote, cell.anchor.page, cell.raw.raw_value, cell.raw.raw_unit,
+            ):
+                raise ValueError("Archived observation or anchor differs from its original binding")
+            rebound.add(identity)
+            if (raw["variable"] not in _RESOURCE_FIELDS or validation["outcome"] != "VALIDATED"
+                    or decision["status"] != "ELIGIBLE" or not anchor["table"] or anchor["table"] == "Narrative"):
+                continue
+            page, source = anchor["page"], capture.source.sha256
+            lines = capture.pdf.pages[page-1].splitlines()
+            matches = [i for i, line in enumerate(lines, 1) if _fold(line) == _fold(anchor["quote"])]
+            if len(matches) != 1:
+                nonunique.add((source, page, anchor["quote"]))
+                continue
+            line, = matches
+            if (source, page, line) in used_rows or len(_NUMERIC_TOKEN.findall(lines[line-1])) < 2:
+                continue
+            used_rows.add((source, page, line))
+            issuer = _issuer(edition.get("publisher", None) or "")
+            _insert_row(db, "train", "archive", binding["case_id"], issuer, project.entity_id, source, page, line, True,
+                        "\n".join(lines[max(0, line-12):line-1]), lines[line-1])
+    if rebound != originals.keys():
+        raise ValueError("Archived observations did not all bind to the identical source records")
+    return {
+        "joined_anchor_records": len(originals), "exact_native_rebinds": len(rebound),
+        "pdf_editions": len(reader.documents), "physical_pages": sum(len(pdf.pages) for pdf in reader.documents.values()),
+        "nonunique_native_quotes": len(nonunique),
+    }
+
+
+def _issuer(name):
+    name = " ".join(re.findall(r"[a-z0-9]+", name.casefold()))
+    return "" if name in {"asx", "australian securities exchange", "london stock exchange"} else name
+
+
+def _row_panel(db, panel, split, origin, captures, cas, cache, timezone, documents):
+    for item in panel["cases"]:
+        edition = captures[item.get("capture_receipt_sha256") or item["capture_sha256"]]
+        project, source = item["project_id"], item["source_sha256"]
+        if ((edition["sha256"], edition["edition_id"], edition["kind"]) != (source, item["edition_id"], "pdf")
+                or project not in edition["project_ids"] or edition["temporal_decision"]["status"] != "ELIGIBLE"
+                or not validate_edition_proofs(cas, edition, timezone)):
+            raise ValueError("Original annotation capture differs from verified edition/Project")
+        oxide_panel = origin == "assay"
+        probes = item["positive_pages"] if oxide_panel else item["probes"]
+        if not probes:
+            continue
+        page_key = "page" if oxide_panel else "physical_page"
+        view = cache.pdf(cas.read(source), source, max(probe[page_key] for probe in probes))
+        documents[source] = view
+        for probe in probes:
+            page = probe[page_key]
+            if oxide_panel:
+                header, line = probe["header_line"], probe["example_row_line"]
+                original = view.locate(page, line=line).text
+                if original != probe["example_row_text"] or view.locate(page, line=header).text != probe["header_text"]:
+                    raise ValueError("Original assay annotation differs from its native locator")
+                context = "\n".join(view.pages[page-1].splitlines()[max(0, header-5):line-1])
+                label = False
+            else:
+                row = probe["row"]
+                line, original = row["line"], row["positioned_text"]
+                anchors = [probe["caption"], *probe["headers"]]
+                if any(view.locate(page, line=a["line"]).text != a["positioned_text"] for a in [row, *anchors]):
+                    raise ValueError("Original resource row annotation differs from its native locator")
+                context = "\n".join(a["positioned_text"] for a in anchors)
+                label = probe["target_resource_row"]
+            family = item.get("report_family") or item["family"]
+            issuer = _issuer(item.get("issuer") or family.split("/")[0])
+            _insert_row(db, split, origin, family, issuer, project, source, page, line, label, context, original)
+
+
+def _features(row):
+    return _NUMERIC_TOKEN.sub(" NUM ", _fold(row["context"]) + " | " + _fold(row["row_text"])).casefold()
+
+
+def _ngram_counts(text):
+    return Counter(text[start:start+size] for size in (3, 4, 5) for start in range(len(text)-size+1))
+
+
+def _sigmoid(value):
+    return 1 / (1 + math.exp(-value))
+
+
+def _learn_probabilities(training, held):
+    """Fit deterministic sparse L2 logistic regression using only training text."""
+    train_counts = [_ngram_counts(_features(row)) for row in training]
+    document_counts = Counter(feature for counts in train_counts for feature in counts)
+    n = len(train_counts)
+    idf = {feature: 1 + math.log((1 + n) / (1 + count)) for feature, count in document_counts.items() if count >= 2}
+    targets = Counter(row["label"] for row in training)
+    if set(targets) != {0, 1} or not idf:
+        raise ValueError("Training requires reviewed positive and negative examples and original vocabulary")
+
+    def encode(counts):
+        vector = {feature: (1 + math.log(counts[feature])) * idf[feature] for feature in sorted(counts.keys() & idf.keys())}
+        norm = math.sqrt(sum(value * value for value in vector.values()))
+        return {feature: value / norm for feature, value in vector.items()}
+
+    vectors = [(encode(counts), row["label"]) for counts, row in zip(train_counts, training, strict=True)]
+    weights = dict.fromkeys(idf, 0.0)
+    bias = 0.0
+    step = 1 / (1 + n / 2)
+    for _ in range(150):
+        gradient = weights.copy()
+        offset = bias
+        for vector, label in vectors:
+            prediction = _sigmoid(bias + sum(weights[key] * val for key, val in vector.items()))
+            error = (prediction - label) * n / (2 * targets[label])
+            offset += error
+            for key, val in vector.items():
+                gradient[key] += error * val
+        weights = {key: weights[key] - step * delta for key, delta in gradient.items()}
+        bias -= step * offset
+    held_vectors = (encode(_ngram_counts(_features(row))) for row in held)
+    return [_sigmoid(bias + sum(weights[key] * val for key, val in vector.items())) for vector in held_vectors], len(idf)
+
+
+def _classification_metrics(rows, predictions):
+    counts = Counter()
+    for row, label in zip(rows, predictions, strict=True):
+        counts[("T" if row["label"] == label else "F") + ("P" if label else "N")] += 1
+    tp, fp, fn = (counts[key] for key in ("TP", "FP", "FN"))
+    return {**_measures(counts), "f1": 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else "UNMEASURED"}
+
+
+def _keyword_row(row):
+    context = row["context"]
+    return bool(_RESOURCE_HEADER.search(context) and _REE_HEADER.search(context) and not _EXCLUDED_HEADER.search(context)
+                and len(_NUMERIC_TOKEN.findall(row["row_text"])) >= 2)
+
+
+def _dataset(args, db):
+    cache = DocumentCache()
+    manifest = _checked_json(*args.manifest)
+    bindings = _checked_json(*args.bindings)
+    proof = _archive_training(db, manifest, bindings, cache, args.store, args.manifest[1], args.bindings[1])
+    captures = {row["receipt_sha256"]: row for row in manifest["editions"]}
+    cas, timezone, documents = ContentStore(args.store), ZoneInfo(manifest["timezone"]), {}
+    panels = [("train", "annotations", args.train_rows), ("train", "assay", args.assay_negatives)]
+    panels.extend(("held", f"holdout_{i}", item) for i, item in enumerate(args.holdout, 1))
+    for split, origin, reference in panels:
+        panel = _checked_json(*reference)
+        _row_panel(db, panel, split, origin, captures, cas, cache, timezone, documents)
+    table = db.execute("SELECT * FROM nlp_rows ORDER BY split,origin,family,source,page,line").fetchall()
+    return table, proof, documents
+
+
+def _grouped_report(args):
+    from au_ree_v3.native_table_discovery import discover_page_rows
+
+    begin = perf_counter()
+    archive, pin = args.archive_sqlite
+    archive = Path(archive).resolve()
+    with archive.open("rb") as stream:
+        if file_digest(stream, "sha256").hexdigest() != pin:
+            raise ValueError("Archived SQLite SHA differs")
+    with closing(sqlite3.connect(archive.as_uri() + "?mode=ro&immutable=1", uri=True)) as disk, closing(
+        sqlite3.connect(":memory:")
+    ) as db:
+        disk.backup(db)
+        db.execute("""CREATE TEMP TABLE nlp_rows(split TEXT, origin TEXT, family TEXT, issuer TEXT, project TEXT, source TEXT,
+                      page INTEGER, line INTEGER, label INTEGER, context TEXT, row_text TEXT, UNIQUE(source,page,line))""")
+        db.row_factory = sqlite3.Row
+        rows, proof, documents = _dataset(args, db)
+    training, held = ([row for row in rows if row["split"] == phase] for phase in ("train", "held"))
+    for key in ("family", "issuer", "project", "source"):
+        if ({row[key] for row in training} - {""}) & ({row[key] for row in held} - {""}):
+            raise ValueError("Train/holdout leakage by " + key)
+    if not training or {row["label"] for row in held} != {0, 1} or {_features(r) for r in training} & {_features(r) for r in held}:
+        raise ValueError("Missing reviewed positive/negative rows or duplicate model inputs across the split")
+    loaded = perf_counter()
+    probabilities, vocabulary = _learn_probabilities(training, held)
+    fitted = perf_counter()
+    locator = {(source, page): {entry.row_line for entry in discover_page_rows(documents[source], page=page)}
+               for source, page in {(r["source"], r["page"]) for r in held}}
+    metrics = {}
+    for cohort in sorted({row["origin"] for row in held}) + ["all"]:
+        panel = [(r, p) for r, p in zip(held, probabilities, strict=True) if cohort == "all" or r["origin"] == cohort]
+        records, scores = zip(*panel, strict=True)
+        metrics[cohort] = {
+            "rows": len(records), "groups": len({r["family"] for r in records}),
+            "model": _classification_metrics(records, [p >= .5 for p in scores]),
+            "lexical_rule": _classification_metrics(records, [_keyword_row(r) for r in records]),
+            "automatic_native_locator": _classification_metrics(
+                records, [r["line"] in locator[r["source"], r["page"]] for r in records]),
+            "model_log_loss": -sum(math.log(p if r["label"] else 1 - p)
+                                   for r, p in panel) / len(panel),
+        }
+    model, base = (metrics["all"][key] for key in ("model", "lexical_rule"))
+    qualifies = all(isinstance(model[key], float) and isinstance(base[key], float) and model[key] >= base[key]
+                    for key in ("precision", "recall"))
+    return {
+        "schema": "grouped-resource-row-nlp-evaluation-v1", "status": "PASS", "code_commit": args.code_commit,
+        "input_sha256": {"source_manifest": args.manifest[1], "sqlite": pin, "bindings": args.bindings[1],
+                         "training_panels": [args.train_rows[1], args.assay_negatives[1]],
+                         "holdout_panels": [row[1] for row in args.holdout]},
+        "training": {"rows": len(training), "families": len({r["family"] for r in training}),
+                     "positive": sum(row["label"] for row in training), "by_origin": dict(Counter(r["origin"] for r in training))},
+        "evidence": proof,
+        "dataset_sha256": sha256(json.dumps([list(row) for row in rows], ensure_ascii=False, separators=(",", ":")).encode()).hexdigest(),
+        "model": {"method": "stdlib character TF-IDF (3–5) class-balanced L2 logistic regression", "vocabulary": vocabulary,
+                  "iterations": 150, "threshold": 0.5},
+        "holdout": metrics, "formal_admission": "UNMEASURED", "scientific_admissions": 0,
+        "candidate_use_gate": {"status": "PASS" if qualifies else "FAIL",
+                               "reason": None if qualifies else "HYPOTHESIS_NOT_SUPPORTED",
+                               "criterion": "Exact original and archive proof, holdout precision and recall at least the lexical baseline"},
+        "scope": "Classification on located review rows. Automatic locator is reported separately. No model/row write or formal release use.",
+        "timing_seconds": {"read_and_verify": loaded-begin, "fit_and_predict": fitted-loaded, "total": perf_counter()-begin},
+    }
+
+
+def grouped_nlp(argv):
+    parser = argparse.ArgumentParser(description="Evaluate a memory-only resource-row classifier on frozen report families.")
+    parser.add_argument("--store", required=True, type=Path)
+    parser.add_argument("--code-commit", required=True)
+    for argument in ("manifest", "bindings", "archive-sqlite", "train-rows", "assay-negatives"):
+        parser.add_argument(f"--{argument}", required=True, nargs=2, metavar=("PATH", "SHA256"))
+    parser.add_argument("--holdout", required=True, action="append", nargs=2, metavar=("PATH", "SHA256"))
+    print(json.dumps(_grouped_report(parser.parse_args(argv)), sort_keys=True, indent=2))
+
+
 if __name__ == "__main__":
-    main()
+    if sys.argv[1:2] == ["grouped-nlp"]:
+        grouped_nlp(sys.argv[2:])
+    else:
+        main()
