@@ -1,0 +1,841 @@
+{
+  "baseline_code_commit": "a2e77572fe67d8421c217deeb2e32cb16b9a85d2",
+  "build_and_web": {
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "browser": {
+      "chromium": "156.0.8078.79",
+      "corpus": "EXACT_RESEARCH_PREVIEWS",
+      "metrics": {
+        "browser_history_load_wall_ms": 253,
+        "browser_js_heap_used_bytes": 8496908,
+        "browser_load_census_wall_ms": 438,
+        "formal_pointer_rejects_candidate": "PASS",
+        "history_csv_update_link": "PASS",
+        "map_ree_mcda_language": "PASS",
+        "mixed_cache_missing_atomic": "PASS",
+        "mobile": "PASS",
+        "no_formal_pointer": "PASS",
+        "rehashed_unqualified_pin_rank_lineage": "PASS",
+        "search_filter_sort_columns_evidence": "PASS",
+        "xss_and_source_link": "PASS"
+      },
+      "runtime": "v24.22.3",
+      "status": "PASS",
+      "versions": [
+        "12c0c26bd5b143a834f0226623162e2f061a431407c8cceb4dad50485d0055ef",
+        "dc5ba57911e6975a0dc60a35258fdcd3485db3fcd3dc2799915d54b7fcc9d19c"
+      ]
+    },
+    "candidate_id": "dc5ba57911e6975a0dc60a35258fdcd3485db3fcd3dc2799915d54b7fcc9d19c"
+  },
+  "discovery": {
+    "candidate_only": true,
+    "capture_profile": {
+      "cutoff": "2026-11-28",
+      "profile_id": "au-ree-2026-11-28",
+      "timezone": "Asia/Taipei"
+    },
+    "corpus": {
+      "by_kind": {
+        "html": 1,
+        "pdf": 141,
+        "zip": 2
+      },
+      "exact_cas": 144,
+      "foreign_key_errors": 0,
+      "index_pages": 7048,
+      "index_spans": 57521,
+      "project_count": 93,
+      "source_project_links": 165,
+      "sqlite_integrity": "ok"
+    },
+    "digests": {
+      "legacy_value_leads.jsonl": "6fd1f511e01db9a21f5e3a7ee0472918efc223426d3678597f48b8526e8d7f2d",
+      "legacy_value_recovery_receipt.json": "eb6bea9981a824ba5977b0a8d6f67bc31543e3a0b0f88a89e32220cee7e5ad38",
+      "source_project_work_queue.json": "2b3f9b23b603b57f00b3d0fc965fbf48bb26025431e6496eda0ccefdf90c8538"
+    },
+    "discovery_receipt": {
+      "candidate_only": true,
+      "context_page_budget": 32,
+      "formal_scientific_values_added": 0,
+      "independent_source_validation": "NOT_RUN",
+      "index_schema": "candidate-evidence-index-v1",
+      "leads_sha256": "6fd1f511e01db9a21f5e3a7ee0472918efc223426d3678597f48b8526e8d7f2d",
+      "notes": "Page budgets apply per historical Census position; grouped work items keep the union. Legacy numbers, locator and scope text are excluded. Independently verify the manifest, source membership and original bytes before extracting.",
+      "numeric_value_hints": 424,
+      "project_cohort": 93,
+      "schema": "v2-resource-value-rediscovery-v1",
+      "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+      "status": "PASS",
+      "statuses": {
+        "SOURCE_AND_LEGACY_PAGES_LOCATED": 389,
+        "SOURCE_EDITION_NOT_IN_V3": 35
+      },
+      "unique_eligible_source_sha": 36,
+      "unique_source_project_work_items": 37,
+      "v2_field_provenance_sha256": "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d",
+      "v2_ref": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+      "v3_candidate_index_sha256": "649a47316cfc1c89d6952a7f30f6612517d74ecae23ed446c0b415b6ff88d1ed",
+      "value_page_budget": 24,
+      "work_queue_sha256": "2b3f9b23b603b57f00b3d0fc965fbf48bb26025431e6496eda0ccefdf90c8538"
+    },
+    "formal_validation": "NOT_RUN_BY_DISCOVERY",
+    "legacy_targeted_project_count": 38,
+    "missing_exact_source_editions": {
+      "impacted_project_counts": {
+        "AU-0098e17a63e7c05c213f": 3,
+        "AU-574465211976ec57b1ef": 18,
+        "AU-d0ce731e1d8198ffaf58": 7,
+        "AU-ee5ca893d12883df35f1": 7
+      },
+      "impacted_quantity_counts": {
+        "OXIDE": 23,
+        "RESOURCE": 12
+      },
+      "sha256": [
+        "428c8f759ec2f4dc393177f0fccce12cc96c9b1359638d003f7ea30b6d388df7",
+        "73936d124c5ce52038f968db521713ba86e72b92c847fb391254ebc47c0f0d51",
+        "bb46f35ad584143bdf7915b53b84c7ff55b6e8dc2aa23bab52f45eb0da057726",
+        "e41fa365bd85fe16c468809804da59a3918326cd9990997e0c9ce8535b5e0950"
+      ]
+    },
+    "over_budget": {
+      "context": 87,
+      "value": 221
+    },
+    "planned_review_pages": {
+      "context": {
+        "project_source_page": 693,
+        "source_page": 687
+      },
+      "seed": {
+        "project_source_page": 47,
+        "source_page": 46
+      },
+      "union": {
+        "project_source_page": 1012,
+        "source_page": 1002
+      },
+      "value": {
+        "project_source_page": 709,
+        "source_page": 701
+      }
+    },
+    "python": "3.12.14",
+    "queue_project_count": 35,
+    "replay_byte_identical": true,
+    "reverification_elapsed_seconds": 1.124524,
+    "schema": "source-project-discovery-verification-v1",
+    "scientific_outputs_added": 0,
+    "sqlite": "3.53.1",
+    "status": "PASS"
+  },
+  "fixed_input_rerun_equal": true,
+  "independent_r1_review": {
+    "anchored_candidates": 7,
+    "frozen_unique_source_sha256s": 144,
+    "new_formal_cells": 0,
+    "new_formal_r1": 0,
+    "schema": "native-resource-lead-review-v1",
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "source_scope": "FIXED_144",
+    "status": "PASS"
+  },
+  "independent_review": {
+    "baseline_evidence_matches": {
+      "baseline_database_sha256": "23237d36732dc0cf10eb032921d8bae2e95f1244e54869a4fa38bb8b5fb1beee",
+      "baseline_observation_count": 38,
+      "baseline_observation_release_id": "834a415967eafd4ac39e130c7111cb963cf3c2e369f7b24d8d5a0a905f634546",
+      "baseline_observations_sha256": "0c5958adcb70c2798f72aa5ed56fcfe2ee05f7a2d672bfc614b3fb14077a5ce3",
+      "existing_candidate_layer_matches": 33,
+      "existing_formal_acceptance_matches": 12,
+      "existing_present_census_cells": 12,
+      "existing_validation_outcomes": {
+        "EVIDENCE_INSUFFICIENT": 9,
+        "SCIENTIFIC_CONFLICT": 6,
+        "VALIDATED": 18
+      },
+      "immutable_baseline_archive": "e7024ab670b6d42dbdf22bc7a2ad496dd53df4e6c366dc99cfa337bf5efc87c8",
+      "immutable_baseline_archive_sha256": "e7024ab670b6d42dbdf22bc7a2ad496dd53df4e6c366dc99cfa337bf5efc87c8",
+      "matches": [
+        {
+          "anchor_id": "9f0bfdcc8e8f964e913c5bbe49ca7cbad7a0572ffb5cee7382e86fd7ad67e40a",
+          "candidate_id": "54590ed16bfbc155860d0e881274fa4d1a16f8ec1eb930effb9fd1598100f99e",
+          "case_id": "goschen-area-one-bulk-oxides",
+          "formal_acceptance_id": "bbb4ca14b999c6b84462c40994c03b4408ee0367ecbaac0eea1c3cbce4853ba8",
+          "observation_id": "1cce1a447d3cf96c904c7dc52f9be4b306fd2c6030b760ea0cdbf4aba409878e",
+          "physical_page": 12,
+          "present_census_cells": [
+            [
+              "AU-6d807eb7caec9db0f35e",
+              "ore_mt"
+            ]
+          ],
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "ab5a50296e373b53559ffbc9a0490c4c421c1c24b625e036514790e7479faefd",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "a021ba23cd58cf222da2544feb5c72df1661dd0865bd371cd222b5f542256dad",
+          "candidate_id": "ec99e7598a19f88ddabfbb66abcde6ec8aff7e94e1f8c4c8e3eeca149e0d9764",
+          "case_id": "goschen-area-one-bulk-oxides",
+          "formal_acceptance_id": "c82eb8eeeb06d89d08f69415cd2156c09f8dd7f0ef86f309103c9981afce9327",
+          "observation_id": "c2096a9574e9efe846f1eeff73b18fd2d0660ce43498debe361b7b2a74d4b520",
+          "physical_page": 12,
+          "present_census_cells": [
+            [
+              "AU-6d807eb7caec9db0f35e",
+              "treo_grade_pct"
+            ]
+          ],
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "c2cd887f397bf5cc1fde6240b9bd98ebdc2b62803a8d2f65c6cc8be33d44d819",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "c6ab7872e920591fb9ef86c4b9302cc1b48113148d5047b01f706c91583a32c7",
+          "candidate_id": "9a4a2907576fe65a685c570aabd7bbe9136166dd75aec1773b770cd5982d4531",
+          "case_id": "goschen-area-one-bulk-oxides",
+          "formal_acceptance_id": "b237c66a5c2224b79dbfa8106146935aaca8746e03b36ffc1e8e5d46afeb00f3",
+          "observation_id": "cf86663469acf6abc2f2b7b0d578168c0086a77b05648c6d190ded097c6429b4",
+          "physical_page": 12,
+          "present_census_cells": [
+            [
+              "AU-6d807eb7caec9db0f35e",
+              "contained_treo_kt"
+            ]
+          ],
+          "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "772da6172935244fe13055d43cc964097ea4731e2605b6f10df1711ba72ad8b4",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "8b891c95fb1c753a29fcb9db24761f91488d9014e927ca53c22c72b08e6a67d9",
+          "candidate_id": "f118f512f1cf25ad9b64737ecdb8a3973e74a7490f0815668625db5028b15357",
+          "case_id": "wudinna-maiden-estimate",
+          "formal_acceptance_id": "3f128d22b3290d6bd2c410a669e702a8cf4d902dc5d57f911dc40330b0f7aa6e",
+          "observation_id": "41dc54bc8c976886f628d7c191822f037c259e0a055bfaf7703198b70e078da0",
+          "physical_page": 3,
+          "present_census_cells": [
+            [
+              "AU-0098e17a63e7c05c213f",
+              "ore_mt"
+            ]
+          ],
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "a66ffc59f11fd362142b920ba31f2f7f56731cf518a83f24dbe402b1b84ce116",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "36342564101593af5aab8babd2967b43def4349addd51295adc334f2ad7c0fb5",
+          "candidate_id": "b985e1c0dd8b88e8a41e6fad2fa6d60cb4fb1062410b80fa2a11adf7c5dd939c",
+          "case_id": "wudinna-maiden-estimate",
+          "formal_acceptance_id": "654bd52f5ae4f6db255b6620b2c12858ba46f288a11397d032bee39a3c3cdf57",
+          "observation_id": "3006c076a1c7abfebf3d00dfd9aae2ca526790db3a5cccda1a1ee79ab2a3984d",
+          "physical_page": 3,
+          "present_census_cells": [
+            [
+              "AU-0098e17a63e7c05c213f",
+              "treo_grade_pct"
+            ]
+          ],
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "8ca70701b69856ad211126b45fa1f68fde860be5a64c758839c23a48cdd22c7b",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "42f4ecaec42c59e970fb4cc373d98262f4115ec4940d911d2641717547c6f94a",
+          "candidate_id": "24ff47f204e3be61add9f96e8188a12d03fcc819c70ac37b01ad3ba80de003bd",
+          "case_id": "wudinna-maiden-estimate",
+          "formal_acceptance_id": "586304a76f9ae701069325b75f354e7f351ddb4298b790bc1e85f79f274dd05e",
+          "observation_id": "8b2bdafea773accd5dc36cf6ff9d2a848c81975c7bda8ef84baa4b68c0762057",
+          "physical_page": 1,
+          "present_census_cells": [
+            [
+              "AU-0098e17a63e7c05c213f",
+              "contained_treo_kt"
+            ]
+          ],
+          "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "06a98419d68b967ce7bf77bc5b46749f20c7a5b8d76dc42364ec51469c399d7c",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "0442a6ed3d129ffcdaafeafcb7eb938d439d889f2c71075303d1878344accb61",
+          "candidate_id": "755ae414cefad3192bec70b84ca35bd02ee0651d680c6b7785d205d80f46a683",
+          "case_id": "yangibana-annual-reaffirmed-resource",
+          "formal_acceptance_id": null,
+          "observation_id": "88c0a9117597bc5248ab24d3ad2ee5267dcd79c4d55286445bdfceaf67180991",
+          "physical_page": 14,
+          "present_census_cells": [],
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "d0c026ac1bda22ac00266152465b3697e71fcc997f5c1d1d61b1dcb17fdd4235",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "TREO_CHEMICAL_DEFINITION_UNBOUND",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "5c242b432fdf401fb12b7350e7b54a439de0e3f8c9aebf7d21b32bd6fb6357d4",
+          "candidate_id": "e2127ba397678669d61d3487ac706d37b30b7a4a6a6d434f4de7a5e7472f1c37",
+          "case_id": "yangibana-annual-reaffirmed-resource",
+          "formal_acceptance_id": null,
+          "observation_id": "8ba68c18ee810500076738d16ef124cfa3dee57c9b701f2b5816872e45bf368f",
+          "physical_page": 14,
+          "present_census_cells": [],
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "9144df9dc884432c5c8274dab2eb78dd5eba0ad1f85af5dd4827e046f156653e",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "TREO_CHEMICAL_DEFINITION_UNBOUND",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "b8811a66cc0dc09948824de28dac0f6fb7c0ecb65b954bc864f800cb9ab98063",
+          "candidate_id": "1f025f7782166d6eac7d40aaaae778ebb606996f9319b19206da37d4d43e60df",
+          "case_id": "yangibana-annual-reaffirmed-resource",
+          "formal_acceptance_id": null,
+          "observation_id": "417c739847d46b5f131be2032d4ba790439aae3a1c989ad128bc792ea07557c6",
+          "physical_page": 14,
+          "present_census_cells": [],
+          "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "e7c8108925a9a252aed80a2825310a56ae1a17ee96e374d4122e49591093b014",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "TREO_CHEMICAL_DEFINITION_UNBOUND",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "7173a76eb48edb19cc6ecb0a980473a18820d4365a369640008bac9daa22c19a",
+          "candidate_id": "818057acea82778ed8afd3c0c38c06179d83f0c265f7b49c80ab2ab307ada994",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": null,
+          "observation_id": "649107b4060d9784ffe775739a9c8a094e2935b3854ddb2e1d84f809fe47bad3",
+          "physical_page": 5,
+          "present_census_cells": [],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "11f0beb3fda23da632f36aabdb6a5a4f7cb86c3d04d55d6b85ac2081480b8a24",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "5e84c2b7b85dae32f9c2ae929138cb4cdbf23b3b6250728a9d248ef258ceb119",
+          "candidate_id": "2e06a649c0826d81126af5f45768d8c90f577f4d3a5a4a9d3d3ca34f6061291f",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": null,
+          "observation_id": "e410e4c4d46d70d5588182e4e37b1ad79e691618779cbd5478be3e9b56900cc5",
+          "physical_page": 5,
+          "present_census_cells": [],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "e5b789a022b1c81047c6560ed8ea7b9676c8641433411f26943b23e42dae0a60",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "71f0247571eec5354741032593e6622beaa7e07ce8dbe8e1009f0cc56f21592b",
+          "candidate_id": "9414d8b5bdc60361cab43addcb3abfc40736078e9087981c7b5898058bbe1b3e",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": null,
+          "observation_id": "6e235083d9894bfa319b7c9b7e74c2cf0998d03afeccb6703ba4c0d39e36d82e",
+          "physical_page": 5,
+          "present_census_cells": [],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "ca742cf2ccad34c855e698cdb64654a7cab948cd56e85567a3a175b60cf00cbb",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "714f81f95173a6495f274eaf00228253166a5521735aa47b09bcd7aa56ba2dac",
+          "candidate_id": "a0090023bc1972f037ce31bc9d8353900bf972ffdcddb714985efd2177bd156d",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": null,
+          "observation_id": "f5fbeca60e76ab02519be682726171a2805a60e119b8ac4efaa0b3665548b204",
+          "physical_page": 5,
+          "present_census_cells": [],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "b8aa38cc0ec29ac99741ebb26a09a40fb5e69d876c8990ad4af8947f43aa2244",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "d88a5bb4cd19293185bd9cb4932055d1c10d534cc42d64deeabe0f90c3884055",
+          "candidate_id": "9adabdaced2ed7448b1cb6517cd21c5d30e916b301f7711114d83af550054c0f",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": null,
+          "observation_id": "dcf1517b448b9e2c7587d5cb015fd5af07df62b80f3d6800b0abe68efc717391",
+          "physical_page": 5,
+          "present_census_cells": [],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "ad3e0a76a1f62491d56ef5623274309a39c2134b4d5a024d4bc93cda26db8c5f",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "def5e8dcd83e9e3032c96bb0cbd47797121a7043df47b4e5cfa55ee53f3b679a",
+          "candidate_id": "a6d6f041cefbed0a75dd08e29b7bdc98a323afbfdadcd7897e0da3f10af93154",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": null,
+          "observation_id": "a81047ecfcad5b80ccb2bcd8be60735be04d2c07fa2bdc3c2439c3ea87ae3d07",
+          "physical_page": 5,
+          "present_census_cells": [],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "99e69edc4ba4608ade901665fa9fb2094375b38ea8228c5065968b29b6f3d826",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "fc97564ce7a02ba4d3ca0154a44fc5309d211f9fdb5a10d46332db3f1d9e7839",
+          "candidate_id": "11b01a9f797a2daa80a9aa8868833ab3eb7a255442a19f03fd5b596b8d0a155f",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": "bcd1ae3f3c00f912a72fd135e2effb3a68695bbe8274c0c2b2c13b012ba2f13a",
+          "observation_id": "489a3558f37b28105abcd6abb383ba670f50542dcf297a2a4537ddfd6ca621bd",
+          "physical_page": 5,
+          "present_census_cells": [
+            [
+              "AU-9bd8e5ed8408cd84d876",
+              "ore_mt"
+            ]
+          ],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "1f423902dffba82b3b7174e8ccc14a757d527437e4035a7577f006bc6d675b67",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "d8692e2f97195a08943673f749e977393ce9d3b62d0b57a3bdf69eb107cfd5e5",
+          "candidate_id": "955b6659baebbafbde99ad4b33edcb70a9f4b7dea0a559df35348b5d5cbcebe9",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": "e201990f3f1e8874e84455f11c37b8fd57b895b63905d399a76f920173d66b8b",
+          "observation_id": "9fdb34620f5d55562fda408d5b03f8289519d0760ae5b96650f0ea346cedbbb7",
+          "physical_page": 5,
+          "present_census_cells": [
+            [
+              "AU-9bd8e5ed8408cd84d876",
+              "treo_grade_pct"
+            ]
+          ],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "27e24fbc9a6c65f97b432038dc7d803f2ae4bb3316df2d0c25ab38b04251eb70",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "fa1672cc3e8b6d056ed0bf8b1dc5683e1cbe8ce5720ad434ac94a65ca04f601d",
+          "candidate_id": "95ae6e3461a41bb69922cbd89d7e54b81fbe0ea2d3ec91bbda34f2c0ed85de6c",
+          "case_id": "wolverine-deposit-total",
+          "formal_acceptance_id": "af13ec4b6f444395bfb06cc017f14c7caaf336f7a3761f7aa55165a2fc707c70",
+          "observation_id": "6c84118d6b6d6a5020f20c91c9fd2153e4aed83bb0f12112b970d4620d10f56a",
+          "physical_page": 5,
+          "present_census_cells": [
+            [
+              "AU-9bd8e5ed8408cd84d876",
+              "contained_treo_kt"
+            ]
+          ],
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "4a2f45bf93d2da813fadb2053f5f44d1b94e2cdc9dfda3a89a544ad9eaaf9e82",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "5a764661a92406485ce42dfb9a60d11475b4dea58cde5bef8fe387144d421adc",
+          "candidate_id": "f493236d569a3db1d88bce3074ddc9bcd26491744024b694618b6cbff3b87e78",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "a72978db402bd8414018602d2498b7ce883b6410055cff5dfb463e196b9bd883",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "e98d8caab34d2dd7ce673593d9f9ffbb3b37ad03ca9abf3c332a06e3790758a0",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "HISTORICAL_OBSERVATION_DATE_MISSING",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "dd9fd21b678e27205d4a25206e2421f54415eb0411929ae516455fa5076b6825",
+          "candidate_id": "fddc351434c563cede558d7903964a4390bc2895b0aa1f5facf4382d557410c4",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "e2de8821ce60a62810c12582aacff915d6f866aac7cb99eaf4d108595a2cec31",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "0294c638238d246c260c6a8d30c4356ab2769834ba46be02076bbe5da12cab68",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "HISTORICAL_OBSERVATION_DATE_MISSING",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "5b3a867adea9590e913afca1ddc4b5248479e6b3c57af1bd411dc050ca8993c7",
+          "candidate_id": "b3fed58b9e24d91b1acdf8e0c6ecef4ba8eabdb13559f21607f32a86605322fc",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "cf44fc00445d47f7dba0ed536cf8fd5b8e2bd47860da3240cb520d5ac1031a4a",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "5b1cf9ebd8e9fa83078025522d8bbda1809e507a75bcd8ac0a45f11eff28173f",
+          "validation_outcome": "SCIENTIFIC_CONFLICT",
+          "validation_reason": "CONFLICTING_CONTAINED_TREO_IN_SAME_STATEMENT",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "f6e568fa89938b4ea5a0dd777b697ae8d067f480b6e2e1b6129c7361b0e3b92d",
+          "candidate_id": "61adab37020d8eac7d77cfef49ca2240832b53fdd5108b21b349dfa90fef8476",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "9feafe83e979ef25a1d8d32f36d255acfd86d7aedb8ed35e26372d948b65dbba",
+          "physical_page": 11,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "9add189e032270376a27921f2f2f6e773d09ef5081769b9b0a2bfe82e5ed2f3a",
+          "validation_outcome": "SCIENTIFIC_CONFLICT",
+          "validation_reason": "CONFLICTING_CONTAINED_TREO_IN_SAME_STATEMENT",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "523e7e02a2fe2f1cdc12858e7dc3219433015b4136c101894f65def91f965c2e",
+          "candidate_id": "bc56089435eefc1e629d125ea950f6181f6577d384519f3c02c7444ca7e9b6bf",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "a78d2e6cc9b42e9117e77cce6057859ec16629015e43c9c9a1d107d001bdb399",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "f0ee865ff2fc50107b931ef1544ebc27486b5e0ba79af1f1b5beecffce795d9e",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "HISTORICAL_OBSERVATION_DATE_MISSING",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "fce49ddcc59fd1a99bdaa70b5811220bdbe31c3832fa811eee91d47b4ec7c700",
+          "candidate_id": "0f47f549fd1d8849fc729033958f83a93358e9df09357839aca6ec10b8ee3d00",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "25e3ea130ed3db31780205d70b468eb4aa44b85940f637759db7aeabdd368cfa",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "c8574b6b5b8d097c0c9b1fa2913f79129d0ba6e06d68fb949e59921caf301109",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "HISTORICAL_OBSERVATION_DATE_MISSING",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "17870ec3910f9fa2cfc00e91370c39660917d10614858a17d7bbb2f02106b3dd",
+          "candidate_id": "dc524a34d4a5be3fa52053ec4206083a10478e65a1fb4b8deba1631e9ac116cd",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "8024941410a0165da15859ee4e39f6e140c86212971ff97775ae85d89c0f302a",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "7d63709dd97597508bdab845a08d38e810b48ef1d568780652493e0124591e4f",
+          "validation_outcome": "SCIENTIFIC_CONFLICT",
+          "validation_reason": "CONFLICTING_CONTAINED_TREO_IN_SAME_STATEMENT",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "c93a3e7e7fd6463004c3d33081314e71b028cbca3f06b0e2e5b7588d10a59fea",
+          "candidate_id": "a4133798bf30350078a8a6b62d8be9b70444e9d5a14c4448d939e7e13861ab30",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "e938fc22c4427227ec501e851b9c61b0de55c71ba54351a26922c5fc713e54a0",
+          "physical_page": 11,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "455b3d5fe13706062ed615a97fb64865083495a82e4d34b25b544830dc4f4dd8",
+          "validation_outcome": "SCIENTIFIC_CONFLICT",
+          "validation_reason": "CONFLICTING_CONTAINED_TREO_IN_SAME_STATEMENT",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "b629701ba94666d88efe64a9c9039cce31b815ad650386b0eaf4dee38c1c6429",
+          "candidate_id": "d41fd283b08ab930ab7dbc310de4d2aa6e2425f6de12fc16af25528b09b685cf",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "e18f0c89a1c5f163cb5153b24889a4cfc614b1dd90b4c38efe373608ae131fb4",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "68c596f8b7716333796693b48b28009475744856a0114e36b6edd05f16f17c52",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "HISTORICAL_OBSERVATION_DATE_MISSING",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "e34b9e8a5525eca669efc0fa2d99f2c7241a28302271f43968ce79984503edde",
+          "candidate_id": "5f98c0980a381c9bb0313dbeee83cdad9364e86ecf6da1becc7938c2b5e3dae5",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "a8a919bb195ad70ec790ebc51fb2c9db5289f84f725953cd92e091dcce53ee97",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "f14bfcef7254fa849db574f6257a09e9355e3c5c869cd45366b71634702d8900",
+          "validation_outcome": "EVIDENCE_INSUFFICIENT",
+          "validation_reason": "HISTORICAL_OBSERVATION_DATE_MISSING",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "f6494992878d29b8eef4c5800c2df665eac856203e17b7fb0087415811b8fc12",
+          "candidate_id": "ab3839bc7659254c5961c20840c507557a5f727767aa3fa9f0990224e0b608d4",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "479be1b16513b17fd3ed921d5124589ae07077cb5143d532d06db7060eea47e0",
+          "physical_page": 1,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "fba712df2dee678f1f892977b646291f12d1d30bd00753317fa23b824b61ebc8",
+          "validation_outcome": "SCIENTIFIC_CONFLICT",
+          "validation_reason": "CONFLICTING_CONTAINED_TREO_IN_SAME_STATEMENT",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "f621f81da4586d7523e64589c2e3144a1b450bb4bc616714dd8fe24f5963f4d9",
+          "candidate_id": "442e3c6d10f5faf2eb8f3f916e75d09147affd57c1055ee93c5ba7ae9c97cc0a",
+          "case_id": "yin-resource-cutoff-series",
+          "formal_acceptance_id": null,
+          "observation_id": "27384fe5ebab5dfc4ad06e7af596ab81e2a8ad599da58561a2590d20d047b1f0",
+          "physical_page": 11,
+          "present_census_cells": [],
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "temporal_status": "CANDIDATE",
+          "validation_id": "c72e188878c0d0dc233038540c9f8252fcdb7790c0e4281a2d6ca18dfaad21b1",
+          "validation_outcome": "SCIENTIFIC_CONFLICT",
+          "validation_reason": "CONFLICTING_CONTAINED_TREO_IN_SAME_STATEMENT",
+          "variable": "contained_treo_kt"
+        },
+        {
+          "anchor_id": "ba08b72898fd6c685e4af8d04656d50cadf93a77da2254799839dd0242217251",
+          "candidate_id": "6dc3e6a8cf9b39b1438be2c9c39883b65bf58b1990d33c8b6544f9b0157003e8",
+          "case_id": "mt-weld-resource",
+          "formal_acceptance_id": "71933c505c0065acfe89bf921f18d95610572dc7f1d54d0188d04dd5b6a3accc",
+          "observation_id": "99596328e551ec66474b4da150828e303d8797315f56844414562a94ef8d71fa",
+          "physical_page": 2,
+          "present_census_cells": [
+            [
+              "AU-efff91a06cf344122d88",
+              "ore_mt"
+            ]
+          ],
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "926bc057fbf72f6151462de1c0aa60b098c52cc9544cf33a426d54211cf3f852",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "ore_mt"
+        },
+        {
+          "anchor_id": "93114bdbfe89351cfee6d2e4b72621def80df693f63855f2e8447dbaae89543c",
+          "candidate_id": "d452d0691c9bc87903f2ffc3b80cc176687ed8be8c8f5cac76dc58a866dbd008",
+          "case_id": "mt-weld-resource",
+          "formal_acceptance_id": "e2a5d2c62397d1085cbf1bca0f748be42bfe321270eaa4832f62e3cd42d1438f",
+          "observation_id": "655b6ceb7192c2ef608582ea22ca3dc9d2088e7735138d8b822e239e7b11cff9",
+          "physical_page": 2,
+          "present_census_cells": [
+            [
+              "AU-efff91a06cf344122d88",
+              "treo_grade_pct"
+            ]
+          ],
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "b8bedabeabedde4ed3f2d91fff300c1a3400cc23de69b0a05f192eccb91e0a87",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "grade"
+        },
+        {
+          "anchor_id": "2ca6c9480d6ae938bf74a45c645bada3caa5709709bfd038c2d52793cd22769d",
+          "candidate_id": "23d616b73ecc7299c9c060594bb5f5b15a734ef1be09ce8950a00c807122c3c4",
+          "case_id": "mt-weld-resource",
+          "formal_acceptance_id": "ded6ad9ff193526e46a55917d16da26693f343012a38e1bccd8f6ecd18122240",
+          "observation_id": "b2a40cc2ce513c0082458b04e9f454cade150d5916fd2b3b7fa41a0c4f32081a",
+          "physical_page": 2,
+          "present_census_cells": [
+            [
+              "AU-efff91a06cf344122d88",
+              "contained_treo_kt"
+            ]
+          ],
+          "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+          "temporal_status": "ELIGIBLE",
+          "validation_id": "5b7eb6b0eae7dd24777bfadf74a418149d5386979cf30751842a50bfce8beadc",
+          "validation_outcome": "VALIDATED",
+          "validation_reason": "EXACT_SOURCE_AND_RESOURCE_EVIDENCE",
+          "variable": "contained_treo_kt"
+        }
+      ]
+    },
+    "native_source_checks": {
+      "direct_pdf_count": 17,
+      "project_scoped_coordinate_tokens_exact": 337,
+      "reviewed_direct_quote_exceptions": [],
+      "reviewed_quotes": {
+        "quote_and_token_exact": 33
+      },
+      "table_coordinate_tokens_exact": 298,
+      "table_row_quotes_and_captions_exact": 47
+    },
+    "scope": "Physical coordinates and archived identity only. No scope, measurement or admission assertion for structural tokens.",
+    "status": "PASS"
+  },
+  "pr24_ci_run": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46086834438",
+  "receipt_sha256_by_path": {
+    "work/census-completion/committed-a/routed_original_candidates.jsonl": "3c24a67f7da472f71ef1e0cfd5084b1f37c7533e4c630f6aa9e3cedb3ad7469e",
+    "work/census-completion/committed-a/routed_source_work.json": "30955f26682c7700692368e3dc6a908370cef26b3dc8f092a7f7d986f60ce831",
+    "work/census-completion/committed-a/source_routing_receipt.json": "96d9008293dd2649624ba2202f85691f851fbbb0f28b7617a202e92c45adeaf9",
+    "work/census-completion/committed-b/source_routing_receipt.json": "96d9008293dd2649624ba2202f85691f851fbbb0f28b7617a202e92c45adeaf9",
+    "work/census-completion/discovery/legacy_value_recovery_receipt.json": "eb6bea9981a824ba5977b0a8d6f67bc31543e3a0b0f88a89e32220cee7e5ad38",
+    "work/census-completion/discovery/source_project_work_queue.json": "2b3f9b23b603b57f00b3d0fc965fbf48bb26025431e6496eda0ccefdf90c8538",
+    "work/census-completion/discovery_verification.json": "338a2cfc838b059fb2154fe4e7f350ae090670bca3b7719b642e28cc6113ae89",
+    "work/census-completion/final-suite.log": "06ed04e3c2a0db62f7b09315edabc37ff04a0b8e3c6aa918b6bd258aa7302e10",
+    "work/census-completion/independent_routing_verification.json": "dca3ccf465dfa7867c5a88e16b11a87c2997a56bbebbd2a8f0d91948eff73344",
+    "work/census-completion/native-r1-reviewed-leads.json": "7a99ea57737f577f0c3fe4b3794af0b32421188467aa3abed0ac55c10d5ea9e7",
+    "work/native-evidence/inventory/native_review.json": "58268d679b82dfd1508225f1ce590aba1fe8e349e2fbc2150240f91565587faa",
+    "work/pr24-independent/final-recovery-97d0e61/archive.json": "702754eac463ec6ad3975a8d17b7759a76838bfae348df9392375b991860dc2d",
+    "work/pr24-independent/final-recovery-97d0e61/browser-verification.json": "dd34c671850662ea432467b4cb91104f119c8dd194c6f198b6857788c5b1d208",
+    "work/pr24-independent/final-recovery-97d0e61/cold-a/replay_receipt.json": "b1a2cc810a7a9496adb3406788c247eb8ab8a85d4b8b4bc9b8c8720fec043191",
+    "work/pr24-independent/final-recovery-97d0e61/cold-b/replay_receipt.json": "c05c693c456ca31892cfeeb698acdc3aa5ee95da58fbe6d8b7949f2be874615d",
+    "work/pr24-independent/final-recovery-97d0e61/delta/comparison_receipt.json": "cf48b90f2c48c4a0b2c7f437deb9071eb89e0a1cbcb4a12d5e3cce14843df32d",
+    "work/pr24-independent/final-recovery-97d0e61/independent-science.json": "13b2fb144efc955bf5b091700634f0c06fd2126e667112fe73778d97f61a774b",
+    "work/pr24-independent/final-recovery-97d0e61/verify-site/site_verification.json": "3577564c8a1cea6a5a081f5555b150ce1587b0341de1538549c58d7b115e7468",
+    "work/pr24-independent/final-recovery-97d0e61/verify-web-baseline/web_verification.json": "cf7b8060b760d3e3b27b45fa0320776939711d2f5a3cf733c4a23d805c78bde1",
+    "work/pr24-independent/final-recovery-97d0e61/verify-web-current/web_verification.json": "8bd159fd151387aa701b2fec6b4d76b9a99c837175a5470df744c7954cd4982d"
+  },
+  "recovery_discovers_historical_display_values": false,
+  "routing": {
+    "candidate_only": true,
+    "candidate_work_statuses": {
+      "CANDIDATE_ROWS_REVIEWED": 18,
+      "NATIVE_PAGES_INSPECTED_NO_STRUCTURAL_MATCH": 19
+    },
+    "cutoff": "2026-11-28",
+    "exact_source_sha_read": 36,
+    "formal_scientific_values_added": 0,
+    "inputs": {
+      "profile_sha256": "8ccc8d042c4b8ce16177acf3f1e583d09d373459adeb930651a317ce4ff59c93",
+      "recovery_receipt_sha256": "eb6bea9981a824ba5977b0a8d6f67bc31543e3a0b0f88a89e32220cee7e5ad38",
+      "registry_sha256": "2262fa68e84e5ddedb72103bf7191fb09da95d1d3bad56b927d73af358c71e7c",
+      "reviewed_bindings_sha256": "7eab84d027e772052e314590ebb62e29f2950944e67573ebb0a5703cf707c899",
+      "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+      "work_queue_sha256": "2b3f9b23b603b57f00b3d0fc965fbf48bb26025431e6496eda0ccefdf90c8538"
+    },
+    "issues_by_work_item": {},
+    "legacy_display_values_loaded": 0,
+    "original_candidate_count_by_method": {
+      "NATIVE_TABLE_TOTAL_ROW": 47,
+      "REVIEWED_BINDING_ORIGINAL_TOKEN": 33
+    },
+    "outputs": {
+      "routed_original_candidates.jsonl": "3c24a67f7da472f71ef1e0cfd5084b1f37c7533e4c630f6aa9e3cedb3ad7469e",
+      "routed_source_work.json": "30955f26682c7700692368e3dc6a908370cef26b3dc8f092a7f7d986f60ce831"
+    },
+    "profile_id": "au-ree-2026-11-28",
+    "reviewed_binding_statuses": {
+      "EXTRACTED": 6
+    },
+    "reviewed_source_project_pairs_outside_queue": [],
+    "schema": "v3-source-work-routing-v1",
+    "source_project_work_items": 37,
+    "status": "PASS",
+    "timezone": "Asia/Taipei",
+    "total_native_pages_decoded": 2850,
+    "unique_native_structural_tokens": 298,
+    "unique_projects": 35,
+    "unique_reviewed_binding_tokens": 33,
+    "unique_source_documents_parsed": 36,
+    "unique_source_pages_inspected": 1002,
+    "unique_source_pages_requested": 1002,
+    "unique_source_sha": 36
+  },
+  "schema": "native-source-value-recovery-verification-v1",
+  "scientific_delta": {
+    "census": {
+      "added": [],
+      "after_sha256": "93e14a7e774bf855297e203cfacf9e7455149281af6f7b8bed22f8d7af31ca08",
+      "before_sha256": "93e14a7e774bf855297e203cfacf9e7455149281af6f7b8bed22f8d7af31ca08",
+      "changed": [],
+      "removed": []
+    },
+    "comparable": {
+      "added": [],
+      "after_sha256": "fbac06ebb311956802fa2ab4efd963925ee8ff580533a05f08c9e045fbca5bd5",
+      "before_sha256": "fbac06ebb311956802fa2ab4efd963925ee8ff580533a05f08c9e045fbca5bd5",
+      "changed": [],
+      "removed": []
+    },
+    "panels": {
+      "added": [],
+      "after_sha256": "bc98519741732bb283e54e4b8a20914d694359c2e8bfa82b89a5194cf7bb69e1",
+      "before_sha256": "bc98519741732bb283e54e4b8a20914d694359c2e8bfa82b89a5194cf7bb69e1",
+      "changed": [],
+      "removed": []
+    }
+  },
+  "scoped_corpus_sha_count": 144,
+  "scoped_manual_review": {
+    "candidate_only": true,
+    "formal_admissions": 0,
+    "page_quote_windows": 38,
+    "pdf_editions": 9,
+    "projects": 7,
+    "typed_token_locations": 83
+  },
+  "scoped_source_routing_commit": "97d0e6140110a83f2c0c681e900d059489f8537b",
+  "status": "PASS",
+  "test_suite": {
+    "executed": 268,
+    "seconds": 45.123,
+    "skipped": 0
+  }
+}

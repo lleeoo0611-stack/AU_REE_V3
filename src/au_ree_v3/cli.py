@@ -83,6 +83,9 @@ def main(argv: list[str] | None = None) -> int:
     extract.add_argument("--database", type=Path, required=True)
     extract.add_argument("--out", type=Path, required=True)
     extract.add_argument("--code-commit", required=True)
+    route = research_commands.add_parser("route-source-work", help="Reread pinned discovery leads in exact V3 originals")
+    for argument in ("profile", "queue", "recovery-receipt", "sources", "assets", "bindings", "out"):
+        route.add_argument(f"--{argument}", type=Path, required=True)
     build = research_commands.add_parser("build", help="Build the fresh Census and decision inputs")
     build.add_argument("--profile", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
@@ -259,6 +262,11 @@ def _run_research(args) -> dict:
             current_release_id=args.current_release_id, release_root=args.release_root,
             storage=ContentStore(args.store) if args.store else None, replay_runs=tuple(args.replay_run),
         )
+    if args.operation == "route-source-work":
+        from .source_routing import route_source_work
+
+        return route_source_work(profile=args.profile, queue=args.queue, recovery_receipt=args.recovery_receipt,
+                                 sources=args.sources, assets=args.assets, bindings=args.bindings, out=args.out)
     if args.operation == "extract":
         from .fresh_observations import extract_sources
 
