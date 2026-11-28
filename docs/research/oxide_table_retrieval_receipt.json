@@ -1,0 +1,198 @@
+{
+  "baseline_commit": "aa92a35c3d5b3593c25b246edcd28ea36c4b0d9a",
+  "candidate_commit": "698cacc2fb5c11864be296484edf0c6e89fa59c0",
+  "engineering_profile": {
+    "pdf_decodes_for_query": 0,
+    "results": {
+      "default": {
+        "branch_score_max": 32,
+        "branch_score_p90": 15,
+        "cross_module_repeated_AST_body_groups": [],
+        "reached_ast_functions": 11,
+        "reached_module_count": 11,
+        "runtime_internal_edge_count": 4,
+        "static_cycles": [],
+        "static_internal_import_edge_count_among_reached_modules": 18
+      },
+      "old": {
+        "branch_score_max": 32,
+        "branch_score_p90": 8,
+        "cross_module_repeated_AST_body_groups": [],
+        "reached_ast_functions": 10,
+        "reached_module_count": 9,
+        "runtime_internal_edge_count": 4,
+        "static_cycles": [],
+        "static_internal_import_edge_count_among_reached_modules": 14
+      },
+      "oxide": {
+        "branch_score_max": 32,
+        "branch_score_p90": 15,
+        "cross_module_repeated_AST_body_groups": [],
+        "reached_ast_functions": 15,
+        "reached_module_count": 11,
+        "runtime_internal_edge_count": 5,
+        "static_cycles": [],
+        "static_internal_import_edge_count_among_reached_modules": 18
+      }
+    },
+    "scope": "One same-Project CLI query on the exact same index; cProfile mappings and repository AST engine.",
+    "third_party_dependencies_added": 0
+  },
+  "file_lifecycle": {
+    "docs/research/oxide_table_retrieval.md": "ADD: report measured outcomes and reproduction",
+    "docs/research/oxide_table_retrieval_receipt.json": "ADD: record frozen inputs, scope, outcomes and costs",
+    "merged_archived_or_removed": [],
+    "src/au_ree_v3/candidate_search.py": "REFACTOR: share exact-index and receipt path for independent retrieval strategies",
+    "src/au_ree_v3/cli.py": "MODIFY: dispatch the opt-in strategy",
+    "src/au_ree_v3/oxide_table_search.py": "ADD: bound positioned evidence for an optional layout query",
+    "tests/test_candidate_search.py": "MODIFY: verify exact physical anchors, alternatives, and original controls",
+    "tools/evaluate_oxide_table_retrieval.py": "ADD: check pinned original-based labels and replay retrieval comparison"
+  },
+  "formal_output_delta": {
+    "census_cells": 0,
+    "comparable_keys": 0,
+    "complete_panels": 0,
+    "observations": 0,
+    "selections": 0
+  },
+  "index": {
+    "index_sha256": "2c2bf124b7d6edf5ee07fc71a2504525895d37bc71e5d482d555159d54711eb6",
+    "index_statuses": {
+      "INDEXED": 145,
+      "UNINDEXED_CONTAINER": 2
+    },
+    "source_count": 147,
+    "span_count": 58723,
+    "sqlite_version": "3.53.1",
+    "status": "PASS"
+  },
+  "methods": {
+    "comparison": "Three orders alternated, eight scoped queries per process with one immutable index and common top-three distinct physical-page budget for each exact SHA.",
+    "environment": {
+      "pdftotext": "pdftotext version 25.03.0",
+      "python": "3.12.14"
+    },
+    "formal_admission": "UNMEASURED. No independent formal admission positives and no Store connection.",
+    "legacy_cli_equivalence_sha256": "0549d6f99031e3f4f279334da2a8c29f0d3f0afea53ec8d8a87e8155147a3fea",
+    "ml_inference": "NOT_RUN. Tested native layout and existing keyword search against fixed original pages.",
+    "numeric_precision": "UNMEASURED. Numeric row recovered as exact raw text. No values attached to individual chemical positions.",
+    "runtime_notes": "Wall/CPU/RSS include index readback and writing search receipts; independently decoding positive result originals is outside timed query. OS file cache uncontrolled."
+  },
+  "page_budget_per_exact_edition": 3,
+  "panel": {
+    "annotation_sha256": "c69eba89aba8e7863806238142f13d85107a503153d91611699cf3854f922b71",
+    "annotations_frozen_utc": "2026-11-28T16:18:51.889726+00:00",
+    "families": 8,
+    "limits": "The annotator is also the implementer, with prior awareness of candidate document structure. The lock prevents redefining the denominator; no model or corpus-level tuning was performed.",
+    "negative_pages": 124,
+    "physical_pages": 127,
+    "positive_pages": 3,
+    "predeclared_component_anchors": 12,
+    "target": "Locate a native analytical table page with the exact four independently reported constituent formulas and visible measurement rows."
+  },
+  "results": {
+    "bm25": {
+      "evaluation_receipt_sha256": [
+        "5024de044484499778fe76983955ee21cea7c0f9d54f090f50db7703d2307872",
+        "489806aa094c833fe4ea2c37a6d1a505b76205d3c5807b27dc2b4565b67bde60",
+        "24cfb7235efde5ba0ffbd5496516b8de5f0b0395b6c8d65872aec45d52cb6020"
+      ],
+      "median_cost": {
+        "cpu_seconds": 0.5151439999999999,
+        "peak_process_rss_kib": 21804,
+        "wall_seconds": 0.5159076530107995
+      },
+      "page_metrics": {
+        "FN": 2,
+        "FP": 7,
+        "TN": 117,
+        "TP": 1,
+        "precision": 0.125,
+        "recall": 0.3333333333333333
+      },
+      "printed_component_anchor_metrics": "UNMEASURED",
+      "samples": [
+        {
+          "cpu_seconds": 0.501601,
+          "peak_process_rss_kib": 21840,
+          "wall_seconds": 0.5044755089911632
+        },
+        {
+          "cpu_seconds": 0.5151439999999999,
+          "peak_process_rss_kib": 21804,
+          "wall_seconds": 0.5159076530107995
+        },
+        {
+          "cpu_seconds": 0.516864,
+          "peak_process_rss_kib": 21652,
+          "wall_seconds": 0.5177315729961265
+        }
+      ],
+      "sqlite_trace_callbacks": {
+        "--": 749,
+        "SELECT": 45
+      },
+      "stable_receipts_per_repeat": 8
+    },
+    "oxide-table": {
+      "evaluation_receipt_sha256": [
+        "88bfb5a7d5d688b3f160cc455dbde8d54c63017e17df7060b71d0fcfe5aa4533",
+        "9b796174b388591f7317f541c14b22998a8e0efa33dc5a418d6ac4ede046676f",
+        "15aab121b382552aef55b9a888945a18ebb7f73e6dcd9733caafa714f0fca41c"
+      ],
+      "median_cost": {
+        "cpu_seconds": 0.747714,
+        "peak_process_rss_kib": 22380,
+        "wall_seconds": 0.7551795530016534
+      },
+      "page_metrics": {
+        "FN": 0,
+        "FP": 0,
+        "TN": 124,
+        "TP": 3,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "printed_component_anchor_metrics": {
+        "FN": 0,
+        "FP": 1,
+        "TN": "UNMEASURED",
+        "TP": 12,
+        "precision": 0.9230769230769231,
+        "recall": 1.0
+      },
+      "samples": [
+        {
+          "cpu_seconds": 0.747714,
+          "peak_process_rss_kib": 22380,
+          "wall_seconds": 0.7551795530016534
+        },
+        {
+          "cpu_seconds": 0.678952,
+          "peak_process_rss_kib": 22380,
+          "wall_seconds": 0.6816239059990039
+        },
+        {
+          "cpu_seconds": 0.7562909999999999,
+          "peak_process_rss_kib": 22272,
+          "wall_seconds": 0.7563668740040157
+        }
+      ],
+      "sqlite_trace_callbacks": {
+        "SELECT": 19
+      },
+      "stable_receipts_per_repeat": 8
+    }
+  },
+  "risk": "medium",
+  "schema": "census-oxide-table-retrieval-verification-v1",
+  "source_manifest_sha256": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a",
+  "status": "PASS",
+  "validation": {
+    "candidate_search_tests_passed": 6,
+    "legacy_hints_tests_passed_with_read_only_pinned_ref": 7,
+    "native_table_discovery_tests_passed": 11,
+    "remote_ci": "NOT_RUN",
+    "source_routing_tests_passed": 7
+  }
+}
