@@ -73,6 +73,9 @@ def main(argv: list[str] | None = None) -> int:
     infrastructure = geo_commands.add_parser("infrastructure", help="Evaluate the site and layer evidence for I1–I4")
     for argument in ("tenements", "sources", "out"):
         infrastructure.add_argument(f"--{argument}", type=Path, required=True)
+    native_points = geo_commands.add_parser("review-native", help="Review exact state government location candidates")
+    for argument in ("bindings", "baseline-manifest", "baseline-assets", "probe-manifest", "probe-assets", "out"):
+        native_points.add_argument(f"--{argument}", type=Path, required=True)
 
     research = commands.add_parser("research", help="Build and verify the fresh research profile")
     research_commands = research.add_subparsers(dest="operation", required=True)
@@ -246,6 +249,11 @@ def _run_geography(args) -> dict:
 
     if args.operation == "infrastructure":
         return evaluate_infrastructure_candidates(args.tenements, args.sources, args.out)
+    if args.operation == "review-native":
+        from .native_geography import review_native_locations
+
+        return review_native_locations(args.bindings, args.baseline_manifest, args.baseline_assets,
+                                       args.probe_manifest, args.probe_assets, args.out)
     return inventory_tenements(args.bindings, args.sources, args.store, args.out)
 
 

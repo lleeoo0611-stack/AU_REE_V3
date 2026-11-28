@@ -27,6 +27,14 @@ INFRASTRUCTURE_LAYERS = {"I1": "ROAD", "I2": "RAIL", "I3": "POWER_GRID", "I4": "
 _LAYER = "CurrentTenements"
 _LICENCE = re.compile(r"[A-Z]{1,3} \d{1,3}/\d{1,6}")
 
+_POINT_ROLES = {"mine": "OFFICIAL_MINE_POINT", "deposit": "OFFICIAL_DEPOSIT_POINT",
+                "mineral deposit": "OFFICIAL_DEPOSIT_POINT", "prospect": "PROSPECT"}
+
+
+def official_point_role(label: str | None) -> str:
+    """Preserve the distinction between native sites and other published locations."""
+    return _POINT_ROLES.get((label or "").casefold(), "OTHER_OFFICIAL_LOCATION")
+
 
 def _decision(edition, manifest, proofs, effective_date=None):
     return evaluate_temporal(

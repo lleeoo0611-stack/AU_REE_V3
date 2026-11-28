@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 
 from .contracts import EntityKind, canonical_json
 from .documents import DocumentCache, DocumentError
-from .geography import SITE_ROLES, _decision, _edition, infrastructure_site_compatibility
+from .geography import SITE_ROLES, _decision, _edition, infrastructure_site_compatibility, official_point_role
 from .sources import ContentStore, IntegrityError, validate_edition_proofs
 
 
@@ -46,10 +46,6 @@ _POINT_DATASETS = {
         "ENO", "CLASS", None, "COMMODITY_CODES", "EPSG:4283", "GDA94",
     ),
 }
-_NATIVE_SITE_ROLES = {"mine": "OFFICIAL_MINE_POINT", "deposit": "OFFICIAL_DEPOSIT_POINT",
-                      "mineral deposit": "OFFICIAL_DEPOSIT_POINT", "prospect": "PROSPECT"}
-
-
 def _point_index(payload, dataset):
     layer = _POINT_DATASETS[dataset]
     if dataset == "GA_OZMIN":
@@ -138,7 +134,7 @@ def _point_candidate(case, edition, expanded, content, timezone, cache, fixed, f
     layer = _POINT_DATASETS[dataset]
     properties, geometry, decision = _known_point(case, edition, expanded, content, timezone, cache)
     native_role = properties.get(layer.role_field)
-    role = _NATIVE_SITE_ROLES.get((native_role or "").casefold(), "OTHER_OFFICIAL_LOCATION")
+    role = official_point_role(native_role)
     raw_accuracy = properties.get("ACCURACY_M")
     accuracy = raw_accuracy if type(raw_accuracy) in {float, int} and math.isfinite(raw_accuracy) and raw_accuracy >= 0 else None
     native_project = (properties.get(layer.project_field) or "").strip() if layer.project_field else None

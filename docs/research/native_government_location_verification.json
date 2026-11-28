@@ -1,0 +1,458 @@
+{
+  "acquisition": {
+    "counts": {
+      "event_statuses": {
+        "HTTP_404": 1,
+        "NETWORK_ERROR": 1,
+        "PUBLIC_CAPTURED": 6
+      },
+      "projects": 93,
+      "projects_searched": 5,
+      "projects_with_source": 5,
+      "projects_with_temporally_eligible_source": 0,
+      "same_url_changed_editions": 0,
+      "temporal_statuses": {
+        "CANDIDATE": 6
+      },
+      "unique_source_sha256": 6,
+      "version_statuses": {
+        "NEW_SHA": 6
+      }
+    },
+    "requested_editions": [
+      {
+        "acquired_at": "2026-11-28T16:19:14.742909+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:14.742909+08:00",
+        "http_status": null,
+        "reason": "Tunnel connection failed: 403 Forbidden",
+        "receipt_sha256": null,
+        "sha256": null,
+        "source_key": "gssa-rare-earth-report",
+        "status": "NETWORK_ERROR",
+        "url": null
+      },
+      {
+        "acquired_at": "2026-11-28T16:19:16.622146+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:16.622146+08:00",
+        "http_status": 404,
+        "reason": "Not Found",
+        "receipt_sha256": null,
+        "sha256": null,
+        "source_key": "sarig-capabilities",
+        "status": "HTTP_404",
+        "url": null
+      },
+      {
+        "acquired_at": "2026-11-28T16:19:15.424379+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:15.424379+08:00",
+        "http_status": 200,
+        "reason": null,
+        "receipt_sha256": "b26a0062bbc554f4137d1d23aba34c1a213b8526c55ae391dc69d75a5f1b460c",
+        "sha256": "12e7eefe7c43edc4849ab6b781f1962f192124730a3b1303f159c0af65822b7a",
+        "source_key": "sarig-mindep-data-services",
+        "status": "PUBLIC_CAPTURED",
+        "url": null
+      },
+      {
+        "acquired_at": "2026-11-28T16:19:18.426577+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:18.426577+08:00",
+        "http_status": 200,
+        "reason": null,
+        "receipt_sha256": "3697166c9bfe3ac0fb092c87056f0df12800c4cc2d4aab3a3491bb3f114482bf",
+        "sha256": "9d48b8ad66160e872b60b0e455c247821460c4b2b1437bb4e63653cee9cb7dcd",
+        "source_key": "sarig-franklyn-10098",
+        "status": "PUBLIC_CAPTURED",
+        "url": null
+      },
+      {
+        "acquired_at": "2026-11-28T16:19:17.287850+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:17.287850+08:00",
+        "http_status": 200,
+        "reason": null,
+        "receipt_sha256": "c555066dbe213d172ec210732e4c95965ce7e8588f04322adab796afb7ebd5dc",
+        "sha256": "48f00e96f92b1fe2c315b98b59c2f01dc7f3d7050e84d9ae8a5d4c00505a5ef3",
+        "source_key": "ntgs-mineral-occurrences",
+        "status": "PUBLIC_CAPTURED",
+        "url": null
+      },
+      {
+        "acquired_at": "2026-11-28T16:19:18.567505+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:18.567505+08:00",
+        "http_status": 200,
+        "reason": null,
+        "receipt_sha256": "13135e093cdcf0aa2f24c5d7895ef16847f893abd8e74007dfe9908e628347b3",
+        "sha256": "f5af91c9f650dc7c0843274ee45b9e8a8d166b90d4b4e95f2fd2aa45c0e60cf8",
+        "source_key": "ntgs-nolans-deposit-study",
+        "status": "PUBLIC_CAPTURED",
+        "url": null
+      },
+      {
+        "acquired_at": "2026-11-28T16:19:19.115205+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:19.115205+08:00",
+        "http_status": 200,
+        "reason": null,
+        "receipt_sha256": "e82d675c0abb30f1fb28742df69a6bf89a4c811a9633d157ae4f1a104887838c",
+        "sha256": "e64d7afea4ce98698998097961d5a5cb39283739f3dcb356771baa036bec1c52",
+        "source_key": "nsw-toongi-regulator",
+        "status": "PUBLIC_CAPTURED",
+        "url": null
+      },
+      {
+        "acquired_at": "2026-11-28T16:19:19.965015+00:00",
+        "acquired_at_research_timezone": "2026-11-29T00:19:19.965015+08:00",
+        "http_status": 200,
+        "reason": null,
+        "receipt_sha256": "31ab73a2755da2de4dd0e0b50a57932ffa150dbcd50a72e957d583b891e8120f",
+        "sha256": "e4dab91a51b9e97c8a0d7b51c4268f04c86934f159f97be536472b91c936ceca",
+        "source_key": "sarig-koppamurra-11871",
+        "status": "PUBLIC_CAPTURED",
+        "url": null
+      }
+    ],
+    "requests": 8
+  },
+  "candidate_baseline": "8369299733848299022aaf976f51df0d5551be550410f4f5263824cab3e4fdc3",
+  "candidate_baseline_code_commit": "a7efe276563ff18b8b15c7a8d0d660ec8f0d8445",
+  "coordinate_oracle": {
+    "difference_is_positional_accuracy": false,
+    "geographic_outputs_axis_order": [
+      "Longitude",
+      "Latitude"
+    ],
+    "invocation": [
+      "gdaltransform",
+      "-s_srs",
+      "EPSG:7854",
+      "-t_srs",
+      "EPSG:7844"
+    ],
+    "maximum_absolute_difference_degree": "0.0000000622999",
+    "projected_inputs_axis_order": [
+      "Easting",
+      "Northing"
+    ],
+    "status": "PASS",
+    "tool": "GDAL 3.10.3",
+    "verified_coordinate_pairs": 2
+  },
+  "cutoff": "2026-11-28",
+  "engineering": {
+    "ast_function_branch_proxy_max": {
+      "geography": [
+        17,
+        17
+      ],
+      "native_geography": [
+        null,
+        10
+      ],
+      "official_geography": [
+        34,
+        34
+      ]
+    },
+    "native_review_internal_import_edges": 5,
+    "new_cyclic_dependencies": 0,
+    "new_third_party_dependencies": 0,
+    "shared_native_role_mapping": 1
+  },
+  "initial_main": "aa92a35c3d5b3593c25b246edcd28ea36c4b0d9a",
+  "measurements": {
+    "acquisition": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 2,
+      "peak_rss_kib": 30944,
+      "system_seconds": 0.08211099999999999,
+      "user_seconds": 0.268335,
+      "wall_seconds": 5.444923421004205
+    },
+    "cold_a": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 36356,
+      "system_seconds": 0.103305,
+      "user_seconds": 0.485801,
+      "wall_seconds": 0.5866470400069375
+    },
+    "cold_b": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 36336,
+      "system_seconds": 0.124762,
+      "user_seconds": 0.429345,
+      "wall_seconds": 0.5471658000024036
+    },
+    "context_tests": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 63488,
+      "system_seconds": 1.673781,
+      "user_seconds": 8.555798,
+      "wall_seconds": 10.430246752002859
+    },
+    "geography_tests": {
+      "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+      "exit_code": 0,
+      "peak_rss_kib": 38956,
+      "system_seconds": 0.49396999999999996,
+      "user_seconds": 2.9801729999999997,
+      "wall_seconds": 3.5316484049981227
+    }
+  },
+  "native_cases": [
+    {
+      "capture_receipt_sha256": "31ab73a2755da2de4dd0e0b50a57932ffa150dbcd50a72e957d583b891e8120f",
+      "case_id": "koppamurra-mindep-11871",
+      "government_source_sha256": "e4dab91a51b9e97c8a0d7b51c4268f04c86934f159f97be536472b91c936ceca",
+      "government_source_url": "https://minerals.sarig.sa.gov.au/MineralDepositDetails.aspx?DEPOSIT_NO=11871",
+      "issuer_context_locator": "PDF page 6, native whitespace-folded characters 809-886",
+      "issuer_context_sha256": "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01",
+      "issues": [
+        "EXACT_FEATURE_NOT_PUBLIC_BY_CUTOFF",
+        "REPRESENTATIVE_SITE_SCOPE_UNBOUND",
+        "FEATURE_APPLICABILITY_DATE_UNBOUND",
+        "METRIC_POSITIONAL_ACCURACY_UNBOUND"
+      ],
+      "location_date": null,
+      "location_role": "OFFICIAL_DEPOSIT_POINT",
+      "native_locator": {
+        "field": "Deposit Number",
+        "native_id": "11871"
+      },
+      "original_accuracy_token": "20",
+      "original_accuracy_unit": null,
+      "original_roles_and_axes": [
+        {
+          "axis_order": [
+            "longitude",
+            "latitude"
+          ],
+          "crs": "EPSG:7844",
+          "unit": "degree"
+        },
+        {
+          "axis_order": [
+            "easting",
+            "northing"
+          ],
+          "crs": "EPSG:7854",
+          "unit": "m"
+        }
+      ],
+      "project_id": "AU-49b538453133bd968e8d",
+      "status": "REVIEWED_CANDIDATE",
+      "temporal_reason": "PRE_CUTOFF_PUBLIC_EVIDENCE_MISSING",
+      "temporal_status": "CANDIDATE"
+    },
+    {
+      "capture_receipt_sha256": "3697166c9bfe3ac0fb092c87056f0df12800c4cc2d4aab3a3491bb3f114482bf",
+      "case_id": "franklyn-mindep-10098",
+      "government_source_sha256": "9d48b8ad66160e872b60b0e455c247821460c4b2b1437bb4e63653cee9cb7dcd",
+      "government_source_url": "https://minerals.sarig.sa.gov.au/MineralDepositDetails.aspx?DEPOSIT_NO=10098",
+      "issuer_context_locator": "PDF page 2, native whitespace-folded characters 43-82",
+      "issuer_context_sha256": "c241e248affde53e8e1753ad9f880caa3b0c53eff8c16445134334cd55716fc9",
+      "issues": [
+        "EXACT_FEATURE_NOT_PUBLIC_BY_CUTOFF",
+        "REPRESENTATIVE_SITE_SCOPE_UNBOUND",
+        "FEATURE_APPLICABILITY_DATE_UNBOUND",
+        "METRIC_POSITIONAL_ACCURACY_UNBOUND",
+        "NATIVE_ROLE_IS_NOT_A_MINE_OR_DEPOSIT_POINT"
+      ],
+      "location_date": null,
+      "location_role": "PROSPECT",
+      "native_locator": {
+        "field": "Deposit Number",
+        "native_id": "10098"
+      },
+      "original_accuracy_token": "50",
+      "original_accuracy_unit": null,
+      "original_roles_and_axes": [
+        {
+          "axis_order": [
+            "longitude",
+            "latitude"
+          ],
+          "crs": "EPSG:7844",
+          "unit": "degree"
+        },
+        {
+          "axis_order": [
+            "easting",
+            "northing"
+          ],
+          "crs": "EPSG:7854",
+          "unit": "m"
+        }
+      ],
+      "project_id": "AU-0832169526bb5ec07626",
+      "status": "REVIEWED_CANDIDATE",
+      "temporal_reason": "PRE_CUTOFF_PUBLIC_EVIDENCE_MISSING",
+      "temporal_status": "CANDIDATE"
+    },
+    {
+      "capture_receipt_sha256": "c555066dbe213d172ec210732e4c95965ce7e8588f04322adab796afb7ebd5dc",
+      "case_id": "nolans-modat-2641",
+      "government_source_sha256": "48f00e96f92b1fe2c315b98b59c2f01dc7f3d7050e84d9ae8a5d4c00505a5ef3",
+      "government_source_url": "https://geoscience.nt.gov.au/contents/prod/Downloads/Mineral_Deposits/MINERALOCCURRENCES_csv.zip",
+      "issuer_context_locator": "PDF page 17, native whitespace-folded characters 158-237",
+      "issuer_context_sha256": "5f72a08840640987e8d619c6d55ca047a2fe26c0194ffd1a46521f76eda7b06f",
+      "issues": [
+        "EXACT_FEATURE_NOT_PUBLIC_BY_CUTOFF",
+        "REPRESENTATIVE_SITE_SCOPE_UNBOUND",
+        "FEATURE_APPLICABILITY_DATE_UNBOUND",
+        "EXACT_FEATURE_CRS_UNBOUND",
+        "METRIC_POSITIONAL_ACCURACY_UNBOUND"
+      ],
+      "location_date": null,
+      "location_role": "OFFICIAL_DEPOSIT_POINT",
+      "native_locator": {
+        "field": "MODAT_ID",
+        "member": "MINERALOCCURRENCES.csv",
+        "member_sha256": "58558435d112ce9eb394b415b6f33d50db452573d7648528dfaa6003531a623b",
+        "native_id": "2641"
+      },
+      "original_accuracy_token": "100 to 200",
+      "original_accuracy_unit": null,
+      "original_roles_and_axes": [
+        {
+          "axis_order": [
+            "easting",
+            "northing"
+          ],
+          "crs": null,
+          "unit": "m"
+        }
+      ],
+      "project_id": "AU-1345edd8165c10930e94",
+      "status": "REVIEWED_CANDIDATE",
+      "temporal_reason": "PRE_CUTOFF_PUBLIC_EVIDENCE_MISSING",
+      "temporal_status": "CANDIDATE"
+    },
+    {
+      "capture_receipt_sha256": "e82d675c0abb30f1fb28742df69a6bf89a4c811a9633d157ae4f1a104887838c",
+      "case_id": "dubbo-toongi-locality",
+      "government_source_sha256": "e64d7afea4ce98698998097961d5a5cb39283739f3dcb356771baa036bec1c52",
+      "government_source_url": "https://www.resources.nsw.gov.au/invest-nsw/investment-pathways/nsw-priority-metals/rare-earth-elements",
+      "issuer_context_locator": "PDF page 24, native whitespace-folded characters 2344-2395",
+      "issuer_context_sha256": "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab",
+      "issues": [
+        "EXACT_FEATURE_NOT_PUBLIC_BY_CUTOFF",
+        "REPRESENTATIVE_SITE_SCOPE_UNBOUND",
+        "FEATURE_APPLICABILITY_DATE_UNBOUND",
+        "EXACT_FEATURE_CRS_UNBOUND",
+        "METRIC_POSITIONAL_ACCURACY_UNBOUND",
+        "NATIVE_ROLE_IS_NOT_A_MINE_OR_DEPOSIT_POINT"
+      ],
+      "location_date": null,
+      "location_role": "PROJECT_LOCALITY_TEXT",
+      "native_locator": {
+        "locator": "HTML fragment 829, line 3628, character 4",
+        "native_id": null
+      },
+      "original_accuracy_token": null,
+      "original_accuracy_unit": null,
+      "original_roles_and_axes": [],
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "status": "REVIEWED_CANDIDATE",
+      "temporal_reason": "PRE_CUTOFF_PUBLIC_EVIDENCE_MISSING",
+      "temporal_status": "CANDIDATE"
+    }
+  ],
+  "replay": {
+    "exact_issuer_scope_context": 4,
+    "geography_cases_verified": 4,
+    "hash_seeds": [
+      17,
+      271
+    ],
+    "historical_wa_ga_byte_equivalent": true,
+    "historical_wa_ga_candidates": 8,
+    "historical_wa_ga_checked": 11,
+    "historical_wa_ga_negative_roles": 3,
+    "locally_distinct_cas_copies": 2,
+    "sarig_license": {
+      "locator": "HTML fragment 452, line 1754, character 775",
+      "source_sha256": "12e7eefe7c43edc4849ab6b781f1962f192124730a3b1303f159c0af65822b7a",
+      "source_url": "https://energymining.sa.gov.au/industry/geological-survey/products-and-services/map-viewers-databases-and-services/data-services",
+      "status": "PASS",
+      "text": "(CC BY 4.0)."
+    },
+    "uses_internet": false
+  },
+  "risk": "medium",
+  "schema": "native-government-location-verification-v1",
+  "scientific_yield": {
+    "baseline_coordinate_missing_cells": 186,
+    "baseline_i1_to_i4_unknown_criteria": 372,
+    "baseline_web_gis_features": 0,
+    "new_census_cells": 0,
+    "new_formal_coordinates": 0,
+    "new_formal_site_representatives": 0,
+    "new_i1_to_i4_comparable_keys": 0,
+    "new_official_locality_context_cases": 1,
+    "new_official_source_site_roles_read": 3,
+    "projects": 93
+  },
+  "sha256": {
+    "acquisition_seeds": "556077ff87fc99bfc30e721b56053f58e500750815add59b188125bf0e828d86",
+    "bindings": "a609683e098afa8c967c9b9f6e7f198444f02e06b483546cdd02cff4a64c53de",
+    "candidate_baseline_census_status": "f61040ce05601cb019721a904cd1d56aab9b6b88378f992242fbb5810a0fdc60",
+    "candidate_baseline_geojson": "9dc7512f9582de56ce1363e5e6472a3e039dacacbf9fb300f2c9b0c881af76f9",
+    "candidate_baseline_mcda_inputs": "18c6b815e82a519ee1728350f746b0076e3556a3529b8d3364627078e95e9083",
+    "exact_native_review": "cd5d9e047dbc29920c8a0645bcb42e3e772e2faeabc5bf3fbf4174b4046a0efd",
+    "fixed_wa_ga_candidate": "99784afdf24a386a9de87ea78e22eec66f34eff55cc019a7336ffd32cfbf52a1",
+    "fixed_wa_ga_main": "99784afdf24a386a9de87ea78e22eec66f34eff55cc019a7336ffd32cfbf52a1",
+    "probe_cold_a": "cd5d9e047dbc29920c8a0645bcb42e3e772e2faeabc5bf3fbf4174b4046a0efd",
+    "probe_cold_b": "cd5d9e047dbc29920c8a0645bcb42e3e772e2faeabc5bf3fbf4174b4046a0efd",
+    "probe_manifest": "434bc1dfb1e233b721394b23c4da3f52837e96b32889ff94ca5c0051faf87189",
+    "source_manifest": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a"
+  },
+  "status": {
+    "baseline_F0_F4": {
+      "status": "PASS"
+    },
+    "baseline_F5": {
+      "status": "BLOCKED"
+    },
+    "candidate_website_rebuild": {
+      "status": "NOT_RUN"
+    },
+    "ci": {
+      "status": "NOT_RUN"
+    },
+    "cost_per_new_scientific_value": {
+      "denominator": 0,
+      "status": "UNMEASURED"
+    },
+    "historic_O2": {
+      "status": "FAIL"
+    },
+    "i1_i4_distance": {
+      "reason": "EVIDENCE_INSUFFICIENT",
+      "status": "NOT_RUN"
+    },
+    "original_readback": {
+      "status": "PASS"
+    },
+    "science_admission": {
+      "reason": "EVIDENCE_INSUFFICIENT",
+      "status": "BLOCKED"
+    },
+    "scientific_candidate_rebuild": {
+      "status": "NOT_RUN"
+    }
+  },
+  "test_executions": {
+    "existing_context_regression": {
+      "failed": 0,
+      "passed": 16,
+      "skipped": 0
+    },
+    "geography": {
+      "failed": 0,
+      "passed": 8,
+      "skipped": 0
+    }
+  },
+  "timezone": "Asia/Taipei"
+}
