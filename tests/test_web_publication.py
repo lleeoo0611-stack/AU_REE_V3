@@ -17,6 +17,7 @@ from au_ree_v3.display_package import DisplayPackage
 from au_ree_v3.fresh_census import build_census
 from au_ree_v3.fresh_decision import build_decision
 from au_ree_v3.fresh_research import BUILD_SCHEMA
+from au_ree_v3.project_attributes import DATED_STUDY_POLICY_SHA, matches_public_attribute_role
 from au_ree_v3.registry import load_profile, load_registry
 from au_ree_v3.research_artifacts import ARTIFACTS
 from au_ree_v3.web_publication import (
@@ -91,6 +92,18 @@ class WebPublicationTests(unittest.TestCase):
 
     def _export(self, out=None, release=RELEASE):
         return export_web(profile=PROFILE, research_build=self.build, release_id=release, out=out or self.out)
+
+    def test_public_dated_attributes_distinguish_study_release_from_completion(self):
+        meta = {"attribute_role": "STUDY_RESULTS_RELEASED", "policy_sha256": DATED_STUDY_POLICY_SHA,
+                "publication_date": "2019-02-07", "event_date_token": "7 February 2019"}
+        scope = "Nolans Project"
+        category = "development_stage_category"
+        self.assertTrue(matches_public_attribute_role("DEVELOPMENT_STAGE", category, "已公布最終可行性研究結果", scope, meta))
+        self.assertFalse(matches_public_attribute_role("DEVELOPMENT_STAGE", category, "已完成最終可行性研究", scope, meta))
+        for override in ({"attribute_role": "PLANNED"}, {"policy_sha256": "a" * 64},
+                         {"event_date_token": "8 February 2019"}, {"event_date_token": "Q1"}):
+            self.assertFalse(matches_public_attribute_role("DEVELOPMENT_STAGE", category, "已公布最終可行性研究結果",
+                                                           scope, meta | override))
 
     def test_candidate_projects_csv_null_states_and_rebuild_are_exact(self):
         manifest = self._export()

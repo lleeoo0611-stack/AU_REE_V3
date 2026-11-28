@@ -744,6 +744,8 @@ def _allowed_public_evidence(row):
 
 
 def _check_census(manifest, census, evidence, csv_payload):
+    from .project_attributes import matches_public_attribute_role
+
     columns = census["columns"]
     projects = census["projects"]
     valid_ids = {project["id"] for project in projects}
@@ -767,7 +769,8 @@ def _check_census(manifest, census, evidence, csv_payload):
     for project, row in zip(projects, raw, strict=True):
         if set(project) != {"id", "cells"} or project["id"] != row[PROJECT_ID_COLUMN] or len(project["cells"]) != len(columns):
             raise WebPublicationError("Web Census Project does not preserve its CSV row")
-        for heading, cell in zip(headings, project["cells"], strict=True):
+        for column, cell in zip(columns, project["cells"], strict=True):
+            heading = column["id"]
             value, state, lineage_id = cell["value"], cell["state"], cell["lineage_id"]
             entry = evidence[lineage_id]
             if (
@@ -787,14 +790,15 @@ def _check_census(manifest, census, evidence, csv_payload):
                 attribute = "DEPOSIT_TYPE" if heading in {"礦床型態代碼", "礦床型態"} else (
                     "DEVELOPMENT_STAGE" if heading in {"開發階段代碼", "開發階段類別", "開發階段"} else None
                 )
-                expected_role = "CONFIRMED_DEPOSIT_TYPE" if attribute == "DEPOSIT_TYPE" else "COMPLETED"
                 if (attribute is None or cell["origin"] != "SOURCE_EVIDENCE" or entry.get("observation_id")
                         or any(not _sha(entry.get(key)) for key in (
                             "source_sha256", "anchor_id", "selection_id", "validation_id", "temporal_decision_id",
                         )) or entry.get("temporal_status") != "ELIGIBLE" or not entry.get("locator")
                         or descriptive.get("evidence_type") != "SOURCE_BOUND_TEXT_ATTRIBUTE"
                         or descriptive.get("display_only") is not True or descriptive.get("attribute_kind") != attribute
-                        or descriptive.get("attribute_role") != expected_role or not descriptive.get("native_value")
+                        or not matches_public_attribute_role(attribute, column["column_id"], value,
+                                                             entry.get("scope"), descriptive)
+                        or not descriptive.get("native_value")
                         or not descriptive.get("publication_date") or not _sha(descriptive.get("policy_sha256"))
                         or attribute == "DEVELOPMENT_STAGE" and not descriptive.get("event_date_token")):
                     raise WebPublicationError("Census attribute lacks its selected source and descriptive role")

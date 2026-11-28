@@ -385,9 +385,33 @@ def _attribute_values(assertion):
     code = assertion.controlled_term
     if assertion.attribute_kind == "DEPOSIT_TYPE":
         return {"deposit_type_code": code, "deposit_type": _DEPOSIT_LABELS[code]}
-    labels = _STUDY_RELEASE_LABELS if assertion.role == STUDY_RESULTS_RELEASED else _STAGE_TERMS
+    return _stage_values(code, assertion.role, assertion.event_date_token, assertion.scope)
+
+
+def _stage_values(code, role, date_token, scope):
+    labels = _STUDY_RELEASE_LABELS if role == STUDY_RESULTS_RELEASED else _STAGE_TERMS
     return {"development_stage_code": code, "development_stage_category": labels[code],
-            "development_stage": f"{labels[code]}（{assertion.event_date_token} · {assertion.scope}）"}
+            "development_stage": f"{labels[code]}（{date_token} · {scope}）"}
+
+
+def matches_public_attribute_role(kind, column_id, value, scope, metadata):
+    """Verify public labels against the historical and dated study roles."""
+    role = metadata.get("attribute_role")
+    if metadata.get("policy_sha256") != DATED_STUDY_POLICY_SHA:
+        return role == ("CONFIRMED_DEPOSIT_TYPE" if kind == "DEPOSIT_TYPE" else "COMPLETED")
+    if kind != "DEVELOPMENT_STAGE" or role not in {"COMPLETED", STUDY_RESULTS_RELEASED} or not scope:
+        return False
+    date_token = metadata.get("event_date_token")
+    publication = metadata.get("publication_date")
+    if not isinstance(date_token, str) or not isinstance(publication, str) or not publication:
+        return False
+    try:
+        event = reported_calendar_date(date_token)
+    except ValueError:
+        return False
+    return bool(event and not calendar_precedes(publication, event)) and any(
+        _stage_values(code, role, date_token, scope).get(column_id) == value
+               for code in _STUDY_RELEASE_LABELS)
 
 
 def _dated_attribute_matches(assertion, anchors, temporal):

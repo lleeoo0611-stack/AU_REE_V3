@@ -429,6 +429,37 @@ try {
     await page.click("#columns summary");
     metrics.scoped_magnet_oxide_disclosure = "PASS";
   }
+  if (flags.includes("--dated-study-coverage")) {
+    assert(!synthetic, "Dated study regression requires the exact research candidate");
+    const cases = [
+      ["AU-216d0983f6892f9b58f9", "已公布預可行性研究結果", "STUDY_RESULTS_RELEASED", "August 2026", 8],
+      ["AU-1345edd8165c10930e94", "已公布最終可行性研究結果", "STUDY_RESULTS_RELEASED", "7 February 2019", 1],
+      ["AU-9b667066e6eb66753005", "已完成範疇研究", "COMPLETED", "August 2023", 12],
+    ];
+    const column = newCensus.columns.findIndex(entry => entry.id === "開發階段");
+    const evidence = JSON.parse(served.get(exactEvidencePath)).entries;
+    await page.click("#columns summary");
+    await page.getByRole("button", {name: "顯示全部 51 欄"}).click();
+    for (const [id, label, role, date, physicalPage] of cases) {
+      const cell = newCensus.projects.find(entry => entry.id === id).cells[column];
+      const proof = evidence[cell.lineage_id];
+      assert.equal(cell.origin, "SOURCE_EVIDENCE");
+      assert.equal(proof.metadata.attribute_role, role);
+      assert.equal(proof.metadata.event_date_token, date);
+      assert.equal(proof.physical_page, physicalPage);
+      await page.fill("#search", id);
+      await page.locator("#census-table tbody").getByRole("button", {name: new RegExp(`^開發階段 · ${label}`)}).click();
+      const dialog = page.locator("#evidence-detail");
+      assert((await dialog.textContent()).includes(proof.source_sha256));
+      assert((await dialog.textContent()).includes(role));
+      assert.match(await dialog.locator("a").getAttribute("href"), new RegExp(`#page=${physicalPage}$`));
+      await page.keyboard.press("Escape");
+    }
+    await page.fill("#search", "");
+    await page.getByRole("button", {name: "恢復預設欄位"}).click();
+    await page.click("#columns summary");
+    metrics.dated_study_evidence = "PASS";
+  }
   if (flags.includes("--stage3")) {
     assert(!synthetic, "Stage 3 regressions require exact archived candidate data");
     const expectedProducts = [
