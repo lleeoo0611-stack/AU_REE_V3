@@ -39,3 +39,9 @@ PYTHONPATH=src python -m tools.census_disclosure_inventory \
 `census_gap_inventory.csv` 提供全量逐格和歷史精確來源對照，`census_disclosure_distribution.csv` 提供總數、逐案、逐欄及逐格狀態。`missing_sources.csv` 提供預期原件、已知 URL、實際核對版次、擷取結果、受影響欄與優先工作。`projects_without_sources.csv` 無符合條件的列，保留欄頭。`v2_not_applicable_cells.csv` 提供歷史狀態與本版證據對照。`census_fill_inventory_receipt.json` 釘選各檔指紋。進一步尋回來源另出收據，基準檔保留發布時的版本範圍。兩次指定不同 Python 雜湊種子，六項輸出逐 byte 一致。[驗證收據](census_disclosure_inventory_receipt.json)
 
 本工具共用現行 Census 投影政策、研究比對、來源版次、CAS 及 PDF 讀取，新增依賴為 0。兩次本地冷重播分別為 15.869 與 16.032 秒，user CPU 為 11.383 與 11.350 秒，system CPU 為 4.307 與 4.359 秒。冷重播峰值 RSS 為 `UNMEASURED`。含指紋驗證、原件抽查及輸出的清冊測量為 4.300 秒 wall、3.270 秒 user、1.009 秒 system，峰值 RSS 85,844 KiB。本文件、機器收據、範圍限定的原件查核、離線清冊工具及測試皆為本輪新增。未移除既有檔案。
+
+## 歷史方法與取得來源
+
+將上方命令最後一行的 `--out ...` 換成 `--provenance`，既有工具會把 `census-historical-provenance-v1` JSON 印至標準輸出。報告使用同一 Stage 6 封存、固定的 V2 Census 和逐格 provenance，以及 profile 釘選的來源目錄。它逐格取 V2 已記錄的原報、計算或描述方法，再以 Project 與原件 SHA 連到符合截日資格的 V3 擷取。擷取方式取自公開擷取收據。來源通路取自來源目錄的同 Project、同請求 URL 記錄。未登錄的來源通路標為 `NOT_IN_PINNED_CATALOG`。
+
+2,500 個歷史有值格涵蓋 68 種方法與 193 個原件 SHA。2,314 格有 SHA、URL 和定位，1,425 格有頁碼。295 個歷史 Project×SHA 群組中，161 組有符合資格的同案擷取，15 組僅在其他 Project 有合格連結，119 組缺合格同版原件。1,859 格至少有一筆同案同版擷取，連到 146 筆 `ANONYMOUS_HTTPS_GET` 收據，其中 144 筆 PDF、2 筆 ZIP。格數按鍵去重，擷取按收據 SHA 去重，同一個格可在不同取得方法中各計一次。一個 Project×SHA 群組也可有多個來源通路。報告保存各群組的原件指紋、歷史方法計數及已核對的擷取收據引用。

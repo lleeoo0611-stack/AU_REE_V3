@@ -11,7 +11,7 @@ from au_ree_v3.census_metadata import load_projection_policy, public_source_url
 from au_ree_v3.contracts import canonical_json
 from au_ree_v3.documents import DocumentCache
 from au_ree_v3.fresh_research import verify_source_manifest
-from au_ree_v3.registry import load_profile, load_registry
+from au_ree_v3.registry import CATALOG_SCHEMA, load_profile, load_registry
 from au_ree_v3.research_delta import ResearchBuild
 from au_ree_v3.sources import ContentStore
 from tools.census_criterion_evidence import match_quote
@@ -146,6 +146,104 @@ def source_indexes(manifest):
                 "capture_sha256": row.get("receipt_sha256"), "scope": "STAGE6_CAPTURE_MANIFEST",
             })
     return scoped, aliases, events
+
+
+def provenance_capture_index(manifest, catalog):
+    """Join verified editions to their public capture and exact Project catalog route."""
+    require(catalog["schema_version"] == CATALOG_SCHEMA, "Unexpected source catalog schema")
+    channels = defaultdict(set)
+    for seed in catalog["seed_urls"]:
+        for project in seed["project_ids"]:
+            channels[project, seed["url"]].add(seed["channel"])
+    events = {event["receipt_sha256"]: event for event in manifest["events"] if event["status"] == "PUBLIC_CAPTURED"}
+    scopes, captures = defaultdict(dict), {}
+    for edition in manifest["editions"]:
+        if edition["temporal_decision"]["status"] != "ELIGIBLE":
+            continue
+        receipt = edition["receipt_sha256"]
+        event = events.get(receipt)
+        sha = edition["sha256"]
+        require(event is not None and event["sha256"] == sha and event["kind"] == edition["kind"] and event["method"]
+                and set(event["project_ids"]) == set(edition["project_ids"]), "Capture does not bind the source edition")
+        url = event["requested_url"]
+        captures[receipt] = {"acquisition_method": event["method"], "kind": event["kind"], "requested_url": url}
+        for project in edition["project_ids"]:
+            scopes[project, sha][receipt] = sorted(channels[project, url] or {"NOT_IN_PINNED_CATALOG"})
+    return scopes, captures
+
+
+def historical_provenance(historical, manifest, catalog):
+    """Count archived cells once and preserve many-to-many exact edition/capture evidence."""
+    scopes, captures = provenance_capture_index(manifest, catalog)
+    available_sha = {sha for _, sha in scopes}
+    scope_methods = {scope: {captures[receipt]["acquisition_method"] for receipt in receipts}
+                     for scope, receipts in scopes.items()}
+    method_scopes = defaultdict(set)
+    method_states, method_acquisitions, group_methods = defaultdict(Counter), defaultdict(Counter), defaultdict(Counter)
+    hints = Counter()
+    for (project, _), row in historical.items():
+        if not row["value"]:
+            continue
+        method = row["method"] or "UNRECORDED_METHOD"
+        keys = {(project, sha) for sha in SHA.findall(row["source_sha256"])}
+        matching = keys & scopes.keys()
+        state = ("NO_ARCHIVED_EDITION_SHA" if not keys else "EXACT_EDITION_NOT_LINKED_TO_PROJECT" if not matching
+                 else "ALL_EXACT_EDITIONS" if matching == keys else "PARTIAL_EXACT_EDITIONS")
+        method_states[method][state] += 1
+        method_scopes[method].update(keys)
+        method_acquisitions[method].update({acquisition for scope in matching for acquisition in scope_methods[scope]})
+        for key in keys:
+            group_methods[key][method] += 1
+        hints.update(name for name in ("source_url", "locator", "pdf_page") if row[name])
+        hints.update(name for name in ("observation_ids", "attribute_ids") if json.loads(row[name]))
+        if keys:
+            hints["source_sha256"] += 1
+    routes = []
+    used_capture_ids = set()
+    for (project, sha), methods in sorted(group_methods.items()):
+        route_captures = scopes.get((project, sha), {})
+        used_capture_ids.update(route_captures)
+        status = ("EXACT_ELIGIBLE" if route_captures else "EXACT_ELIGIBLE_OTHER_PROJECT" if sha in available_sha
+                  else "NO_EXACT_ELIGIBLE_EDITION")
+        routes.append({"project_id": project, "source_sha256": sha, "edition_state": status,
+                       "historical_cells_by_method": dict(methods), "catalog_channels_by_capture_sha256": route_captures})
+    by_capture = {receipt: captures[receipt] for receipt in sorted(used_capture_ids)}
+    return {
+        "schema": "census-historical-provenance-v1",
+        "populated_cells": sum(sum(states.values()) for states in method_states.values()),
+        "cells_with_historical_hints": dict(hints),
+        "distinct_historical_sha256": len({sha for _, sha in group_methods}),
+        "project_sha_groups_by_edition_state": dict(Counter(route["edition_state"] for route in routes)),
+        "capture_counts_by_acquisition_method": dict(Counter(row["acquisition_method"] for row in by_capture.values())),
+        "capture_counts_by_source_kind": dict(Counter(row["kind"] for row in by_capture.values())),
+        "project_sha_counts_by_catalog_channel": dict(Counter(
+            channel for route in routes for channel in {
+                name for names in route["catalog_channels_by_capture_sha256"].values() for name in names
+            }
+        )),
+        "historical_methods": {
+            method: {"populated_cells": sum(states.values()), "edition_alignment": dict(states),
+                     "populated_cells_by_exact_acquisition_method": dict(method_acquisitions[method]),
+                     "project_sha_groups": len(method_scopes[method])}
+            for method, states in method_states.items()
+        },
+        "project_sha_groups": routes,
+        "eligible_captures": by_capture,
+    }
+
+
+def provenance_report(workspace, v2_root, replays, comparison):
+    build, _, _, manifest, _, baseline = verify_baseline(workspace, replays, comparison)
+    _, _, historical, historical_pins = frozen_v2(v2_root, build)
+    profile_path = workspace / EXPANDED_PROFILE
+    pinned_profile = json.loads(checked(profile_path, baseline["inputs_sha256"]["profile"]))
+    profile = load_profile(profile_path)
+    catalog = checked(profile.source_catalog_path, pinned_profile["inputs"]["source_seed_catalog"]["sha256"])
+    result = historical_provenance(historical, manifest, json.loads(catalog))
+    return {**result, "status": "PASS", "candidate_release_id": baseline["candidate_release_id"],
+            "source_manifest_sha256": baseline["inputs_sha256"]["sources"], "source_catalog_sha256": fingerprint(catalog),
+            "historical_census_sha256": historical_pins["v2_inputs_sha256"]["REE project census.csv"],
+            "historical_provenance_sha256": historical_pins["v2_inputs_sha256"]["field_provenance.csv"]}
 
 
 def archived_attempts(workspace):
@@ -464,10 +562,16 @@ def run(workspace, v2_root, replays, comparison, out, review_path=ROOT / REVIEW)
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for flag in ("workspace", "v2-root", "comparison", "out"):
+    for flag in ("workspace", "v2-root", "comparison"):
         parser.add_argument(f"--{flag}", required=True, type=Path)
     parser.add_argument("--replays", required=True, nargs=2, type=Path)
+    output = parser.add_mutually_exclusive_group(required=True)
+    output.add_argument("--out", type=Path, help="Write the existing disclosure inventory files")
+    output.add_argument("--provenance", action="store_true", help="Print the historical source provenance report to stdout")
     args = parser.parse_args()
+    if args.provenance:
+        print(canonical_json(provenance_report(args.workspace, args.v2_root, args.replays, args.comparison)))
+        return
     result = run(args.workspace, args.v2_root, args.replays, args.comparison, args.out)
     print(canonical_json({"status": result["status"], "cells": result["cells"], "T0": result["T0"], "T1": result["T1"]}))
 

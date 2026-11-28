@@ -6,7 +6,10 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from tools.census_disclosure_inventory import distributions, editions_for_cells, old_applicability, primary_disclosure, run
+from tools.census_disclosure_inventory import (
+    distributions, editions_for_cells, historical_provenance, old_applicability, primary_disclosure,
+    provenance_report, run,
+)
 
 
 def cell(state='UNKNOWN', source='SOURCE_ACQUIRED', metadata=''):
@@ -69,6 +72,45 @@ class DisclosureInventoryTests(unittest.TestCase):
         assert {item['scope'] for item in distributions([row])} == {'TOTAL', 'PROJECT', 'FIELD', 'CELL'}
 
 
+    def test_provenance_links_capture_method_and_catalog_channel_by_exact_project_and_edition(self):
+        original, missing, other, capture = 'a' * 64, 'b' * 64, 'c' * 64, 'd' * 64
+        url = 'https://test.example.org/a.pdf'
+        event = {'status': 'PUBLIC_CAPTURED', 'receipt_sha256': capture, 'sha256': original,
+                 'kind': 'pdf', 'method': 'ANONYMOUS_HTTPS_GET', 'requested_url': url, 'project_ids': ['p1', 'p2']}
+        edition = {'receipt_sha256': capture, 'sha256': original, 'kind': 'pdf', 'project_ids': ['p1', 'p2'],
+                   'temporal_decision': {'status': 'ELIGIBLE'}}
+        manifest = {'events': [event], 'editions': [edition]}
+        catalog = {'schema_version': 'source-seed-catalog-v1', 'seed_urls': [
+            {'url': url, 'project_ids': ['p1', 'p3'], 'channel': 'OFFICIAL_EXCHANGE'},
+            {'url': url.replace('a.pdf', 'b.pdf'), 'project_ids': ['p2'], 'channel': 'OFFICIAL_GOVERNMENT'},
+        ]}
+        proof = {'value': '1', 'method': 'ORIGINAL_QUANTITY', 'locator': 'p2', 'pdf_page': '2', 'source_url': url,
+                 'observation_ids': '["observation-1"]', 'attribute_ids': '[]'}
+        rows = {('p1', 'ore'): {**proof, 'source_sha256': f'{original};{missing}'},
+                ('p2', 'ore'): {**proof, 'source_sha256': original},
+                ('p3', 'ore'): {**proof, 'source_sha256': original},
+                ('p1', 'grade'): {**proof, 'source_sha256': ''},
+                ('p1', 'contained'): {**proof, 'value': '', 'source_sha256': other}}
+        report = historical_provenance(rows, manifest, catalog)
+        assert report['populated_cells'] == 4 and report['distinct_historical_sha256'] == 2
+        assert report['historical_methods']['ORIGINAL_QUANTITY']['edition_alignment'] == {
+            'ALL_EXACT_EDITIONS': 1, 'PARTIAL_EXACT_EDITIONS': 1, 'NO_ARCHIVED_EDITION_SHA': 1,
+            'EXACT_EDITION_NOT_LINKED_TO_PROJECT': 1,
+        }
+        assert report['historical_methods']['ORIGINAL_QUANTITY']['populated_cells_by_exact_acquisition_method'] == {
+            'ANONYMOUS_HTTPS_GET': 2,
+        }
+        assert report['project_sha_groups_by_edition_state'] == {
+            'EXACT_ELIGIBLE': 2, 'EXACT_ELIGIBLE_OTHER_PROJECT': 1, 'NO_EXACT_ELIGIBLE_EDITION': 1,
+        }
+        assert report['capture_counts_by_acquisition_method'] == {'ANONYMOUS_HTTPS_GET': 1}
+        assert report['project_sha_counts_by_catalog_channel'] == {'OFFICIAL_EXCHANGE': 1, 'NOT_IN_PINNED_CATALOG': 1}
+        by_project = {(r['project_id'], r['source_sha256']): r for r in report['project_sha_groups']}
+        assert by_project['p3', original]['catalog_channels_by_capture_sha256'] == {}
+        with self.assertRaisesRegex(ValueError, 'Capture does not bind'):
+            historical_provenance(rows, {**manifest, 'events': [{**event, 'sha256': other}]}, catalog)
+
+
     @unittest.skipUnless(os.getenv('AU_REE_FILL_WORKSPACE') and os.getenv('AU_REE_FILL_V2_ROOT'),
                          'requires both the exact V2 archive and Stage 6 CAS replicas')
     def test_frozen_originals_and_stage6_archives(self):
@@ -89,3 +131,21 @@ class DisclosureInventoryTests(unittest.TestCase):
         assert rows['AU-3651cf8448b9227adcf5', 'ore_mt']['disclosure_reason'] == 'DISCLOSED_NOT_EXTRACTED'
         assert rows['AU-efff91a06cf344122d88', 'magnet_oxide_kt']['disclosure_reason'] == 'SEARCHED_NOT_DISCLOSED'
         assert rows['AU-0098e17a63e7c05c213f', 'hree8_kt']['disclosure_reason'] == 'PARTIAL_DISCLOSURE'
+
+
+    @unittest.skipUnless(os.getenv('AU_REE_FILL_WORKSPACE') and os.getenv('AU_REE_FILL_V2_ROOT'),
+                         'requires both the exact V2 archive and Stage 6 CAS replicas')
+    def test_frozen_provenance_report(self):
+        workspace = Path(os.environ['AU_REE_FILL_WORKSPACE'])
+        cold = workspace / 'work/census-fill/t0'
+        report = provenance_report(workspace, Path(os.environ['AU_REE_FILL_V2_ROOT']),
+                                   [cold / 'cold-a', cold / 'cold-b'], cold / 'comparison')
+        assert report['status'] == 'PASS' and report['populated_cells'] == 2500
+        assert report['distinct_historical_sha256'] == 193 and len(report['historical_methods']) == 68
+        assert report['project_sha_groups_by_edition_state'] == {
+            'EXACT_ELIGIBLE': 161, 'EXACT_ELIGIBLE_OTHER_PROJECT': 15, 'NO_EXACT_ELIGIBLE_EDITION': 119,
+        }
+        assert report['capture_counts_by_acquisition_method'] == {'ANONYMOUS_HTTPS_GET': 146}
+        assert report['capture_counts_by_source_kind'] == {'pdf': 144, 'zip': 2}
+        assert sum(method['populated_cells_by_exact_acquisition_method'].get('ANONYMOUS_HTTPS_GET', 0)
+                   for method in report['historical_methods'].values()) == 1859
