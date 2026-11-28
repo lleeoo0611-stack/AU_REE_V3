@@ -72,3 +72,5 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python -B tools/evaluate_oxide_table_re
 ```
 
 資料組合 SHA-256 為 `1b6d1ece9a7dde6c6b7eb4c81617ff0139e087fb6040cacaf32bf006be888468`。標註和原件依既有封存權限讀取。
+
+可給同一命令加上 `--recovered-sqlite PATH SHA256 --recovery-registry PATH SHA256`。擴張資料從已執行原件回讀的候選 SQLite 讀入，透過外鍵連接 Project、已核驗 SHA 與原件錨點。訓練只納入有歷史定位、原報表頭及稀土資源角色的唯一列。同頁同列的多個數值做去重，排除留出原件、Project、已知發行方與相同特徵。兩個模型使用同一留出組評估，收據分別記錄有無額外 SQLite 資料的結果。

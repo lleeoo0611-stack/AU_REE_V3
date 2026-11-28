@@ -2,6 +2,7 @@
 
 from collections import Counter, defaultdict
 import csv
+from decimal import Decimal
 from hashlib import sha256
 from io import StringIO
 import json
@@ -10,8 +11,9 @@ import re
 from tempfile import TemporaryDirectory
 from zoneinfo import ZoneInfo
 
-from .contracts import canonical_json
-from .documents import DocumentCache, DocumentError
+from .contracts import Entity, EntityKind, EvidenceAnchor, RawObservation, ResourceScope, Source, canonical_json
+from .contracts.temporal import evaluate_temporal
+from .documents import DocumentCache, DocumentError, read_asset
 from .native_table_discovery import DISCOVERY_RULE, discover_page_rows
 from .normalization import KNOWN_OXIDE_SPECIES
 from .registry import SHA256, load_profile, load_registry
@@ -19,6 +21,7 @@ from .resource_table_binding import DETECTION_RULE, RULE, _baseline_overlap, _pl
 from .source_case_inventory import V2_REF, _git_blob
 from .source_inventory import MAX_DOCUMENT_BYTES, _CheckedBody, _verify_edition
 from .sources import ContentStore, IntegrityError, SCHEMA as SOURCE_MANIFEST_SCHEMA
+from .store import Store
 
 WORK_RULE = "native-resource-table-work-v1"
 _LOCATOR = re.compile(r"PDF page (\d+), line (\d+)")
@@ -30,6 +33,7 @@ _LINEAGE = "value_evidence_lineage.jsonl"
 _REVIEW_RESULT = "prior_binding_dispositions.jsonl"
 _DISCOVERED = "discovered_native_rows.jsonl"
 LEGACY_LANE_SCHEMA = "legacy-resource-source-lane-replay-v1"
+COHORT_RECOVERY_SCHEMA = "historical-resource-cohort-recovery-v1"
 _LEGACY_STATEMENTS = "results/ree-project-census/coverage-locked-20261125/resource_statement_observations.csv"
 _LEGACY_STATEMENTS_SHA = "067e6bf1d8ba46426fb5f16ec7ab404606aa58c181b6ec57445ea6321e97aeb2"
 _LEGACY_SPECIES = {item.casefold() for item in KNOWN_OXIDE_SPECIES}
@@ -419,29 +423,42 @@ def _legacy_cell(hint, document, index, editions):
         reason = "AMBIGUOUS_TYPED_NATIVE_POSITION" if cells else "TYPED_LANE_NOT_LOCATED"
         return None, _legacy_hold(hint, reason)
     row, cell = next(iter(cells.values()))
-    span = document.locate(page, line=row.row_line)
     edition = min(editions, key=lambda value: (value["acquired_at"], value["edition_id"]))
-    identity = [hint["project_id"], document.source_sha256, cell.value.locator]
+    return _recovered_cell(hint["project_id"], document, row, cell, edition), None
+
+
+def _recovered_cell(project_id, document, row, cell, edition):
+    page = cell.value.physical_page
+    span = document.locate(page, line=row.row_line)
+    identity = [project_id, document.source_sha256, cell.value.locator]
     return {
         **cell.to_dict(), "candidate_id": _digest(canonical_json(identity).encode()),
-        "project_id": hint["project_id"], "source_sha256": document.source_sha256,
+        "project_id": project_id, "source_sha256": document.source_sha256,
         "source_url": edition["url"], "physical_page": page, "source_edition_id": edition["edition_id"],
         "source_capture_sha256": edition["receipt_sha256"],
         "temporal_decision_id": edition["temporal_decision"]["decision_id"],
         "row_anchor": {"locator": span.locator, "text": span.text},
         "context_anchors": [anchor.to_dict() for anchor in row.context_anchors],
         "scope_status": "UNBOUND", "state": "CANDIDATE", "candidate_only": True, "formal_admission": False,
-    }, None
+    }
 
 
-def _legacy_document(store, digest, hints, editions, identity, timezone):
+def _legacy_document(store, digest, hints, editions, identity, timezone, *, fallback=None):
     projects = {hint["project_id"] for hint in hints}
     records = [{"project_id": project, "edition_id": edition["edition_id"]}
                for edition in editions for project in projects.intersection(edition["project_ids"])]
-    document, verified = _verified_view(store, DocumentCache(), digest, editions, records, identity, timezone)
+    cache = DocumentCache()
+    if editions:
+        document, verified = _verified_view(store, cache, digest, editions, records, identity, timezone)
+    else:
+        document = cache.pdf(read_asset(fallback["source"], fallback["assets"]), digest)
+        verified = {}
     by_project = defaultdict(list)
     for (project, edition), captures in verified.items():
         by_project[project].extend(captures)
+    if fallback:
+        for project in projects - by_project.keys():
+            by_project[project].append(fallback["edition"])
     pages = sorted({page for hint in hints if (page := _legacy_page(hint)) and page <= len(document.pages)})
     index = _legacy_page_cells(document, pages)
     found, holds = [], []
@@ -453,7 +470,7 @@ def _legacy_document(store, digest, hints, editions, identity, timezone):
             found.append((candidate, hint["observation_id"]))
     receipt = {"source_sha256": digest, "native_pages_decoded": len(document.pages),
                "nominated_pages_read": pages, "runtime": document.runtime}
-    return found, holds, receipt
+    return found, holds, receipt, index, document, by_project
 
 
 def replay_legacy_source_lanes(*, v2_root: Path, sources: Path, assets: Path) -> dict:
@@ -482,7 +499,9 @@ def replay_legacy_source_lanes(*, v2_root: Path, sources: Path, assets: Path) ->
     failed = []
     for digest, group in sorted(grouped.items()):
         try:
-            found, unresolved, receipt = _legacy_document(store, digest, group, catalog[digest], identity, timezone)
+            found, unresolved, receipt, _, _, _ = _legacy_document(
+                store, digest, group, catalog[digest], identity, timezone,
+            )
         except DocumentError as error:
             failed.append({"source_sha256": digest, "status": error.outcome, "reason": str(error)})
             holds.extend(_legacy_hold(hint, str(error)) for hint in group)
@@ -506,3 +525,300 @@ def replay_legacy_source_lanes(*, v2_root: Path, sources: Path, assets: Path) ->
             "timezone": identity[2], "source_manifest_sha256": _digest(manifest_bytes), "v2_archive_ref": V2_REF,
             "v2_observations_sha256": _LEGACY_STATEMENTS_SHA, "candidate_only": True, "counts": counts,
             "observations": list(observations.values()), "holds": holds, "documents": documents, "failed_documents": failed}
+
+
+def _cohort_inventory(v2_root, registry):
+    from .migration.baseline import PinnedRepository, checked_csv
+    from .migration.project_registry import ASSETS, CENSUS, PROVENANCE, RELEASE, _archive_inputs
+
+    pinned = _archive_inputs(v2_root)
+    historical = checked_csv(pinned[CENSUS])
+    provenance = checked_csv(pinned[PROVENANCE])
+    wanted = {
+        (row["專案ID"], column): value
+        for row in historical for column, value in row.items()
+    }
+    if ({p.project_id for p in registry.projects} != {row["專案ID"] for row in historical}
+            or len(wanted) != len(provenance) or len(wanted) != 4743
+            or {(row["project_id"], row["column"]): row["value"] for row in provenance} != wanted):
+        raise ValueError("Historical and current Project or Census axes differ")
+    catalog = defaultdict(list)
+    for row in json.loads(pinned[ASSETS]):
+        catalog[row["sha256"]].append(row)
+    claims = PinnedRepository(v2_root).read("science", "data/claims.json")
+    if claims is None or _digest(claims) != json.loads(pinned[RELEASE])["claims_sha256"]:
+        raise ValueError("Frozen claim extraction configuration differs")
+    return provenance, catalog, {**{name: _digest(value) for name, value in pinned.items()},
+                                 "data/claims.json": _digest(claims)}, json.loads(claims)
+
+
+def _historical_source(versions, sha, assets, cutoff):
+    records = sorted(
+        (row for row in versions if row["role"] == "snapshot" and row["kind"] == "pdf"
+         and row["url"].startswith("https://")), key=lambda row: (row["key"], row["url"]),
+    )
+    if not records:
+        return None
+    source = Source(source_key=f"historical-pdf-{sha}", sha256=sha, url=records[0]["url"],
+                    kind="pdf", source_version=sha)
+    decision = evaluate_temporal(source_sha256=sha, cutoff=cutoff, observation_role="DOCUMENT")
+    return {"source": source, "assets": assets, "edition": {
+        "url": source.url, "edition_id": source.source_key, "receipt_sha256": None,
+        "temporal_decision": decision.to_dict(), "acquired_at": "",
+    }}
+
+
+def _cohort_lanes(hints, catalog, manifest, store, historical_assets, inventory):
+    identity, timezone = _identity(manifest), ZoneInfo(manifest["timezone"])
+    current = defaultdict(list)
+    for entry in manifest["editions"]:
+        if entry["kind"] == "pdf" and entry["temporal_decision"]["status"] == "ELIGIBLE":
+            current[entry["sha256"]].append(entry)
+    grouped = defaultdict(list)
+    for hint in hints:
+        grouped[hint["source_sha256"]].append(hint)
+    documents, holds, observations, views = [], [], {}, {}
+    for sha, group in sorted(grouped.items()):
+        fallback = _historical_source(catalog[sha], sha, historical_assets, identity[1])
+        editions = [e for e in current[sha] if set(e["project_ids"]) & {h["project_id"] for h in group}]
+        if fallback is None and not editions:
+            holds.extend(_legacy_hold(item, "HISTORICAL_PDF_VERSION_NOT_REGISTERED") for item in group)
+            continue
+        try:
+            found, unresolved, receipt, index, document, by_project = _legacy_document(
+                store, sha, group, editions, identity, timezone, fallback=fallback,
+            )
+        except DocumentError as error:
+            holds.extend(_legacy_hold(item, str(error)) for item in group)
+            continue
+        documents.append(receipt)
+        views[sha] = document
+        holds.extend(unresolved)
+        row_locations = {}
+        for candidate, hint_id in found:
+            record = observations.setdefault(candidate["candidate_id"], {**candidate, "legacy_hint_ids": []})
+            record["legacy_hint_ids"].append(hint_id)
+            row_key = candidate["physical_page"], candidate["row_anchor"]["locator"]
+            row_locations.setdefault(row_key, set()).add(candidate["project_id"])
+        for cells in index.values():
+            for row, cell in cells.values():
+                for project in sorted(row_locations.get((row.physical_page, row.row_locator), ())):
+                    edition = min(by_project[project], key=lambda x: (x["acquired_at"], x["edition_id"]))
+                    record = _recovered_cell(project, document, row, cell, edition)
+                    observations.setdefault(record["candidate_id"], {**record, "legacy_hint_ids": []})
+        inventory[sha] = "NATIVE_PDF_REREAD"
+    return observations, holds, documents, views
+
+
+def _verify_cohort_bytes(historical_assets, store, catalog, provenance, inventory):
+    """Verify content availability throughout the Census, including external data."""
+    for row in provenance:
+        for sha in filter(None, row["source_sha256"].split(";")):
+            if sha in inventory:
+                continue
+            try:
+                if store.path(sha).is_file():
+                    store.read(sha)
+                else:
+                    versions = catalog[sha]
+                    raw = versions[0]
+                    read_asset(Source(source_key=raw["key"], url=raw["url"], sha256=sha,
+                                      kind=raw["kind"], source_version=sha), historical_assets)
+            except (DocumentError, IntegrityError, OSError, IndexError) as error:
+                inventory[sha] = "SOURCE_SHA_CONFLICT" if (
+                    isinstance(error, IntegrityError) or getattr(error, "outcome", None) == "SCIENTIFIC_CONFLICT"
+                ) else "EXACT_BYTES_UNAVAILABLE"
+            else:
+                inventory[sha] = "EXACT_BYTES_AVAILABLE"
+
+
+def _write_cohort_store(database, registry, records, store, historical_assets):
+    with Store(database) as output, output.transaction():
+        for project in registry.projects:
+            output.add(Entity(entity_id=project.project_id, kind=EntityKind.PROJECT,
+                              native_namespace="v3-project-registry", native_id=project.project_id, name=project.name))
+        sources = {}
+        for record in sorted(records.values(), key=lambda row: row["candidate_id"]):
+            sha = record["source_sha256"]
+            if sha not in sources:
+                source = Source(source_key=f"historical-recovery-{sha}", url=record["source_url"], sha256=sha,
+                                kind="pdf", source_version=sha)
+                content = store.read(sha) if record["source_capture_sha256"] else read_asset(source, historical_assets)
+                output.add_source(source, content)
+                sources[sha] = source
+            source = sources[sha]
+            project = record["project_id"]
+            row_loc = record["row_anchor"]["locator"]
+            scope_id = _digest(canonical_json([COHORT_RECOVERY_SCHEMA, project, sha, row_loc]).encode())
+            output.add(ResourceScope(scope_id=scope_id, project_id=project, name="Original table row; scope under review"))
+            anchor = EvidenceAnchor(anchor_id=record["candidate_id"], source_key=source.source_key, source_sha=sha,
+                                    locator=record["value_anchor"]["locator"], page=record["physical_page"],
+                                    quote=record["value_anchor"]["text"], role="HISTORICAL_NATIVE_TABLE_TOKEN")
+            output.add(anchor)
+            output.add(RawObservation(observation_id=record["candidate_id"], project_id=project, scope_id=scope_id,
+                                      source_key=source.source_key, source_sha=sha, variable=record["variable"],
+                                      raw_value=anchor.quote, raw_unit=record["native_unit"], status="CANDIDATE",
+                                      transform_version=COHORT_RECOVERY_SCHEMA, original_payload=record,
+                                      anchor_id=anchor.anchor_id, chemical_basis=record["chemical_basis"]))
+        return output.integrity()
+
+
+def _cohort_cells(provenance, inventory, observations, text, government):
+    recovered = defaultdict(set)
+    for record in observations.values():
+        for hint in record["legacy_hint_ids"]:
+            recovered[hint].add(record["candidate_id"])
+    cells = []
+    for row in provenance:
+        shas = {sha: inventory[sha] for sha in filter(None, row["source_sha256"].split(";"))}
+        hits = sorted({item for hint in json.loads(row["observation_ids"]) for item in recovered[hint]})
+        geographic = government.get(row["project_id"]) if row["column"] in {"經度", "緯度"} else None
+        cells.append({
+            "project_id": row["project_id"], "column": row["column"], "historical_method": row["method"],
+            "historical_present": bool(row["value"]), "source_sha256": shas, "source_url": row["source_url"],
+            "locator": row["locator"], "original_anchor_ids": hits,
+            "candidate_text_evidence": text.get((row["project_id"], row["column"])),
+            "candidate_government_point": geographic,
+        })
+    return cells
+
+
+def _text_hints(claims, provenance):
+    from .observations import digest
+
+    keys = {(r["project_id"], r["column"], r["source_sha256"], r["locator"]) for r in provenance if r["value"]}
+    grouped = defaultdict(list)
+    for record in claims["projects"]:
+        project = "AU-" + digest([record.get("entity_namespace", "project_registry_v1"), str(record["id"])])[:20]
+        for entry in record.get("attributes", ()):
+            sha = entry["source_sha256"]
+            cell = project, entry["column"], sha, entry["locator"]
+            page = entry.get("pdf_page")
+            quotes = tuple(dict.fromkeys(" ".join(text.split()) for text in entry.get("page_markers", ()) if len(text.strip()) >= 3))
+            if cell in keys and type(page) is int and page > 0 and len(quotes) >= 2:
+                grouped[sha].append((cell, page, quotes))
+    return grouped
+
+
+def _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, cutoff, views):
+    from .development import bind_native_quote
+
+    records = {}
+    holds = Counter()
+    for sha, entries in _text_hints(claims, provenance).items():
+        source = _historical_source(catalog[sha], sha, historical_assets, cutoff)
+        if source is None:
+            holds["ORIGINAL_QUOTE_SOURCE_NOT_PDF"] += len(entries)
+            continue
+        try:
+            if sha in views:
+                holds["PDF_VIEW_REUSED"] += 1
+                document = views[sha]
+            else:
+                body = store.read(sha) if store.path(sha).is_file() else read_asset(source["source"], historical_assets)
+                document = DocumentCache().pdf(body, sha)
+        except (DocumentError, IntegrityError, OSError) as error:
+            holds[str(error)] += len(entries)
+            continue
+        for (project, column, _, _), page, quotes in entries:
+            try:
+                anchors = [bind_native_quote(document, source["source"].source_key, page, quote, "ARCHIVED_TEXT_CANDIDATE")
+                           for quote in quotes]
+            except DocumentError as error:
+                holds[str(error)] += 1
+                continue
+            records[project, column] = {
+                "state": "CANDIDATE", "source_sha256": sha, "source_url": source["source"].url,
+                "anchors": [anchor.to_dict() for anchor in anchors], "scope_status": "UNBOUND",
+                "temporal_decision": source["edition"]["temporal_decision"],
+            }
+    reused = holds.pop("PDF_VIEW_REUSED", 0)
+    return records, holds, reused
+
+
+def _cohort_formula_checks(records):
+    from .derivations import registered_formula
+    from .observations import exact_value
+
+    groups = defaultdict(list)
+    for row in records.values():
+        groups[row["project_id"], row["source_sha256"], row["row_anchor"]["locator"]].append(row)
+    results = []
+    for (project, sha, locator), row in sorted(groups.items()):
+        masses = [r for r in row if (r["variable"], r["native_unit"]) == ("ore_mt", "Mt")]
+        grades = [r for r in row if (r["variable"], r["chemical_basis"]) == ("grade", "TREO")
+                  and r["native_unit"] in {"ppm", "%"}]
+        if len(masses) != 1 or len(grades) != 1:
+            continue
+        mass, grade = masses[0], grades[0]
+        formula = registered_formula(f"contained-treo-from-mt-{'ppm' if grade['native_unit'] == 'ppm' else 'pct'}-v1")
+        amounts = [exact_value(item["value_anchor"]["text"]) for item in (mass, grade)]
+        results.append({"project_id": project, "source_sha256": sha, "row_locator": locator, "layer": "SHADOW",
+                        "reason": "SAME_ROW_ARITHMETIC_MATERIAL_AND_SCOPE_UNVERIFIED",
+                        "input_observation_ids": [mass["candidate_id"], grade["candidate_id"]],
+                        "formula_id": formula.formula_id, "formula_sha256": formula.sha256,
+                        "value": str(amounts[0] * amounts[1] * Decimal(formula.factor)), "unit": "kt"})
+    return results
+
+
+def _replay_cohort_government(v2_root, geography):
+    if geography is None:
+        return {}, None
+    from .official_geography import replay_historical_points
+
+    prior, store = geography
+    payload = prior.read_bytes()
+    receipt = replay_historical_points(v2_root, store, prior=json.loads(payload))
+    points = {row["project_id"]: row for row in receipt["points"] if row["geometry"] is not None}
+    return points, {"input_receipt_sha256": _digest(payload), "status": receipt["status"], "counts": receipt["counts"]}
+
+
+def recover_historical_cohort(*, v2_root, profile, sources, assets, historical_assets, database, geography=None):
+    """Rebuild source routes across the fixed Census and materialize original tokens for review."""
+    if database.resolve().is_relative_to(v2_root.resolve()) or database.exists():
+        raise ValueError("Recovery requires a new candidate SQLite outside the V2 reference")
+    settings = load_profile(profile)
+    registry = load_registry(settings.registry_path)
+    provenance, catalog, hashes, claims = _cohort_inventory(v2_root, registry)
+    content = sources.read_bytes()
+    manifest = json.loads(content)
+    if (manifest.get("schema") != SOURCE_MANIFEST_SCHEMA
+            or _identity(manifest) != (settings.profile_id, settings.research_cutoff.isoformat(), settings.timezone.key)):
+        raise ValueError("Cohort recovery manifest and fixed profile differ")
+    hints = _git_blob(v2_root, _LEGACY_STATEMENTS)
+    if hints is None or _digest(hints) != _LEGACY_STATEMENTS_SHA:
+        raise ValueError("Frozen resource observation hints differ")
+    hints = list(csv.DictReader(StringIO(hints.decode("utf-8-sig"))))
+    store, inventory = ContentStore(assets), {}
+    records, holds, documents, views = _cohort_lanes(hints, catalog, manifest, store, historical_assets, inventory)
+    _verify_cohort_bytes(historical_assets, store, catalog, provenance, inventory)
+    text, text_holds, reused = _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, manifest["cutoff"], views)
+    government, government_receipt = _replay_cohort_government(v2_root, geography)
+    cells = _cohort_cells(provenance, inventory, records, text, government)
+    calculations = _cohort_formula_checks(records)
+    database.parent.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(dir=database.parent) as directory:
+        temporary = Path(directory) / database.name
+        integrity = _write_cohort_store(temporary, registry, records, store, historical_assets)
+        database.hardlink_to(temporary)
+    return {
+        "schema": COHORT_RECOVERY_SCHEMA,
+        "status": "FAIL" if "SOURCE_SHA_CONFLICT" in inventory.values() else "PASS" if records else "BLOCKED",
+        "complete_historical_rebuild": "BLOCKED" if "EXACT_BYTES_UNAVAILABLE" in inventory.values() else "NOT_RUN",
+        "v2_archive_ref": V2_REF, "archive_input_sha256": hashes, "profile_sha256": settings.sha256,
+        "source_manifest_sha256": _digest(content), "cutoff": manifest["cutoff"], "timezone": manifest["timezone"],
+        "database_sha256": _digest(database.read_bytes()), "sqlite_integrity": integrity,
+        "counts": {
+            "projects": len(registry.projects), "cells": len(cells), "pdfs_read": len(documents),
+            "candidate_positions": len(records), "candidate_projects": len({row["project_id"] for row in records.values()}),
+            "v2_hint_matched_positions": sum(bool(row["legacy_hint_ids"]) for row in records.values()),
+            "candidate_cells_with_original_anchors": sum(bool(row["original_anchor_ids"]) for row in cells),
+            "candidate_text_cells": len(text), "candidate_text_projects": len({project for project, _ in text}),
+            "candidate_text_holds": dict(text_holds), "shadow_formula_checks": len(calculations),
+            "reused_pdf_views": reused, "government_candidate_projects": len(government),
+            "source_status": dict(Counter(inventory.values())), "holds": dict(Counter(row["reason"] for row in holds)),
+            "formal_admissions": 0,
+        },
+        "cells": cells, "resource_holds": holds, "documents": documents, "formula_checks": calculations,
+        "government_replay": government_receipt,
+    }

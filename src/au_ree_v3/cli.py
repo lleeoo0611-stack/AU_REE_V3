@@ -104,6 +104,10 @@ def main(argv: list[str] | None = None) -> int:
     for argument in ("v2-root", "sources", "assets"):
         historical_lanes.add_argument(f"--{argument}", type=Path, required=True)
     historical_lanes.add_argument("--out", type=Path)
+    cohort_recovery = research_commands.add_parser("recover-historical-cohort", help="Recover original evidence throughout the fixed Census")
+    for argument in ("v2-root", "profile", "sources", "assets", "historical-assets", "database", "out"):
+        cohort_recovery.add_argument(f"--{argument}", type=Path, required=True)
+    cohort_recovery.add_argument("--geography", type=Path, nargs=2, metavar=("RECEIPT", "STORE"))
     build = research_commands.add_parser("build", help="Build the fresh Census and decision inputs")
     build.add_argument("--profile", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
@@ -301,6 +305,16 @@ def _run_research(args) -> dict:
         _reference_receipt_path(args)
         return _write_reference_receipt(args, replay_legacy_source_lanes(
             v2_root=args.v2_root, sources=args.sources, assets=args.assets,
+        ))
+    if args.operation == "recover-historical-cohort":
+        from .native_table_work import recover_historical_cohort
+
+        _reference_receipt_path(args)
+        if args.out.exists() or args.out.resolve() == args.database.resolve():
+            raise ValueError("Cohort recovery requires a distinct new receipt")
+        return _write_reference_receipt(args, recover_historical_cohort(
+            v2_root=args.v2_root, profile=args.profile, sources=args.sources, assets=args.assets,
+            historical_assets=args.historical_assets, database=args.database, geography=args.geography,
         ))
     if args.operation == "review-development":
         from .development import review_milestones

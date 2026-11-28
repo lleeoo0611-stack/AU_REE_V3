@@ -55,3 +55,19 @@ export AU_REE_LEGACY_LANE_MANIFEST=/workspace/AU_REE_V3/work/census-stage6/addit
 export AU_REE_LEGACY_LANE_CAS=/workspace/AU_REE_V3/work/census-stage6/verified/cas
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python -m unittest discover -s tests -p test_native_table_discovery.py -v
 ```
+
+## 固定 93 案的原件回讀
+
+`research recover-historical-cohort` 從唯讀 V2 凍結版核對 Project ID、4,743 格血緣、來源清冊及原擷取設定的 SHA。它逐來源回讀既有 V3 CAS 或按 SHA 命名的歷史原件庫，重用原生表格解析及文字定位。能以舊線索定位一格時，同列其他已辨識角色的數值也由原件讀回。歷史擷取設定只提供位置、角色及判讀線索，候選數字來自當次讀回的原件錨點。
+
+候選 SQLite 使用既有 Store 契約，保存 Project、Source、Scope、原件錨點和 Raw Observation。Scope 暫繫於該表列。文字候選保留原件可唯一定位的引文及原欄位。已註冊的 TREO 含量公式可用同一原始表列的量與品位重算，結果保持影子狀態。外部圖層可輸入先前政府擷取收據及 CAS，依原生 ID 重播。缺同版原件、欄義、時間或資源範圍證據的結果保留在回讀收據。
+
+```sh
+PYTHONPATH=src python -m au_ree_v3 research recover-historical-cohort \
+  --v2-root "$V2_REFERENCE" --profile config/research_profiles/au_ree_census_evidence_fill_v1.json \
+  --sources "$SOURCE_MANIFEST" --assets "$V3_SOURCE_CAS" --historical-assets "$EXACT_V2_ASSETS" \
+  --geography "$GOVERNMENT_RECEIPT" "$GOVERNMENT_CAS" \
+  --database "$OUTPUT/candidates.sqlite" --out "$OUTPUT/recovery.json"
+```
+
+輸出各自使用新路徑。移除 `--geography` 可單獨重播來源、文件與公式。候選 SQLite 可用來執行附來源分組的 NLP 評估。 [分組訓練與留出](oxide_table_retrieval.md)
