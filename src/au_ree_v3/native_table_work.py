@@ -1,19 +1,24 @@
 """Reread pinned source inventory and close candidate-only table review work."""
 
 from collections import Counter, defaultdict
+import csv
 from hashlib import sha256
+from io import StringIO
 import json
 from pathlib import Path
 import re
 from tempfile import TemporaryDirectory
+from zoneinfo import ZoneInfo
 
 from .contracts import canonical_json
 from .documents import DocumentCache, DocumentError
 from .native_table_discovery import DISCOVERY_RULE, discover_page_rows
+from .normalization import KNOWN_OXIDE_SPECIES
 from .registry import SHA256, load_profile, load_registry
-from .resource_table_binding import DETECTION_RULE, RULE, _baseline_overlap, _plain, bind_page_row
+from .resource_table_binding import DETECTION_RULE, RULE, _baseline_overlap, _plain, _unit_label, bind_page_row
+from .source_case_inventory import V2_REF, _git_blob
 from .source_inventory import MAX_DOCUMENT_BYTES, _CheckedBody, _verify_edition
-from .sources import ContentStore, IntegrityError
+from .sources import ContentStore, IntegrityError, SCHEMA as SOURCE_MANIFEST_SCHEMA
 
 WORK_RULE = "native-resource-table-work-v1"
 _LOCATOR = re.compile(r"PDF page (\d+), line (\d+)")
@@ -24,6 +29,10 @@ _UNBOUND_LEDGER = "unbound_numeric_tokens.jsonl"
 _LINEAGE = "value_evidence_lineage.jsonl"
 _REVIEW_RESULT = "prior_binding_dispositions.jsonl"
 _DISCOVERED = "discovered_native_rows.jsonl"
+LEGACY_LANE_SCHEMA = "legacy-resource-source-lane-replay-v1"
+_LEGACY_STATEMENTS = "results/ree-project-census/coverage-locked-20261125/resource_statement_observations.csv"
+_LEGACY_STATEMENTS_SHA = "067e6bf1d8ba46426fb5f16ec7ab404606aa58c181b6ec57445ea6321e97aeb2"
+_LEGACY_SPECIES = {item.casefold() for item in KNOWN_OXIDE_SPECIES}
 
 
 def _digest(data):
@@ -355,3 +364,145 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
     if len(documents) != len(by_sha) and report["status"] == "PASS":
         report["status"] = "BLOCKED"
     return _write_outputs(out, report, outputs)
+
+
+def _legacy_lane(hint):
+    """Treat historical token, measurement role and unit solely as lookup discriminators."""
+    variable, basis = hint["variable"], hint["basis"].strip().casefold()
+    if variable in {"ore_mt", "reported_resource_ore_mt"}:
+        return "ore_mt"
+    if basis == "treo" and variable in {"grade", "reported_resource_grade", "reported_resource_grade_ppm",
+                                         "reported_resource_grade_pct", "contained_treo_kt"}:
+        return "contained_treo_kt" if variable == "contained_treo_kt" else "grade"
+    if basis in _LEGACY_SPECIES and variable.endswith("_ppm"):
+        return f"{basis}_ppm"
+    return None
+
+
+def _legacy_hold(hint, reason):
+    return {"legacy_hint_id": hint["observation_id"], "project_id": hint["project_id"],
+            "source_sha256": hint["source_sha256"], "physical_page": _legacy_page(hint), "reason": reason}
+
+
+def _legacy_page(hint):
+    value = hint["physical_page"]
+    return int(value) if value.isdecimal() and int(value) > 0 else None
+
+
+def _legacy_page_cells(document, pages):
+    by_lane = defaultdict(dict)
+    for page in pages:
+        for row in discover_page_rows(document, page=page):
+            for cell in row.cells:
+                if cell.variable and cell.header and cell.unit_label and cell.value.physical_page == page:
+                    key = page, cell.variable, cell.unit, cell.value.text
+                    by_lane[key][cell.value.locator] = row, cell
+    return by_lane
+
+
+def _legacy_cell(hint, document, index, editions):
+    if not editions:
+        return None, _legacy_hold(hint, "EXACT_CAPTURE_OR_TEMPORAL_PROOF_UNBOUND")
+    if hint["source_transform"]:
+        return None, _legacy_hold(hint, "HISTORICAL_TRANSFORM_REQUIRES_SEPARATE_REVIEW")
+    if not hint["original_token"]:
+        return None, _legacy_hold(hint, "ORIGINAL_TOKEN_HINT_MISSING")
+    page = _legacy_page(hint)
+    if page is None or page > len(document.pages):
+        return None, _legacy_hold(hint, "PHYSICAL_PAGE_UNAVAILABLE")
+    lane, unit = _legacy_lane(hint), _unit_label(hint["original_unit"])
+    if not lane or not unit:
+        reason = "ORIGINAL_UNIT_HINT_MISSING" if not unit else "MEASUREMENT_ROLE_OUTSIDE_REPLAY"
+        return None, _legacy_hold(hint, reason)
+    cells = index.get((page, lane, unit, hint["original_token"]), {})
+    if len(cells) != 1:
+        reason = "AMBIGUOUS_TYPED_NATIVE_POSITION" if cells else "TYPED_LANE_NOT_LOCATED"
+        return None, _legacy_hold(hint, reason)
+    row, cell = next(iter(cells.values()))
+    span = document.locate(page, line=row.row_line)
+    edition = min(editions, key=lambda value: (value["acquired_at"], value["edition_id"]))
+    identity = [hint["project_id"], document.source_sha256, cell.value.locator]
+    return {
+        **cell.to_dict(), "candidate_id": _digest(canonical_json(identity).encode()),
+        "project_id": hint["project_id"], "source_sha256": document.source_sha256,
+        "source_url": edition["url"], "physical_page": page, "source_edition_id": edition["edition_id"],
+        "source_capture_sha256": edition["receipt_sha256"],
+        "temporal_decision_id": edition["temporal_decision"]["decision_id"],
+        "row_anchor": {"locator": span.locator, "text": span.text},
+        "context_anchors": [anchor.to_dict() for anchor in row.context_anchors],
+        "scope_status": "UNBOUND", "state": "CANDIDATE", "candidate_only": True, "formal_admission": False,
+    }, None
+
+
+def _legacy_document(store, digest, hints, editions, identity, timezone):
+    projects = {hint["project_id"] for hint in hints}
+    records = [{"project_id": project, "edition_id": edition["edition_id"]}
+               for edition in editions for project in projects.intersection(edition["project_ids"])]
+    document, verified = _verified_view(store, DocumentCache(), digest, editions, records, identity, timezone)
+    by_project = defaultdict(list)
+    for (project, edition), captures in verified.items():
+        by_project[project].extend(captures)
+    pages = sorted({page for hint in hints if (page := _legacy_page(hint)) and page <= len(document.pages)})
+    index = _legacy_page_cells(document, pages)
+    found, holds = [], []
+    for hint in hints:
+        candidate, hold = _legacy_cell(hint, document, index, by_project[hint["project_id"]])
+        if hold:
+            holds.append(hold)
+        else:
+            found.append((candidate, hint["observation_id"]))
+    receipt = {"source_sha256": digest, "native_pages_decoded": len(document.pages),
+               "nominated_pages_read": pages, "runtime": document.runtime}
+    return found, holds, receipt
+
+
+def replay_legacy_source_lanes(*, v2_root: Path, sources: Path, assets: Path) -> dict:
+    """Replay native resource/oxide lanes against the frozen V2 locator hints, without writes."""
+    body = _git_blob(Path(v2_root), _LEGACY_STATEMENTS)
+    if body is None or _digest(body) != _LEGACY_STATEMENTS_SHA:
+        raise ValueError("Frozen V2 statement observation input is missing or has different bytes")
+    hints = list(csv.DictReader(StringIO(body.decode("utf-8-sig"))))
+    manifest_bytes = Path(sources).read_bytes()
+    manifest = json.loads(manifest_bytes)
+    if manifest.get("schema") != SOURCE_MANIFEST_SCHEMA:
+        raise ValueError("Native lane replay requires the V3 source manifest contract")
+    identity, store = _identity(manifest), ContentStore(Path(assets))
+    timezone = ZoneInfo(manifest["timezone"])
+    catalog, grouped, available = defaultdict(list), defaultdict(list), set()
+    for edition in manifest["editions"]:
+        if edition["kind"] == "pdf" and edition["temporal_decision"]["status"] == "ELIGIBLE":
+            catalog[edition["sha256"]].append(edition)
+            available.update((project, edition["sha256"]) for project in edition["project_ids"])
+    holds, observations, documents = [], {}, []
+    for hint in hints:
+        if (hint["project_id"], hint["source_sha256"]) in available:
+            grouped[hint["source_sha256"]].append(hint)
+        else:
+            holds.append(_legacy_hold(hint, "NO_ELIGIBLE_EXACT_PROJECT_PDF"))
+    failed = []
+    for digest, group in sorted(grouped.items()):
+        try:
+            found, unresolved, receipt = _legacy_document(store, digest, group, catalog[digest], identity, timezone)
+        except DocumentError as error:
+            failed.append({"source_sha256": digest, "status": error.outcome, "reason": str(error)})
+            holds.extend(_legacy_hold(hint, str(error)) for hint in group)
+            continue
+        holds.extend(unresolved)
+        documents.append(receipt)
+        for candidate, hint_id in found:
+            record = observations.setdefault(candidate["candidate_id"], {**candidate, "legacy_hint_ids": []})
+            record["legacy_hint_ids"].append(hint_id)
+    counts = {"legacy_hints": len(hints), "exact_manifest_project_pdf_join": sum(map(len, grouped.values())),
+              "pdfs_read": len(documents), "nominated_pages_read": sum(len(doc["nominated_pages_read"]) for doc in documents),
+              "native_pages_decoded": sum(doc["native_pages_decoded"] for doc in documents),
+              "matching_legacy_hints": sum(len(record["legacy_hint_ids"]) for record in observations.values()),
+              "candidate_positions": len(observations), "candidate_projects": len({r["project_id"] for r in observations.values()}),
+              "holds_by_reason": dict(Counter(hold["reason"] for hold in holds)), "formal_admissions": 0}
+    proof_missing = counts["holds_by_reason"].get("EXACT_CAPTURE_OR_TEMPORAL_PROOF_UNBOUND")
+    status = "FAIL" if any(row["status"] == "SCIENTIFIC_CONFLICT" for row in failed) else (
+        "BLOCKED" if failed or proof_missing or not documents else "PASS"
+    )
+    return {"schema": LEGACY_LANE_SCHEMA, "status": status, "profile_id": identity[0], "cutoff": identity[1],
+            "timezone": identity[2], "source_manifest_sha256": _digest(manifest_bytes), "v2_archive_ref": V2_REF,
+            "v2_observations_sha256": _LEGACY_STATEMENTS_SHA, "candidate_only": True, "counts": counts,
+            "observations": list(observations.values()), "holds": holds, "documents": documents, "failed_documents": failed}

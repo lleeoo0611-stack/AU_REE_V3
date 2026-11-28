@@ -11,8 +11,8 @@ from au_ree_v3.census_metadata import prepare_census_metadata
 from au_ree_v3.contracts import ContractViolation
 from au_ree_v3.fresh_research import verify_source_manifest
 from au_ree_v3.project_attributes import (
-    AttributeAssertion, AttributeSelection, POLICY_SHA, ValidatedAttribute,
-    _development_role, _select_attributes, _verdict,
+    AttributeAssertion, AttributeSelection, DATED_STUDY_POLICY_SHA, POLICY_SHA, ValidatedAttribute,
+    _development_role, _select_attributes, _verdict, matches_public_attribute_role,
 )
 from au_ree_v3.registry import load_profile, load_registry
 from au_ree_v3.sources import ContentStore
@@ -216,6 +216,7 @@ class DatedStudyEventsTests(unittest.TestCase):
             ),
             "north-stanmore-prior-pfs-planned": ("CANDIDATE", "PLANNED", None, 1, False, None),
             "nolans-early-construction-works": ("CANDIDATE", "EARLY_WORKS", None, 1, False, None),
+            "jupiter-scoping-outcomes-released": ("VALIDATED", "STUDY_RESULTS_RELEASED", "2026-10-20", 1, True, None),
         }
         actual = {
             item["case_id"]: (
@@ -226,8 +227,18 @@ class DatedStudyEventsTests(unittest.TestCase):
         }
         self.assertEqual(actual, expected)
         self.assertEqual((previous.attribute_receipt["display_cells"], current.attribute_receipt["display_cells"]),
-                         (27, 36))
+                         (27, 39))
         self.assertEqual(current.attribute_receipt["mcda_inputs_added"], 0)
+        self.assertEqual(DATED_STUDY_POLICY_SHA, "1f452b8a39c97db1987a50f1b86880f6853b35c4904c3b0d1a0d6809f2c6565c")
+        jupiter = current.cells["AU-dac3c8e40326b8244cdb", "開發階段"]
+        metadata = json.loads(jupiter["metadata_evidence"])
+        value = "已公布範疇研究結果（20 October 2026 · Jupiter Rare Earth Elements Project）"
+        self.assertEqual(jupiter["value"], value)
+        self.assertTrue(matches_public_attribute_role("DEVELOPMENT_STAGE", "development_stage", value,
+                                                       jupiter["scope"], metadata))
+        self.assertFalse(matches_public_attribute_role("DEVELOPMENT_STAGE", "development_stage", value,
+                                                        jupiter["scope"], {**metadata, "attribute_role": "COMPLETED"}))
+        self.assertNotIn(("AU-47d12ebe6b66df8e5936", "開發階段"), current.cells)
         for key, row in previous.cells.items():
             after = current.cells[key]
             self.assertEqual({field: after.get(field) for field in ("value", "source_sha256", "anchor_id")},

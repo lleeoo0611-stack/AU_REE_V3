@@ -16,7 +16,9 @@ from au_ree_v3.census_resource_display import (
 )
 from au_ree_v3.display_package import compile_display_package
 from au_ree_v3.documents import DocumentCache, PDFDocument
+from au_ree_v3.publication import _extract_code, load_release
 from au_ree_v3.resource_extraction import ResourceStatement
+from au_ree_v3.sources import ContentStore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,6 +49,16 @@ def _linked_date_fixture():
 
 def _phrase(text):
     return _Phrase(1, "PDF page 1, line 1", text)
+
+
+def _archived_profile(test, candidate, release):
+    archive = load_release(candidate / "archive", release)
+    store = ContentStore(candidate / "cas")
+    directory = tempfile.TemporaryDirectory()
+    test.addCleanup(directory.cleanup)
+    code = Path(directory.name) / "code"
+    _extract_code(store.read(archive["code_archive_sha256"]), code)
+    return code / "config/research_profiles"
 
 
 class ResourceDisplayContextTests(unittest.TestCase):
@@ -84,7 +96,7 @@ class AsReportedResourceTests(unittest.TestCase):
         workspace = Path(os.environ["AU_REE_REPORTED_RESOURCE_WORKSPACE"])
         candidate = workspace / "work/census-fill/verified"
         release = json.loads((candidate / "archive.json").read_text())["release_id"]
-        profile = ROOT / "config/research_profiles"
+        profile = _archived_profile(self, candidate, release)
         package = compile_display_package(
             profile=profile / "au_ree_census_evidence_fill_v1.json",
             columns_path=profile / "census_display_columns_v2.json",
@@ -107,6 +119,33 @@ class AsReportedResourceTests(unittest.TestCase):
                and record["state"] == "SCIENTIFIC_CONFLICT" and record["context"]["reported_cutoff"] == "0.20 % TREO"]
         self.assertEqual({(record["context"]["raw_token"], record["context"]["physical_page"]) for record in yin},
                          {("311,800", "1"), ("312,300", "11")})
+
+
+@unittest.skipUnless(os.environ.get("AU_REE_HISTORICAL_V2_ROOT") and os.environ.get("AU_REE_REPORTED_RESOURCE_WORKSPACE"),
+                     "sealed candidate and frozen V2 source locators required")
+class HistoricalResourceReviewTests(unittest.TestCase):
+    def test_reread_adds_review_evidence_for_previously_unbound_table_positions(self):
+        workspace = Path(os.environ["AU_REE_REPORTED_RESOURCE_WORKSPACE"])
+        candidate = workspace / "work/census-as-reported/verified"
+        release = json.loads((candidate / "archive.json").read_bytes())["release_id"]
+        profile = _archived_profile(self, candidate, release)
+        package = compile_display_package(
+            profile=profile / "au_ree_census_evidence_fill_v1.json",
+            columns_path=profile / "census_display_columns_v2.json",
+            build_directory=candidate / "build", release_root=candidate / "archive",
+            release_id=release, assets=candidate / "cas", bindings=profile / "resource_bindings_v6.json",
+            sources=workspace / "work/census-stage6/additional-sources/combined/source_manifest.json",
+            historical_tables=Path(os.environ["AU_REE_HISTORICAL_V2_ROOT"]),
+        )
+        records = [record for record in json.loads(package.public_view)["review_only"]
+                   if record["context"].get("recovery_rule") == "legacy-resource-source-lane-replay-v1"]
+        self.assertEqual(len(records), 44)
+        self.assertEqual(sum("census_column_id" in record["context"] for record in records), 13)
+        self.assertTrue(all(record["state"] == "CANDIDATE" and record["scope"] == "UNKNOWN_CONTEXT"
+                            and record["context"]["raw_token"] in record["quote"] for record in records))
+        oxide = [record for record in records if record["context"]["quantity_role"].endswith("_ppm")]
+        self.assertEqual(len(oxide), 31)
+        self.assertTrue(all("census_column_id" not in record["context"] for record in oxide))
 
 
 @unittest.skipUnless(all(os.environ.get(key) for key in (

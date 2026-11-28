@@ -6,7 +6,9 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from au_ree_v3.contracts.temporal import TemporalEvidence
-from au_ree_v3.development import DATED_STUDY_POLICY_VERSION, _classification, _review, review_milestones
+from au_ree_v3.development import (
+    DATED_STUDY_POLICY_V2, DATED_STUDY_POLICY_VERSION, _classification, _review, review_milestones,
+)
 from au_ree_v3.documents import DocumentError, PDFDocument
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -80,6 +82,15 @@ class DevelopmentMilestoneTests(unittest.TestCase):
         own_notice = {"event_date_role": "STUDY_RESULTS_RELEASED", "event_date_source": "SAME_ISSUER_NOTICE"}
         item = read("The Company is pleased to announce the results of the Pre-Feasibility Study", **own_notice)
         self.assertEqual(item["event_date"], "2026-10-30")
+        outcomes = "The Company is pleased to announce the outcomes of the Scoping Study"
+        with self.assertRaisesRegex(DocumentError, "ISSUER_STUDY_RESULTS_RELEASE_UNBOUND"):
+            read(outcomes, **own_notice, stage="Scoping")
+        item = read(outcomes, **own_notice, stage="Scoping", event_policy=DATED_STUDY_POLICY_V2)
+        self.assertEqual((item["claim_state"], item["event_date"], item["shadow_ordinal"]),
+                         ("STUDY_RESULTS_RELEASED", "2026-10-30", None))
+        with self.assertRaisesRegex(DocumentError, "ISSUER_STUDY_RESULTS_RELEASE_UNBOUND"):
+            read("The Company expects to announce the outcomes of the Scoping Study", **own_notice,
+                 stage="Scoping", event_policy=DATED_STUDY_POLICY_V2)
         negative = (
             ("The company was founded in August 2026 and released a Pre-Feasibility Study", native_date),
             ("The company mentioned the Pre-Feasibility Study in August 2026", native_date),

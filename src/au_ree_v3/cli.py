@@ -76,6 +76,11 @@ def main(argv: list[str] | None = None) -> int:
     native_points = geo_commands.add_parser("review-native", help="Review exact state government location candidates")
     for argument in ("bindings", "baseline-manifest", "baseline-assets", "probe-manifest", "probe-assets", "out"):
         native_points.add_argument(f"--{argument}", type=Path, required=True)
+    historical_points = geo_commands.add_parser("replay-historical-points", help="Recover archived native government point lookups")
+    historical_points.add_argument("--v2-root", type=Path, required=True)
+    historical_points.add_argument("--store", type=Path, required=True, help="Content-addressed capture store")
+    historical_points.add_argument("--prior", type=Path, help="Replay a prior receipt offline with the same raw captures")
+    historical_points.add_argument("--out", type=Path)
 
     research = commands.add_parser("research", help="Build and verify the fresh research profile")
     research_commands = research.add_subparsers(dest="operation", required=True)
@@ -95,6 +100,10 @@ def main(argv: list[str] | None = None) -> int:
         native.add_argument(f"--{argument}", type=Path, required=True)
     native.add_argument("--prior-binding", type=Path, help="Pinned previous binding directory to close each unresolved case")
     native.add_argument("--located-only", action="store_true", help="Keep structure work outside the comparable located-cell run")
+    historical_lanes = research_commands.add_parser("replay-historical-tables", help="Reread old table locators against exact V3 originals")
+    for argument in ("v2-root", "sources", "assets"):
+        historical_lanes.add_argument(f"--{argument}", type=Path, required=True)
+    historical_lanes.add_argument("--out", type=Path)
     build = research_commands.add_parser("build", help="Build the fresh Census and decision inputs")
     build.add_argument("--profile", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
@@ -108,6 +117,7 @@ def main(argv: list[str] | None = None) -> int:
     display.add_argument("--release-id", required=True)
     display.add_argument("--forecast", type=Path, nargs=2, metavar=("BINDINGS", "ORACLE"))
     display.add_argument("--reported-resources", action="store_true", help="Include source-bound unselected resource values for display")
+    display.add_argument("--historical-tables", type=Path, metavar="V2_ROOT", help="Include original historical table candidates")
     display.add_argument("--geography", type=Path, nargs=3, metavar=("BINDINGS", "MANIFEST", "STORE"))
     display.add_argument("--geography-base", type=Path, help="Exact parent source manifest for an expanded candidate")
     display.add_argument("--web-out", type=Path, help="Write an immutable candidate web release with the same verified display")
@@ -205,6 +215,9 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError) as error:
         print(f"{operation}: {error}", file=sys.stderr)
         return 1
+    if args.out is None:
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+        return EXIT_CODES[result["status"]]
     response = {"operation": operation, "status": result["status"], "receipt_directory": str(args.out)}
     for key in ("reason", "release_id", "gates", "F4", "F5"):
         if key in result:
@@ -255,12 +268,40 @@ def _run_geography(args) -> dict:
 
         return review_native_locations(args.bindings, args.baseline_manifest, args.baseline_assets,
                                        args.probe_manifest, args.probe_assets, args.out)
+    if args.operation == "replay-historical-points":
+        from .official_geography import replay_historical_points
+
+        _reference_receipt_path(args)
+        prior = json.loads(args.prior.read_bytes()) if args.prior else None
+        return _write_reference_receipt(args, replay_historical_points(args.v2_root, args.store, prior=prior))
     return inventory_tenements(args.bindings, args.sources, args.store, args.out)
+
+
+def _reference_receipt_path(args):
+    if args.out is not None and args.out.resolve().is_relative_to(args.v2_root.resolve()):
+        raise ValueError("Write review receipts outside the V2 reference checkout")
+
+
+def _write_reference_receipt(args, result):
+    if args.out is not None:
+        from .contracts import canonical_json
+
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        with args.out.open("x", encoding="utf-8") as destination:
+            destination.write(canonical_json(result) + "\n")
+    return result
 
 
 def _run_research(args) -> dict:
     if args.operation in web_release_cli.OPERATIONS:
         return web_release_cli.run(args)
+    if args.operation == "replay-historical-tables":
+        from .native_table_work import replay_legacy_source_lanes
+
+        _reference_receipt_path(args)
+        return _write_reference_receipt(args, replay_legacy_source_lanes(
+            v2_root=args.v2_root, sources=args.sources, assets=args.assets,
+        ))
     if args.operation == "review-development":
         from .development import review_milestones
 
@@ -282,6 +323,7 @@ def _run_research(args) -> dict:
             release_root=args.release_root, release_id=args.release_id, sources=args.sources,
             assets=args.assets, bindings=args.bindings, forecast=args.forecast, geography=args.geography,
             geography_base=args.geography_base, include_reported_resources=args.reported_resources,
+            historical_tables=args.historical_tables,
         )
         receipt = write_display_package(bundle, args.out)
         if args.web_out is not None:

@@ -96,6 +96,10 @@
     {
       "case_id": "nolans-early-construction-works",
       "scope_kind": "PROJECT"
+    },
+    {
+      "case_id": "jupiter-scoping-outcomes-released",
+      "scope_kind": "PROJECT"
     }
   ],
   "schema": "source-bound-project-attributes-v1",

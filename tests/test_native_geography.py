@@ -1,8 +1,11 @@
+from copy import deepcopy
 from hashlib import sha256
 from io import BytesIO
 import json
 import os
 from pathlib import Path
+from unittest.mock import patch
+from urllib.parse import parse_qs, urlsplit
 import shutil
 import tempfile
 import unittest
@@ -10,7 +13,8 @@ from zipfile import ZipFile
 
 from au_ree_v3.documents import DocumentCache, DocumentError
 from au_ree_v3.native_geography import _nt_modat, _sarig_mindep, review_native_locations
-from au_ree_v3.sources import IntegrityError
+from au_ree_v3.official_geography import replay_historical_points
+from au_ree_v3.sources import ContentStore, HttpResult, IntegrityError
 
 
 def _sarig_page(*, longitude="140.1", latitude="-36.5", role="Deposit"):
@@ -57,6 +61,69 @@ class NativePointAdaptersTest(unittest.TestCase):
         self.assertEqual(point["positional_accuracy"]["raw"], "100 to 200")
         self.assertIsNone(point["crs"])
         self.assertIsNone(point["geometry"])
+
+
+class HistoricalPointRecoveryTest(unittest.TestCase):
+    def test_native_layer_and_printed_precision_replay_with_verified_raw_capture(self):
+        url = ("https://services.ga.gov.au/gis/rest/services/"
+               "AustralianCriticalMineralsOperatingMinesAndDeposits/MapServer/5/query")
+        digest = "a" * 64
+        rows = ("project_id,dataset,native_feature_id,source_sha256,locator,export_crs,longitude,latitude\n"
+                f"project-a,GA2025,2275,{digest},objectid=2275,GDA94,142.7815,-36.4994\n").encode()
+        legacy_assets = json.dumps([{"sha256": digest, "url": url + "?where=legacy", "role": "snapshot"}]).encode()
+        pins = {"asset_manifest.json": ("", sha256(legacy_assets).hexdigest())}
+        response = json.dumps({
+            "spatialReference": {"wkid": 4283}, "geometryType": "esriGeometryPoint",
+            "features": [{"attributes": {"objectid": 2275, "status": "Prospect"},
+                          "geometry": {"x": 142.78151, "y": -36.49942}}],
+        }).encode()
+
+        def fetch(request, method, *_):
+            self.assertEqual(urlsplit(request).path, urlsplit(url).path)
+            self.assertEqual(method, "GET")
+            params = parse_qs(urlsplit(request).query)
+            self.assertEqual(params["where"], ["objectid IN (2275)"])
+            self.assertEqual(params["outSR"], ["4283"])
+            return HttpResult("FETCHED", request, "2026-11-29T00:10:00+00:00", 200, "application/json", response)
+
+        with tempfile.TemporaryDirectory() as directory:
+            store = Path(directory) / "store"
+            v2 = Path(directory) / "readonly"
+            with (
+                patch("au_ree_v3.migration.baseline.PinnedRepository.read", side_effect=lambda _, name:
+                      rows if name.endswith("spatial_point_quality.csv") else legacy_assets),
+                patch("au_ree_v3.migration.project_registry.V2_ARCHIVE_FILES", pins),
+                patch("au_ree_v3.official_geography._HISTORICAL_POINTS_SHA", sha256(rows).hexdigest()),
+            ):
+                live = replay_historical_points(v2, store, fetcher=fetch)
+                point, = live["points"]
+                capture, = live["captures"]
+                self.assertEqual(live["status"], "PASS")
+                self.assertEqual(live["counts"]["formal_coordinates"], 0)
+                self.assertEqual(point["location_role"], "PROSPECT")
+                self.assertEqual(point["state"], "CANDIDATE")
+                self.assertEqual(capture["dataset"], "GA_CRITICAL_LAYER_5")
+                self.assertEqual(capture["historical_sha256"], digest)
+                self.assertEqual(capture["source_sha256"], sha256(response).hexdigest())
+                self.assertEqual(capture["temporal_decision"]["status"], "CANDIDATE")
+                self.assertEqual(capture["temporal_decision"]["reason"], "PRE_CUTOFF_PUBLIC_EVIDENCE_MISSING")
+
+                def no_network(*_):
+                    self.fail("Offline capture replay attempted network access")
+
+                self.assertEqual(live, replay_historical_points(v2, store, prior=live, fetcher=no_network))
+                changed = deepcopy(live)
+                changed["captures"][0]["acquired_at"] = "2026-10-01T00:10:00+00:00"
+                with self.assertRaisesRegex(IntegrityError, "verified query receipt"):
+                    replay_historical_points(v2, store, prior=changed, fetcher=no_network)
+                different_query = replay_historical_points(v2, store, fetcher=lambda request, *_: HttpResult(
+                    "FETCHED", url + "?where=1%3D1", "2026-11-29T00:10:00+00:00", 200, "application/json", response,
+                ))
+                self.assertEqual(different_query["captures"][0]["status"], "GOVERNMENT_QUERY_REDIRECTED")
+                self.assertEqual(different_query["points"][0]["comparison"], "SOURCE_UNAVAILABLE")
+                ContentStore(store).path(capture["source_sha256"]).write_bytes(b"a different source edition")
+                with self.assertRaisesRegex(IntegrityError, "SHA-256 mismatch"):
+                    replay_historical_points(v2, store, prior=live, fetcher=no_network)
 
 
 _VARS = ("AU_REE_GEO_BASE_MANIFEST", "AU_REE_GEO_BASE_ASSETS", "AU_REE_GEO_PROBE_MANIFEST", "AU_REE_GEO_PROBE_ASSETS")

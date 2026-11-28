@@ -413,6 +413,52 @@ def _reported_measurement(bound, measurement, archived, capture, edition):
     }
 
 
+def historical_resource_reviews(replayed, editions, archived):
+    """Expose newly located original table cells through the candidate review display."""
+    from .resource_table_binding import _unit_label
+
+    known = {
+        (entry["project_id"], entry["source_sha256"], entry["page"], entry["variable"],
+         entry["raw_value"], _unit_label(entry["raw_unit"] or ""))
+        for entry in archived if entry.get("raw_value") and entry.get("raw_unit")
+    }
+    for cell in replayed["observations"]:
+        edition = editions.get(cell["source_capture_sha256"])
+        if (edition is None or cell["project_id"] not in edition["project_ids"]
+                or cell["source_sha256"] != edition["sha256"]
+                or cell["source_url"] != edition["url"]
+                or cell["temporal_decision_id"] != edition["temporal_decision"]["decision_id"]):
+            raise ValueError("Historical display lookup differs from the verified original capture")
+        variable, token, unit = cell["variable"], cell["value_anchor"]["text"], cell["native_unit"]
+        if (cell["project_id"], cell["source_sha256"], cell["physical_page"], variable, token, unit) in known:
+            continue
+        label = f"{token} {unit}"
+        decision = edition["temporal_decision"]
+        context = {
+            "raw_token": token, "raw_unit": unit, "physical_page": str(cell["physical_page"]),
+            "display_rule": _REVIEW_RULE, "display_value": label, "recovery_rule": replayed["schema"],
+            "original_header": cell["header_anchor"]["text"], "original_unit_label": cell["unit_anchor"]["text"],
+            "quantity_role": variable, "chemical_basis": cell["chemical_basis"] or UNKNOWN,
+            "estimate_effective_date": UNKNOWN, "material_basis": UNKNOWN, "reported_cutoff": UNKNOWN,
+            "scope_status": cell["scope_status"], "candidate_id": cell["candidate_id"],
+            "temporal_decision_id": decision["decision_id"],
+            "publication_date_status": "AS_REPORTED" if edition["publication_date"] else UNKNOWN,
+            "first_proven_public_date": decision["earliest_proven_public_date"],
+        }
+        if variable in _CORE_REPORT_COLUMNS and (variable == "ore_mt" or cell["chemical_basis"] == "TREO"):
+            context["census_column_id"] = _CORE_REPORT_COLUMNS[variable]
+        if cell["caption_anchors"]:
+            context["original_table_caption"] = " ".join(anchor["text"] for anchor in cell["caption_anchors"])
+        yield {
+            "project_id": cell["project_id"], "data_role": ROLE, "state": "CANDIDATE",
+            "label": f"{cell['header_anchor']['text']} · {label}", "reason": "ORIGINAL_TABLE_VALUE_SCOPE_UNBOUND",
+            "source_sha256": edition["sha256"], "source_capture_sha256": edition["receipt_sha256"],
+            "source_url": edition["url"], "publication_date": edition["publication_date"] or "",
+            "locator": cell["value_anchor"]["locator"], "quote": cell["row_anchor"]["text"],
+            "scope": UNKNOWN, "context": context,
+        }
+
+
 def _facts_for(project, bound, measured, capture, edition, binding, diagnostics):
     grade = measured["grade"]
     statement = bound.statement

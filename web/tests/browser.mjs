@@ -331,7 +331,10 @@ async function checkDisplay(page) {
     await page.locator("#display-review button").filter({hasText:review.label}).first().click();
     const text = await details.textContent();
     assert(text.includes(review.quote) && text.includes(review.reason) && text.includes(review.source_capture_sha256));
-    if (!review.publication_date) assert(text.includes(review.context.capture_date));
+    if (!review.publication_date) {
+      const date = review.context.capture_date ?? review.context.first_proven_public_date;
+      assert(date && text.includes(date));
+    }
     await page.keyboard.press("Escape");
     await page.fill("#search", "");
   }
@@ -403,7 +406,7 @@ async function checkReportedCensus(page) {
   const resources = doc.review_only.filter(row => row.data_role === "REPORTED_RESOURCE"
     && row.context.display_rule === "as-reported-resource-review-v1" && row.context.display_value
     && row.context.raw_unit && row.context.census_column_id);
-  const resourceCells = new Set();
+  const resourceCells = new Set(), historicalCells = new Set();
   for (const report of resources) {
     const col = newCensus.columns.find(column => column.column_id === report.context.census_column_id);
     assert(col);
@@ -414,6 +417,7 @@ async function checkReportedCensus(page) {
       continue;
     }
     resourceCells.add(`${report.project_id}:${col.id}`);
+    if (report.context.recovery_rule) historicalCells.add(`${report.project_id}:${col.id}`);
     const cell = await verify(report.project_id, col.id, /\d/);
     assert((await cell.textContent()).includes(report.context.display_value));
     await cell.click();
@@ -423,6 +427,24 @@ async function checkReportedCensus(page) {
   }
 
   if (flags.includes("--reported-resources")) assert(resourceCells.size > 0, "Expected original resource cells in the candidate");
+  if (flags.includes("--historical-tables")) {
+    const review = doc.review_only.filter(row => row.context.recovery_rule === "legacy-resource-source-lane-replay-v1");
+    assert(review.length > 0 && historicalCells.size > 0);
+    assert(review.every(row => row.state === "CANDIDATE" && row.context.scope_status === "UNBOUND"));
+    const oxide = review.find(row => row.context.quantity_role.endsWith("_ppm") && !row.context.census_column_id);
+    assert(oxide, "Expected review evidence for concentration in its reported unit");
+    await page.fill("#search", oxide.project_id);
+    await page.locator("#show-display").check();
+    const list = page.locator("#display-review");
+    if (!(await list.evaluate(element => element.open))) await list.locator("summary").click();
+    await list.getByRole("button").filter({hasText: oxide.label}).first().click();
+    assert((await dialog.textContent()).includes(oxide.source_capture_sha256));
+    assert((await dialog.textContent()).includes(oxide.context.raw_unit));
+    await page.keyboard.press("Escape");
+    await page.locator("#show-display").uncheck();
+    metrics.historical_table_candidates = review.length;
+    metrics.historical_table_overlay_cells = historicalCells.size;
+  }
   await page.selectOption("#data-filter", "REPORTED_PREVIEW");
   await page.fill("#search", nolansId);
   await expectText(page, "#table-count", /^1 \/ 93/);
