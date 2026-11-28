@@ -1,0 +1,68 @@
+status,path,reason
+新增,config/research_profiles/au_ree_census_evidence_fill_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/census_attribute_batches_v2.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/census_attribute_bindings_v3.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/development_milestone_bindings_v3.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/lyons_recovered_resource_review_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/native_geography_bindings_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/native_geography_source_seeds_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/production_forecast_bindings_v2.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/resource_source_exact_recovery_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/yangibana_exact_edition_reacquisition_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/yangibana_reacquired_resource_review_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/yttria_reacquired_resource_review_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,config/research_profiles/yttria_resource_edition_reacquisition_v1.json,固定來源、適用用途、選值理由或候選 profile 的版本
+新增,docs/research/census_development_milestone_evidence.md,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_disclosure_inventory.md,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_disclosure_inventory_receipt.json,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_disclosure_search_review_v1.json,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_fill_round_coverage.csv,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_fill_round_lifecycle.csv,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_fill_round_receipt.json,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_fill_round_report.md,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_fill_science_review.md,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_targeted_source_recovery.md,保存科學、工程、來源或發布差異收據
+新增,docs/research/census_targeted_source_recovery_verification.json,保存科學、工程、來源或發布差異收據
+新增,docs/research/issuer_forecast_coverage_receipt.json,保存科學、工程、來源或發布差異收據
+新增,docs/research/native_government_location_review.md,保存科學、工程、來源或發布差異收據
+新增,docs/research/native_government_location_verification.json,保存科學、工程、來源或發布差異收據
+新增,docs/research/oxide_table_retrieval.md,保存科學、工程、來源或發布差異收據
+新增,docs/research/oxide_table_retrieval_receipt.json,保存科學、工程、來源或發布差異收據
+修改,src/au_ree_v3/candidate_search.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/census_science.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/cli.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/development.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/forecast.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/fresh_census.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/geography.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+新增,src/au_ree_v3/native_geography.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/official_geography.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+新增,src/au_ree_v3/oxide_table_search.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/project_attributes.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/registry.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/research_delta.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+修改,src/au_ree_v3/web_publication.py,重用現有契約並接入來源、候選診斷、展示或發布驗證
+新增,tests/fixtures/census_applicability_oracle_v1.json,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+新增,tests/fixtures/production_forecast_context_oracle_v2.json,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+修改,tests/test_candidate_search.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+修改,tests/test_census_context_display.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+新增,tests/test_census_disclosure_inventory.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+修改,tests/test_census_science.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+修改,tests/test_development.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+新增,tests/test_native_geography.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+修改,tests/test_project_attributes.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+修改,tests/test_web_publication.py,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+新增,tools/audit_census_applicability.py,共同工具、原件審查或獨立 Oracle 與既有輸出差異驗證
+新增,tools/census_disclosure_inventory.py,共同工具、原件審查或獨立 Oracle 與既有輸出差異驗證
+新增,tools/evaluate_oxide_table_retrieval.py,共同工具、原件審查或獨立 Oracle 與既有輸出差異驗證
+修改,tools/recover_source_editions.py,共同工具、原件審查或獨立 Oracle 與既有輸出差異驗證
+修改,tools/verify_census_derivations.py,共同工具、原件審查或獨立 Oracle 與既有輸出差異驗證
+修改,tools/verify_reported_mreo.py,共同工具、原件審查或獨立 Oracle 與既有輸出差異驗證
+修改,web/assets/labels.mjs,版本化網站的原件證據角色與標籤
+修改,web/assets/views.mjs,版本化網站的原件證據角色與標籤
+修改,web/tests/browser.mjs,驗證真實原件、科學反例、歷史相容或瀏覽器互動
+封存,/workspace/AU_REE_V3/work/census-fill/verified/archive,以新 Release ID 綁定原件、設定與科學產物
+封存,/workspace/AU_REE_V3/work/census-fill/verified/census-fill-preview.zip,可展開及驗證的候選網站
+封存,/workspace/AU_REE_V3/work/census-fill/verified/delta,"完整 4,743 格與 MCDA 差異"
+封存,/workspace/AU_REE_V3/work/census-fill/inventory,原始逐格清冊、證據原因與 V2 缺件清單
+封存,/workspace/AU_REE_V3/work/census-fill/sources/blocked_sources.csv,時間、版次及科學證據仍不足的來源
