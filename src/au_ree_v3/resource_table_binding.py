@@ -401,6 +401,38 @@ def reviewed_table_rows(document: PDFDocument, binding: dict):
         ), tuple(cell for cell in aligned if cell.variable is None), row_lines[start:index], _resource_type(caption)
 
 
+def _baseline_overlap(case, bound, reviewed):
+    ids = tuple(case.get("existing_reviewed_row_lexeme_overlap") or ())
+    if not ids:
+        return None
+    raw = case["row"]["text"]
+    position_count = sum(
+        _parsed_value(numeric)[0].text == bound.value.text
+        for numeric in _numbers(raw, bound.value.physical_page, bound.value.line)
+    )
+    matches = []
+    for observation_id in ids:
+        old = reviewed.get(observation_id)
+        if old is None:
+            continue
+        unit = old.get("source_unit_as_reported") or ""
+        known_unit = "kt" if _plain(unit).startswith(("‘000 ", "’000 ", "'000 ")) else _unit_label(unit)
+        if (
+            position_count == 1 and old.get("role_guess") == bound.variable and known_unit == bound.unit
+            and all(old.get(key) == case[key] for key in ("source_sha256", "project_id", "physical_page", "source_token"))
+            and _plain((old.get("row") or {}).get("text") or "") == _plain(raw)
+        ):
+            matches.append(old)
+    if len(matches) == 1:
+        old, = matches
+        return {
+            "status": "EXISTING_REVIEWED_CELL_OVERLAP", "reviewed_observation_ids": [old["existing_observation_id"]],
+            "reviewed_validation_id": old.get("existing_validation_id"),
+            "reviewed_acceptance_id": old.get("existing_formal_acceptance_id"),
+        }
+    return {"status": "BASELINE_ROW_LEXEME_MATCH_UNRESOLVED", "reviewed_observation_ids": list(ids)}
+
+
 def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, assets, out):
     """Produce reproducible typed-candidate and unbound ledgers from routed originals."""
     from collections import Counter, defaultdict
@@ -443,6 +475,8 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
     ):
         raise ValueError("Native binding inventory violates candidate or Project identity")
     native = defaultdict(list)
+    baseline = {row["existing_observation_id"]: row for row in cases
+                if row["kind"] == "REVIEWED_BINDING_ORIGINAL_TOKEN" and row.get("existing_observation_id")}
     lineage = []
     for case in cases:
         if case["kind"] == "NATIVE_TABLE_TOTAL_ROW":
@@ -458,7 +492,7 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
         if edition["sha256"] in native:
             catalog[edition["sha256"]].append(edition)
     cas = ContentStore(assets)
-    typed, unbound, sources_read = [], [], []
+    typed, overlaps, unbound, sources_read = [], [], [], []
     def result(case, status, reason, **extra):
         return {
             "case_id": case["case_id"], "project_id": case["project_id"], "source_sha256": case["source_sha256"],
@@ -540,7 +574,12 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
                                              if bound.variable == "grade" else "OXIDE_COMPOSITION"),
                               material_basis=None, denominator_basis=None, estimate_effective_date=None,
                               reporting_standard=None, cutoff_context=None, **details)
-                typed.append(item)
+                overlap = _baseline_overlap(case, bound, baseline)
+                if overlap:
+                    item.update(status=overlap["status"], baseline_overlap=overlap)
+                    overlaps.append(item)
+                else:
+                    typed.append(item)
             except DocumentError as error:
                 item = result(case, error.outcome, str(error), token_columns=case.get("token_columns"))
                 unbound.append(item)
@@ -558,7 +597,11 @@ def bind_source_inventory(*, profile, inventory, inventory_receipt, sources, ass
         "source_documents_verified_and_parsed": len(sources_read), "source_documents": sources_read,
         "case_count": len(cases), "distinct_native_source_positions": len({row["source_position_id"]
             for rows in native.values() for row in rows}),
+        "resolved_typed_sightings": len(typed) + len(overlaps),
+        "distinct_resolved_native_positions": len({row["source_position_id"] for row in (*typed, *overlaps)}),
         "typed_candidate_sightings": len(typed), "distinct_typed_native_positions": len({row["source_position_id"] for row in typed}),
+        "existing_reviewed_exact_cell_overlaps": sum(row["status"] == "EXISTING_REVIEWED_CELL_OVERLAP" for row in overlaps),
+        "unresolved_baseline_row_lexeme_matches": sum(row["status"] == "BASELINE_ROW_LEXEME_MATCH_UNRESOLVED" for row in overlaps),
         "distinct_project_candidates": len({row["candidate_id"] for row in typed}),
         "unbound_candidate_sightings": len(unbound),
         "status_by_case": dict(Counter(row["status"] for row in lineage)),

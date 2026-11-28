@@ -5,7 +5,7 @@ import unittest
 
 from au_ree_v3.documents import DocumentError, PDFDocument
 from au_ree_v3.resource_extraction import native_resource_table
-from au_ree_v3.resource_table_binding import bind_page_row, reviewed_table_rows
+from au_ree_v3.resource_table_binding import _baseline_overlap, bind_page_row, reviewed_table_rows
 
 SHA = "a" * 64
 CAPTION = "Table 1 Example Hill Mineral Resource Estimate as at 21 September 2026"
@@ -171,6 +171,21 @@ class NativeLayoutTests(unittest.TestCase):
         wrong = PAGE.replace("Total                        1,225", "Total                        4,225")
         value, = native_resource_table((wrong,), BINDING, BINDING["publication_date"])
         self.assertTrue(all(cell.conflict == "TONNAGE_GRADE_CONTAINED_MISMATCH" for cell in value.measurements))
+
+    def test_exact_baseline_measurement_is_distinct_from_row_lexeme_hint(self):
+        # A single occurrence per row distinguishes the raw source position.
+        row = "Total                        1,225                  1,000               1,226"
+        toy = "\n".join((*PAGE.splitlines()[:6], row, *PAGE.splitlines()[7:]))
+        pdf = PDFDocument(SHA, (toy,), "test")
+        bound = next(cell for cell in bind_page_row(pdf, page=1, row_line=7, caption_line=2)
+                     if cell.variable == "contained_treo_kt")
+        case = {"source_sha256": SHA, "project_id": "example", "physical_page": 1, "source_token": "1,225",
+                "row": {"text": row}, "existing_reviewed_row_lexeme_overlap": ["old"]}
+        old = dict(case, existing_observation_id="old", source_unit_as_reported="t",
+                   role_guess="contained_treo_kt", existing_validation_id="validated")
+        self.assertEqual(_baseline_overlap(case, bound, {"old": old})["status"], "EXISTING_REVIEWED_CELL_OVERLAP")
+        self.assertEqual(_baseline_overlap(case, bound, {"old": {**old, "role_guess": "ore_mt"}})["status"],
+                         "BASELINE_ROW_LEXEME_MATCH_UNRESOLVED")
 
     def test_original_non_resource_category_and_mixed_scope_do_not_authorize(self):
         spec = deepcopy(BINDING)
