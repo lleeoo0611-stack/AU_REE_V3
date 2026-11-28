@@ -96,14 +96,14 @@ def _known_point(case, edition, expanded, content, timezone, cache):
     if (case["project_id"] not in edition["project_ids"]
             or not all(_is_government_layer(edition[key], dataset) for key in ("url", "final_url"))):
         raise DocumentError("SCIENTIFIC_CONFLICT", "OFFICIAL_LAYER_OR_PROJECT_DISCOVERY_SCOPE_MISMATCH")
-    if edition["sha256"] not in cache:
-        proofs = validate_edition_proofs(content, edition, timezone)
-        decision = _decision(edition, expanded, proofs)
-        if decision.status != "ELIGIBLE" or json.loads(canonical_json(decision.to_dict())) != edition["temporal_decision"]:
-            raise DocumentError("EVIDENCE_INSUFFICIENT", "EXACT_OFFICIAL_EDITION_NOT_PROVEN_BY_CUTOFF")
-        points = _point_index(json.loads(content.read(edition["sha256"])), dataset)
-        cache[edition["sha256"]] = points, decision
-    points, decision = cache[edition["sha256"]]
+    proofs = validate_edition_proofs(content, edition, timezone)
+    decision = _decision(edition, expanded, proofs)
+    if decision.status != "ELIGIBLE" or json.loads(canonical_json(decision.to_dict())) != edition["temporal_decision"]:
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "EXACT_OFFICIAL_EDITION_NOT_PROVEN_BY_CUTOFF")
+    cache_key = edition["sha256"], dataset
+    if cache_key not in cache:
+        cache[cache_key] = _point_index(json.loads(content.read(edition["sha256"])), dataset)
+    points = cache[cache_key]
     if case["native_id"] not in points:
         raise DocumentError("EVIDENCE_INSUFFICIENT", "NATIVE_POINT_ID_NOT_LOCATED")
     attributes, geometry = points[case["native_id"]]
@@ -192,12 +192,15 @@ def _point_candidate(case, edition, expanded, content, timezone, cache, fixed, f
     }
 
 
-def review_official_point_candidates(bindings_path, fixed_manifest, fixed_assets, expanded_manifest, expanded_assets, out):
+def review_official_point_candidates(bindings_path, fixed_manifest, fixed_assets, expanded_manifest, expanded_assets,
+                                     out=None):
     """Reopen official point editions in a separate expansion journal, with no site admission."""
-    fixed_path, expanded_path, out = map(Path, (fixed_manifest, expanded_manifest, out))
-    if (out.resolve() in {fixed_path.resolve(), expanded_path.resolve(), Path(bindings_path).resolve()}
-            or any(out.resolve().is_relative_to(Path(assets).resolve()) for assets in (fixed_assets, expanded_assets))):
-        raise ValueError("Point candidate receipt requires an output outside the locked sources")
+    fixed_path, expanded_path = map(Path, (fixed_manifest, expanded_manifest))
+    if out is not None:
+        out = Path(out)
+        if (out.resolve() in {fixed_path.resolve(), expanded_path.resolve(), Path(bindings_path).resolve()}
+                or any(out.resolve().is_relative_to(Path(assets).resolve()) for assets in (fixed_assets, expanded_assets))):
+            raise ValueError("Point candidate receipt requires an output outside the locked sources")
     fixed_bytes, expanded_bytes = fixed_path.read_bytes(), expanded_path.read_bytes()
     fixed, expanded, spec = json.loads(fixed_bytes), json.loads(expanded_bytes), json.loads(Path(bindings_path).read_bytes())
     fixed_sha, expanded_sha = (sha256(body).hexdigest() for body in (fixed_bytes, expanded_bytes))
@@ -269,12 +272,58 @@ def review_official_point_candidates(bindings_path, fixed_manifest, fixed_assets
         "fixed_manifest_sha256": fixed_sha, "expanded_manifest_sha256": expanded_sha,
         "bindings_sha256": sha256(Path(bindings_path).read_bytes()).hexdigest(),
         "expanded_unique_sha256": len({edition["sha256"] for edition in expanded["editions"]}),
-        "decoded_point_responses": len(decoded), "decoded_point_rows": sum(len(points) for points, _ in decoded.values()),
+        "decoded_point_responses": len(decoded), "decoded_point_rows": sum(len(points) for points in decoded.values()),
         "cases": list(cases.values()), "cross_authority_relations": relations, "layer_metadata": metadata,
         "formal_census": 0, "formal_infrastructure": 0,
         "status": "FAIL" if any(row["state"] == "SCIENTIFIC_CONFLICT" for row in cases.values())
         else "PASS" if cases and all(row["state"] == "SHADOW" for row in cases.values()) else "BLOCKED",
     }
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(canonical_json(report) + "\n", encoding="utf-8")
+    if out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(canonical_json(report) + "\n", encoding="utf-8")
     return report
+
+
+def official_geography_evidence(bindings_path, fixed_manifest, fixed_assets, expanded_manifest,
+                               expanded_assets) -> tuple[dict, ...]:
+    """Expose validated native feature context without publishing coordinates or site cells."""
+    report = review_official_point_candidates(bindings_path, fixed_manifest, fixed_assets, expanded_manifest,
+                                              expanded_assets)
+    disagreements = {case_id for relation in report["cross_authority_relations"]
+                     if relation["verdict"] == "CROSS_AUTHORITY_ROLE_MISMATCH" for case_id in relation["case_ids"]}
+    records = []
+    for row in report["cases"]:
+        if (row["state"] != "SHADOW" or row["proposed_site_use"] != "EVIDENCE_INSUFFICIENT"
+                or row["document_temporality"]["status"] != "ELIGIBLE" or not row["native_name"]):
+            continue
+        layer = _POINT_DATASETS[row["dataset"]]
+        accuracy = row["precision"]["positional_accuracy_m"]
+        native_id = row["native_locator"]
+        context = {
+            "source_scope": "EXPANDED_MANIFEST", "expanded_manifest_sha256": report["expanded_manifest_sha256"],
+            "source_kind": "OFFICIAL_STRUCTURED_POINT", "source_capture_url": row["source_url"],
+            "capture_date": row["document_temporality"]["earliest_proven_public_date"],
+            "feature_effective_date": "UNKNOWN_CONTEXT", "temporal_status": "ELIGIBLE",
+            "temporal_decision_id": row["document_temporality"]["decision_id"],
+            "native_role": row["raw_role"], "geometry_type": row["geometry"]["type"],
+            "crs": row["crs"], "datum": row["datum"],
+            "positional_accuracy_m": str(accuracy) if accuracy is not None else "UNKNOWN_CONTEXT",
+            "registered_relationship": row["registered_relationship"],
+        }
+        if row["source_extract_date"]:
+            context["source_extract_date"] = row["source_extract_date"]
+        if row["precision"]["public_visibility"]:
+            context["public_visibility"] = row["precision"]["public_visibility"]
+        if native_id["native_project_id"]:
+            context["native_project_id"] = native_id["native_project_id"]
+        if row["case_id"] in disagreements:
+            context["cross_authority_comparison"] = "CROSS_AUTHORITY_ROLE_MISMATCH"
+        records.append({
+            "project_id": row["project_id"], "data_role": row["location_role"], "state": "SHADOW",
+            "label": row["native_name"], "reason": ", ".join(row["open_issues"]),
+            "source_sha256": row["source_sha256"], "source_capture_sha256": row["receipt_sha256"],
+            "source_url": f"https://{layer.host}{layer.path}", "publication_date": "",
+            "locator": f"{row['dataset']}: {native_id['field']}={native_id['native_id']}",
+            "quote": row["native_name"], "scope": row["registered_relationship"], "context": context,
+        })
+    return tuple(records)
