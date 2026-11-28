@@ -1,0 +1,1691 @@
+{
+  "artifacts": {
+    "actual_tests": {
+      "bytes": 71701,
+      "sha256": "44b66c56de5213a7d99dde25bf938f6ae3b1a1f685bddac61711031d95195e43",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/exact-tests-final.log"
+    },
+    "blocked_sources": {
+      "bytes": 2688,
+      "sha256": "5fbd00f9001492a8b2c38ec05118de429ccd0955a4caf2e4c9d71f838b4507be",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/sources/blocked_sources.csv"
+    },
+    "browser": {
+      "bytes": 1196,
+      "sha256": "bee31afdda775b5dbcb4d1152030a68575d9e8864acb6fe4a8122846d8fe5603",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/browser.json"
+    },
+    "candidate_preview_zip": {
+      "bytes": 390870,
+      "sha256": "3acc0ff26be54c9fc3463310665fd57b9ab0d0c123e530e8f830519846a57472",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/census-fill-preview.zip"
+    },
+    "cohort_oracle": {
+      "bytes": 4990,
+      "sha256": "271ce617bc7b0d200c0e97b9dd66a6ce5f2c097bc4768ad701561a0275232725",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/independent-cohort-comparison.json"
+    },
+    "cold_a": {
+      "bytes": 2430,
+      "sha256": "9f07b216ab5cbbfafa392d5469d570dc376fa69dc9f0a5a82c43917239fbaaf4",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/cold-a/replay_receipt.json"
+    },
+    "cold_b": {
+      "bytes": 2430,
+      "sha256": "82c86028af6495c10c323ddb9d99cb3e1445752e228d53bc3e0e83aced1e0fb0",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/cold-b/replay_receipt.json"
+    },
+    "coverage_csv": {
+      "bytes": 11933,
+      "sha256": "fb6a14741e176b2784744891bbf7ae27c0b6767a0458735395c24d99f604f95b",
+      "workspace_path": "docs/research/census_fill_round_coverage.csv"
+    },
+    "coverage_summary": {
+      "bytes": 54053,
+      "sha256": "4a724a7f1b29615c244d9f9d998759390b7f0369e1b2884ce45388981436e7ce",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/coverage/coverage_summary.json"
+    },
+    "display": {
+      "bytes": 5191,
+      "sha256": "9e3f4d216c205f6f6ea3c776a0867c5782dbd67d101fe27ae1d420da1a002829",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/display/display_package_receipt.json"
+    },
+    "display_cold_a": {
+      "bytes": 5191,
+      "sha256": "9e3f4d216c205f6f6ea3c776a0867c5782dbd67d101fe27ae1d420da1a002829",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/display-cold-a/display_package_receipt.json"
+    },
+    "display_cold_b": {
+      "bytes": 5191,
+      "sha256": "9e3f4d216c205f6f6ea3c776a0867c5782dbd67d101fe27ae1d420da1a002829",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/display-cold-b/display_package_receipt.json"
+    },
+    "engineering": {
+      "bytes": 17345,
+      "sha256": "d3e4f990827dff88c41e9d1abed8fa91e55b1be48f048d389c1748fa20f40018",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/engineering-collection.json"
+    },
+    "fault_checks": {
+      "bytes": 1288,
+      "sha256": "0669b4417f2e617aa87c13f512b6fd68790af8434fe34bf3b812477166214352",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/faults/verification.json"
+    },
+    "file_lifecycle": {
+      "bytes": 7735,
+      "sha256": "2b0bbf5c6a394b3114d4459a7d739bb7db9103e6ca0d920cdd379b5beccc25b8",
+      "workspace_path": "docs/research/census_fill_round_lifecycle.csv"
+    },
+    "forecast_binding_expansion": {
+      "bytes": 5974,
+      "sha256": "f93016c165a1e58fddbd68662481b0c2576e671f7ab6cde872e20e4c487faa4d",
+      "workspace_path": "/workspace/scratch/census-fill/reproduction/forecast_bindings.json"
+    },
+    "full_cell_delta": {
+      "bytes": 16381260,
+      "sha256": "8e075aed0414fdcf9c04b69a53f5dd1cef10204edd7c22c8e70d9d90d78469e7",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/delta/census_delta.csv"
+    },
+    "release": {
+      "bytes": 100063,
+      "sha256": "3d85497ac2fdaf19683bdc7dc22af4f8b4fda237c61643653f95721d774cc50e",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/archive/releases/3d85497ac2fdaf19683bdc7dc22af4f8b4fda237c61643653f95721d774cc50e.json"
+    },
+    "research_compare": {
+      "bytes": 1511,
+      "sha256": "be2337209f91d4c31c0c5c4fece82a4a0536f5aa15bac74563fc156b4b95f458",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/delta/comparison_receipt.json"
+    },
+    "source_only_overlay": {
+      "bytes": 322,
+      "sha256": "c9bec4d9f87262cdd402dde16dfe25e0774f9acc5ac45c4f824105a74bc6a5c7",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/sources/candidate-source-overlay-receipt.json"
+    },
+    "sqlite": {
+      "bytes": 765952,
+      "sha256": "5b036223bc62db6893c7fae132a837cda5250924b72a705e026dee60c7da6b25",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/verified/build/observations/research.sqlite"
+    },
+    "static_architecture": {
+      "bytes": 64792,
+      "sha256": "9da28b83023461727ec08a151947e24674dde5f7ab6496c02d6e774c25d63a08",
+      "workspace_path": "/workspace/AU_REE_V3/work/census-fill/engineering-static-final.json"
+    }
+  },
+  "baseline_release_id": "8369299733848299022aaf976f51df0d5551be550410f4f5263824cab3e4fdc3",
+  "candidate_release_id": "3d85497ac2fdaf19683bdc7dc22af4f8b4fda237c61643653f95721d774cc50e",
+  "cas_objects": 320,
+  "ci": {
+    "billed_cost": "UNMEASURED",
+    "jobs": {
+      "141040630285": {
+        "conclusion": "success",
+        "execution_seconds": 10,
+        "name": "Development governance",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165060537/job/141040630285"
+      },
+      "141040630430": {
+        "conclusion": "success",
+        "execution_seconds": 17,
+        "name": "Static and unit",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165060505/job/141040630430"
+      },
+      "141040630636": {
+        "conclusion": "success",
+        "execution_seconds": 60,
+        "name": "Exact resource integration",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165060505/job/141040630636"
+      },
+      "141040882865": {
+        "conclusion": "success",
+        "execution_seconds": 65,
+        "name": "Exact resource integration",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165141957/job/141040882865"
+      },
+      "141040882978": {
+        "conclusion": "success",
+        "execution_seconds": 9,
+        "name": "Development governance",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165141948/job/141040882978"
+      },
+      "141040883165": {
+        "conclusion": "success",
+        "execution_seconds": 26,
+        "name": "Static and unit",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165141957/job/141040883165"
+      },
+      "141041151936": {
+        "conclusion": "success",
+        "execution_seconds": 27,
+        "name": "Static and unit",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165226172/job/141041151936"
+      },
+      "141041152190": {
+        "conclusion": "success",
+        "execution_seconds": 86,
+        "name": "Exact resource integration",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165226172/job/141041152190"
+      },
+      "141041152224": {
+        "conclusion": "success",
+        "execution_seconds": 4,
+        "name": "Development governance",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165226169/job/141041152224"
+      },
+      "141041168898": {
+        "conclusion": "success",
+        "execution_seconds": 74,
+        "name": "Exact resource integration",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165231654/job/141041168898"
+      },
+      "141041168904": {
+        "conclusion": "success",
+        "execution_seconds": 8,
+        "name": "Development governance",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165231692/job/141041168904"
+      },
+      "141041169126": {
+        "conclusion": "success",
+        "execution_seconds": 18,
+        "name": "Static and unit",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165231654/job/141041169126"
+      },
+      "141041395980": {
+        "conclusion": "success",
+        "execution_seconds": 4,
+        "name": "Development governance",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165302225/job/141041395980"
+      },
+      "141041396212": {
+        "conclusion": "success",
+        "execution_seconds": 18,
+        "name": "Static and unit",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165302268/job/141041396212"
+      },
+      "141041396420": {
+        "conclusion": "success",
+        "execution_seconds": 75,
+        "name": "Exact resource integration",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165302268/job/141041396420"
+      },
+      "141042245005": {
+        "conclusion": "success",
+        "execution_seconds": 11,
+        "name": "Development governance",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165576016/job/141042245005"
+      },
+      "141042245328": {
+        "conclusion": "success",
+        "execution_seconds": 63,
+        "name": "Exact resource integration",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165576028/job/141042245328"
+      },
+      "141042245361": {
+        "conclusion": "success",
+        "execution_seconds": 15,
+        "name": "verify",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165576006/job/141042245361"
+      },
+      "141042245558": {
+        "conclusion": "success",
+        "execution_seconds": 27,
+        "name": "Static and unit",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165576028/job/141042245558"
+      },
+      "141042245980": {
+        "conclusion": "success",
+        "execution_seconds": 60,
+        "name": "Browser interaction and release integrity",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165576008/job/141042245980"
+      },
+      "141042572171": {
+        "conclusion": "success",
+        "execution_seconds": 26,
+        "name": "Static and unit",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165683869/job/141042572171"
+      },
+      "141042572172": {
+        "conclusion": "success",
+        "execution_seconds": 10,
+        "name": "Development governance",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165683878/job/141042572172"
+      },
+      "141042572605": {
+        "conclusion": "success",
+        "execution_seconds": 44,
+        "name": "Exact resource integration",
+        "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46165683869/job/141042572605"
+      }
+    },
+    "runner_execution_seconds": 757
+  },
+  "code_commit": "869f8970089da455e9bfe8858de5035d1352a904",
+  "cohort_comparison": {
+    "comparable": [
+      6,
+      6
+    ],
+    "hypotheses": {
+      "complete_r1_and_s1_panel": {
+        "after": 2,
+        "before": 2,
+        "reason": "HYPOTHESIS_NOT_SUPPORTED",
+        "status": "FAIL",
+        "target": 3
+      },
+      "new_independent_r1_or_s1": {
+        "net": 0,
+        "reason": "HYPOTHESIS_NOT_SUPPORTED",
+        "status": "FAIL",
+        "target": 1
+      }
+    },
+    "panels": {
+      "issuer_resource_composition": {
+        "after_eligible_count": 2,
+        "after_status": "PASS"
+      },
+      "issuer_resource_infrastructure": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      },
+      "issuer_resource_study": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      },
+      "resource_infrastructure_pilot": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      },
+      "six_domain": {
+        "after_eligible_count": 0,
+        "after_status": "INSUFFICIENT_COHORT"
+      }
+    }
+  },
+  "core_change_counts": {
+    "DISPLAY_VALUE_CHANGED": 1,
+    "PROVENANCE_RECEIPT_CHANGED": 53,
+    "UNCHANGED": 4680,
+    "VALIDATED_ATTRIBUTE_ADDED": 9
+  },
+  "core_evidence_changes": [
+    {
+      "after": {
+        "anchor_id": "94412e9cb51dd87b4f8d848862fc1e48665ce81e3dc76ed540b1a0c93aae00fd",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 1, native whitespace-folded characters 1019-1173",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "1",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+        "source_table": "",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20190207/pdf/442fgrbxqwrxdd.pdf",
+        "statement_id": "",
+        "temporal_decision_id": "73ceb479067da482db33b3581a967c0d56f46140401509fa060e0b56ef4f4017",
+        "unit": "",
+        "value": "已公布最終可行性研究結果（7 February 2019 · Nolans Project）",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage",
+      "project_id": "AU-1345edd8165c10930e94"
+    },
+    {
+      "after": {
+        "anchor_id": "94412e9cb51dd87b4f8d848862fc1e48665ce81e3dc76ed540b1a0c93aae00fd",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 1, native whitespace-folded characters 1019-1173",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "1",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+        "source_table": "",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20190207/pdf/442fgrbxqwrxdd.pdf",
+        "statement_id": "",
+        "temporal_decision_id": "73ceb479067da482db33b3581a967c0d56f46140401509fa060e0b56ef4f4017",
+        "unit": "",
+        "value": "已公布最終可行性研究結果",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage_category",
+      "project_id": "AU-1345edd8165c10930e94"
+    },
+    {
+      "after": {
+        "anchor_id": "94412e9cb51dd87b4f8d848862fc1e48665ce81e3dc76ed540b1a0c93aae00fd",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 1, native whitespace-folded characters 1019-1173",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "1",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+        "source_table": "",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20190207/pdf/442fgrbxqwrxdd.pdf",
+        "statement_id": "",
+        "temporal_decision_id": "73ceb479067da482db33b3581a967c0d56f46140401509fa060e0b56ef4f4017",
+        "unit": "",
+        "value": "DFS",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage_code",
+      "project_id": "AU-1345edd8165c10930e94"
+    },
+    {
+      "after": {
+        "anchor_id": "e77df82e5b2adac1b3f8c45bc63c73cff865890f325ab6dab5b208717e874ca3",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 8, native whitespace-folded characters 0-56",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "8",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "e3ece5b0173dae538cf610486f76b2815d1830abd1dfbf7f29039955a4db224c",
+        "source_table": "",
+        "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7814024.pdf?v=63960532622",
+        "statement_id": "",
+        "temporal_decision_id": "ff6c6974acf1463e963f76fb51fa87c9bbfd875d9b4b522d6f4afb61b92c4b27",
+        "unit": "",
+        "value": "已公布預可行性研究結果（August 2026 · North Stanmore Heavy Rare Earth Project）",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage",
+      "project_id": "AU-216d0983f6892f9b58f9"
+    },
+    {
+      "after": {
+        "anchor_id": "e77df82e5b2adac1b3f8c45bc63c73cff865890f325ab6dab5b208717e874ca3",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 8, native whitespace-folded characters 0-56",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "8",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "e3ece5b0173dae538cf610486f76b2815d1830abd1dfbf7f29039955a4db224c",
+        "source_table": "",
+        "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7814024.pdf?v=63960532622",
+        "statement_id": "",
+        "temporal_decision_id": "ff6c6974acf1463e963f76fb51fa87c9bbfd875d9b4b522d6f4afb61b92c4b27",
+        "unit": "",
+        "value": "已公布預可行性研究結果",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage_category",
+      "project_id": "AU-216d0983f6892f9b58f9"
+    },
+    {
+      "after": {
+        "anchor_id": "e77df82e5b2adac1b3f8c45bc63c73cff865890f325ab6dab5b208717e874ca3",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 8, native whitespace-folded characters 0-56",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "8",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "e3ece5b0173dae538cf610486f76b2815d1830abd1dfbf7f29039955a4db224c",
+        "source_table": "",
+        "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7814024.pdf?v=63960532622",
+        "statement_id": "",
+        "temporal_decision_id": "ff6c6974acf1463e963f76fb51fa87c9bbfd875d9b4b522d6f4afb61b92c4b27",
+        "unit": "",
+        "value": "PFS",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage_code",
+      "project_id": "AU-216d0983f6892f9b58f9"
+    },
+    {
+      "after": {
+        "anchor_id": "c6f182a48425f61db05ded0559aee4132afd9838819a8add62edbfa2241c4e9b",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 12, native whitespace-folded characters 3398-3452",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "12",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9",
+        "source_table": "",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20240125/pdf/05zrcjjvw7nkyl.pdf",
+        "statement_id": "",
+        "temporal_decision_id": "08a3c529bc5e62b160ca250732a5fa93cfc5aa1d8283d51d0067a422a61f48f0",
+        "unit": "",
+        "value": "已完成範疇研究（August 2023 · Cummins Range Rare Earths-Phosphate Project）",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage",
+      "project_id": "AU-9b667066e6eb66753005"
+    },
+    {
+      "after": {
+        "anchor_id": "c6f182a48425f61db05ded0559aee4132afd9838819a8add62edbfa2241c4e9b",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 12, native whitespace-folded characters 3398-3452",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "12",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9",
+        "source_table": "",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20240125/pdf/05zrcjjvw7nkyl.pdf",
+        "statement_id": "",
+        "temporal_decision_id": "08a3c529bc5e62b160ca250732a5fa93cfc5aa1d8283d51d0067a422a61f48f0",
+        "unit": "",
+        "value": "已完成範疇研究",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage_category",
+      "project_id": "AU-9b667066e6eb66753005"
+    },
+    {
+      "after": {
+        "anchor_id": "c6f182a48425f61db05ded0559aee4132afd9838819a8add62edbfa2241c4e9b",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "VALIDATED_DESCRIPTIVE",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "PDF page 12, native whitespace-folded characters 3398-3452",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "12",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9",
+        "source_table": "",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20240125/pdf/05zrcjjvw7nkyl.pdf",
+        "statement_id": "",
+        "temporal_decision_id": "08a3c529bc5e62b160ca250732a5fa93cfc5aa1d8283d51d0067a422a61f48f0",
+        "unit": "",
+        "value": "Scoping",
+        "value_origin": "SOURCE_EVIDENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "evidence_state",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "rules_sha256",
+        "scope",
+        "selection_id",
+        "source_key",
+        "source_sha256",
+        "source_url",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "validation_id",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "development_stage_code",
+      "project_id": "AU-9b667066e6eb66753005"
+    },
+    {
+      "after": {
+        "anchor_id": "fcc268a225908223305b19800a606dbf078a7c992114ad1ee070790083a035b1",
+        "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "2025-01-15",
+        "evidence_state": "DESCRIPTIVE_ONLY",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "[\"14765263d2ca2840fbabcff43dec63cb7b9ba5ae535481737a26665ecb8ce5c9\",\"200d4ed6b7b6579ec9cffe1683f240438ed3b48108b4ac68ad20c6f623c8a6c5\",\"402291de4008ecde83408051d799555b497b842e132d0366fdcf27de812a2071\",\"9bada3ed0f7d76e2771660ff2705230666ca3647e03ef73c6f1c84617e64f354\"]",
+        "locator": "physical PDF page 6; Table 5; Total; Dy2O3",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "6",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "FOUR_MAGNET_OXIDES_IN_SCOPED_ORIGINAL",
+        "scope_id": "83f8b8b64b1d647712d4ca3ace94c02f1140cc59de988c8945cccf79d616f564",
+        "source_column": "Dy2O3",
+        "source_row": "Total",
+        "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+        "source_table": "Table 5",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf",
+        "statement_id": "81f27299da02fbba3ba82660d49437021544e8bad8b182685173dbdf68347fa0",
+        "temporal_decision_id": "852d129ec8eb8401a207dc097cfed1c2c9d4ba88c16ef2e1fb24a6d707cc1eb5",
+        "unit": "",
+        "value": "是",
+        "value_origin": "EVIDENCE_REFERENCE",
+        "value_state": "PRESENT"
+      },
+      "before": {
+        "anchor_id": "",
+        "category": "",
+        "chemical_basis": "",
+        "comparable": "NO",
+        "denominator_basis": "",
+        "effective_date": "",
+        "evidence_state": "EVIDENCE_INSUFFICIENT",
+        "formula_id": "",
+        "formula_sha256": "",
+        "input_observation_ids": "",
+        "locator": "",
+        "material_basis": "",
+        "observation_id": "",
+        "physical_page": "",
+        "precision": "",
+        "raw_unit": "",
+        "raw_value": "",
+        "reason": "NO_APPROVED_SELECTION",
+        "scope_id": "",
+        "source_column": "",
+        "source_row": "",
+        "source_sha256": "",
+        "source_table": "",
+        "source_url": "",
+        "statement_id": "",
+        "temporal_decision_id": "",
+        "unit": "",
+        "value": "",
+        "value_origin": "",
+        "value_state": "UNKNOWN"
+      },
+      "change": "STATE_OR_EVIDENCE_ROLE_CHANGED",
+      "changed_fields": [
+        "anchor_id",
+        "category",
+        "effective_date",
+        "evidence_state",
+        "input_observation_ids",
+        "lineage_id",
+        "locator",
+        "metadata_evidence",
+        "physical_page",
+        "reason",
+        "release_id",
+        "scope",
+        "scope_id",
+        "source_column",
+        "source_key",
+        "source_row",
+        "source_sha256",
+        "source_table",
+        "source_url",
+        "statement_id",
+        "temporal_decision_id",
+        "temporal_evidence_ids",
+        "temporal_policy_version",
+        "temporal_status",
+        "value",
+        "value_origin",
+        "value_state"
+      ],
+      "field_id": "has_four_magnet_oxides",
+      "project_id": "AU-9bd8e5ed8408cd84d876"
+    }
+  ],
+  "core_roles_before_after": {
+    "EVIDENCE_REFERENCE": [
+      4,
+      5
+    ],
+    "FORMAL_DERIVED": [
+      4,
+      4
+    ],
+    "FORMAL_DIRECT": [
+      18,
+      18
+    ],
+    "VALIDATED_DESCRIPTIVE": [
+      27,
+      36
+    ]
+  },
+  "core_states_before_after": [
+    {
+      "NOT_APPLICABLE": 0,
+      "PRESENT": 1141,
+      "UNKNOWN": 3602
+    },
+    {
+      "NOT_APPLICABLE": 0,
+      "PRESENT": 1151,
+      "UNKNOWN": 3592
+    }
+  ],
+  "cutoff": "2026-11-28",
+  "extension_states_before_after": [
+    {
+      "NOT_APPLICABLE": 0,
+      "PRESENT": 45,
+      "UNKNOWN": 792
+    },
+    {
+      "NOT_APPLICABLE": 0,
+      "PRESENT": 52,
+      "UNKNOWN": 785
+    }
+  ],
+  "extension_value_changes": [
+    {
+      "after": {
+        "fact_ids": [
+          "a13b16f365896d545b76149202ab79023d4ebccdd9e4b01b6e7b3565db7bc036"
+        ],
+        "state": "PRESENT",
+        "value": "4,357 tonnes per annum"
+      },
+      "before": {
+        "fact_ids": [],
+        "state": "UNKNOWN",
+        "value": null
+      },
+      "field_id": "forecast_annual_rate_as_reported",
+      "project_id": "AU-1345edd8165c10930e94"
+    },
+    {
+      "after": {
+        "fact_ids": [
+          "84add85c2769efe435d8b87a8462fc17c83cbeacd245e96f115a3962a7d92bbc"
+        ],
+        "state": "PRESENT",
+        "value": "NdPr oxide"
+      },
+      "before": {
+        "fact_ids": [],
+        "state": "UNKNOWN",
+        "value": null
+      },
+      "field_id": "forecast_product_and_basis",
+      "project_id": "AU-1345edd8165c10930e94"
+    },
+    {
+      "after": {
+        "fact_ids": [
+          "6056db4c04267836a56c742b19011013607e8d8237d4fa97643c5b26b5eb024f"
+        ],
+        "state": "PRESENT",
+        "value": "Annual average after three-year ramp-up, excluding the partial final year"
+      },
+      "before": {
+        "fact_ids": [],
+        "state": "UNKNOWN",
+        "value": null
+      },
+      "field_id": "forecast_scenario_or_period",
+      "project_id": "AU-1345edd8165c10930e94"
+    },
+    {
+      "after": {
+        "fact_ids": [
+          "280dbdd2d2a6daef091487ab8bb8d8acf2cc4aed3578d3011b03652cbdf028f3",
+          "5986891e89510bed93db32f1d51d9bb9474e5df1ad0b95ea4f2394243ded0205"
+        ],
+        "state": "PRESENT",
+        "value": "1,157 tpa | 1,037 tpa"
+      },
+      "before": {
+        "fact_ids": [],
+        "state": "UNKNOWN",
+        "value": null
+      },
+      "field_id": "forecast_annual_rate_as_reported",
+      "project_id": "AU-2cfeb25aefee0c4f95fb"
+    },
+    {
+      "after": {
+        "fact_ids": [
+          "7a6f0801e127d7a1020ab78ea96c1e4226cac077503e91fb95a6f1e18d4267ed",
+          "6ff080b693138bc66978033d066a7d3d7fbc4c6ec64058198eaef6f41596b684"
+        ],
+        "state": "PRESENT",
+        "value": "NdPr oxide | NdPr oxide"
+      },
+      "before": {
+        "fact_ids": [],
+        "state": "UNKNOWN",
+        "value": null
+      },
+      "field_id": "forecast_product_and_basis",
+      "project_id": "AU-2cfeb25aefee0c4f95fb"
+    },
+    {
+      "after": {
+        "fact_ids": [
+          "a9196184c239cc35585bb4358ace02c8205503d448c39c738f9b79b9d36f8058",
+          "9250fd89969d6376a851132f76a565dddbe97963e98badadc6c03c779d633d0d"
+        ],
+        "state": "PRESENT",
+        "value": "Average annual production target, years 3–15 | Life-of-mine average annual production target"
+      },
+      "before": {
+        "fact_ids": [],
+        "state": "UNKNOWN",
+        "value": null
+      },
+      "field_id": "forecast_scenario_or_period",
+      "project_id": "AU-2cfeb25aefee0c4f95fb"
+    },
+    {
+      "after": {
+        "fact_ids": [
+          "3161ea5ea222f025ad38d2833ffe463768fbfe744b3a28cc4c781fa1a7440e83"
+        ],
+        "state": "PRESENT",
+        "value": "2023-08"
+      },
+      "before": {
+        "fact_ids": [],
+        "state": "UNKNOWN",
+        "value": null
+      },
+      "field_id": "study_effective_or_completion_date",
+      "project_id": "AU-9b667066e6eb66753005"
+    }
+  ],
+  "full_exact_test_run": {
+    "execution": {
+      "elapsed_s": 148.00933236800483,
+      "exit_status": 0,
+      "peak_rss_kib": 179440,
+      "sys_cpu_s": 29.187477,
+      "user_cpu_s": 117.458733
+    },
+    "passed": 418,
+    "seconds": 146.93,
+    "tests": 418
+  },
+  "gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "historical_O2": "FAIL"
+  },
+  "initial_main": "aa92a35c3d5b3593c25b246edcd28ea36c4b0d9a",
+  "input_artifacts": {
+    "bindings": "8194d0bfe95041e0ef1f4c90810b74361d0eccd8bf0bef045f381a89d267b0be",
+    "profile": "bca46943c26be72f31a1915b22e63a5ff671f31fe137990a4631729d6f4723c0",
+    "sources": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a"
+  },
+  "lifecycle_counts": {
+    "A": 38,
+    "M": 24
+  },
+  "measurements": {
+    "base_median": {
+      "cpu_seconds": 11.134677,
+      "parent_peak_rss_kib": 97608,
+      "seconds": 11.045755758008454,
+      "subprocess_peak_rss_kib": 97608
+    },
+    "candidate_median": {
+      "cpu_seconds": 10.805303,
+      "parent_peak_rss_kib": 98148,
+      "seconds": 10.65252849299577,
+      "subprocess_peak_rss_kib": 98148
+    },
+    "full_receipt": {
+      "path": "/workspace/AU_REE_V3/work/census-fill/engineering-matched/engineering.json",
+      "sha256": "c4b9a5c448665c1d3aa112f9d12dd5bc9979ec11e828ae0af4c7d3bc3e53d50d"
+    },
+    "scientific_difference_fields": {
+      "candidate": []
+    },
+    "source_manifest_sha256": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a",
+    "status": "PASS"
+  },
+  "outputs_sha256": {
+    "census/cell_status.csv": "1eb2f6e0663e36bfe689184433be3d2057c883432c7848efe6f55dea64c62b6f",
+    "census/census.csv": "7e91a748449a71654f7808ae80eb0137a54f43d7a518b09fab9508ee55bba844",
+    "census/census_receipt.json": "72f12839e8c0ebef637989ae647adb16efa184c266a9bdb08160c82c061967b1",
+    "decision/decision_receipt.json": "5060cc4d819668c881fd984d71063475cd5070e3a95cf742c0ee2b3126f1b7e6",
+    "decision/mcda_inputs.json": "a27647b94c144639f7c30c6f1fc6a33ceebf5d9bcfe7f2fbf459bfcba45a3a3d",
+    "decision/mcda_results.json": "1c9d2961859b50e51412d4ff1021f24173aadf398f9812840ffe14fcbc001f62",
+    "observations/extraction.json": "f1cbae4d5a22ecced2a6d709e098570ae4f29fc94adb1e6178c82db82a92e9e8",
+    "observations/observations.jsonl": "bc9dde6a7b73fbc25653cd14412c9e21fd9742c200033276e721a52c36997d13"
+  },
+  "prior_failed_integration": {
+    "code_commit": "daf38b27a7a802539bc4e99f41ee9a2873c561af",
+    "display": "FAIL",
+    "isolated_under": "/workspace/AU_REE_V3/work/census-fill/integration-role-mismatch",
+    "reason": "Legacy website verifier rejected the new STUDY_RESULTS_RELEASED role",
+    "release_id": "60c02b691d4bf0a91d815640852f32b643ef4ff83ec6878131744285f743778e"
+  },
+  "profile_artifacts": {
+    "census_attribute_batches_v2.json": "60651ee04a60004243820d9784d60fa52d1c60ba3f7b98c89fe71ff6ae1e8629",
+    "census_attribute_bindings_v3.json": "acd799bf5654ff4f12de92ab659af294926d95ff0918d4fee85d7a7837922181",
+    "census_columns_v1.json": "c7f4ea7bbb49191559b611f1afc88ebbac2f262680f1cfa48d3d014b4f183058",
+    "census_oxide_derivations_v1.json": "418b56a5e4af35f94a3b07bbc5d2309e30a175554b5c086a64faa6ecb82ec7ef",
+    "development_milestone_bindings_v3.json": "0cb67c141eb5944c9de2fffd9dc8e77fb119f7a6e711480b0cfbd3e86e58960e",
+    "project_registry_2026-11-28.json": "2262fa68e84e5ddedb72103bf7191fb09da95d1d3bad56b927d73af358c71e7c",
+    "source_seeds_2026-11-28.json": "7663487064e05992519298df832018b83b2cd6fe3baf70cda060530c9cc964ed"
+  },
+  "pull_requests": [
+    {
+      "head": "4fa73f0",
+      "number": 56,
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/56"
+    },
+    {
+      "head": "c550554",
+      "number": 57,
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/57"
+    },
+    {
+      "head": "cd351f1",
+      "number": 58,
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/58"
+    },
+    {
+      "head": "c389d56",
+      "number": 59,
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/59"
+    },
+    {
+      "head": "4bc9d42",
+      "number": 60,
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/60"
+    },
+    {
+      "head": "b5cbf3c",
+      "number": 61,
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/61"
+    },
+    {
+      "head": "bcbfa12",
+      "number": 62,
+      "url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/62"
+    }
+  ],
+  "release_costs": {
+    "fill": {
+      "archive": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 61076,
+        "system_seconds": 0.442032,
+        "user_seconds": 2.18297,
+        "wall_seconds": 2.6349759620061377
+      },
+      "build": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 93840,
+        "system_seconds": 1.606316,
+        "user_seconds": 10.983096,
+        "wall_seconds": 12.36847078599385
+      },
+      "cold-a": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 93440,
+        "system_seconds": 2.018737,
+        "user_seconds": 12.328138,
+        "wall_seconds": 14.210529585005133
+      },
+      "cold-b": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 93220,
+        "system_seconds": 2.327267,
+        "user_seconds": 15.383727,
+        "wall_seconds": 17.603452684998047
+      },
+      "display-cold-a": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 107028,
+        "system_seconds": 1.043562,
+        "user_seconds": 7.370206,
+        "wall_seconds": 8.341443192999577
+      },
+      "display-cold-b": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 107308,
+        "system_seconds": 1.261043,
+        "user_seconds": 8.381194,
+        "wall_seconds": 9.525786950005568
+      },
+      "display-live": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 107428,
+        "system_seconds": 0.968563,
+        "user_seconds": 7.427042,
+        "wall_seconds": 8.298839868992218
+      }
+    },
+    "stage6": {
+      "archive": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 60256,
+        "system_seconds": 0.5414749999999999,
+        "user_seconds": 2.693832,
+        "wall_seconds": 4.042719926001155
+      },
+      "build": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 93512,
+        "system_seconds": 1.293973,
+        "user_seconds": 13.182369,
+        "wall_seconds": 18.74321973900078
+      },
+      "cold-a": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 93160,
+        "system_seconds": 1.8561239999999999,
+        "user_seconds": 15.543449,
+        "wall_seconds": 22.055036993988324
+      },
+      "cold-b": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 92908,
+        "system_seconds": 2.065992,
+        "user_seconds": 15.059339,
+        "wall_seconds": 20.254673154995544
+      },
+      "display-cold-a": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 105796,
+        "system_seconds": 0.8938379999999999,
+        "user_seconds": 7.491458,
+        "wall_seconds": 8.443786129006185
+      },
+      "display-cold-b": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 106072,
+        "system_seconds": 1.479821,
+        "user_seconds": 9.03565,
+        "wall_seconds": 10.643297028000234
+      },
+      "display-live": {
+        "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+        "exit_code": 0,
+        "peak_rss_kib": 105748,
+        "system_seconds": 1.027642,
+        "user_seconds": 7.256692,
+        "wall_seconds": 8.229414389003068
+      }
+    }
+  },
+  "release_status": "RESEARCH_CANDIDATE",
+  "research_pointer_changed": false,
+  "schema": "census-fill-round-verification-v1",
+  "static_architecture": [
+    {
+      "branch_score_max": 84,
+      "branch_score_p90": 20,
+      "cross_module_duplicate_groups": 3,
+      "functions": 995,
+      "internal_static_edges": 328,
+      "modules": 70,
+      "static_cycles": 1
+    },
+    {
+      "branch_score_max": 82,
+      "branch_score_p90": 20,
+      "cross_module_duplicate_groups": 3,
+      "functions": 1032,
+      "internal_static_edges": 337,
+      "modules": 72,
+      "static_cycles": 1
+    }
+  ],
+  "status": "PASS",
+  "study_and_oxide_browser": {
+    "browser_history_load_wall_ms": 373,
+    "browser_js_heap_used_bytes": 8915864,
+    "browser_load_census_wall_ms": 752,
+    "dated_study_evidence": "PASS",
+    "extended_fields": 9,
+    "extended_fields_filters_sort_csv_evidence": "PASS",
+    "extended_missing_corrupt_keeps_prior_version": "PASS",
+    "extended_original_source_readback": "PASS",
+    "extended_present_cells": 52,
+    "extended_rehashed_mixed_role_lineage_csv_refused": "PASS",
+    "extended_review_only_records": 9,
+    "formal_pointer_rejects_candidate": "PASS",
+    "history_csv_update_link": "PASS",
+    "map_ree_mcda_language": "PASS",
+    "mixed_cache_missing_atomic": "PASS",
+    "mobile": "PASS",
+    "no_formal_pointer": "PASS",
+    "rehashed_unqualified_pin_rank_lineage": "PASS",
+    "scoped_magnet_oxide_disclosure": "PASS",
+    "search_filter_sort_columns_evidence": "PASS",
+    "xss_and_source_link": "PASS"
+  },
+  "timezone": "Asia/Taipei"
+}
