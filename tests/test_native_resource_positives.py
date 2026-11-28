@@ -41,6 +41,40 @@ EXPECTED = {
 @unittest.skipUnless(os.environ.get("AU_REE_NATIVE_RESOURCE_ASSETS") and shutil.which("pdftotext")
                      and shutil.which("pdfimages"), "exact ASX originals and Poppler required")
 class NativeResourcePositiveTests(unittest.TestCase):
+    def _exact_document(self, source_sha, page):
+        bases = Path(os.environ["AU_REE_NATIVE_RESOURCE_ASSETS"])
+        source = next(path for path in (bases / source_sha, bases / "objects" / source_sha) if path.is_file())
+        original = source.read_bytes()
+        self.assertEqual(sha256(original).hexdigest(), source_sha)
+        return DocumentCache().pdf(original, source_sha, page)
+
+    def test_exact_threshold_series_keeps_three_original_inventories_separate(self):
+        doc = self._exact_document("eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5", 1)
+        rows = discover_page_rows(doc, page=1)
+        measured = [tuple((cell.variable, cell.value.text, cell.unit) for cell in row.cells if cell.variable)
+                    for row in rows]
+        self.assertEqual(measured, [
+            (("ore_mt", "29.98", "Mt"), ("grade", "1.04", "%"), ("contained_treo_kt", "311,800", "t")),
+            (("ore_mt", "21.06", "Mt"), ("grade", "1.35", "%"), ("contained_treo_kt", "284,300", "t")),
+            (("ore_mt", "11.63", "Mt"), ("grade", "1.93", "%"), ("contained_treo_kt", "224,400", "t")),
+        ])
+        self.assertEqual([row.context_anchors[-1].text for row in rows], ["0.20", "0.40", "1.00"])
+        self.assertTrue(all(row.cells[0].reason == "CUTOFF_THRESHOLD_IS_NOT_A_RESOURCE_GRADE" for row in rows))
+        self.assertNotIn("40.82", {cell.value.text for row in rows for cell in row.cells})
+
+    def test_exact_companion_unit_and_modified_chemistry_are_separate(self):
+        wudinna = self._exact_document("89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864", 3)
+        row, = discover_page_rows(wudinna, page=3)
+        grade, = [cell for cell in row.cells if cell.variable == "grade"]
+        self.assertEqual((grade.value.text, grade.unit, grade.unit_label.physical_page), ("470", "ppm", 1))
+        self.assertIn("200 ppm TREO-Ce", grade.caption[0].text)
+        goschen = self._exact_document("5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0", 12)
+        row, = discover_page_rows(goschen, page=12)
+        self.assertEqual(row.strategy, "NAMED_RESOURCE_SUBTABLE")
+        self.assertEqual([cell.value.text for cell in row.cells], ["94,200,000", "0.08", "74,000"])
+        self.assertEqual([cell.variable for cell in row.cells], ["ore_mt", None, None])
+        self.assertTrue(all(cell.reason == "CHEMICALLY_MODIFIED_TREO_IS_NOT_STANDARD_TREO" for cell in row.cells[1:]))
+
     def test_native_discovery_distinguishes_issuer_vintage_and_row_marker(self):
         source_sha = "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e"
         bases = Path(os.environ["AU_REE_NATIVE_RESOURCE_ASSETS"])
