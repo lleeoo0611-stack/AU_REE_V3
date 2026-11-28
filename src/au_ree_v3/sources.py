@@ -562,7 +562,7 @@ def _capture_map(manifest):
     return captures
 
 
-def _projects(manifest):
+def _manifest_project_ids(manifest):
     return {row["project_id"] for row in manifest["projects"]}
 
 
@@ -571,7 +571,7 @@ def require_source_expansion(fixed, expanded, fixed_sha):
     identity = ("schema", "profile_id", "cutoff", "timezone")
     if fixed["schema"] != SCHEMA or any(fixed[key] != expanded[key] for key in identity):
         raise ValueError("Source manifests have different research identities")
-    if _projects(fixed) != _projects(expanded):
+    if _manifest_project_ids(fixed) != _manifest_project_ids(expanded):
         raise ValueError("Expanded manifest changes the project cohort")
     if fixed_sha not in {row["sha256"] for row in expanded.get("input_manifests", ())}:
         raise ValueError("Expanded manifest does not identify the fixed input")
