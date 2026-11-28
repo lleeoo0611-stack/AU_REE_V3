@@ -89,6 +89,8 @@ def main(argv: list[str] | None = None) -> int:
     native = research_commands.add_parser("bind-native-tables", help="Bind exact native PDF table quantities as candidates")
     for argument in ("profile", "inventory", "inventory-receipt", "sources", "assets", "out"):
         native.add_argument(f"--{argument}", type=Path, required=True)
+    native.add_argument("--prior-binding", type=Path, help="Pinned previous binding directory to close each unresolved case")
+    native.add_argument("--located-only", action="store_true", help="Keep structure work outside the comparable located-cell run")
     build = research_commands.add_parser("build", help="Build the fresh Census and decision inputs")
     build.add_argument("--profile", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
@@ -271,11 +273,12 @@ def _run_research(args) -> dict:
         return route_source_work(profile=args.profile, queue=args.queue, recovery_receipt=args.recovery_receipt,
                                  sources=args.sources, assets=args.assets, bindings=args.bindings, out=args.out)
     if args.operation == "bind-native-tables":
-        from .resource_table_binding import bind_source_inventory
+        from .native_table_work import bind_source_inventory
 
         return bind_source_inventory(profile=args.profile, inventory=args.inventory,
                                      inventory_receipt=args.inventory_receipt, sources=args.sources,
-                                     assets=args.assets, out=args.out)
+                                     assets=args.assets, out=args.out, prior_binding=args.prior_binding,
+                                     located_only=args.located_only)
     if args.operation == "extract":
         from .fresh_observations import extract_sources
 
