@@ -22,11 +22,11 @@ No source/Project association is inferred by title/name similarity, and matching
 
 ## Outputs
 
-- legacy_value_leads.jsonl: numeric resource and individual oxide historical hints, same-SHA and Project status, ranked pages; all carry candidate_only=true and original_value_confirmed=false.
+- legacy_value_leads.jsonl: resource and individual oxide field references, same-SHA and Project status, and ranked pages. Historical display values and free-text locator and scope fields are excluded.
 - source_project_work_queue.json: unique (source SHA-256, Project ID) work items aggregating suggested pages, target columns and old page hints, with formal_admission=false.
 - legacy_value_recovery_receipt.json: exact V2 provenance checksum, current V3 index checksum, linked source manifest SHA, counts, classifications and result hashes.
 
-All output directories must start empty. Existing research outputs are never overwritten.
+Use an empty output directory outside the V2 checkout. The per-position page budgets govern search, and each Source–Project queue entry contains the union of those pages. The index metadata and page matches are discovery inputs. Recheck them against the fixed V3 manifest and exact CAS bytes during reprocessing.
 
 ## Reproduction in an exact-source V3 workspace
 

@@ -79,7 +79,7 @@ def _pages(raw: str) -> list[int]:
     if not raw.strip():
         return []
     parts = re.split(r"[;,\s]+", raw.strip())
-    if any(not v.isdigit() or not 1 <= int(v) <= 10000 for v in parts):
+    if any(not re.fullmatch(r"[0-9]{1,5}", v) or not 1 <= int(v) <= 10000 for v in parts):
         return []
     return sorted({int(x) for x in parts})
 
@@ -126,6 +126,8 @@ def run(*, v2_root: Path, index_path: Path, out: Path) -> dict:
     """Create read-only, source/Page keyed leads, never numeric observations."""
     if out.exists() and any(out.iterdir()):
         raise FileExistsError("Recovery output must be a new empty directory; immutable prior results cannot be overwritten")
+    if out.resolve().is_relative_to(v2_root.resolve()):
+        raise ValueError("Recovery output must be outside the read-only V2 checkout")
     out.mkdir(parents=True, exist_ok=True)
     provenance_sha, legacy = _read_v2(v2_root)
     payload = index_path.read_bytes()
@@ -134,8 +136,9 @@ def run(*, v2_root: Path, index_path: Path, out: Path) -> dict:
     with closing(sqlite3.connect(index_path.resolve().as_uri() + "?mode=ro&immutable=1", uri=True)) as conn:
         conn.row_factory = sqlite3.Row
         metadata = {row["key"]: json.loads(row["value"]) for row in conn.execute("SELECT key,value FROM metadata")}
-        if metadata.get("schema") != INDEX_SCHEMA or not metadata.get("candidate_only"):
-            raise ValueError("Only the verified V3 candidate-only source index may be used")
+        if (metadata.get("schema") != INDEX_SCHEMA or metadata.get("candidate_only") is not True
+                or not re.fullmatch(r"[0-9a-f]{64}", metadata.get("source_manifest_sha256", ""))):
+            raise ValueError("A V3 candidate index with a pinned source manifest fingerprint is required")
         sources = {row["source_sha256"]: dict(row) for row in conn.execute("SELECT * FROM sources")}
         associations = {(row["source_sha256"], row["project_id"])
                         for row in conn.execute("SELECT source_sha256,project_id FROM source_projects")}
@@ -148,8 +151,7 @@ def run(*, v2_root: Path, index_path: Path, out: Path) -> dict:
             pages = _pages(row["pdf_page"])
             result = {
                 "project_id": row["project_id"], "column": row["column"],
-                "legacy_display_hint": row["value"], "legacy_method": row["method"],
-                "legacy_scope_hint": row["scope"], "legacy_locator_hint": row["locator"],
+                "legacy_method": row["method"],
                 "legacy_pages": pages, "legacy_source_shas": shas, "quantity_group": role,
                 "source_role": "V2_SEARCH_HINT_ONLY", "candidate_only": True, "formal_observation_created": False,
                 "original_value_confirmed": False, "source_science_use_validated": False,
@@ -215,7 +217,7 @@ def run(*, v2_root: Path, index_path: Path, out: Path) -> dict:
         "unique_eligible_source_sha": len({x["source_sha256"] for x in queue_rows}),
         "value_page_budget": PAGE_BUDGET, "context_page_budget": CONTEXT_BUDGET,
         "independent_source_validation": "NOT_RUN", "formal_scientific_values_added": 0,
-        "notes": "Value/oxide hints are V2 projection labels, often derived. No raw token, formal acceptance, or scientific equivalence is asserted. Rerun native source parser and validated V3 selection independently.",
+        "notes": "Page budgets apply per historical Census position; grouped work items keep the union. Legacy numbers, locator and scope text are excluded. Independently verify the manifest, source membership and original bytes before extracting.",
     }
     with (out / "legacy_value_leads.jsonl").open("w", encoding="utf-8", newline="\n") as stream:
         for rec in records:

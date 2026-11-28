@@ -83,7 +83,7 @@ class LegacyResourceHintsTests(unittest.TestCase):
                    "pdf_page":"","locator":"","method":"SCOPE","scope":""}]
             with patch.object(recover,"_read_v2",return_value=("e"*64,fake)):
                 out=root/"output"
-                result=recover.run(v2_root=root,index_path=index,out=out)
+                result=recover.run(v2_root=root/"readonly-v2",index_path=index,out=out)
                 self.assertEqual(result["numeric_value_hints"],4)
                 self.assertEqual(result["formal_scientific_values_added"],0)
                 self.assertEqual(result["unique_source_project_work_items"], 1)
@@ -98,6 +98,8 @@ class LegacyResourceHintsTests(unittest.TestCase):
                 self.assertEqual(leads[2]["status"],"SOURCE_EDITION_NOT_IN_V3")
                 self.assertEqual(leads[3]["status"],"NO_LEGACY_SOURCE_SHA")
                 self.assertFalse(any(row["formal_observation_created"] for row in leads))
+                self.assertFalse(any({"legacy_display_hint", "legacy_scope_hint", "legacy_locator_hint"} & row.keys()
+                                     for row in leads))
                 self.assertEqual(result["leads_sha256"],__import__("hashlib").sha256((out/"legacy_value_leads.jsonl").read_bytes()).hexdigest())
 
     def test_immutable_prior_results_are_not_overwritten(self):
@@ -116,6 +118,15 @@ class LegacyResourceHintsTests(unittest.TestCase):
         self.assertEqual(recover._pages("bad 4"),[])
         self.assertEqual(recover._target("CeO2_氧化鈰_kt"),"OXIDE")
         self.assertEqual(recover._target("開發商"),None)
+        self.assertEqual(recover._pages("²"), [])
+
+    def test_v2_checkout_cannot_be_an_output_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "output"
+            with self.assertRaisesRegex(ValueError, "read-only V2 checkout"):
+                recover.run(v2_root=root, index_path=root / "unused.sqlite", out=output)
+            self.assertFalse(output.exists())
 
 
 if __name__ == "__main__":
