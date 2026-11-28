@@ -1,20 +1,21 @@
 """Verify official point responses in a separate research source expansion."""
 
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
+from decimal import Decimal
 from hashlib import sha256
 import json
 import math
 from pathlib import Path
 import re
-from urllib.parse import urlsplit
+from urllib.parse import urlencode, urlsplit
 from zoneinfo import ZoneInfo
 
 from .contracts import EntityKind, canonical_json
 from .documents import DocumentCache, DocumentError
 from .geography import SITE_ROLES, _decision, _edition, infrastructure_site_compatibility, official_point_role
-from .sources import ContentStore, IntegrityError, validate_edition_proofs
+from .sources import ContentStore, IntegrityError, fetch_public, validate_edition_proofs
 
 
 OFFICIAL_POINTS_SCHEMA = "government-native-point-candidates-v1"
@@ -46,6 +47,14 @@ _POINT_DATASETS = {
         "ENO", "CLASS", None, "COMMODITY_CODES", "EPSG:4283", "GDA94",
     ),
 }
+
+for _layer_number in (5, 6):
+    _deposits = _POINT_DATASETS["GA_CRITICAL_DEPOSITS"]
+    _POINT_DATASETS[f"GA_CRITICAL_LAYER_{_layer_number}"] = replace(
+        _deposits, path=_deposits.path[:-1] + str(_layer_number),
+    )
+
+
 def _point_index(payload, dataset):
     layer = _POINT_DATASETS[dataset]
     if dataset == "GA_OZMIN":
@@ -84,7 +93,158 @@ def _is_government_layer(url, dataset, *, metadata=False):
     layer = _POINT_DATASETS[dataset]
     parsed = urlsplit(url)
     expected = layer.path if metadata or dataset == "GA_OZMIN" else layer.path + "/query"
-    return parsed.scheme == "https" and parsed.hostname == layer.host and parsed.path == expected
+    return parsed.scheme == "https" and parsed.netloc == layer.host and parsed.path == expected
+
+
+HISTORICAL_POINT_SCHEMA = "historical-government-point-recovery-v1"
+_HISTORICAL_POINTS = "spatial_point_quality.csv"
+_HISTORICAL_POINTS_SHA = "11ede840da25bb5ec3e50f69a986a03dc5dbfe26baecb51a489de826eed1e777"
+_HISTORICAL_LAYER_LABELS = {
+    "WA_MINEDEX": ("WA_MINEDEX",),
+    "GA2025": ("GA_CRITICAL_LAYER_5", "GA_CRITICAL_LAYER_6", "GA_CRITICAL_DEPOSITS"),
+}
+
+
+def _historical_routes(rows, assets):
+    urls = defaultdict(set)
+    for asset in assets:
+        if asset["role"] == "snapshot":
+            urls[asset["sha256"]].add(asset["url"])
+    routes = defaultdict(list)
+    for row in rows:
+        label = row["dataset"]
+        if label not in _HISTORICAL_LAYER_LABELS:
+            continue
+        digest = row["source_sha256"]
+        approved = []
+        for url in sorted(urls[digest]):
+            parsed = urlsplit(url)
+            if (label == "WA_MINEDEX" and parsed.scheme == "https"
+                    and parsed.netloc == "public-services.slip.wa.gov.au"
+                    and parsed.path == "/public/rest/services/SLIP_Public_Services/Industry_and_Mining_WFS/MapServer/0/query"):
+                approved.append(("WA_MINEDEX", url))
+            approved.extend((key, url) for key in _HISTORICAL_LAYER_LABELS[label] if _is_government_layer(url, key))
+        if len(approved) != 1:
+            raise IntegrityError(f"V2 point source lacks one archived government layer: {digest}")
+        dataset, url = approved[0]
+        routes[dataset, digest, url].append(row)
+    return routes
+
+
+def _point_query(dataset, rows):
+    layer = _POINT_DATASETS[dataset]
+    ids = sorted({row["native_feature_id"] for row in rows})
+    pattern = r"S[0-9]+" if dataset == "WA_MINEDEX" else r"[0-9]+"
+    if not ids or any(not re.fullmatch(pattern, native_id) for native_id in ids):
+        raise IntegrityError("V2 point locator does not match the layer's native identifier")
+    values = ",".join(f"'{native_id}'" if dataset == "WA_MINEDEX" else native_id for native_id in ids)
+    params = {"f": "json", "where": f"{layer.id_field} IN ({values})", "outFields": "*",
+              "outSR": layer.crs.split(":")[1], "returnGeometry": "true"}
+    return f"https://{layer.host}{layer.path}/query?{urlencode(params)}"
+
+
+def _point_recovery(row, dataset, points, capture):
+    layer = _POINT_DATASETS[dataset]
+    locator = row["native_feature_id"]
+    identity = locator if dataset == "WA_MINEDEX" else int(locator)
+    row_crs = {"7844": "EPSG:7844", "GDA94": "EPSG:4283"}.get(row["export_crs"], row["export_crs"])
+    result = {
+        "project_id": row["project_id"], "native_id": locator, "native_id_field": layer.id_field,
+        "historical_locator": row["locator"], "historical_crs": row_crs, "capture_crs": layer.crs,
+        "source_sha256": capture["source_sha256"], "state": "CANDIDATE",
+        "feature_effective_date": None, "location_role": None, "native_role": None, "geometry": None,
+        "comparison": ("SOURCE_UNAVAILABLE" if capture["status"] != "FETCHED" else
+                       "INVALID_LAYER_RESPONSE" if "layer_error" in capture else "NATIVE_FEATURE_NOT_LOCATED"),
+    }
+    if identity in points:
+        properties, geometry = points[identity]
+        original = [Decimal(row[key]) for key in ("longitude", "latitude")]
+        same_precision = all(
+            Decimal(str(now)).quantize(expected) == expected
+            for now, expected in zip(geometry["coordinates"], original, strict=True)
+        )
+        native_role = properties.get(layer.role_field)
+        result.update(geometry=geometry, native_role=native_role, location_role=official_point_role(native_role),
+                      historical_coordinates=[str(value) for value in original],
+                      comparison="CRS_DIFFERS" if row_crs != layer.crs else
+                      "MATCH_AT_HISTORICAL_PRECISION" if same_precision else "COORDINATES_DIFFER")
+    return result
+
+
+def _read_point_capture(dataset, url, store, recorded, fetcher):
+    if recorded is None:
+        response = fetcher(url, "GET", 18, 12_000_000)
+        digest = store.put(response.payload) if response.status == "FETCHED" and response.payload else None
+        capture = {"requested_url": url, "final_url": response.final_url, "acquired_at": response.at,
+                   "status": response.status, "http_status": response.http_status, "source_sha256": digest}
+        if response.status == "FETCHED" and digest is None:
+            capture["status"] = "EMPTY_RESPONSE"
+    else:
+        capture = {key: recorded[key] for key in
+                   ("requested_url", "final_url", "acquired_at", "status", "http_status", "source_sha256")}
+        if capture["requested_url"] != url:
+            raise IntegrityError("Recorded point capture disagrees with the frozen native query")
+    if capture["status"] != "FETCHED":
+        return capture, {}
+    payload = store.read(capture["source_sha256"])
+    try:
+        if not _is_government_layer(capture["final_url"], dataset):
+            raise IntegrityError("Point capture redirected outside its government layer")
+        return capture, _point_index(json.loads(payload), dataset)
+    except (AttributeError, KeyError, TypeError, ValueError) as error:
+        capture["layer_error"] = str(error)
+        return capture, {}
+
+
+def replay_historical_points(v2_root, store_path, *, prior=None, fetcher=fetch_public):
+    """Recover published managed-layer features without assigning release eligibility."""
+    from .migration.baseline import BASELINES, PinnedRepository, checked_csv
+    from .migration.project_registry import ARCHIVE, ASSETS, RESEARCH_CUTOFF, TIMEZONE, V2_ARCHIVE_FILES
+
+    if store_path.resolve().is_relative_to(v2_root.resolve()):
+        raise ValueError("Write point captures outside the V2 reference checkout")
+    repo = PinnedRepository(v2_root)
+    data = repo.read("engineering", f"{ARCHIVE}/{_HISTORICAL_POINTS}")
+    assets = repo.read("engineering", f"{ARCHIVE}/{ASSETS}")
+    if data is None or assets is None:
+        raise ValueError("Frozen V2 point rows or asset manifest unavailable")
+    if sha256(data).hexdigest() != _HISTORICAL_POINTS_SHA or sha256(assets).hexdigest() != V2_ARCHIVE_FILES[ASSETS][1]:
+        raise IntegrityError("V2 government point reference fingerprints differ")
+
+    store = ContentStore(store_path)
+    cutoff = RESEARCH_CUTOFF.isoformat()
+    routes = _historical_routes(checked_csv(data), json.loads(assets))
+    recorded = {}
+    if prior is not None:
+        if prior["schema"] != HISTORICAL_POINT_SCHEMA or prior["archive_sha256"] != _HISTORICAL_POINTS_SHA:
+            raise IntegrityError("Recorded point receipt does not refer to the fixed V2 archive")
+        recorded = {row["requested_url"]: row for row in prior["captures"]}
+        expected = {_point_query(dataset, rows) for (dataset, _, _), rows in routes.items()}
+        if len(recorded) != len(prior["captures"]) or set(recorded) != expected:
+            raise IntegrityError("Recorded point receipt does not cover the exact native queries")
+    captures, results = [], []
+    for (dataset, digest, archive_url), rows in sorted(routes.items()):
+        url = _point_query(dataset, rows)
+        capture, points = _read_point_capture(dataset, url, store, recorded.get(url), fetcher)
+        if capture["source_sha256"]:
+            capture["temporal_decision"] = _decision(
+                {"sha256": capture["source_sha256"], "publication_date": None,
+                 "acquired_at": capture["acquired_at"], "reacquired_at": None},
+                {"cutoff": cutoff}, (),
+            ).to_dict()
+        capture.update(dataset=dataset, historical_sha256=digest, historical_url=archive_url)
+        captures.append(capture)
+        results.extend(_point_recovery(row, dataset, points, capture) for row in rows)
+    matched = sum(row["comparison"] == "MATCH_AT_HISTORICAL_PRECISION" for row in results)
+    return {
+        "schema": HISTORICAL_POINT_SCHEMA, "archive_sha256": _HISTORICAL_POINTS_SHA,
+        "archive_commit": BASELINES["refs"]["engineering"], "cutoff": cutoff, "timezone": TIMEZONE,
+        "status": "PASS" if results and matched == len(results) else "BLOCKED",
+        "counts": {"native_routes": len(routes), "historical_points": len(results), "coordinate_matches": matched,
+                   "native_features_reread": sum(row["geometry"] is not None for row in results),
+                   "formal_coordinates": 0, "formal_infrastructure": 0},
+        "captures": captures, "points": sorted(results, key=lambda item: item["project_id"]),
+    }
 
 
 def _known_point(case, edition, expanded, content, timezone, cache):
