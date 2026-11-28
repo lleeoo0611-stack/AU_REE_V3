@@ -1,0 +1,24 @@
+{
+  "schema": "source-edition-recovery-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "lyons-historical-resource-appendix",
+      "project_id": "AU-7c198d219aa1db3e291f",
+      "kind": "pdf",
+      "expected_sha256": "9c9df3bfd3cca3c86946638121c09cd07117d1bea12737ecfc06dbf8b7c14334",
+      "routes": [
+        {"publisher": "Lanthanein Resources Limited", "url": "https://announcements.asx.com.au/asxpdf/20240315/pdf/061k5t4brnh2bl.pdf"}
+      ]
+    },
+    {
+      "case_id": "yttria-historical-asra-pdf-alternate-locator",
+      "project_id": "AU-ee5ca893d12883df35f1",
+      "kind": "pdf",
+      "expected_sha256": "73936d124c5ce52038f968db521713ba86e72b92c847fb391254ebc47c0f0d51",
+      "routes": [
+        {"publisher": "Asra Minerals Limited", "url": "https://wcsecure.weblink.com.au/pdf/ASR/02795766.pdf"}
+      ]
+    }
+  ]
+}

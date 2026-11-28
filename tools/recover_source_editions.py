@@ -12,7 +12,7 @@ from au_ree_v3.contracts import canonical_json
 from au_ree_v3.contracts.temporal import evaluate_temporal
 from au_ree_v3.registry import load_profile
 from au_ree_v3.sources import (
-    SCHEMA as SOURCE_SCHEMA, ContentStore, IntegrityError, _capture, _run_requests, _write_manifest, fetch_public,
+    SCHEMA as SOURCE_SCHEMA, ContentStore, IntegrityError, _capture, _kind, _public_url, _run_requests, _write_manifest, fetch_public,
     validate_edition_proofs,
 )
 
@@ -47,7 +47,10 @@ def _read_inputs(profile_path, fixed_manifest, bindings):
         or case.get("access_basis") != "PUBLIC_ANONYMOUS" for case in cases
     ):
         raise ValueError("New source versions require a separate public native identifier")
-    return profile, fixed, fixed_sha, spec["schema"], cases
+    priors = tuple(spec.get("prior_manifest_sha256", ()))
+    if len(set(priors)) != len(priors) or any(not _HEX_SHA.fullmatch(digest) for digest in priors):
+        raise ValueError("Prior acquisitions require unique exact manifest fingerprints")
+    return profile, fixed, fixed_sha, spec["schema"], cases, priors
 
 
 def _requests(cases):
@@ -123,14 +126,83 @@ def _native_route_bindings(rows):
     ]}
 
 
-def recover_public_editions(*, profile_path, fixed_manifest, bindings, store, out, fetcher=fetch_public):
+def _prior_sources(prior_inputs, expected, profile):
+    recovered = {}
+    identity = SOURCE_SCHEMA, profile.profile_id, profile.research_cutoff.isoformat(), profile.timezone.key
+    for manifest_path, store in prior_inputs:
+        body = Path(manifest_path).read_bytes()
+        digest = sha256(body).hexdigest()
+        if digest not in expected or digest in recovered:
+            raise IntegrityError("Prior capture manifest is missing its exact acquisition pin")
+        content = ContentStore(Path(store))
+        content.read(digest)
+        manifest = json.loads(body)
+        if tuple(manifest[key] for key in ("schema", "profile_id", "cutoff", "timezone")) != identity:
+            raise IntegrityError("Prior capture belongs to another research profile")
+        recovered[digest] = body, manifest, content
+    if recovered.keys() != set(expected):
+        raise IntegrityError("All pinned prior capture manifests and stores are required")
+    return recovered
+
+
+def _restore_proofs(sources, digest, content, profile, by_sha):
+    """Copy proof objects for fetched identical bytes while keeping actual capture clocks."""
+    lineage = []
+    visited = set()
+    cutoff = profile.research_cutoff.isoformat()
+    for manifest_digest, (_, manifest, store) in sorted(sources.items()):
+        for edition in manifest["editions"]:
+            if edition["sha256"] != digest:
+                continue
+            proofs = validate_edition_proofs(store, edition, profile.timezone)
+            for proof in proofs:
+                capture = proof.reference_sha256
+                if proof.public_on > cutoff or capture in visited:
+                    continue
+                content.put(store.read(digest))
+                receipt = json.loads(store.read(capture))
+                if content.register_capture(receipt) != capture:
+                    raise IntegrityError("Prior public capture changed while restoring exact bytes")
+                by_sha[digest].append((capture, receipt))
+                lineage.append({"manifest_sha256": manifest_digest, "source_sha256": digest,
+                                "capture_sha256": capture, "public_on": proof.public_on})
+                visited.add(capture)
+    return sorted(lineage, key=lambda row: (row["source_sha256"], row["capture_sha256"]))
+
+
+def _verify_restored_proofs(content, expanded, result, expected, profile):
+    if not expected:
+        return
+    manifests = {digest: json.loads(content.read(digest)) for digest in expected}
+    lineage = expanded["restored_prior_proofs"]
+    if result["restored_prior_proofs"] != lineage or expanded["prior_manifest_sha256"] != list(expected):
+        raise IntegrityError("Prior proof lineage disagrees across recovery receipts")
+    used = {(edition["sha256"], proof["reference_sha256"])
+            for edition in expanded["editions"] for proof in edition["temporal_evidence"]}
+    local_captures = {edition["receipt_sha256"] for edition in expanded["editions"]}
+    external = {(digest, capture) for digest, capture in used if capture not in local_captures}
+    if external != {(row["source_sha256"], row["capture_sha256"]) for row in lineage}:
+        raise IntegrityError("Restored proof lineage does not cover the external capture references")
+    for row in lineage:
+        digest, capture = row["source_sha256"], row["capture_sha256"]
+        manifest = manifests[row["manifest_sha256"]]
+        if not any(edition["sha256"] == digest and any(
+            t["reference_sha256"] == capture and t["public_on"] == row["public_on"]
+            for t in edition["temporal_evidence"]
+        ) for edition in manifest["editions"]):
+            raise IntegrityError("Restored public capture is absent from its pinned manifest")
+        if (digest, capture) not in used or row["public_on"] > profile.research_cutoff.isoformat():
+            raise IntegrityError("Restored proof lacks evidence of exact publication under the cutoff")
+
+
+def recover_public_editions(*, profile_path, fixed_manifest, bindings, store, out, fetcher=fetch_public, prior_inputs=()):
     out, store = Path(out), Path(store)
     if (out.resolve().is_relative_to(store.resolve()) or store.resolve().is_relative_to(out.resolve())
             or any(path.resolve().is_relative_to(root.resolve())
                    for path in map(Path, (profile_path, fixed_manifest, bindings)) for root in (out, store))
             or out.exists() and any(out.iterdir()) or store.exists() and any(store.iterdir())):
         raise ValueError("Recovery requires empty, separate output and CAS directories outside the locked inputs")
-    profile, fixed, fixed_sha, schema, cases = _read_inputs(profile_path, fixed_manifest, bindings)
+    profile, fixed, fixed_sha, schema, cases, prior_pins = _read_inputs(profile_path, fixed_manifest, bindings)
     original_hashes = {row["sha256"] for row in fixed["editions"]}
     if any(case.get("expected_sha256") in original_hashes for case in cases):
         raise ValueError("Edition recovery cannot replace an edition in the fixed cohort")
@@ -139,8 +211,19 @@ def recover_public_editions(*, profile_path, fixed_manifest, bindings, store, ou
     content = ContentStore(store)
     by_url, prior, by_sha = {}, defaultdict(list), defaultdict(list)
     events, editions = [], []
+    prior_sources = _prior_sources(prior_inputs, prior_pins, profile)
+    for body, _, _ in prior_sources.values():
+        content.put(body)
+    previous_matches, restored = set(), []
     responses = _run_requests(plans, "GET", 4, 24, 12 * 1024 * 1024, fetcher)
     for plan, response in zip(plans, responses, strict=True):
+        if (prior_sources and response.status == "FETCHED" and response.http_status == 200
+                and response.payload is not None and _public_url(plan["url"]) and _public_url(response.final_url)
+                and _kind(plan["url"], plan["kind"], response.payload, response.response_mime)):
+            digest = sha256(response.payload).hexdigest()
+            if digest not in previous_matches:
+                restored.extend(_restore_proofs(prior_sources, digest, content, profile, by_sha))
+                previous_matches.add(digest)
         event, edition = _capture(plan, response, content, profile, prior, by_sha)
         by_url[plan["url"]] = event, edition
         events.append(event)
@@ -150,8 +233,10 @@ def recover_public_editions(*, profile_path, fixed_manifest, bindings, store, ou
             editions.append(edition)
     rows = [_assess(case, by_url, original_hashes) for case in cases]
     native = _native_route_bindings(rows) if schema == VERSION_SCHEMA else {}
+    historical_context = {"prior_manifest_sha256": list(prior_pins), "restored_prior_proofs": restored} if prior_sources else {}
     _write_manifest(profile, tuple(row["project_id"] for row in fixed["projects"]), events, editions,
-                    content, None, out, purpose=_PURPOSES[schema], base_manifest_sha256=fixed_sha, **native)
+                    content, None, out, purpose=_PURPOSES[schema], base_manifest_sha256=fixed_sha,
+                    **native, **historical_context)
     summary = {
         "schema": schema, "scope": "EXPANDED_MANIFEST", "status": "PASS", "fixed_manifest_sha256": fixed_sha,
         "fixed_manifest_new_sources": 0, "formal_display_facts_added": 0, "formal_mcda_criteria_added": 0,
@@ -162,7 +247,7 @@ def recover_public_editions(*, profile_path, fixed_manifest, bindings, store, ou
         "new_exact_source_versions": len({row["sha256"] for row in editions} - original_hashes),
         "exact_requested_editions_recovered": sum(row["result"] == "RECOVERED_EXACT" for row in rows),
         "distinct_public_editions_observed": len({row["sha256"] for row in editions}),
-        "cases": rows,
+        "cases": rows, **historical_context,
     }
     (out / "source_edition_recovery.json").write_text(canonical_json(summary) + "\n")
     return summary
@@ -170,7 +255,7 @@ def recover_public_editions(*, profile_path, fixed_manifest, bindings, store, ou
 
 def verify_recovered_editions(*, profile_path, fixed_manifest, bindings, store, out):
     """Reopen the acquisition manifest, route results, and exact proofs without network."""
-    profile, fixed, fixed_sha, schema, cases = _read_inputs(profile_path, fixed_manifest, bindings)
+    profile, fixed, fixed_sha, schema, cases, prior_pins = _read_inputs(profile_path, fixed_manifest, bindings)
     path = Path(out) / "source_manifest.json"
     manifest_bytes = path.read_bytes()
     digest = sha256(manifest_bytes).hexdigest()
@@ -208,6 +293,7 @@ def verify_recovered_editions(*, profile_path, fixed_manifest, bindings, store, 
     if (editions or any(expanded.get(key) != value for key, value in native.items()) or set(by_url) != {plan["url"] for plan in _requests(cases)}
             or canonical_json(rows) != canonical_json(result["cases"])):
         raise IntegrityError("Recovery findings differ from their immutable capture journal")
+    _verify_restored_proofs(content, expanded, result, prior_pins, profile)
     return result
 
 
@@ -217,12 +303,13 @@ def verify_public_version_context(result, store, reviewed):
     from au_ree_v3.documents import DocumentCache
 
     spec = json.loads(reviewed.read_bytes())
-    if (spec["schema"] != "public-source-version-native-review-v1" or result["schema"] != VERSION_SCHEMA
+    if (spec["schema"] != "public-source-version-native-review-v1" or result["schema"] not in _PURPOSES
             or spec["expansion_manifest_sha256"] != result["expansion_manifest_sha256"]):
         raise IntegrityError("Native review must name the exact independent source expansion")
     cases = {case["case_id"]: case for case in result["cases"]}
-    if len(spec["cases"]) != len(cases) or {item["case_id"] for item in spec["cases"]} != cases.keys():
-        raise IntegrityError("One native review is required per distinct source family")
+    reviewed_cases = {item["case_id"] for item in spec["cases"]}
+    if not reviewed_cases or len(reviewed_cases) != len(spec["cases"]) or not reviewed_cases <= cases.keys():
+        raise IntegrityError("Native review must refer to distinct acquired source cases")
     records = []
     content, cache = ContentStore(store), DocumentCache()
     decoded_pages = 0
@@ -230,16 +317,19 @@ def verify_public_version_context(result, store, reviewed):
     source_keys = {edition["receipt_sha256"]: edition["source_key"] for edition in acquisition["editions"]}
     for assessment in spec["cases"]:
         case = cases[assessment["case_id"]]
-        eligible = defaultdict(list)
+        chosen = defaultdict(list)
+        dispositions = set(assessment.get("capture_dispositions", ("NEW_PUBLIC_EDITION",)))
+        if not dispositions or not dispositions <= {"NEW_PUBLIC_EDITION", "RECOVERED_EXACT", "SOURCE_AFTER_CUTOFF"}:
+            raise IntegrityError("Unknown native review source disposition")
         for attempt in case["attempts"]:
-            if attempt["disposition"] == "NEW_PUBLIC_EDITION":
-                eligible[attempt["candidate_edition_sha256"]].append(attempt)
-        if set(assessment["source_editions"]) != eligible.keys() or not assessment["blockers"]:
-            raise IntegrityError("Report assessment requires all exact editions and explicit science blockers")
+            if attempt["disposition"] in dispositions:
+                chosen[attempt["candidate_edition_sha256"]].append(attempt)
+        if not chosen or set(assessment["source_editions"]) != chosen.keys() or not assessment["blockers"]:
+            raise IntegrityError("Report assessment requires all requested exact editions and explicit science blockers")
         edition_records = []
         anchors = assessment["anchors"]
         pages = max(anchor["page"] for anchor in anchors)
-        for digest, attempts in sorted(eligible.items()):
+        for digest, attempts in sorted(chosen.items()):
             document = cache.pdf(content.read(digest), digest, pages)
             decoded_pages += len(document.pages)
             primary = attempts[0]["capture_sha256"]
@@ -248,9 +338,14 @@ def verify_public_version_context(result, store, reviewed):
             edition_records.append({"sha256": digest, "primary_capture_sha256": primary,
                                     "capture_sha256s": sorted(row["capture_sha256"] for row in attempts),
                                     "anchors": evidence})
-        context = {key: value for key, value in assessment.items() if key not in {"source_editions", "anchors"}}
+        context = {key: value for key, value in assessment.items()
+                   if key not in {"source_editions", "anchors", "review_state"}}
+        default_state = "CANDIDATE" if "SOURCE_AFTER_CUTOFF" in dispositions else "EVIDENCE_INSUFFICIENT"
+        state = assessment.get("review_state", default_state)
+        if state not in {"CANDIDATE", "EVIDENCE_INSUFFICIENT", "SCIENTIFIC_CONFLICT"}:
+            raise IntegrityError("Native source review cannot authorize formal use")
         records.append({**context, "project_id": case["project_id"], "edition_records": edition_records,
-                        "state": "EVIDENCE_INSUFFICIENT", "formal_selection": False})
+                        "state": state, "formal_selection": False})
     return {
         "schema": spec["schema"], "status": "PASS", "scope": "EXPANDED_MANIFEST_CANDIDATE_ONLY",
         "expansion_manifest_sha256": spec["expansion_manifest_sha256"],
@@ -266,17 +361,21 @@ def main():
     for flag in ("profile-path", "fixed-manifest", "bindings", "store", "out"):
         parser.add_argument("--" + flag, type=Path, required=True)
     parser.add_argument("--verify", action="store_true", help="Verify the existing acquisition without network")
+    parser.add_argument("--prior", nargs=2, action="append", type=Path, default=[], metavar=("MANIFEST", "CAS"))
     parser.add_argument("--native-review", type=Path, help="Pin separate native evidence assessment for offline replay")
     parser.add_argument("--review-output", type=Path, help="Write the read-only native evidence receipt here")
     args = vars(parser.parse_args())
     reviewed, assessment_out = args.pop("native_review"), args.pop("review_output")
     verify = args.pop("verify")
+    prior_inputs = args.pop("prior")
+    if prior_inputs and verify:
+        parser.error("Offline verification reads the already restored immutable proof objects")
     if reviewed or assessment_out:
         if not (verify and reviewed and assessment_out and not assessment_out.exists()
                 and not assessment_out.resolve().is_relative_to(args["store"].resolve())):
             parser.error("Native assessment requires offline verification and a separate new receipt path")
     operation = verify_recovered_editions if verify else recover_public_editions
-    result = operation(**args)
+    result = operation(**args) if verify else operation(**args, prior_inputs=prior_inputs)
     if reviewed:
         native = verify_public_version_context(result, args["store"], reviewed)
         assessment_out.write_text(canonical_json(native) + "\n")

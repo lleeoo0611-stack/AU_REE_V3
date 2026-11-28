@@ -1,0 +1,26 @@
+{
+  "schema": "public-source-version-native-review-v1",
+  "expansion_manifest_sha256": "b41e7e7aa5817a3e9485ceaa2630d8b609eb69b534303242629229dc49c040f0",
+  "cases": [
+    {
+      "case_id": "lyons-historical-resource-appendix",
+      "statement_scope": "Lyons 12&13 sub-row of the 25 October 2023 Inferred-only Mineral Resource at 0.2% TREO",
+      "publication_date": "2024-03-15",
+      "estimate_date": "2023-10-25",
+      "reporting_category": "INFERRED_ONLY",
+      "cutoff_analyte": "TREO",
+      "cutoff_token": "0.2",
+      "cutoff_unit": "%",
+      "capture_dispositions": ["SOURCE_AFTER_CUTOFF"],
+      "source_editions": ["9c9df3bfd3cca3c86946638121c09cd07117d1bea12737ecfc06dbf8b7c14334"],
+      "blockers": ["PRE_CUTOFF_PUBLIC_EVIDENCE_MISSING", "APPROVED_PROJECT_RESOURCE_CATEGORY_REQUIRED"],
+      "anchors": [
+        {"role": "ESTIMATE_DATE", "page": 8, "quote": "Table 3: Inferred Mineral Resources at Lyons above 0.2% TREO (25 October 2023)"},
+        {"role": "SCOPED_ROW", "page": 8, "quote": "Lyons 0.69 0.33 0.15 0.23 2,266 12&13"},
+        {"role": "DRY_TONNAGE", "page": 8, "quote": "Tonnages are dry metric tonnes."},
+        {"role": "OTHER_ROW", "page": 8, "quote": "Lyons 11 0.30 0.32 0.10 670"},
+        {"role": "UNRELATED_TOTAL", "page": 8, "quote": "Total 0.99 0.32 0.13 3,221"}
+      ]
+    }
+  ]
+}

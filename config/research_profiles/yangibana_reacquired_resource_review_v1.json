@@ -1,0 +1,24 @@
+{
+  "schema": "public-source-version-native-review-v1",
+  "expansion_manifest_sha256": "68030e19957c2fd6cc955b149e6ecfa1a3d2a15e0a0be102e254ffcb634a6000",
+  "cases": [
+    {
+      "case_id": "yangibana-revised-dfs-exact-reacquisition",
+      "statement_scope": "Yangibana revised DFS reprint of October 2022 all-deposit resources",
+      "publication_date": "2026-07-13",
+      "estimate_date": "2022-10-11",
+      "reporting_category": "MEASURED_INDICATED_INFERRED_TOTAL",
+      "review_state": "SCIENTIFIC_CONFLICT",
+      "capture_dispositions": ["RECOVERED_EXACT"],
+      "source_editions": ["99233befa81a1e193848122f00dfaa25079d0b2adbc2f19ef96326ca63c38f2a"],
+      "blockers": ["ALL_DEPOSIT_TOTAL_COMBINES_TREO_AND_NDPR_CUTOFFS", "REPRINT_HAS_RESERVE_LABEL_AND_DIFFERENT_INFERRED_MASS"],
+      "anchors": [
+        {"role": "CONFLICTING_RESERVE_LABEL", "page": 7, "quote": "Table 5: Total JORC (2012) Ore Reserves by deposit"},
+        {"role": "TOTAL_ROW", "page": 7, "quote": "TOTAL 29.93 0.93 0.32 276,955"},
+        {"role": "RESOURCE_VINTAGE", "page": 32, "quote": "Table 1.4 and Table 1.5 provide a summary of the current Yangibana Mineral Resources (October 2022"},
+        {"role": "MAIN_DEPOSIT_CUTOFF", "page": 32, "quote": "The MRE uses a 0.24% TREO cut-off grade for the six main deposits."},
+        {"role": "OTHER_DEPOSIT_CUTOFF", "page": 32, "quote": "have been reported at a 0.20% NdPr cut-off grade"}
+      ]
+    }
+  ]
+}

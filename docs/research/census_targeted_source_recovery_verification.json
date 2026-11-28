@@ -1,0 +1,134 @@
+{
+  "base_commit": "aa92a35c3d5b3593c25b246edcd28ea36c4b0d9a",
+  "blocked_sources_sha256": "5fbd00f9001492a8b2c38ec05118de429ccd0955a4caf2e4c9d71f838b4507be",
+  "candidate_source_overlay": {
+    "applied_to_scientific_release": false,
+    "combined_manifest_sha256": "97bf6d725343d25dc1532e781bd6f16d5c8f4f6c2e10550b2a7c37d4144da3da",
+    "elapsed_seconds": 1.0355471320071956,
+    "process_peak_rss_kib": 49976,
+    "total_eligible_captures": 155,
+    "unique_original_sha256": 149,
+    "verified_preserved_captures": 152
+  },
+  "ci": "NOT_RUN_IN_WORK_PACKAGE",
+  "cutoff": "2026-11-28",
+  "distinct_returned_bytes_sha256": 3,
+  "eligible_exact_historical_target_recovered": 1,
+  "exact_historical_target_received_without_precutoff_proof": 1,
+  "historical_prior_scan": {
+    "different_project_candidate_links": 11,
+    "exact_project_source_matches": 1,
+    "missing_inventory_sha256": "ce2123c801486a88c860c04f6d6feb2d396978cad42f223abddd90400c3d4c16",
+    "physical_sha_matches": 6,
+    "scanned_distinct_manifests": 20,
+    "survey_receipt_sha256": "5e5ff312bade3076fc48ffa0dce7ed8d05f8caea28b6f478bf400b067a5b71cc",
+    "target_project_edition_relationships": 134,
+    "target_unique_sha256": 57
+  },
+  "http_captures": 5,
+  "journalled_live_requests": 5,
+  "local_tests": {
+    "count": 6,
+    "skips": 0,
+    "status": "PASS"
+  },
+  "new_formal_census_values": 0,
+  "new_independent_verified_observations": 0,
+  "new_mcda_keys": 0,
+  "reviewed_source_scopes": 3,
+  "risk": "high",
+  "runtime_offline": {
+    "cpu_seconds": 0.6868609999999999,
+    "native_receipts_byte_equal": true,
+    "peak_rss_kib": 33540,
+    "python_hash_seed": "221",
+    "wall_seconds": 0.6835309229936684
+  },
+  "schema": "census-targeted-source-recovery-receipt-v1",
+  "scope": "T4_RECOVERY_REPLAY_AND_NATIVE_REVIEW",
+  "source_receipts": [
+    {
+      "capture_statuses": {
+        "PUBLIC_CAPTURED": 2
+      },
+      "cases": {
+        "lyons-historical-resource-appendix": "SOURCE_AFTER_CUTOFF",
+        "yttria-historical-asra-pdf-alternate-locator": "SOURCE_UNAVAILABLE"
+      },
+      "elapsed_acquisition_seconds": 3.54978,
+      "manifest_sha256": "b41e7e7aa5817a3e9485ceaa2630d8b609eb69b534303242629229dc49c040f0",
+      "native_review_sha256": "b5fa503478fbe63e59bddba5ffa3d540975486b1d40c52824852bbeb60ef14e9",
+      "operative_source_shas": [
+        "9c9df3bfd3cca3c86946638121c09cd07117d1bea12737ecfc06dbf8b7c14334"
+      ],
+      "pdf_decodes": 1,
+      "pdf_pages_decoded": 8,
+      "requests": 2,
+      "restored_prior_proofs": [],
+      "result_sha256": "e09bbbd15eb0c218763698504026b236f19144eabab702f0390aa65db0e5e506"
+    },
+    {
+      "capture_statuses": {
+        "PUBLIC_CAPTURED": 2
+      },
+      "cases": {
+        "yttria-issuer-maiden-ree-resource-reacquisition": "NEW_PUBLIC_EDITION"
+      },
+      "elapsed_acquisition_seconds": 3.489364,
+      "manifest_sha256": "e0b6ab313ca876602f99180843c57f9ff1f8230f6046f6c02a277679e44db340",
+      "native_review_sha256": "3eddaf3ad01914f3df142f01b6712f3335e0a87a5644bbc09b85d8dc35a585b8",
+      "operative_source_shas": [
+        "339bb9ebcf737b2c5b30e0970aca49f31bf462a4384353ca1743f1ca85f6b811"
+      ],
+      "pdf_decodes": 1,
+      "pdf_pages_decoded": 18,
+      "requests": 2,
+      "restored_prior_proofs": [
+        {
+          "capture_sha256": "4b72c7b68c7c7fb8d4d5ed65d5a4370f3e3f6340698fbb61ab04a3306140a0c0",
+          "manifest_sha256": "eba8121e65d5654ef9abc23dcfa2b2d03961d4af618e11c0794496dad537a544",
+          "public_on": "2026-11-28",
+          "source_sha256": "339bb9ebcf737b2c5b30e0970aca49f31bf462a4384353ca1743f1ca85f6b811"
+        },
+        {
+          "capture_sha256": "5148d93a7a566b8c7c55f41d34be915949c7e27639e1ff1ccbbe34ff633a73ed",
+          "manifest_sha256": "eba8121e65d5654ef9abc23dcfa2b2d03961d4af618e11c0794496dad537a544",
+          "public_on": "2026-11-28",
+          "source_sha256": "339bb9ebcf737b2c5b30e0970aca49f31bf462a4384353ca1743f1ca85f6b811"
+        }
+      ],
+      "result_sha256": "43a21ce95fdad2223c30231b3307bdfe612cf5ebf6c846d6c6d1ac9afbdb5f80"
+    },
+    {
+      "capture_statuses": {
+        "PUBLIC_CAPTURED": 1
+      },
+      "cases": {
+        "yangibana-revised-dfs-exact-reacquisition": "RECOVERED_EXACT"
+      },
+      "elapsed_acquisition_seconds": 3.80499,
+      "manifest_sha256": "68030e19957c2fd6cc955b149e6ecfa1a3d2a15e0a0be102e254ffcb634a6000",
+      "native_review_sha256": "45e9c2b83f3556a635371830630e3f6596f2ed2125a89a42af79b859ec6b3a5e",
+      "operative_source_shas": [
+        "99233befa81a1e193848122f00dfaa25079d0b2adbc2f19ef96326ca63c38f2a"
+      ],
+      "pdf_decodes": 1,
+      "pdf_pages_decoded": 32,
+      "requests": 1,
+      "restored_prior_proofs": [
+        {
+          "capture_sha256": "d4ce2d613a18ffb537a3fa8cb1b71d41df32b532f7f3d9a7984142cb171c74ee",
+          "manifest_sha256": "8f43eb977bd54b34af7b1124d2c81ddd2f0b5919b3c9c10e1b528f14dd1f8b81",
+          "public_on": "2026-11-28",
+          "source_sha256": "99233befa81a1e193848122f00dfaa25079d0b2adbc2f19ef96326ca63c38f2a"
+        }
+      ],
+      "result_sha256": "942fb90d03c13f5ef606f8c589f8ae04aa38eb11eaa16412f835105ea3f9c854"
+    }
+  ],
+  "status": "PASS",
+  "temporally_eligible_distinct_sha256": 2,
+  "temporally_eligible_reacquisition_events": 3,
+  "timezone": "Asia/Taipei",
+  "work_root": "work/census-fill/sources"
+}
