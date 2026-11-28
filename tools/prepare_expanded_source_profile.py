@@ -7,7 +7,7 @@ from pathlib import Path
 
 from au_ree_v3.contracts import canonical_json
 from au_ree_v3.registry import load_profile
-from au_ree_v3.sources import SCHEMA
+from au_ree_v3.sources import require_source_expansion
 
 
 ATTRIBUTE_INPUTS = frozenset({"attribute_bindings", "attribute_milestones", "attribute_batches"})
@@ -17,40 +17,11 @@ def _encoded(document):
     return (canonical_json(document) + "\n").encode()
 
 
-def _capture_map(manifest):
-    rows = manifest["editions"]
-    captures = {row["receipt_sha256"]: row for row in rows}
-    if len(captures) != len(rows):
-        raise ValueError("Duplicate capture in source manifest")
-    return captures
-
-
-def _projects(manifest):
-    return {row["project_id"] for row in manifest["projects"]}
-
-
-def require_expansion(fixed, expanded, fixed_sha):
-    """Check the original scientific/source scope before changing any input pin."""
-    identity = ("schema", "profile_id", "cutoff", "timezone")
-    if fixed["schema"] != SCHEMA or any(fixed[key] != expanded[key] for key in identity):
-        raise ValueError("Source manifests have different research identities")
-    if _projects(fixed) != _projects(expanded):
-        raise ValueError("Expanded manifest changes the project cohort")
-    if fixed_sha not in {row["sha256"] for row in expanded.get("input_manifests", ())}:
-        raise ValueError("Expanded manifest does not identify the fixed input")
-    original, combined = _capture_map(fixed), _capture_map(expanded)
-    if any(combined.get(capture) != row for capture, row in original.items()):
-        raise ValueError("Expanded manifest changes a fixed source edition")
-    if combined.keys() == original.keys():
-        raise ValueError("No additional source captures in the expanded manifest")
-    return len(original), len(combined)
-
-
 def prepare_profile(profile_path, fixed_path, expanded_path, output):
     settings = load_profile(profile_path)
     fixed, expanded = fixed_path.read_bytes(), expanded_path.read_bytes()
     fixed_sha, expanded_sha = (sha256(data).hexdigest() for data in (fixed, expanded))
-    before, after = require_expansion(json.loads(fixed), json.loads(expanded), fixed_sha)
+    before, after = require_source_expansion(json.loads(fixed), json.loads(expanded), fixed_sha)
     profile = json.loads(profile_path.read_bytes())
     if not ATTRIBUTE_INPUTS.intersection(profile["inputs"]):
         raise ValueError("Profile has no descriptive source pins to update")

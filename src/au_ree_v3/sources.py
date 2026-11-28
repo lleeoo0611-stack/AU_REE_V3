@@ -554,6 +554,35 @@ def _write_manifest(profile, ids, events, editions, primary, replica, out, **met
 
 
 
+def _capture_map(manifest):
+    rows = manifest["editions"]
+    captures = {row["receipt_sha256"]: row for row in rows}
+    if len(captures) != len(rows):
+        raise ValueError("Duplicate capture in source manifest")
+    return captures
+
+
+def _manifest_project_ids(manifest):
+    return {row["project_id"] for row in manifest["projects"]}
+
+
+def require_source_expansion(fixed, expanded, fixed_sha):
+    """Check the original scientific/source scope before changing any input pin."""
+    identity = ("schema", "profile_id", "cutoff", "timezone")
+    if fixed["schema"] != SCHEMA or any(fixed[key] != expanded[key] for key in identity):
+        raise ValueError("Source manifests have different research identities")
+    if _manifest_project_ids(fixed) != _manifest_project_ids(expanded):
+        raise ValueError("Expanded manifest changes the project cohort")
+    if fixed_sha not in {row["sha256"] for row in expanded.get("input_manifests", ())}:
+        raise ValueError("Expanded manifest does not identify the fixed input")
+    original, combined = _capture_map(fixed), _capture_map(expanded)
+    if any(combined.get(capture) != row for capture, row in original.items()):
+        raise ValueError("Expanded manifest changes a fixed source edition")
+    if combined.keys() == original.keys():
+        raise ValueError("No additional source captures in the expanded manifest")
+    return len(original), len(combined)
+
+
 def combine_acquisition(
     profile_path: Path, manifests: list[Path], out: Path, *, store: Path, replica: Path | None = None,
 ) -> dict:

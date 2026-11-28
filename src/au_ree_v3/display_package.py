@@ -16,7 +16,7 @@ from .fresh_research import verify_source_manifest
 from .publication import load_release
 from .registry import load_census_columns, load_profile, load_registry
 from .research_delta import ResearchBuild
-from .sources import ContentStore
+from .sources import ContentStore, require_source_expansion
 
 RECEIPT = "display_package_receipt.json"
 
@@ -122,9 +122,11 @@ def _edition_join(fact: DisplayFact, editions: dict):
         raise ValueError("Display fact does not bind an eligible exact Project capture and source edition")
 
 
-def _opt_in_context(profile, sources, assets, forecast, geography):
+def _opt_in_context(profile, sources, assets, forecast, geography, geography_base):
     extras, review = (), ()
     pins = {}
+    if geography_base is not None and geography is None:
+        raise ValueError("A geography base requires separate geography review inputs")
     if forecast is not None:
         from .forecast import forecast_display_facts
 
@@ -135,7 +137,11 @@ def _opt_in_context(profile, sources, assets, forecast, geography):
         from .official_geography import official_geography_evidence
 
         geo_rules, expanded_manifest, expanded_assets = geography
-        review = official_geography_evidence(geo_rules, sources, assets, expanded_manifest, expanded_assets)
+        if geography_base is not None:
+            base_doc, base_sha = _read(geography_base)
+            require_source_expansion(base_doc, _read(sources)[0], base_sha)
+            pins["geography_base_manifest"] = base_sha
+        review = official_geography_evidence(geo_rules, geography_base or sources, assets, expanded_manifest, expanded_assets)
         pins.update(geography_rules=_sha(geo_rules.read_bytes()), expanded_review_manifest=_sha(expanded_manifest.read_bytes()))
     return extras, review, pins
 
@@ -143,7 +149,7 @@ def _opt_in_context(profile, sources, assets, forecast, geography):
 def compile_display_package(
     *, profile: Path, columns_path: Path, build_directory: Path, release_root: Path, release_id: str,
     sources: Path, bindings: Path, assets: Path, forecast: tuple[Path, Path] | None = None,
-    geography: tuple[Path, Path, Path] | None = None,
+    geography: tuple[Path, Path, Path] | None = None, geography_base: Path | None = None,
 ) -> DisplayPackage:
     """Rebind display evidence to raw frozen bytes with no Store or decision write path."""
     from .census_resource_display import reported_resource_facts
@@ -177,7 +183,7 @@ def compile_display_package(
         diagnostics=resource_diagnostics, bindings=binding_spec, manifest_sha=source_sha,
     )
     dates = _statement_dates(census_receipt, editions, content, cache)
-    extras, region_review, context_pins = _opt_in_context(profile, sources, assets, forecast, geography)
+    extras, region_review, context_pins = _opt_in_context(profile, sources, assets, forecast, geography, geography_base)
     resource_review = tuple(item["review_evidence"] for item in resource_diagnostics if "review_evidence" in item)
     review = (*resource_review, *region_review)
     facts = (*resources, *dates, *extras)

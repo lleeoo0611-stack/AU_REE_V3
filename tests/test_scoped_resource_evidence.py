@@ -10,8 +10,7 @@ import unittest
 
 from au_ree_v3.documents import DocumentCache
 from au_ree_v3.resource_extraction import native_resource_table
-from au_ree_v3.sources import SCHEMA
-from tools.prepare_expanded_source_profile import require_expansion
+from au_ree_v3.sources import SCHEMA, require_source_expansion
 
 
 class ExpandedSourceScopeTests(unittest.TestCase):
@@ -21,17 +20,17 @@ class ExpandedSourceScopeTests(unittest.TestCase):
         expanded = deepcopy(fixed)
         expanded["input_manifests"] = [{"sha256": "verified-fixed-manifest"}]
         expanded["editions"].append({"receipt_sha256": "two", "sha256": "PDF-2"})
-        self.assertEqual(require_expansion(fixed, expanded, "verified-fixed-manifest"), (1, 2))
+        self.assertEqual(require_source_expansion(fixed, expanded, "verified-fixed-manifest"), (1, 2))
         changed = deepcopy(expanded)
         changed["editions"][0]["sha256"] = "SUBSTITUTED"
         with self.assertRaisesRegex(ValueError, "changes a fixed source edition"):
-            require_expansion(fixed, changed, "verified-fixed-manifest")
+            require_source_expansion(fixed, changed, "verified-fixed-manifest")
         changed = deepcopy(expanded)
         changed["projects"].append({"project_id": "Q"})
         with self.assertRaisesRegex(ValueError, "changes the project cohort"):
-            require_expansion(fixed, changed, "verified-fixed-manifest")
+            require_source_expansion(fixed, changed, "verified-fixed-manifest")
         with self.assertRaisesRegex(ValueError, "does not identify the fixed input"):
-            require_expansion(fixed, expanded, "another-manifest")
+            require_source_expansion(fixed, expanded, "another-manifest")
 
 
 @unittest.skipUnless(os.environ.get("AU_REE_SCOPED_RESOURCE_ASSETS") and shutil.which("pdftotext"),

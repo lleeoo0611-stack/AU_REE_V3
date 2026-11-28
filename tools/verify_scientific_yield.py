@@ -149,12 +149,41 @@ def derived_records(connection):
     return result
 
 
+_MEASUREMENT_SCALES = {
+    "Mt": {"t": -6, "kt": -3, "Mt": 0, "Bt": 3},
+    "ppm": {"ppm": 0, "%": 4, "kg/t": 3},
+    "%": {"ppm": -4, "%": 0, "kg/t": -1},
+}
+
+
+def _reported_measurement(entry, interval, target):
+    raw, value = entry["raw"], entry["normalized"]
+    token = Decimal(raw["raw_value"].replace(",", ""))
+    significant = interval.get("reported_significant_figures")
+    exponent = token.as_tuple().exponent if significant is None else token.adjusted() - significant + 1
+    move = _MEASUREMENT_SCALES[target][raw["raw_unit"]]
+    half_step = Decimal("0.5").scaleb(exponent)
+    measured = token.scaleb(move)
+    bounds = (max(token - half_step, Decimal(0)).scaleb(move), (token + half_step).scaleb(move))
+    require((interval["raw_token"], interval["raw_unit"]) == (raw["raw_value"], raw["raw_unit"])
+            and interval["normalized_unit"] == value["unit"] == target
+            and Decimal(value["value"]) == Decimal(interval["normalized_value"]) == measured
+            and tuple(map(Decimal, interval["normalized_rounding_interval"])) == bounds,
+            "Independent source token, units or printed rounding bounds differ")
+    return measured, bounds
+
+
 def verify_formula(value, inputs):
     assessment = value["assessment"]
     formula_id = assessment["formula_id"]
-    recipes = {"contained-treo-from-mt-ppm-v1": "grade", "contained-reported-mreo-mt-ppm-v1": "mreo_ppm"}
+    recipes = {
+        "contained-treo-from-mt-ppm-v1": ("grade", "ppm", Decimal("0.001")),
+        "contained-treo-from-mt-pct-v1": ("grade", "%", Decimal(10)),
+        "contained-reported-mreo-mt-ppm-v1": ("mreo_ppm", "ppm", Decimal("0.001")),
+    }
     require(formula_id in recipes and assessment["status"] == "APPROVED", "New formula falls outside the independent verifier")
-    by_raw = {row["normalized"]["raw_record_id"]: row for row in inputs}
+    by_raw = {(row["normalized"]["raw_record_id"] or row["raw"]["native_raw_id"] or row["raw"]["observation_id"]): row
+              for row in inputs}
     eligible = [by_raw[key] for key in value["input_observation_ids"]]
     for entry in eligible:
         raw = entry["raw"]
@@ -162,13 +191,17 @@ def verify_formula(value, inputs):
                 == (assessment["statement_id"], assessment["scope_id"], value["project_id"], assessment["source_sha256"]),
                 "New derived value mixes statement, scope, Project or source")
     variables = {row["raw"]["variable"]: row for row in eligible}
-    ore, concentration = variables["ore_mt"]["normalized"], variables[recipes[formula_id]]["normalized"]
-    require(ore["unit"] == "Mt" and concentration["unit"] == "ppm", f"Unexpected formula input units for {formula_id}")
-    amount = Decimal(ore["value"]) * Decimal(concentration["value"]) / Decimal(1000)
+    precision = {row["variable"]: row for row in assessment["inputs"]}
+    concentration, unit, factor = recipes[formula_id]
+    ore, ore_bounds = _reported_measurement(variables["ore_mt"], precision["ore_mt"], "Mt")
+    grade, grade_bounds = _reported_measurement(variables[concentration], precision[concentration], unit)
+    amount = ore * grade * factor
     lower, upper = map(Decimal, assessment["rounding_interval"])
-    require(amount == Decimal(value["value"]) and lower <= amount <= upper,
+    require(amount == Decimal(value["value"])
+            and (lower, upper) == tuple(tonnage * percentage * factor for tonnage, percentage in zip(ore_bounds, grade_bounds, strict=True)),
             f"Independent scientific formula value or interval differs for {formula_id}")
-    return {"value": str(amount), "formula_id": formula_id, "input_observation_ids": value["input_observation_ids"]}
+    return {"value": str(amount), "formula_id": formula_id, "input_observation_ids": value["input_observation_ids"],
+            "rounding_interval": [str(lower), str(upper)]}
 
 
 def compare_census(before, after, added, approved, derived, locks):
