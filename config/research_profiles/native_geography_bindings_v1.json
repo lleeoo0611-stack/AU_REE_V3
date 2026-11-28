@@ -1,0 +1,58 @@
+{
+  "schema": "native-government-location-review-v1",
+  "baseline_manifest_sha256": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a",
+  "probe_manifest_sha256": "434bc1dfb1e233b721394b23c4da3f52837e96b32889ff94ca5c0051faf87189",
+  "license_evidence": {
+    "receipt_sha256": "b26a0062bbc554f4137d1d23aba34c1a213b8526c55ae391dc69d75a5f1b460c"
+  },
+  "cases": [
+    {
+      "case_id": "koppamurra-mindep-11871",
+      "dataset": "SA_SARIG_MINDEP",
+      "project_id": "AU-49b538453133bd968e8d",
+      "receipt_sha256": "31ab73a2755da2de4dd0e0b50a57932ffa150dbcd50a72e957d583b891e8120f",
+      "native_token": "11871",
+      "issuer_context": {
+        "source_sha256": "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01",
+        "page": 6,
+        "quote": "The Koppamurra Project is located approximately 30 km southeast of Naracoorte"
+      }
+    },
+    {
+      "case_id": "franklyn-mindep-10098",
+      "dataset": "SA_SARIG_MINDEP",
+      "project_id": "AU-0832169526bb5ec07626",
+      "receipt_sha256": "3697166c9bfe3ac0fb092c87056f0df12800c4cc2d4aab3a3491bb3f114482bf",
+      "native_token": "10098",
+      "issuer_context": {
+        "source_sha256": "c241e248affde53e8e1753ad9f880caa3b0c53eff8c16445134334cd55716fc9",
+        "page": 2,
+        "quote": "The Franklyn Prospect is within EL 6160"
+      }
+    },
+    {
+      "case_id": "nolans-modat-2641",
+      "dataset": "NT_STRIKE_MODAT",
+      "project_id": "AU-1345edd8165c10930e94",
+      "receipt_sha256": "c555066dbe213d172ec210732e4c95965ce7e8588f04322adab796afb7ebd5dc",
+      "native_token": "2641",
+      "issuer_context": {
+        "source_sha256": "5f72a08840640987e8d619c6d55ca047a2fe26c0194ffd1a46521f76eda7b06f",
+        "page": 17,
+        "quote": "The Nolans Bore deposit is located wholly within Exploration Licence (EL) 28473"
+      }
+    },
+    {
+      "case_id": "dubbo-toongi-locality",
+      "dataset": "NSW_RESOURCES",
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "receipt_sha256": "e82d675c0abb30f1fb28742df69a6bf89a4c811a9633d157ae4f1a104887838c",
+      "native_token": "The Dubbo Project is located at Toongi",
+      "issuer_context": {
+        "source_sha256": "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab",
+        "page": 24,
+        "quote": "The Toongi deposit is centred on a trachyte outcrop"
+      }
+    }
+  ]
+}

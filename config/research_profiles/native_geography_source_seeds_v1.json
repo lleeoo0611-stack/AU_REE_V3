@@ -1,0 +1,90 @@
+{
+  "seed_urls": [
+    {
+      "source_key": "sarig-koppamurra-11871",
+      "url": "https://minerals.sarig.sa.gov.au/MineralDepositDetails.aspx?DEPOSIT_NO=11871",
+      "kind": "html",
+      "publisher": "South Australia Department for Energy and Mining",
+      "project_ids": [
+        "AU-49b538453133bd968e8d"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    },
+    {
+      "source_key": "sarig-franklyn-10098",
+      "url": "https://minerals.sarig.sa.gov.au/MineralDepositDetails.aspx?DEPOSIT_NO=10098",
+      "kind": "html",
+      "publisher": "South Australia Department for Energy and Mining",
+      "project_ids": [
+        "AU-0832169526bb5ec07626"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    },
+    {
+      "source_key": "sarig-mindep-data-services",
+      "url": "https://energymining.sa.gov.au/industry/geological-survey/products-and-services/map-viewers-databases-and-services/data-services",
+      "kind": "html",
+      "publisher": "South Australia Department for Energy and Mining",
+      "project_ids": [
+        "AU-49b538453133bd968e8d",
+        "AU-0832169526bb5ec07626",
+        "AU-0098e17a63e7c05c213f"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    },
+    {
+      "source_key": "sarig-capabilities",
+      "url": "https://services.sarig.sa.gov.au/vector/mines_and_mineral_deposits/wfs?service=WFS&version=1.1.0&request=GetCapabilities",
+      "kind": "xml",
+      "publisher": "South Australia Department for Energy and Mining",
+      "project_ids": [
+        "AU-49b538453133bd968e8d",
+        "AU-0832169526bb5ec07626",
+        "AU-0098e17a63e7c05c213f"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    },
+    {
+      "source_key": "gssa-rare-earth-report",
+      "url": "https://demstedpprodaue12.blob.core.windows.net/mesac-public/resources/files/5880056/RB24-28%20CMSA%20REE%202.pdf",
+      "kind": "pdf",
+      "publisher": "Geological Survey of South Australia",
+      "project_ids": [
+        "AU-49b538453133bd968e8d",
+        "AU-0832169526bb5ec07626",
+        "AU-0098e17a63e7c05c213f"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    },
+    {
+      "source_key": "ntgs-mineral-occurrences",
+      "url": "https://geoscience.nt.gov.au/contents/prod/Downloads/Mineral_Deposits/MINERALOCCURRENCES_csv.zip",
+      "kind": "zip",
+      "publisher": "Northern Territory Geological Survey",
+      "project_ids": [
+        "AU-1345edd8165c10930e94"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    },
+    {
+      "source_key": "ntgs-nolans-deposit-study",
+      "url": "https://www.ga.gov.au/bigobj/GA8802.pdf",
+      "kind": "pdf",
+      "publisher": "Geoscience Australia",
+      "project_ids": [
+        "AU-1345edd8165c10930e94"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    },
+    {
+      "source_key": "nsw-toongi-regulator",
+      "url": "https://www.resources.nsw.gov.au/invest-nsw/investment-pathways/nsw-priority-metals/rare-earth-elements",
+      "kind": "html",
+      "publisher": "NSW Resources",
+      "project_ids": [
+        "AU-2cfeb25aefee0c4f95fb"
+      ],
+      "reference": "RESEARCH_OFFICIAL_GEOGRAPHY_PROBE"
+    }
+  ]
+}
