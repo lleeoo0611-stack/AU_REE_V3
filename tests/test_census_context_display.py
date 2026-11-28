@@ -107,3 +107,55 @@ class EditionRecoveryTest(unittest.TestCase):
             (paths["store"] / "objects" / cases[0]["expected_sha256"]).write_bytes(b"changed")
             with self.assertRaises(IntegrityError):
                 functions["verify_recovered_editions"](**paths)
+
+    def test_new_versions_preserve_native_identity_and_never_count_as_historical_recovery(self):
+        functions = runpy.run_path(str(ROOT / "tools/recover_source_editions.py"))
+        body = b"%PDF-1.4\nnew public statement"
+        url = "https://example.edu/statement.pdf"
+        profile = load_profile(PROFILE)
+        project = load_registry(profile.registry_path).projects[0].project_id
+        case = {"case_id": "native-assay", "project_id": project, "kind": "pdf", "native_namespace": "PUBLISHER_REPORT",
+                "native_id": "NATIVE-1", "access_basis": "PUBLIC_ANONYMOUS",
+                "routes": [{"url": url, "publisher": "Public Scientific Publisher"}]}
+        fixed = {"schema": SOURCE_SCHEMA, "profile_id": profile.profile_id, "cutoff": "2026-11-28",
+                 "timezone": "Asia/Taipei", "projects": [{"project_id": project}],
+                 "editions": [{"sha256": f"{index:064x}"} for index in range(144)]}
+
+        def fetcher(locator, method, timeout, max_bytes):
+            self.assertEqual((locator, method), (url, "GET"))
+            return HttpResult("FETCHED", url, "2026-11-28T13:00:00+00:00", 200, "application/pdf", body)
+
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            fixed_manifest, bindings = root / "fixed.json", root / "bindings.json"
+            fixed_manifest.write_text(json.dumps(fixed))
+            frozen_sha = sha256(fixed_manifest.read_bytes()).hexdigest()
+            bindings.write_text(json.dumps({"schema": functions["VERSION_SCHEMA"], "cases": [case],
+                                            "fixed_manifest_sha256": frozen_sha}))
+            paths = dict(profile_path=PROFILE, fixed_manifest=fixed_manifest, bindings=bindings,
+                         store=root / "cas", out=root / "new")
+            acquired = functions["recover_public_editions"](**paths, fetcher=fetcher)
+            result = functions["verify_recovered_editions"](**paths)
+            self.assertEqual(json.loads(json.dumps(acquired)), result)
+            self.assertEqual(result["exact_requested_editions_recovered"], 0)
+            self.assertEqual(result["cases"][0]["result"], "NEW_PUBLIC_EDITION")
+            self.assertEqual(sha256(fixed_manifest.read_bytes()).hexdigest(), frozen_sha)
+            expansion = json.loads((paths["out"] / "source_manifest.json").read_bytes())
+            native, = expansion["native_route_bindings"]
+            self.assertEqual((native["native_namespace"], native["native_id"], native["scope_status"]),
+                             ("PUBLISHER_REPORT", "NATIVE-1", "PROJECT_AND_STATEMENT_REVIEW_REQUIRED"))
+            self.assertEqual(native["source_sha256"], sha256(body).hexdigest())
+
+    def test_historical_gap_input_requires_the_exact_prior_diagnostic(self):
+        diagnostic = runpy.run_path(str(ROOT / "tools/census_v2_coverage_diagnostic.py"))
+        classify = diagnostic["_historical_gap_type"]
+        self.assertEqual(classify("總TREO蘊藏量_kt", "SOURCE_REPORTED"), "resource")
+        self.assertEqual(classify("總TREO蘊藏量_kt", "ORE_MT_X_GRADE_PERCENT_X_10"), "resource_formula")
+        self.assertEqual(classify("Dy2O3_氧化鏑_kt", "SOURCE_REPORTED"), "composition")
+        self.assertEqual(classify("經度", "REVIEWED_OFFICIAL_PROJECT_FEATURE"), "location")
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            altered = root / "altered.csv"
+            altered.write_text("project_id,column\nfiction,經度\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "exact 1,396-slot diagnostic"):
+                diagnostic["historical_source_gaps"](root, altered, root / "missing-manifest", root / "out")

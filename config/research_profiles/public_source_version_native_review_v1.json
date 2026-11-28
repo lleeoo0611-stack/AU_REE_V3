@@ -1,0 +1,50 @@
+{
+  "schema": "public-source-version-native-review-v1",
+  "expansion_manifest_sha256": "0fde4a9739af749a3f3eb519db2b632b8de3104d5725ff2ac8cceb69cd1b913d",
+  "cases": [
+    {
+      "case_id": "barkly-updated-inferred-resource-2026",
+      "statement_scope": "Barkly Project Vanadis and Benmara Total Inferred Mineral Resource inside optimized pit shell",
+      "publication_date": "2026-11-27",
+      "estimate_date": "2026-11-26",
+      "reporting_category": "INFERRED_ONLY",
+      "cutoff_analyte": "MREO",
+      "cutoff_token": "570",
+      "cutoff_unit": "ppm",
+      "source_editions": ["cb4ca4798cf29cd8a31953c96ca99269be7365ab83f729d8c08dd5d84138c006"],
+      "blockers": ["APPROVED_PROJECT_RESOURCE_CATEGORY_REQUIRED", "EXACT_PRIMARY_TREO_CUTOFF_REQUIRED"],
+      "anchors": [
+        {"role": "PROJECT_SCOPE", "page": 1, "quote": "Barkly Project in the Northern Territory (Table 1)."},
+        {"role": "PUBLICATION_DATE", "page": 1, "quote": "27 November 2026"},
+        {"role": "ESTIMATE_CAPTION", "page": 5, "quote": "Table 1: Barkly Inferred Mineral Resource, 26 November 2026."},
+        {"role": "TOTAL_ROW", "page": 5, "quote": "Total Inferred 205 2,100 700 670 34 2.3 7.7 420,000 140,000"},
+        {"role": "PRIMARY_CUTOFF", "page": 5, "quote": "a 570-ppm MREO cut-off grade"},
+        {"role": "DRY_TONNAGE", "page": 38, "quote": "Tonnages were estimated on an in-situ dry weight basis"},
+        {"role": "CHEMICAL_MEMBERS", "page": 5, "quote": "TREO = La2O3 + CeO2 + Pr6O11 + Nd2O3 + Sm2O3 + Eu2O3 + Gd2O3 + Tb4O7 + Dy2O3 + Ho2O3 + Er2O3 + Tm2O3 + Yb2O3 + Lu2O3 + Y2O3"}
+      ]
+    },
+    {
+      "case_id": "tower-maiden-resource-2022",
+      "statement_scope": "Krakatoa Mt Clere Project Tower deposit Total Indicated and Inferred Mineral Resource",
+      "publication_date": "2022-11-21",
+      "estimate_date": null,
+      "reporting_category": "INDICATED_INFERRED_TOTAL",
+      "cutoff_analyte": "TREO-CeO2",
+      "cutoff_token": "300",
+      "cutoff_unit": "ppm",
+      "source_editions": [
+        "25250b7516461b177ef74541eafc21f6a88161ac72e8f508b28097b51cb67589",
+        "b851d6be70185458340650c893126b02c8900e5d74dee81a437282cfc7948e96"
+      ],
+      "blockers": ["EXACT_PRIMARY_TREO_CUTOFF_REQUIRED", "ESTIMATE_EFFECTIVE_DATE_UNVERIFIED"],
+      "anchors": [
+        {"role": "PROJECT_SCOPE", "page": 1, "quote": "maiden Mineral Resource estimate at the Tower Project, the first prospect"},
+        {"role": "PARENT_PROJECT", "page": 1, "quote": "the Company’s flagship Mt Clere Project"},
+        {"role": "PUBLICATION_DATE", "page": 1, "quote": "21 November 2022"},
+        {"role": "ESTIMATE_CAPTION", "page": 2, "quote": "Table 1. Tower project Mineral Resources estimate and Exploration Target."},
+        {"role": "TOTAL_ROW", "page": 2, "quote": "Total(1) 101 840 517 267 233 607 2 32"},
+        {"role": "PRIMARY_CUTOFF", "page": 2, "quote": "Mineral Resources reported at a cut-off grade of 300 ppm TREO-CeO2"}
+      ]
+    }
+  ]
+}

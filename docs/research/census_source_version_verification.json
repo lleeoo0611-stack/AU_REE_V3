@@ -1,0 +1,109 @@
+{
+  "code_base": "44bc122d1337434cb8f496d8d0d6d0dd2dc4d981",
+  "cutoff": "2026-11-28",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "historical_gap": {
+    "by_evidence_blocker": {
+      "DATED_COMPLETED_MILESTONE_SCOPE_UNBOUND": 263,
+      "GEOLOGIC_CLASS_AND_SCOPE_UNVERIFIED": 166,
+      "HISTORICAL_RESOURCE_FORMULA_UNREPRODUCED": 24,
+      "LEGAL_LISTING_STATUS_AS_OF_UNVERIFIED": 92,
+      "NATIVE_RESOURCE_STATEMENT_UNBOUND": 109,
+      "OFFICIAL_FEATURE_ROLE_OR_TIME_UNVERIFIED": 128,
+      "OXIDE_MEMBERS_AND_DENOMINATOR_UNVERIFIED": 548,
+      "PRODUCT_SCENARIO_OR_PERIOD_UNVERIFIED": 47,
+      "VERIFIED_SOURCE_ATTRIBUTION_UNBOUND": 19
+    },
+    "by_source_state": {
+      "EVIDENCE_INSUFFICIENT": 1121,
+      "SOURCE_UNAVAILABLE": 275
+    },
+    "cells_sha256": "5deb94fe4aa4360315a8afb0d0f138b1de2419394ac2a47480aa39d69f951d49",
+    "receipt_sha256": "a5bf0fc4fd3539478b986f76f1f9e4829026c9ad148e67e670d44135acea7e83",
+    "repeat_equal": true,
+    "slots": 1396,
+    "source_diagnostic_sha256": "f773e1919b504949626900ef39af8080226a0937f5a47e095f6494c43dba2f82",
+    "stage4_v2_only_slots": 1362,
+    "v2_values_carried_to_v3": 0,
+    "v3_baseline_commit": "a0fcf28adb72625f703421011a8de2d965cbbcb7"
+  },
+  "historical_recovery": {
+    "expansion_manifest_sha256": "eba8121e65d5654ef9abc23dcfa2b2d03961d4af618e11c0794496dad537a544",
+    "historical_case_results": {
+      "mt-stirling-yttria-historical-pdf": "SOURCE_UNAVAILABLE",
+      "splinter-wamex-report": "SOURCE_UNAVAILABLE",
+      "wudinna-lse-html": "SOURCE_UNAVAILABLE",
+      "yttria-markit-pdf": "SOURCE_UNAVAILABLE"
+    },
+    "offline_reverification": "PASS",
+    "receipt_sha256": "3a876957b3660921ebb212335dde765690fce4d5c66368cf9465c60762f6f846",
+    "requested_urls": 7
+  },
+  "integration_ci": "NOT_RUN_IN_WORK_PACKAGE",
+  "measured_runtime": {
+    "live": {
+      "peak_rss_kib": 41316,
+      "wall_seconds": 3.581368589999329
+    },
+    "offline": {
+      "offline_native_verification_peak_rss_kib": 23964,
+      "offline_native_verification_wall_seconds": 0.31337633400107734
+    },
+    "tests": {
+      "errors": 0,
+      "failures": 0,
+      "peak_rss_kib": 46788,
+      "skipped": 0,
+      "tests": 5,
+      "wall_seconds": 1.818395820002479
+    }
+  },
+  "new_public_versions": {
+    "captures": 4,
+    "cas_work_path": "work/census-stage5/sources/version-cas",
+    "documents": [
+      {
+        "blockers": [
+          "APPROVED_PROJECT_RESOURCE_CATEGORY_REQUIRED",
+          "EXACT_PRIMARY_TREO_CUTOFF_REQUIRED"
+        ],
+        "case_id": "barkly-updated-inferred-resource-2026",
+        "project_id": "AU-ad64122c217f0dbfabc8",
+        "source_sha256": [
+          "cb4ca4798cf29cd8a31953c96ca99269be7365ab83f729d8c08dd5d84138c006"
+        ]
+      },
+      {
+        "blockers": [
+          "EXACT_PRIMARY_TREO_CUTOFF_REQUIRED",
+          "ESTIMATE_EFFECTIVE_DATE_UNVERIFIED"
+        ],
+        "case_id": "tower-maiden-resource-2022",
+        "project_id": "AU-a8258e4989c7bd95b7af",
+        "source_sha256": [
+          "25250b7516461b177ef74541eafc21f6a88161ac72e8f508b28097b51cb67589",
+          "b851d6be70185458340650c893126b02c8900e5d74dee81a437282cfc7948e96"
+        ]
+      }
+    ],
+    "manifest_sha256": "0fde4a9739af749a3f3eb519db2b632b8de3104d5725ff2ac8cceb69cd1b913d",
+    "native_assessment_sha256": "e560ef92d41cf392811914fa23efeea37493e0236f94e3bf752c4ee615d808c3",
+    "new_census_scientific_cells": 0,
+    "new_comparable_project_criterion_keys": 0,
+    "new_complete_panel_projects": 0,
+    "new_exact_source_versions": 3,
+    "new_independent_verified_observations": 0,
+    "new_selected_scientific_values": 0,
+    "pdf_decodes": 3,
+    "pdf_pages_decoded": 42,
+    "receipt_sha256": "9cd38902fe8badb12387961cebfddafbebf79d3c9295f4a15ff35df4d654b4c9",
+    "receipt_work_path": "work/census-stage5/sources/version-acquisition",
+    "requests": 4,
+    "reviewed_statement_families": 2,
+    "time_per_new_selected_value": "UNMEASURED"
+  },
+  "schema": "census-source-version-recovery-verification-v1",
+  "scope": "C_HISTORICAL_CLASSIFICATION_AND_SEPARATE_CAPTURE_REPLAY",
+  "status": "PASS",
+  "timezone": "Asia/Taipei"
+}
