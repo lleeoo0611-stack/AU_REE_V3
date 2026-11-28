@@ -1,0 +1,108 @@
+{
+  "archived_code_commit": "d114c388440ad7db9b1b3de25d3e7646d4a84953",
+  "archived_release_id": "de50379f50e49fdd74ac536deb51b8b03dade8f442565644564c5cef1f2a17ef",
+  "artifacts": {
+    "census_gain_funnel.csv": "39cec1b97b4644e096e8761da77ab6e2f38d420aaa6c79da38dba9b00388e626",
+    "stage2_baseline.json": "fa1c4d1387931ee17cc86df7d454568301b01f901431084bc0fad20accf875c6"
+  },
+  "cell_funnel_stages": {
+    "EVIDENCE_INSUFFICIENT": 3595,
+    "NOT_LOCATED": 28,
+    "REPORTED_DIRECT": 16,
+    "SCIENTIFIC_CONFLICT": 5,
+    "SHADOW": 7,
+    "VALIDATED_DESCRIPTIVE": 1092
+  },
+  "code_commit": "074e00daf69360cd71cab2554f651b4b6e76a668",
+  "counts": {
+    "candidate_observations": 42,
+    "cells": 4743,
+    "columns": 51,
+    "comparable_keys": {
+      "R1": 4,
+      "S1": 2
+    },
+    "complete_r1_s1_projects": 2,
+    "formal_derived_cells": 0,
+    "present_cells": 1108,
+    "projects": 93,
+    "reported_science_cells": 16,
+    "selected_observations": 21,
+    "validated_observations": 27
+  },
+  "cross_release_comparison": {
+    "byte_identical_artifacts": [
+      "census/census.csv",
+      "observations/observations.jsonl"
+    ],
+    "census_change_counts": {
+      "PROVENANCE_RECEIPT_CHANGED": 20,
+      "UNCHANGED": 4723
+    },
+    "compared_census_cells": 4743,
+    "science_and_mcda_equivalent": true
+  },
+  "gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "historical_O2": "FAIL"
+  },
+  "holdouts": {
+    "raw-binding-10": {
+      "annotations_sha256": "840cf4ce2cc3330af8772d2b8593c050fab50e59069b694610c9ee5e2a77705c",
+      "documents": 3,
+      "issuer_project_family_sha256": "0d9b0cb696fcd5d52cd9db61aafb2d45567b87fb7f12e9a6929c426a888e85d2",
+      "prior_scoring": {
+        "FN": 9,
+        "FP": 0,
+        "TN": 11,
+        "TP": 1
+      },
+      "relative_frozen_annotations": "frozen_holdouts/raw-binding-10.json"
+    },
+    "raw-binding-31": {
+      "annotations_sha256": "ad27468ea501eb060e37cc0370e7861110477b074149864305a91176f1ca26e2",
+      "documents": 4,
+      "issuer_project_family_sha256": "b4c1d1a564d71e0163aa5bd7abb21be91b6a6d089fd32c5d8fdfe721439298c8",
+      "prior_scoring": {
+        "FN": 30,
+        "FP": 0,
+        "TP": 1
+      },
+      "relative_frozen_annotations": "frozen_holdouts/raw-binding-31.json"
+    }
+  },
+  "replays": {
+    "actual_wall_seconds_each": [
+      9.352,
+      6.567
+    ],
+    "d114_archived_cold_runs": 2,
+    "identical_census_funnel_and_scientific_baseline_files": true,
+    "scientific_artifacts_verified_per_run": 8
+  },
+  "schema": "census-stage2-baseline-verification-v1",
+  "source_binding_funnel": {
+    "distinct_original_number_positions": 298,
+    "existing_reviewed_exact_cell_overlaps": 2,
+    "inventory_receipt_sha256": "83376a17b7c6bd4dd1e543283dee29cc2d580fc41abcdf5355535c1513402ed0",
+    "pdf_reread": "NOT_RUN_REUSED_EXACT_RECEIPTS",
+    "resolved_original_number_positions": 103,
+    "table_binding_receipt_sha256": "604c62a572b1a2b7c6380e47337d903ef5a73aa181d7708ca6a591c43e8dbd64",
+    "typed_candidates_after_exact_cell_dedup": 110,
+    "unbound_reasons": {
+      "AMBIGUOUS_OR_CONFLICTING_COLUMN_ALIGNMENT": 13,
+      "HEADER_OR_UNIT_UNBOUND": 210,
+      "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+    },
+    "unbound_scoped_sightings": 225,
+    "unrecognized_source_project_work_items": 19
+  },
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "status": "PASS",
+  "unit_and_real_archive_checks_passed": 4
+}
