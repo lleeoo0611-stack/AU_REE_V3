@@ -29,6 +29,58 @@ function envelope(schema_version, release_id, rest) {
   return {schema_version, release_id, ...rest};
 }
 
+const displayName = "census_display.json", displayCsvName = "census_display_extended.csv";
+const sortedFields = (_, value) => value && typeof value === "object" && !Array.isArray(value)
+  ? Object.fromEntries(Object.keys(value).sort().map(key => [key, value[key]])) : value;
+const canonicalDigest = value => digest(JSON.stringify(value, sortedFields));
+
+function addMockDisplay(files, releaseId, core) {
+  const definition = (field_id, label_zh, label_en, group, data_type, evidence_roles, unit = "as reported") => ({
+    field_id, label_zh, label_en, group, data_type, evidence_roles, unit,
+    basis: "As reported", purpose: "CENSUS_DISPLAY_ONLY", source_priority: "ISSUER",
+    applicability: "Source statement", missing_semantics: "UNKNOWN", validation_rule: "ORIGINAL",
+    precision: "AS_REPORTED", display_label: "SOURCE_REPORTED_DISPLAY", version: "v2",
+  });
+  const columns = [
+    definition("resource_estimate_effective_date", "原件估算日期", "Reported estimate date", "resource", "PARTIAL_DATE", ["REPORTED_RESOURCE"]),
+    definition("forecast_annual_rate_as_reported", "原報告工程年率", "Reported annual rate", "forecast", "REPORTED_QUANTITY", ["FORECAST"], "tpa"),
+  ];
+  const source = (project_id, data_role) => ({
+    project_id, data_role, source_sha256: "a".repeat(64), source_capture_sha256: "b".repeat(64),
+    source_url: "https://example.net/issuer.pdf", publication_date: "2026-11-01", locator: "PDF page 6, Table 1",
+    quote: "Reported case from the original\nengineering study.", scope: "Synthetic provenance",
+    context: {product: "MREC", as_reported_at: "2026-11-01", source_kind: "ISSUER", temporal_status: "ELIGIBLE"},
+  });
+  const facts = {}, coverage = {};
+  const input = [
+    [core[0].id, columns[0].field_id, "2026-09", "REPORTED_RESOURCE", ""],
+    [core[0].id, columns[1].field_id, "8,300", "FORECAST", "tpa"],
+    [core[1].id, columns[1].field_id, "29,000", "FORECAST", "tpa"],
+  ];
+  for (const [project, field, value, role, unit] of input) {
+    const fact = {...source(project, role), field_id: field, value: unit ? `${value} ${unit}` : value,
+      raw_token: value, raw_unit: unit, subject_id: project};
+    facts[canonicalDigest(fact)] = fact;
+  }
+  const projects = core.map(({id}) => ({id, cells: columns.map(column => {
+    const claim = Object.entries(facts).find(([, fact]) => fact.project_id === id && fact.field_id === column.field_id);
+    return claim ? {state: "PRESENT", value: claim[1].value, fact_ids: [claim[0]]} : {state: "UNKNOWN", value: null, fact_ids: []};
+  })}));
+  columns.forEach((column, index) => {
+    const present = projects.filter(project => project.cells[index].state === "PRESENT").length;
+    coverage[column.field_id] = {present, unknown: 93 - present, not_applicable: 0};
+  });
+  const undated = {...source(core[0].id, "OFFICIAL_REFERENCE"), publication_date: "",
+    label: "Unverified geographic reference", state: "EVIDENCE_INSUFFICIENT", reason: "Representative point unproved",
+    context: {capture_date: "2026-11-28", feature_effective_date: "UNKNOWN_CONTEXT"}};
+  files.set(displayName, buffer(envelope("web-census-display-v2", releaseId, {
+    columns, projects, facts, coverage, review_only: [undated],
+    contract_sha256: canonicalDigest({schema_version: "census-display-columns-v2", columns}),
+  })));
+  const csvRows = [["專案ID", ...columns.map(column => column.field_id)], ...projects.map(project => [project.id, ...project.cells.map(cell => cell.value ?? "")])];
+  files.set(displayCsvName, Buffer.from(csvRows.map(row => row.map(value => value.includes(",") ? `"${value}"` : value).join(",")).join("\r\n") + "\r\n"));
+}
+
 async function mockData() {
   const contract = JSON.parse(await readFile(resolve(repo, "config/research_profiles/census_columns_v1.json")));
   const headings = contract.columns;
@@ -67,6 +119,7 @@ async function mockData() {
     };
     const files = new Map(Object.entries(object).map(([name,payload])=>[name,buffer(payload)]));
     files.set("census.csv", Buffer.from(headings.join(",")+"\n"+projects.map(project=>project.cells.map(cell=>cell.value??"").join(",")).join("\n")+"\n"));
+    if (current) addMockDisplay(files, id, projects);
     inputs.set(id, files);
     coverageExpected.set(id, present);
   }
@@ -92,7 +145,7 @@ function stage() {
   for (const [id, files] of inputs) {
     const previous = files.get("manifest.json");
     const manifest = previous ?? buffer(envelope("web-research-manifest-v1",id,{
-      cutoff:"2026-11-28", release_status:"RESEARCH_CANDIDATE",
+      cutoff:"2026-11-28", release_status:"RESEARCH_CANDIDATE", authorization_sha256:null,
       artifacts:Object.fromEntries([...files].map(([name,bytes])=>[name,{path:name,sha256:digest(bytes)}])),
     }));
     const record = JSON.parse(manifest);
@@ -102,7 +155,9 @@ function stage() {
     entries.push({release_id:id,release_status:record.release_status,cutoff:record.cutoff,
       manifest_path:`releases/${id}/manifest.json`,manifest_sha256:digest(manifest)});
   }
-  entries.sort((left,right)=>coverageExpected.get(right.release_id)-coverageExpected.get(left.release_id));
+  const hasDisplay = entry => Number(inputs.get(entry.release_id).has(displayName));
+  entries.sort((left,right)=>(flags.includes("--stage4") ? hasDisplay(right) - hasDisplay(left) : 0)
+    || coverageExpected.get(right.release_id)-coverageExpected.get(left.release_id));
   return entries;
 }
 
@@ -112,6 +167,9 @@ let entries=stage();
 assert(entries.length>=2,"Two explicitly identified data versions are required");
 const [lead, prior] = entries;
 const leadId=lead.release_id, priorId=prior.release_id;
+const extended = inputs.get(leadId).has(displayName);
+if (flags.includes("--stage4")) assert(extended, "The newer candidate must include the exact Stage 4 display artifacts");
+if (extended) assert(!inputs.get(priorId).has(displayName), "The prior candidate must retain its original core-only layout");
 const pointerKey = "data/preview.json";
 const writePointer = (active = lead, history = entries) => served.set(pointerKey, buffer({
   schema_version:"web-release-pointer-v1",...active,previous_release_id:priorId,releases:history,
@@ -151,6 +209,104 @@ const expectText = (page,id,expr)=>page.waitForFunction(([target,re])=>new RegEx
 async function version(page,id) {
   await page.selectOption("#version",id);
   await page.waitForFunction(value=>document.querySelector("#footer-release").textContent===value,id);
+}
+
+async function checkDisplay(page) {
+  const json = JSON.parse(served.get(art(leadId, displayName)));
+  const facts = Object.values(json.facts);
+  const fact = facts.find(item => item.data_role === "FORECAST" && item.field_id === "forecast_annual_rate_as_reported") ?? facts[0];
+  const index = json.columns.findIndex(column => column.field_id === fact.field_id);
+  const definition = json.columns[index];
+  const selected = json.projects.find(row => row.id === fact.project_id).cells[index];
+  const present = Object.values(json.coverage).reduce((count, value) => count + value.present, 0);
+  const toggle = page.locator("#show-display");
+  await toggle.waitFor();
+  assert.equal(await toggle.isChecked(), false);
+  assert(await page.locator("#download-display").isHidden());
+  await toggle.check();
+  await expectText(page, "#display-coverage", new RegExp(`${present.toLocaleString("en-US")} / ${(93 * json.columns.length).toLocaleString("en-US")}`));
+  await expectText(page, "#table-count", new RegExp(`延伸欄 ${json.columns.length} / ${json.columns.length}`));
+  await page.click("#columns summary");
+  const group = page.locator("#column-options details").filter({has:page.getByText(definition.label_zh, {exact:true})});
+  const groupLabels = { resource:"資源估算", study:"開發研究", forecast:"產量預測", geology:"礦床類型", location:"位置" };
+  assert.equal(await group.locator("summary").textContent(), groupLabels[definition.group]);
+  await page.click("#columns summary");
+  const field = page.locator("#census-table th").filter({hasText:definition.label_zh});
+  await field.getByRole("button").click();
+  assert.equal(await field.getAttribute("aria-sort"), "ascending");
+  if (synthetic) {
+    const first = page.locator("#census-table tbody tr").first();
+    assert(await first.getByRole("button", {name:/8,300/}).isVisible());
+    await field.getByRole("button").click();
+    assert.equal(await field.getAttribute("aria-sort"), "descending");
+    assert(await first.getByRole("button", {name:/29,000/}).isVisible());
+  }
+  await page.selectOption("#display-field", `display:${definition.field_id}`);
+  await page.selectOption("#display-state", "PRESENT");
+  await page.fill("#display-query", "no exact source value");
+  await expectText(page, "#table-count", /^0 \/ 93/);
+  await page.fill("#display-query", fact.value);
+  await page.fill("#search", fact.project_id);
+  await expectText(page, "#table-count", /^1 \/ 93/);
+  await page.locator("#census-table tbody button").filter({hasText:selected.value}).and(
+    page.getByRole("button", {name: `${definition.label_zh} · ${selected.value} · 已核對原件展示`}),
+  ).click();
+  await page.locator("dialog[open]").waitFor();
+  const details = page.locator("#evidence-detail");
+  const text = await details.textContent();
+  assert([fact.quote, fact.raw_token, fact.scope, fact.source_sha256, fact.source_capture_sha256, fact.locator]
+    .every(value => text.includes(value)));
+  const source = details.locator("dl").filter({hasText:fact.source_sha256}).filter({hasText:fact.locator}).locator("a").first();
+  const link = new URL(await source.getAttribute("href"));
+  const physical = fact.locator.match(/\bPDF page (\d+)\b/i);
+  if (physical) assert.equal(link.hash, `#page=${physical[1]}`);
+  if (process.env.AU_REE_STAGE4_CAS) {
+    link.hash = "";
+    const bytes = await readFile(resolve(process.env.AU_REE_STAGE4_CAS, "objects", fact.source_sha256));
+    assert.equal(digest(bytes), fact.source_sha256);
+    const receipts = process.env.AU_REE_STAGE4_CAPTURES ?? resolve(process.env.AU_REE_STAGE4_CAS, "captures");
+    const receipt = await readFile(resolve(receipts, `${fact.source_capture_sha256}.json`));
+    assert.equal(digest(receipt), fact.source_capture_sha256);
+    const context = page.context();
+    await context.route(url => url.toString() === link.href, route => route.fulfill({
+      body:bytes, contentType:"application/pdf", status:200,
+    }));
+    const requested = context.waitForEvent("request", request => request.url() === link.href);
+    await source.click();
+    assert.equal((await requested).url(), link.href);
+    metrics.extended_original_source_readback = "PASS";
+  }
+  await page.keyboard.press("Escape");
+  await page.fill("#search", "");
+  await page.fill("#display-query", "");
+  await page.selectOption("#display-state", "");
+  if (json.review_only.length) {
+    const [review] = json.review_only;
+    await page.fill("#search", review.project_id);
+    await page.click("#display-review summary");
+    const table = await page.locator("#census-table tbody").textContent();
+    assert(!table.includes(review.reason));
+    const grid = json.projects.find(row => row.id === review.project_id);
+    const accepted = grid.cells.filter(cell => cell.state === "PRESENT").length;
+    assert.equal(await page.locator('#census-table tbody button[title="已核對原件展示"]').count(), accepted);
+    await page.locator("#display-review button").filter({hasText:review.label}).first().click();
+    const text = await details.textContent();
+    assert(text.includes(review.quote) && text.includes(review.reason) && text.includes(review.source_capture_sha256));
+    if (!review.publication_date) assert(text.includes(review.context.capture_date));
+    await page.keyboard.press("Escape");
+    await page.fill("#search", "");
+  }
+  const downloading = page.waitForEvent("download");
+  await page.click("#download-display");
+  const download = await downloading;
+  assert.equal(download.suggestedFilename(), `census-display-extended-${leadId}.csv`);
+  assert.equal(digest(await readFile(await download.path())), digest(served.get(art(leadId, displayCsvName))));
+  await toggle.uncheck();
+  assert(await page.locator("#download-display").isHidden());
+  metrics.extended_fields_filters_sort_csv_evidence = "PASS";
+  metrics.extended_fields = json.columns.length;
+  metrics.extended_present_cells = present;
+  metrics.extended_review_only_records = json.review_only.length;
 }
 
 try {
@@ -205,6 +361,7 @@ try {
     await page.selectOption("#state-filter","");
   }
   metrics.search_filter_sort_columns_evidence="PASS";
+  if (extended) await checkDisplay(page);
   if (flags.includes("--stage3")) {
     assert(!synthetic, "Stage 3 regressions require exact archived candidate data");
     const expectedProducts = [
@@ -326,6 +483,7 @@ try {
   await page.click('[data-tab="census"]');
   metrics.map_ree_mcda_language="PASS";
 
+  if (extended) await page.locator("#show-display").check();
   const before = performance.now();
   await version(page,priorId);
   metrics.browser_history_load_wall_ms=Math.round(performance.now()-before);
@@ -336,6 +494,8 @@ try {
   assert.equal(download.suggestedFilename(),`census-${priorId}.csv`);
   assert.equal(digest(await readFile(await download.path())),digest(oldCsv));
   assert(new URL(page.url()).searchParams.get("release")===priorId);
+  assert(await page.locator("#show-display").isHidden());
+  assert.equal(await page.locator("#download-display").getAttribute("href"), null);
   await page.click("#refresh");
   await page.locator(".update-button").waitFor();
   assert.equal(await page.locator("#footer-release").textContent(),priorId);
@@ -352,12 +512,30 @@ try {
   assert.equal(await page.locator("#footer-release").textContent(),priorId);
   fault=null;
   metrics.mixed_cache_missing_atomic="PASS";
+  if (extended) {
+    for (const [name, response, message] of [
+      [displayName, {body:buffer({}), contentType:"application/json"}, /指紋/],
+      [displayCsvName, {status:404, body:"missing"}, /缺少必要/],
+    ]) {
+      const download = await page.locator("#download").getAttribute("href");
+      fault = {matches:path=>path===art(leadId,name), response};
+      await page.selectOption("#version", leadId);
+      await expectText(page, "#status", message);
+      assert.equal(await page.locator("#footer-release").textContent(), priorId);
+      assert.equal(await page.locator("#version").inputValue(), priorId);
+      assert.equal(await page.locator("#download").getAttribute("href"), download);
+      assert(await page.locator("#show-display").isHidden());
+    }
+    fault = null;
+    metrics.extended_missing_corrupt_keeps_prior_version = "PASS";
+  }
   async function rejectedData(file, mutate) {
     const filePath=art(leadId,file), manifestPath=art(leadId,"manifest.json");
     const original=served.get(filePath), originalManifest=served.get(manifestPath);
-    const record=JSON.parse(original), info=JSON.parse(originalManifest);
-    mutate(record);
-    const body=buffer(record);
+    const info=JSON.parse(originalManifest);
+    const prototype=file.endsWith(".csv") ? original.toString("utf-8") : JSON.parse(original);
+    const mutated=mutate(prototype) ?? prototype;
+    const body=file.endsWith(".csv") ? Buffer.from(mutated) : buffer(mutated);
     info.artifacts[file].sha256=digest(body);
     const manifest=buffer(info);
     const rehashed={...lead,manifest_sha256:digest(manifest)};
@@ -387,6 +565,16 @@ try {
     census.selected_composition[populated.id]=[{variable:"mreo_ppm",lineage_id:"absent",unit:"ppm",value:"1"}];
   });
   metrics.rehashed_unqualified_pin_rank_lineage="PASS";
+  if (extended) {
+    await rejectedData(displayName, payload=>{ payload.release_id=priorId; });
+    await rejectedData(displayName, payload=>{ payload.projects.reverse(); });
+    await rejectedData(displayName, payload=>{ Object.values(payload.facts)[0].project_id=payload.projects.at(-1).id; });
+    await rejectedData(displayName, payload=>{ Object.values(payload.facts)[0].data_role="CANDIDATE"; });
+    await rejectedData(displayName, payload=>{ payload.columns[0].basis="Unpinned basis"; });
+    await rejectedData(displayName, payload=>{ Object.values(payload.facts)[0].quote="Unpinned original excerpt"; });
+    await rejectedData(displayCsvName, payload=>payload.replace(/^專案ID/, "unknown_field_name"));
+    metrics.extended_rehashed_mixed_role_lineage_csv_refused = "PASS";
+  }
 
 
   const originalEvidence = served.get(exactEvidencePath);
@@ -428,6 +616,10 @@ try {
   await mobile.goto(url+"?preview=1");
   await mobile.locator("#census-table tbody tr").first().waitFor();
   assert(await mobile.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+  if (extended) {
+    await mobile.locator("#show-display").check();
+    assert(await mobile.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+  }
   await mobile.click('[data-tab="map"]');
   await expectText(mobile,"#map-details",/無可驗證座標/);
   if (capture) await mobile.screenshot({path:resolve(capture,"map-mobile.png"),fullPage:true});

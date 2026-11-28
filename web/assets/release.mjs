@@ -1,3 +1,5 @@
+import {DISPLAY_CSV, DISPLAY_JSON, DISPLAY_SCHEMA, readExtendedDisplay} from "./display.mjs";
+
 const shaPattern = /^[a-f0-9]{64}$/;
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const artifacts = {
@@ -191,7 +193,12 @@ export async function readVersion(pointer, releaseId, signal) {
   check(isRecord(manifest) && manifest.schema_version === "web-research-manifest-v1"
     && manifest.release_id === releaseId && manifest.cutoff === entry.cutoff
     && manifest.release_status === entry.release_status && isRecord(manifest.artifacts));
-  const files = await Promise.all(Object.entries(artifacts).map(async ([name, schema]) => {
+  const hasDisplay = Object.hasOwn(manifest.artifacts, DISPLAY_JSON);
+  check(hasDisplay === Object.hasOwn(manifest.artifacts, DISPLAY_CSV));
+  check(!hasDisplay || (entry.release_status === "RESEARCH_CANDIDATE" && manifest.authorization_sha256 === null));
+  const expected = hasDisplay ? {...artifacts, [DISPLAY_JSON]: DISPLAY_SCHEMA, [DISPLAY_CSV]: null} : artifacts;
+  check(Object.keys(manifest.artifacts).length === Object.keys(expected).length);
+  const files = await Promise.all(Object.entries(expected).map(async ([name, schema]) => {
     const artifact = manifest.artifacts[name];
     check(isRecord(artifact) && artifact.path === name);
     const bytes = await verified(new URL(artifact.path, manifestURL), artifact.sha256, signal);
@@ -212,7 +219,8 @@ export async function readVersion(pointer, releaseId, signal) {
     && counts.PRESENT + counts.UNKNOWN + counts.NOT_APPLICABLE === 4743
   );
   checkDecision(mcda, projectIds);
-  return {entry, manifest, census, evidence, coverage, mcda, map, columnIds, csv: data["census.csv"]};
+  const display = hasDisplay ? await readExtendedDisplay(data[DISPLAY_JSON], data[DISPLAY_CSV], census, {check, sourceURL: publicSourceURL}) : null;
+  return {entry, manifest, census, evidence, coverage, mcda, map, columnIds, csv: data["census.csv"], display};
 }
 
 export function publicSourceURL(value, page) {

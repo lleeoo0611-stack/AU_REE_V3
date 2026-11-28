@@ -1,6 +1,7 @@
 import {readPointer, readVersion, ReleaseError} from "./release.mjs";
+import {reportedQuantity} from "./display.mjs";
 import {en, zh, columnLabels, panelLabels} from "./labels.mjs";
-import {evidenceDetails, node, options, renderDecision, renderMap, tableRows} from "./views.mjs";
+import {displayEvidence, evidenceDetails, node, options, renderDecision, renderMap, tableRows} from "./views.mjs";
 
 const byId = id => document.getElementById(id);
 const keys = {
@@ -21,6 +22,7 @@ const current = {
   pointer: null, data: null, request: null, checked: null, next: null, message: null,
   tab: "census", project: null, selectedColumns: new Set(defaultColumns),
   page: 0, sort: null, ascending: true, outline: null, csvUrl: null, evidenceTarget: null,
+  showDisplay: false, displayCsvUrl: null,
 };
 const t = key => (current.language === "en" ? en : zh)[key] ?? key;
 const number = value => new Intl.NumberFormat(current.language === "en" ? "en-AU" : "zh-TW").format(value);
@@ -29,10 +31,58 @@ const label = col => current.language === "en"
   : col.label ?? col.id;
 
 const projects = () => current.data.census.projects;
-const column = id => current.data.census.columns[current.data.columnIds.indexOf(id)];
-const cell = (project, id) => project?.cells[current.data.columnIds.indexOf(id)];
+const displayIndex = id => current.data.display?.byColumn.get(id);
+const column = id => current.data.display?.columns[displayIndex(id)] ?? current.data.census.columns[current.data.columnIds.indexOf(id)];
+const cell = (project, id) => current.data.display?.projects.get(project?.id)?.[displayIndex(id)] ?? project?.cells[current.data.columnIds.indexOf(id)];
+const explorerColumns = () => current.showDisplay && current.data.display
+  ? [...current.data.columnIds, ...current.data.display.columns.map(item => item.id)] : current.data.columnIds;
 const name = id => cell(projects().find(p => p.id === id), keys.name)?.value || id;
 const displayState = state => t(state === "UNKNOWN" ? "missing" : "na");
+
+// The extension controls belong to the existing Census pane. They stay absent
+// from historical versions that only carry the frozen 51 columns.
+const displayToggle = node("input");
+displayToggle.type = "checkbox";
+displayToggle.id = "show-display";
+const displayToggleLabel = node("label", null, "display-toggle");
+const newLabel = key => { const text = node("span"); text.dataset.i = key; return text; };
+displayToggleLabel.append(displayToggle, newLabel("showDisplay"));
+const displayDownload = node("a", null, "button secondary");
+displayDownload.id = "download-display";
+displayDownload.dataset.i = "downloadDisplay";
+const displayToolbar = node("div", null, "display-toolbar");
+const displayCoverage = node("span", null, "mini");
+displayCoverage.id = "display-coverage";
+displayToolbar.append(displayToggleLabel, displayDownload, displayCoverage);
+displayToolbar.hidden = true;
+byId("census-filters").before(displayToolbar);
+
+const displayFilters = node("div", null, "filters display-filter-row");
+function addDisplayFilter(key, control, id) {
+  const field = node("div", null, "field");
+  const name = node("label");
+  name.htmlFor = id;
+  name.dataset.i = key;
+  control.id = id;
+  field.append(name, control);
+  displayFilters.append(field);
+  return control;
+}
+const displayField = addDisplayFilter("displayField", node("select"), "display-field");
+const displayQuery = addDisplayFilter("displayQuery", node("input"), "display-query");
+displayQuery.type = "search";
+const displayStateFilter = addDisplayFilter("valueState", node("select"), "display-state");
+displayFilters.hidden = true;
+byId("census-filters").after(displayFilters);
+
+const reviewPanel = node("details", null, "display-review");
+reviewPanel.id = "display-review";
+const reviewTitle = node("summary");
+reviewTitle.dataset.i = "reviewOnly";
+const reviewItems = node("ul", null, "display-review-items");
+reviewPanel.append(reviewTitle, reviewItems);
+reviewPanel.hidden = true;
+byId("census").append(reviewPanel);
 
 function translate() {
   document.documentElement.lang = current.language === "en" ? "en" : "zh-Hant";
@@ -141,6 +191,18 @@ function filterOptions() {
   options(dataFilter, [["", t("all")], ["UNKNOWN", t("missing")], ["NOT_APPLICABLE", t("na")], ["PRESENT", t("present")]], dataFilter.value);
 }
 
+function renderDisplaySettings() {
+  const display = current.data.display;
+  displayToolbar.hidden = !display;
+  displayToggle.checked = current.showDisplay;
+  displayFilters.hidden = displayDownload.hidden = displayCoverage.hidden = !display || !current.showDisplay;
+  if (!display) return;
+  const populated = Object.values(display.coverage).reduce((count, column) => count + column.present, 0);
+  displayCoverage.textContent = `${t("displayCoverage")} ${number(populated)} / ${number(projects().length * display.columns.length)}`;
+  options(displayField, [["", t("allDisplayFields")], ...display.columns.map(item => [item.id, label(item)])], displayField.value);
+  options(displayStateFilter, [["", t("all")], ["PRESENT", t("present")], ["UNKNOWN", t("missing")]], displayStateFilter.value);
+}
+
 function renderColumns() {
   const box = byId("column-options");
   const create = (key, update) => {
@@ -154,9 +216,11 @@ function renderColumns() {
   };
   const identified = projects().some(project => cell(project, keys.name).value !== null);
   const defaults = identified ? defaultColumns : [keys.project, ...defaultColumns];
-  box.replaceChildren(create("displayAll", current.data.columnIds), create("defaultColumns", defaults));
+  const available = explorerColumns();
+  box.replaceChildren(create(current.showDisplay && current.data.display ? "displayAllExtended" : "displayAll", available),
+    create("defaultColumns", defaults));
   const groups = new Map();
-  for (const col of current.data.census.columns) {
+  for (const col of available.map(column)) {
     const group = col.display_group || "metadata";
     if (!groups.has(group)) groups.set(group, []);
     groups.get(group).push(col);
@@ -170,7 +234,7 @@ function renderColumns() {
       check.type = "checkbox";
       check.checked = current.selectedColumns.has(col.id);
       check.addEventListener("change", () => {
-        if (!check.checked && current.selectedColumns.size === 1) {
+        if (!check.checked && available.filter(id => current.selectedColumns.has(id)).length === 1) {
           check.checked = true;
           return;
         }
@@ -186,9 +250,22 @@ function renderColumns() {
   }
 }
 
+function matchesDisplay(project) {
+  if (!current.showDisplay || !current.data.display) return true;
+  const q = displayQuery.value.trim().toLocaleLowerCase();
+  const expected = displayStateFilter.value;
+  if (!q && !expected) return true;
+  const columns = displayField.value ? [displayField.value] : current.data.display.columns.map(item => item.id);
+  return columns.some(id => {
+    const item = cell(project, id);
+    return (!expected || item.state === expected) && (!q || item.value?.toLocaleLowerCase().includes(q));
+  });
+}
+
 function selectRows(visible) {
   const q = byId("search").value.trim().toLocaleLowerCase();
   const state = byId("data-filter").value;
+  const core = visible.filter(id => displayIndex(id) === undefined);
   const filtered = projects().filter(project => {
     if (q && ![keys.project, keys.name, keys.developer, "ASX代碼"].some(id =>
       cell(project, id).value?.toLocaleLowerCase().includes(q))) return false;
@@ -198,17 +275,27 @@ function selectRows(visible) {
       const actual = item.state === "UNKNOWN" ? "__unknown" : item.value;
       if (filter && filter !== actual) return false;
     }
-    return !state || visible.some(id => cell(project, id).state === state);
+    return matchesDisplay(project) && (!state || (core.length ? core : current.data.columnIds).some(id => cell(project, id).state === state));
   });
   if (!current.sort) return filtered;
   const collator = new Intl.Collator(current.language === "en" ? "en" : "zh-Hant", {numeric: true, sensitivity: "base"});
-  const dtype = column(current.sort)?.data_type;
-  const numericType = ["number", "numeric", "decimal", "integer"].includes(dtype?.toLowerCase()) || [keys.ore, keys.grade, keys.contained].includes(current.sort);
+  const sortColumn = column(current.sort);
+  const display = current.data.display;
+  const quantityType = sortColumn?.definition?.data_type === "REPORTED_QUANTITY";
+  const numericType = !sortColumn?.definition && (["number", "numeric", "decimal", "integer"].includes(sortColumn?.data_type?.toLowerCase())
+    || [keys.ore, keys.grade, keys.contained].includes(current.sort));
   return filtered.sort((left, right) => {
-    const a = cell(left, current.sort).value, b = cell(right, current.sort).value;
+    const l = cell(left, current.sort), r = cell(right, current.sort);
+    const a = l.value, b = r.value;
     if (a === null || b === null) return a !== b ? (a === null ? 1 : -1) : collator.compare(left.id, right.id);
-    const numeric = numericType && Number.isFinite(Number(a)) && Number.isFinite(Number(b));
-    const order = numeric ? Number(a) - Number(b) : collator.compare(a, b);
+    let order = collator.compare(a, b);
+    if (quantityType) {
+      const x = reportedQuantity(l, display.facts), y = reportedQuantity(r, display.facts);
+      if (x && y) order = collator.compare(x.unit, y.unit) || x.amount - y.amount;
+      else if (Boolean(x) !== Boolean(y)) order = x ? -1 : 1;
+    } else if (numericType && Number.isFinite(Number(a)) && Number.isFinite(Number(b))) {
+      order = Number(a) - Number(b);
+    }
     return (current.ascending ? order : -order) || collator.compare(left.id, right.id);
   });
 }
@@ -216,13 +303,16 @@ function selectRows(visible) {
 function cellButton(projectId, col, item) {
   const trigger = node("button", item.value ?? displayState(item.state), item.state === "PRESENT" ? "cell-button" : "cell-button missing");
   trigger.type = "button";
-  trigger.setAttribute("aria-label", `${label(col)} · ${item.value ?? displayState(item.state)}`);
+  const display = col.definition && item.state === "PRESENT";
+  const hint = display ? ` · ${t("SOURCE_REPORTED_DISPLAY")}` : "";
+  trigger.setAttribute("aria-label", `${label(col)} · ${item.value ?? displayState(item.state)}${hint}`);
+  if (display) trigger.title = t("SOURCE_REPORTED_DISPLAY");
   trigger.addEventListener("click", () => openEvidence(projectId, col, item));
   return trigger;
 }
 
 function renderTable() {
-  const visible = current.data.columnIds.filter(id => current.selectedColumns.has(id));
+  const visible = explorerColumns().filter(id => current.selectedColumns.has(id));
   const rows = selectRows(visible);
   const lastPage = Math.max(0, Math.ceil(rows.length / pageSize) - 1);
   current.page = Math.min(current.page, lastPage);
@@ -243,6 +333,7 @@ function renderTable() {
     if (current.sort === id) header.setAttribute("aria-sort", current.ascending ? "ascending" : "descending");
     const button = node("button", header.textContent, "sort");
     button.type = "button";
+    if (column(id).definition?.data_type === "REPORTED_QUANTITY") button.title = t("sortReportedQuantity");
     button.addEventListener("click", () => {
       current.ascending = current.sort !== id || !current.ascending;
       current.sort = id; current.page = 0; renderTable();
@@ -250,18 +341,42 @@ function renderTable() {
     });
     header.replaceChildren(button);
   }
-  byId("table-count").textContent = `${number(rows.length)} / ${number(projects().length)} · ${number(visible.length)} / 51`;
+  const extended = visible.filter(id => displayIndex(id) !== undefined).length;
+  const core = visible.length - extended;
+  const total = `${number(rows.length)} / ${number(projects().length)} · ${number(core)} / 51`;
+  byId("table-count").textContent = current.showDisplay && current.data.display
+    ? `${total} · ${t("displayFields")} ${number(extended)} / ${number(current.data.display.columns.length)}` : total;
   byId("page-info").textContent = rows.length ? `${number(start + 1)}–${number(Math.min(start + pageSize, rows.length))} / ${number(rows.length)}` : "0";
   byId("prev").disabled = current.page === 0;
   byId("next").disabled = current.page >= lastPage;
+  renderReview(rows);
 }
 
-function openEvidence(id, col, item) {
+function renderReview(rows) {
+  const display = current.data.display;
+  const ids = new Set(rows.map(project => project.id));
+  const matching = current.showDisplay && display ? display.review.filter(entry => ids.has(entry.project_id)) : [];
+  reviewPanel.hidden = !matching.length;
+  reviewItems.replaceChildren(...matching.map(entry => {
+    const listItem = node("li");
+    const action = node("button", `${name(entry.project_id)} · ${entry.label} · ${t(entry.state)}`, "cell-button");
+    action.type = "button";
+    action.addEventListener("click", () => openEvidence(entry.project_id, {id: entry.label}, {state: entry.state, value: null}, entry));
+    listItem.append(action);
+    return listItem;
+  }));
+}
+
+function openEvidence(id, col, item, review = null) {
   current.project = id;
-  current.evidenceTarget = {id, col, item};
-  const evidence = current.data.evidence.entries[item.lineage_id];
+  current.evidenceTarget = {id, col, item, review};
   byId("evidence-title").textContent = `${name(id)} · ${label(col)}`;
-  byId("evidence-detail").replaceChildren(evidenceDetails(evidence, item, t, displayState(item.state)));
+  const display = current.data.display;
+  const status = review ? t(item.state) : displayState(item.state);
+  const details = col.definition || review
+    ? displayEvidence(review ? [review] : item.fact_ids.map(key => display.facts[key]), item, col, t, status, display.contractSha)
+    : evidenceDetails(current.data.evidence.entries[item.lineage_id], item, t, status);
+  byId("evidence-detail").replaceChildren(details);
   if (!byId("evidence").open) byId("evidence").showModal();
   deepLink();
 }
@@ -339,6 +454,7 @@ function renderVersion() {
   setupVersion(current.data.entry, current.pointer);
   renderMetrics();
   filterOptions();
+  renderDisplaySettings();
   renderColumns();
   renderTable();
   projectChoices();
@@ -350,8 +466,36 @@ function renderVersion() {
   updateDecision();
   setTab(current.tab);
   if (current.evidenceTarget && byId("evidence").open) {
-    const {id, col, item} = current.evidenceTarget;
-    openEvidence(id, col, item);
+    const {id, col, item, review} = current.evidenceTarget;
+    openEvidence(id, col, item, review);
+  }
+}
+
+function setDisplayVersion(result, id) {
+  const previouslyOffered = current.data?.display?.byColumn;
+  const next = result.display;
+  current.selectedColumns = new Set([...current.selectedColumns].filter(key => result.columnIds.includes(key) || next?.byColumn.has(key)));
+  for (const col of next?.columns ?? []) {
+    if (!previouslyOffered?.has(col.id)) current.selectedColumns.add(col.id);
+  }
+  if (current.sort && !result.columnIds.includes(current.sort) && !next?.byColumn.has(current.sort)) current.sort = null;
+  if (!next) {
+    current.showDisplay = false;
+    displayField.replaceChildren();
+    displayQuery.value = displayStateFilter.value = "";
+    reviewPanel.open = false;
+  }
+  if (!(current.showDisplay && next) && !result.columnIds.some(key => current.selectedColumns.has(key))) {
+    current.selectedColumns.add(keys.project);
+  }
+  if (current.displayCsvUrl) URL.revokeObjectURL(current.displayCsvUrl);
+  current.displayCsvUrl = next ? URL.createObjectURL(new Blob([next.csv], {type: "text/csv;charset=utf-8"})) : null;
+  if (next) {
+    displayDownload.href = current.displayCsvUrl;
+    displayDownload.download = `census-display-extended-${id}.csv`;
+  } else {
+    displayDownload.removeAttribute("href");
+    displayDownload.removeAttribute("download");
   }
 }
 
@@ -365,6 +509,7 @@ async function changeVersion(id, pointer, push = false) {
   try {
     const result = await readVersion(pointer, id, request.signal);
     if (current.request !== request) return;
+    setDisplayVersion(result, id);
     if (!result.census.projects.some(project => project.cells[result.columnIds.indexOf(keys.name)].value !== null)) {
       current.selectedColumns.add(keys.project);
     }
@@ -430,6 +575,19 @@ for (const id of [...Object.keys(filters), "data-filter"]) byId(id).addEventList
   current.page = 0;
   renderTable();
 });
+displayToggle.addEventListener("change", () => {
+  current.showDisplay = displayToggle.checked;
+  if (current.showDisplay && !current.data.display.columns.some(col => current.selectedColumns.has(col.id))) {
+    for (const col of current.data.display.columns) current.selectedColumns.add(col.id);
+  }
+  if (!current.showDisplay && displayIndex(current.sort) !== undefined) current.sort = null;
+  if (!explorerColumns().some(key => current.selectedColumns.has(key))) current.selectedColumns.add(keys.project);
+  current.page = 0;
+  renderDisplaySettings(); renderColumns(); renderTable();
+});
+for (const [control, event] of [[displayField, "change"], [displayQuery, "input"], [displayStateFilter, "change"]]) {
+  control.addEventListener(event, () => { current.page = 0; renderTable(); });
+}
 byId("prev").addEventListener("click", () => { current.page -= 1; renderTable(); });
 byId("next").addEventListener("click", () => { current.page += 1; renderTable(); });
 for (const select of ["compare-left", "compare-right", "compare-metric"]) byId(select).addEventListener("change", renderComparison);
