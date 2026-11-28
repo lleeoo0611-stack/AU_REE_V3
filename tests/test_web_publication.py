@@ -212,12 +212,13 @@ class WebPublicationTests(unittest.TestCase):
 class RealResearchWebTests(unittest.TestCase):
     def test_fixed_real_research_values_and_rankings_preserved(self):
         build = Path(os.environ["AU_REE_WEB_RESEARCH_BUILD"])
+        profile = Path(os.environ.get("AU_REE_WEB_RESEARCH_PROFILE", PROFILE))
         receipt = _read(build / "build_receipt.json")
         release_id = os.environ.get("AU_REE_WEB_RELEASE_ID", receipt["observation_release_id"])
         release_root = os.environ.get("AU_REE_WEB_RELEASE_ROOT")
         with TemporaryDirectory() as temporary:
             out = Path(temporary)
-            manifest = export_web(profile=PROFILE, research_build=build, release_id=release_id, out=out,
+            manifest = export_web(profile=profile, research_build=build, release_id=release_id, out=out,
                                   release_root=Path(release_root) if release_root else None)
             target = out / "releases" / release_id
             self.assertEqual(verify_web_release(target, expected_release_id=release_id), manifest)
@@ -242,13 +243,22 @@ class RealResearchWebTests(unittest.TestCase):
             columns = {rule["id"]: index for index, rule in enumerate(census["columns"])}
             projects = {row["id"]: row["cells"] for row in census["projects"]}
             with (build / "census/cell_status.csv").open(encoding="utf-8", newline="") as stream:
-                reference_rows = [row for row in csv.DictReader(stream) if row["value_origin"] == "EVIDENCE_REFERENCE"]
+                rows = tuple(csv.DictReader(stream))
+            reference_rows = [row for row in rows if row["value_origin"] == "EVIDENCE_REFERENCE"]
+            attributes = [row for row in rows if row.get("evidence_state") == "VALIDATED_DESCRIPTIVE"]
+            self.assertEqual(len(attributes), 5 if profile.name == "au_ree_census_attributes_v1.json" else 0)
+            for row in attributes:
+                cell = projects[row["project_id"]][columns[row["column"]]]
+                anchor = evidence[cell["lineage_id"]]
+                self.assertEqual((cell["value"], anchor["source_sha256"]), (row["value"], row["source_sha256"]))
+                self.assertEqual(anchor["evidence_state"], "VALIDATED_DESCRIPTIVE")
+                self.assertIn(anchor["metadata"]["attribute_role"], {"CONFIRMED_DEPOSIT_TYPE", "COMPLETED"})
             self.assertEqual(coverage["evidence_reference_cells"], len(reference_rows))
             self.assertEqual(coverage["other_present_cells"], 0)
             if reference_rows:
                 self.assertEqual(len(reference_rows), 4)
-                self.assertEqual(coverage["cell_states"]["PRESENT"], 1092 + receipt["scientific_output_count"])
-                self.assertEqual((coverage["identity_cells"], coverage["metadata_cells"]), (93, 995))
+                self.assertEqual(coverage["cell_states"]["PRESENT"], 1092 + receipt["scientific_output_count"] + len(attributes))
+                self.assertEqual((coverage["identity_cells"], coverage["metadata_cells"]), (93, 995 + len(attributes)))
                 for reference in reference_rows:
                     cell = projects[reference["project_id"]][columns["有TREO資源估計"]]
                     anchor = evidence[cell["lineage_id"]]

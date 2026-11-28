@@ -63,6 +63,7 @@ _METADATA_FIELDS = {
     "native_field", "native_value", "registry_sha256", "scope", "verified_distinct_source_count",
     "snapshot_cutoff", "source_capture_sha256", "source_manifest_sha256", "source_sha256",
     "temporal_status", "temporal_decision_id", "geometry_role",
+    "attribute_kind", "attribute_role", "policy_sha256", "publication_date", "event_date_token",
 }
 _CONTEXT_FIELDS = {
     "category", "chemical_basis", "cutoff_analyte", "cutoff_grade", "cutoff_unit", "denominator_basis",
@@ -180,6 +181,10 @@ def _csv(payload: bytes):
 
 
 def _evidence(row: dict) -> dict:
+    if row.get("evidence_state") == "VALIDATED_DESCRIPTIVE":
+        from .project_attributes import validate_attribute_cell
+
+        validate_attribute_cell(row)
     evidence = _scalar_fields(row, _EVIDENCE_FIELDS)
     evidence["reason"] = evidence.get("reason") or "EVIDENCE_NOT_DISCLOSED"
     origin = row.get("value_origin")
@@ -756,6 +761,22 @@ def _check_census(manifest, census, evidence, csv_payload):
             if cell["precision"] is not None and _precision({"precision": cell["precision"]}) != cell["precision"]:
                 raise WebPublicationError("Invalid public Census precision")
             _allowed_public_evidence(entry)
+            if state == "PRESENT" and entry["evidence_state"] == "VALIDATED_DESCRIPTIVE":
+                descriptive = entry.get("metadata", {})
+                attribute = "DEPOSIT_TYPE" if heading in {"礦床型態代碼", "礦床型態"} else (
+                    "DEVELOPMENT_STAGE" if heading in {"開發階段代碼", "開發階段類別", "開發階段"} else None
+                )
+                expected_role = "CONFIRMED_DEPOSIT_TYPE" if attribute == "DEPOSIT_TYPE" else "COMPLETED"
+                if (attribute is None or cell["origin"] != "SOURCE_EVIDENCE" or entry.get("observation_id")
+                        or any(not _sha(entry.get(key)) for key in (
+                            "source_sha256", "anchor_id", "selection_id", "validation_id", "temporal_decision_id",
+                        )) or entry.get("temporal_status") != "ELIGIBLE" or not entry.get("locator")
+                        or descriptive.get("evidence_type") != "SOURCE_BOUND_TEXT_ATTRIBUTE"
+                        or descriptive.get("display_only") is not True or descriptive.get("attribute_kind") != attribute
+                        or descriptive.get("attribute_role") != expected_role or not descriptive.get("native_value")
+                        or not descriptive.get("publication_date") or not _sha(descriptive.get("policy_sha256"))
+                        or attribute == "DEVELOPMENT_STAGE" and not descriptive.get("event_date_token")):
+                    raise WebPublicationError("Census attribute lacks its selected source and descriptive role")
             if state == "PRESENT" and cell["origin"] in {"FORMAL_SELECTION", "FORMAL_DIRECT"}:
                 if (any(not _sha(entry.get(key)) for key in (
                         "source_sha256", "observation_id", "anchor_id", "temporal_decision_id"))

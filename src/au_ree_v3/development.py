@@ -65,7 +65,7 @@ def _classification(stage: str, quote: str) -> tuple[str, str]:
     return "MENTIONED", "NO_COMPLETION_OR_COMMENCEMENT_CLAIM"
 
 
-def _date_token(token: str | None) -> str | None:
+def reported_calendar_date(token: str | None) -> str | None:
     """Keep a reported date at the precision actually disclosed."""
     if token is None:
         return None
@@ -78,7 +78,7 @@ def _date_token(token: str | None) -> str | None:
     raise ValueError("D1 binding date must be a reported calendar day, month, or year")
 
 
-def _anchor(document: PDFDocument, source_key: str, page: int, quote: str, purpose: str) -> EvidenceAnchor:
+def bind_native_quote(document: PDFDocument, source_key: str, page: int, quote: str, purpose: str) -> EvidenceAnchor:
     view = _flatten(document.locate(page).text)
     quote = _flatten(quote)
     if not quote or view.count(quote) != 1:
@@ -93,10 +93,11 @@ def _anchor(document: PDFDocument, source_key: str, page: int, quote: str, purpo
     )
 
 
-def _review(binding, edition, document, proofs, cutoff, ordinal):
+def read_milestone_evidence(binding, edition, document, proofs, cutoff):
+    """Read one source-bound claim without projecting a stage or decision score."""
     page, key, digest = binding["page"], edition["source_key"], edition["sha256"]
-    statement = _anchor(document, key, page, binding["quote"], "DEVELOPMENT_STAGE_CLAIM")
-    scope = _anchor(document, key, page, binding["scope_quote"], "DEVELOPMENT_PROJECT_SCOPE")
+    statement = bind_native_quote(document, key, page, binding["quote"], "DEVELOPMENT_STAGE_CLAIM")
+    scope = bind_native_quote(document, key, page, binding["scope_quote"], "DEVELOPMENT_PROJECT_SCOPE")
     gap = max(statement.text_span["start"], scope.text_span["start"]) - min(
         statement.text_span["end"], scope.text_span["end"],
     )
@@ -105,19 +106,19 @@ def _review(binding, edition, document, proofs, cutoff, ordinal):
     publication = binding.get("publication")
     publication_anchor = None
     if publication:
-        publication_anchor = _anchor(
+        publication_anchor = bind_native_quote(
             document, key, publication["page"], publication["quote"], "DEVELOPMENT_PUBLICATION_DATE",
         )
         if publication["date_token"] not in publication_anchor.quote:
             raise DocumentError("EVIDENCE_INSUFFICIENT", "PUBLICATION_DATE_NOT_BOUND_TO_QUOTE")
-    published_date = _date_token(publication["date_token"]) if publication else None
+    published_date = reported_calendar_date(publication["date_token"]) if publication else None
     claim_state, reason = _classification(binding["stage"], statement.quote)
     date_token = binding.get("event_date_token")
     if date_token is not None and not re.search(
         rf"\b(?:in|on)\s+{re.escape(date_token)}\b", statement.quote, re.I,
     ):
         raise DocumentError("EVIDENCE_INSUFFICIENT", "EVENT_DATE_NOT_BOUND_TO_QUOTE")
-    event_date = _date_token(date_token)
+    event_date = reported_calendar_date(date_token)
     reached = claim_state in {"COMPLETED", "ATTAINED"}
     role = "HISTORICAL_EVENT" if reached else "ENGINEERING_PLAN" if claim_state == "PLANNED" else "DOCUMENT"
     decision = evaluate_temporal(
@@ -126,6 +127,17 @@ def _review(binding, edition, document, proofs, cutoff, ordinal):
         event_date=event_date if reached else None, evidence=proofs,
     )
     anchors = [statement, scope] + ([publication_anchor] if publication_anchor else [])
+    return claim_state, reason, role, event_date, date_token, published_date, anchors, decision
+
+
+def _review(binding, edition, document, proofs, cutoff, ordinal):
+    claim_state, reason, role, event_date, date_token, published_date, anchors, decision = (
+        read_milestone_evidence(binding, edition, document, proofs, cutoff)
+    )
+    statement, scope, *publication_anchors = anchors
+    publication_anchor = publication_anchors[0] if publication_anchors else None
+    reached = claim_state in {"COMPLETED", "ATTAINED"}
+    key, digest = edition["source_key"], edition["sha256"]
     observed = None
     if reached or claim_state == "PLANNED":
         scope_id = _canonical_sha([SCHEMA, binding["project_id"], binding["scope"]])

@@ -95,6 +95,13 @@ export function evidenceDetails(entry, cell, t, status) {
   append("temporal", entry.temporal_decision_id, true);
   append("registry", entry.registry_sha256, true);
   append("projection", entry.projection_policy_sha256 ?? entry.policy_sha256, true);
+  if (entry.evidence_state === "VALIDATED_DESCRIPTIVE") {
+    append("attributeRole", entry.metadata?.attribute_role);
+    append("sourceStatement", entry.metadata?.native_value);
+    append("publicationDate", entry.metadata?.publication_date);
+    append("eventDate", entry.metadata?.event_date_token);
+    append("attributePolicy", entry.metadata?.policy_sha256, true);
+  }
   return details;
 }
 

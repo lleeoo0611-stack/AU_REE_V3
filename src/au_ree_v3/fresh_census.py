@@ -231,7 +231,7 @@ def _enrich_cell(row, definition, metadata, has_resource):
         projection_policy_version=metadata.policy.version, projection_policy_sha256=metadata.policy.sha256,
     )
     supplied = metadata.cells.get((row["project_id"], row["column"]))
-    if supplied is not None and metadata_projection(definition) and row["value_origin"] in {"", "IDENTITY"}:
+    if supplied is not None and metadata.can_project(definition) and row["value_origin"] in {"", "IDENTITY"}:
         row.update(supplied)
     if row["value_origin"] == "FORMAL_SELECTION":
         row["evidence_state"] = "FORMAL_DIRECT"
@@ -322,6 +322,12 @@ def validate_projected_cell(cell, definition):
         raise ValueError("Census URL is not a public HTTPS reference")
     if definition["source_edition_required"] and not SHA256.fullmatch(cell["source_sha256"]):
         raise ValueError("Census projection lacks an exact source edition")
+    if cell["evidence_state"] == "VALIDATED_DESCRIPTIVE":
+        from .project_attributes import validate_attribute_cell
+
+        if not metadata_projection(definition, include_attributes=True) or definition["data_role"] != "VERIFIED_METADATA":
+            raise ValueError("Census attribute is outside its metadata projection")
+        validate_attribute_cell(cell)
     if cell["evidence_state"] in {"FORMAL_DIRECT", "FORMAL_DERIVED"}:
         if not cell["temporal_decision_id"] or cell["temporal_status"] != "ELIGIBLE":
             raise ValueError("formal Census cell requires a temporal decision")
@@ -411,8 +417,12 @@ def _receipt(out, axes, release_id, release_mode, cells, metadata, science_views
     if metadata is not None:
         receipt.update(
             schema_version=PROJECTION_SCHEMA, projection_policy_version=metadata.policy.version,
-            projection_policy_sha256=metadata.policy.sha256, coverage=coverage_report(cells, metadata.policy),
+            projection_policy_sha256=metadata.policy.sha256, coverage=coverage_report(
+                cells, metadata.policy, include_attributes=metadata.attribute_receipt is not None,
+            ),
         )
+        if metadata.attribute_receipt is not None:
+            receipt["attribute_assessments"] = metadata.attribute_receipt
     if science_views is not None:
         receipt["science_views"] = science_views
     if origins["FORMAL_DERIVED"]:

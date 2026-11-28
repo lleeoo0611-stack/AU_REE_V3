@@ -53,6 +53,8 @@ class ResearchProfile:
     project_count: int
     census_column_count: int
     sha256: str
+    attribute_bindings_path: Path | None = None
+    attribute_milestones_path: Path | None = None
 
 
 def _read(path: Path, version: str) -> tuple[dict, str]:
@@ -89,6 +91,9 @@ def load_profile(path: Path | str) -> ResearchProfile:
     profile_id = payload["profile_id"]
     if not isinstance(profile_id, str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]*", profile_id):
         raise ValueError("Profile ID must be a stable lowercase identifier")
+    attribute_inputs = {"attribute_bindings", "attribute_milestones"}
+    if attribute_inputs.intersection(inputs) not in (set(), attribute_inputs):
+        raise ValueError("Profile attribute bindings and milestone inputs must be pinned together")
     return ResearchProfile(
         profile_id=profile_id,
         research_cutoff=date.fromisoformat(payload["research_cutoff"]),
@@ -97,6 +102,10 @@ def load_profile(path: Path | str) -> ResearchProfile:
         source_catalog_path=_pinned_profile_path(path.parent, inputs["source_seed_catalog"]),
         census_columns_path=_pinned_profile_path(path.parent, inputs["census_columns"]),
         project_count=project_count, census_column_count=census_column_count, sha256=digest,
+        attribute_bindings_path=_pinned_profile_path(path.parent, inputs["attribute_bindings"])
+        if "attribute_bindings" in inputs else None,
+        attribute_milestones_path=_pinned_profile_path(path.parent, inputs["attribute_milestones"])
+        if "attribute_milestones" in inputs else None,
     )
 
 
