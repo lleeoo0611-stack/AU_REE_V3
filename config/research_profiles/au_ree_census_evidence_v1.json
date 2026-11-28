@@ -23,7 +23,7 @@
     },
     "oxide_derivation_policy": {
       "path": "census_oxide_derivations_v1.json",
-      "sha256": "3e873a59c8e6f73393bf3b2e83adf7499bf441224ce031025fdfe47e8886b3c0"
+      "sha256": "418b56a5e4af35f94a3b07bbc5d2309e30a175554b5c086a64faa6ecb82ec7ef"
     }
   },
   "legacy_replay": "LEGACY_DIAGNOSTIC_ONLY",

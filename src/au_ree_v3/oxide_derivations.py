@@ -7,10 +7,9 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from .comparability import MREO_BASIS, MREO_VARIABLE, composition_comparison, normalize_input, resource_bundle, resource_context
+from .comparability import MREO_BASIS, MREO_VARIABLE, normalize_input, resource_context, verify_reported_mreo_units
 from .contracts import ContractViolation, DerivedValue, ResearchRelease, canonical_json
 from .derivations import _calculate, _decimal_text, _measure
-from .fresh_decision import load_policy
 from .observations import digest
 from .research_inputs import RESOURCE_RULE, ResearchInput, checked_research_inputs
 
@@ -75,6 +74,7 @@ OXIDE_FORMULA_REGISTRY_SHA256 = digest({
     "version": OXIDE_POLICY_VERSION, "formula_sha256": FORMULA_SHA256,
     "source_review_sha256": SOURCE_REVIEW_SHA256, "input_selection_rule": RESOURCE_RULE,
     "rounding_policy": "independently-reported-last-digit-v1", "cross_source_join": False,
+    "aggregate_evidence": "original-scope-reported-mreo-v1",
 })
 
 _POLICY = {"schema_version": OXIDE_POLICY_VERSION, "formula_registry_sha256": OXIDE_FORMULA_REGISTRY_SHA256,
@@ -162,9 +162,9 @@ def _group_evidence(proof: dict) -> bool:
     companion = {**REVIEW["companion"], "version": "fixed-original-combined-oxide-table-review-v1",
                  **{key: REVIEW[key] for key in ("source_sha256", "scope", "effective_date", "cutoff")}}
     return _matches(proof, {
-        "method": "same-statement-reported-four-oxide-share-v1", "reported_definition": definition,
-        "component_tokens": {"MREO": aggregate["token"]}, "denominator_ppm": grade["token"],
-        "numerator_ppm": aggregate["token"], "treo_token": grade["token"], "treo_unit": grade["unit"],
+        "method": "original-scope-reported-mreo-v1", "reported_definition": definition,
+        "reported_group_token": aggregate["token"], "reported_group_unit": "ppm",
+        "treo_token": grade["token"], "treo_unit": grade["unit"], "oxide_species": list(MEMBERS),
         "input_observation_ids": [aggregate["observation_id"], grade["observation_id"]],
     }) and _matches(proof.get("reported_unit_evidence", {}), companion)
 
@@ -190,12 +190,9 @@ def assess_reported_mreo(inputs: tuple[ResearchInput, ...], release: ResearchRel
     selected = [item for item in inputs if item.raw.project_id == REVIEW["project_id"]]
     if any(item.raw.variable == OXIDE_VARIABLE for item in selected):
         return refused("DIRECT_REPORTED_MREO_MASS_TAKES_PRECEDENCE")
-    by_variable = {key: [item for item in selected if item.raw.variable == key] for key in (*INPUT_VARIABLES, "contained_treo_kt")}
+    by_variable = {key: [item for item in selected if item.raw.variable == key] for key in INPUT_VARIABLES}
     if any(len(by_variable[key]) != 1 for key in INPUT_VARIABLES):
         return refused("EXACT_ORE_TREO_AND_REPORTED_MREO_SELECTIONS_REQUIRED")
-    resources = resource_bundle(by_variable)
-    if not resources.comparable:
-        return refused(resources.reason)
     items = tuple(by_variable[key][0] for key in INPUT_VARIABLES)
     ore, grade, aggregate = items
     if any(resource_context(item) != resource_context(ore) for item in items):
@@ -203,10 +200,20 @@ def assess_reported_mreo(inputs: tuple[ResearchInput, ...], release: ResearchRel
     if (aggregate.raw.chemical_basis != MREO_BASIS or aggregate.candidate.chemical_basis != MREO_BASIS
             or any(item.raw.chemical_basis != "TREO" for item in (ore, grade))):
         return refused("EXACT_REPORTED_MREO_QUARTET_ROLE_REQUIRED")
-    # Reuse the published aggregate evidence check for units and component names.
-    # Only the aggregate observation enters the mass calculation and it cannot create component samples.
-    group = composition_comparison({MREO_VARIABLE: [aggregate]}, resources, load_policy()["s1_admission"])
-    if not group.comparable or not _group_evidence(group.derivation or {}):
+    payload = json.loads(aggregate.raw.original_payload)
+    species = payload.get("oxide_species")
+    if not isinstance(species, list) or not all(isinstance(item, str) for item in species):
+        return refused("REPORTED_MREO_DEFINITION_OR_COMPANION_EVIDENCE_UNBOUND")
+    units = verify_reported_mreo_units(aggregate, ore, grade, Decimal(REVIEW["selected_inputs"][1]["token"]))
+    group_evidence = {
+        "method": "original-scope-reported-mreo-v1",
+        "reported_definition": payload.get("oxide_definition"),
+        "reported_group_token": aggregate.raw.raw_value, "reported_group_unit": aggregate.raw.raw_unit,
+        "treo_token": grade.raw.raw_value, "treo_unit": grade.raw.raw_unit,
+        "input_observation_ids": [aggregate.raw.observation_id, grade.raw.observation_id],
+        "oxide_species": sorted(species), "reported_unit_evidence": units or {},
+    }
+    if not _group_evidence(group_evidence):
         return refused("REPORTED_MREO_DEFINITION_OR_COMPANION_EVIDENCE_UNBOUND")
     try:
         entries = tuple(_input(item, check, release) for item, check in zip(items, REVIEW["selected_inputs"], strict=True))
@@ -226,7 +233,7 @@ def assess_reported_mreo(inputs: tuple[ResearchInput, ...], release: ResearchRel
         "scope_filters": REVIEW["scope_filters"],
         "result_basis": "REPORTED_NAMED_GROUP", "value": value, "rounding_interval": interval,
         "output_variable": OXIDE_VARIABLE, "output_unit": FORMULA["output_unit"], "factor": FORMULA["factor"],
-        "inputs": list(entries), "dry_basis_review": REVIEW["dry_basis"], "group_evidence": group.derivation,
+        "inputs": list(entries), "dry_basis_review": REVIEW["dry_basis"], "group_evidence": group_evidence,
     }
     return json.loads(canonical_json({**proof, "assessment_id": digest(proof)}))
 

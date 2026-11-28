@@ -9,6 +9,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from au_ree_v3.census_derivations import REPORTED_MREO_COLUMN
 from au_ree_v3.contracts import ContractViolation, DerivedValue, ResearchRelease
@@ -120,6 +121,12 @@ class OriginalMreoStoreTests(unittest.TestCase):
         with self.store.transaction():
             self.assertEqual(persist_census_oxide(self.store, self.release), (approved,))
         self.assertEqual(self.store.integrity(), {"integrity_check":["ok"],"foreign_key_check":[]})
+
+    def test_mass_does_not_require_r1_inventory_or_the_mcda_policy(self):
+        restricted = tuple(item for item in self.inputs if item.raw.variable != "contained_treo_kt")
+        with patch("au_ree_v3.fresh_decision.load_policy", side_effect=AssertionError("MCDA policy accessed")):
+            assessment = assess_reported_mreo(restricted, self.release)
+        self.assertEqual((assessment["status"], assessment["value"]), ("APPROVED", "16.8"))
 
     def test_dimensional_scope_and_definitions_fail_closed(self):
         position = next(i for i,x in enumerate(self.inputs) if x.raw.variable=="mreo_ppm")
