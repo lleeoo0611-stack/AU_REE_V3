@@ -700,9 +700,22 @@ def _text_hints(claims, provenance):
     return grouped
 
 
-def _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, cutoff, views):
+def _cohort_quote_anchors(document, source_key, page, quotes):
     from .development import bind_native_quote
 
+    try:
+        return [bind_native_quote(document, source_key, page, quote, "ARCHIVED_TEXT_CANDIDATE") for quote in quotes]
+    except DocumentError:
+        # A heading or identifier may repeat on one page. Require a unique
+        # original paragraph containing the entire bundle of nominated phrases.
+        blocks = [block for block in document.blocks(page)
+                  if all(quote in " ".join(block.text.split()) for quote in quotes)]
+        if len(blocks) != 1:
+            raise
+    return [bind_native_quote(document, source_key, page, blocks[0].text, "ARCHIVED_TEXT_COLOCATED_QUOTE")]
+
+
+def _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, cutoff, views):
     records = {}
     holds = Counter()
     for sha, entries in _text_hints(claims, provenance).items():
@@ -722,8 +735,7 @@ def _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, c
             continue
         for (project, column, _, _), page, quotes in entries:
             try:
-                anchors = [bind_native_quote(document, source["source"].source_key, page, quote, "ARCHIVED_TEXT_CANDIDATE")
-                           for quote in quotes]
+                anchors = _cohort_quote_anchors(document, source["source"].source_key, page, quotes)
             except DocumentError as error:
                 holds[str(error)] += 1
                 continue

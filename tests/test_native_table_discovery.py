@@ -4,10 +4,11 @@ import os
 from pathlib import Path
 import unittest
 
-from au_ree_v3.documents import PDFDocument
+from au_ree_v3.documents import DocumentError, PDFDocument
 from au_ree_v3.native_table_discovery import discover_page_rows
 from au_ree_v3.native_table_work import (
-    _cohort_formula_checks, _legacy_cell, _legacy_page_cells, _recovered_cell, replay_legacy_source_lanes,
+    _cohort_formula_checks, _cohort_quote_anchors, _legacy_cell, _legacy_page_cells, _recovered_cell,
+    replay_legacy_source_lanes,
 )
 from au_ree_v3.resource_table_binding import bind_page_row
 
@@ -24,6 +25,15 @@ def document(*pages):
 
 
 class LegacySourceLaneTests(unittest.TestCase):
+    def test_repeated_marker_requires_a_unique_original_block(self):
+        text = ("Example issue heading", "", "Example issue published its Scoping Study", "as approved.")
+        pdf = document(text)
+        anchor, = _cohort_quote_anchors(pdf, "source", 1, ("Example issue", "Scoping Study"))
+        self.assertEqual(anchor.quote, "Example issue published its Scoping Study as approved.")
+        self.assertEqual(anchor.role, "ARCHIVED_TEXT_COLOCATED_QUOTE")
+        with self.assertRaises(DocumentError):
+            _cohort_quote_anchors(document((*text, "", *text)), "source", 1, ("Example issue", "Scoping Study"))
+
     def test_formula_check_retains_its_same_native_row_and_shadow_role(self):
         pdf = document(("Table 1 Synthetic Mineral Resource Estimate", HEADER, *BODY))
         edition = {"url": "https://publisher.invalid/resource.pdf", "edition_id": "historical",
