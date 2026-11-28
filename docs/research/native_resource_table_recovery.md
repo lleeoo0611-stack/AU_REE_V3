@@ -71,3 +71,42 @@ PYTHONPATH=src python -m au_ree_v3 research recover-historical-cohort \
 ```
 
 輸出各自使用新路徑。移除 `--geography` 可單獨重播來源、文件與公式。候選 SQLite 可用來執行附來源分組的 NLP 評估。 [分組訓練與留出](oxide_table_retrieval.md)
+
+## 逐格准入與原報展示
+
+以 PR #66 合併提交 `fb3b0aa6300f119623d7e6f282073adc5cc23c0c` 為基準，逐格核對 93 案、4,743 格、85 案的 472 個歷史候選格。其中 363 格在基準候選網站仍空白。同一份 SQLite 也找出 3 個獨立的原生欄位候選格。逐格收據各自列出 Census 展示、SQLite 正式選值及 MCDA 資格，記錄來源 SHA、原件定位、適用規則及第一個未通過的關卡。可用此收據查閱一格的所有原件路徑。各用途的關卡次序固定，格級摘要採用走到最遠的證據路徑。
+
+重用原有 Temporal Gate 及已驗證的同 SHA、同 Project 發行人擷取收據，將 212 個文字格中的 186 格核對為截日前可用。其餘 26 格仍缺合格公開證明。公開時間已確認的文字仍須核對欄義、主張角色及適用範圍。Charley Creek 的發行公告可定位到 Scoping Study 完成聲明，現行里程碑驗證器仍回傳 `NO_COMPLETION_OR_COMMENCEMENT_CLAIM`，因研究事件日期及受支援的完成句式未建立。
+
+逐份回讀 11 份同版原件的 12 個聲明表列及 70 個原始儲存位置。12 列均能從原件連到有名稱的資源表；其中 8 列的原報 cutoff、7 列的分類未達新增正式資源准入，兩組原因可能重疊。共有 15 個位置已可對到基準中的同一筆驗證觀測。Wolverine 的一個 (Y_2O_3) 位置仍有已登錄的精度衝突。欄位辨識已能區分同表、同為 ppm 的 TREO 與 TREO−CeO₂ 欄，也可讀取帶全名括註的 TREO 成員定義。Circle Valley 重綁出 890 ppm，Inferred-only 仍由現行驗證器拒絕正式採納。98 Mt 的偏移欄在嚴格路徑仍未綁定，430 ppm TREO−CeO₂ 的原報 cutoff 可查核，化學式下標仍會影響正式定位器。
+
+以原報表名、數字、單位、同版擷取及時間證據填入 3 格候選 Census 展示。Barkly 為 40 Mt，Brockman 為 41.6 Mt 與 0.20%。三格保留原報 Inferred 類別及候選狀態。正式科學採納新增 0，Census 正式科學格維持 22，MCDA 比較鍵維持 6，完整 R1＋S1 案維持 2，具完整六構面的案例仍為 0。全部 691 筆 V2 觀測線索的回讀及分組訓練見 [NLP 報告](oxide_table_retrieval.md)。
+
+| 472 個歷史候選格的首個正式選值關卡 | 格數 |
+| --- | ---: |
+| 欄義或用途相容性 | 338 |
+| 截日資格 | 78 |
+| JORC 類別 | 53 |
+| 估算有效日 | 2 |
+| 已有同一原件的選值，Goschen 礦量 | 1 |
+
+3 個新增展示格中，Barkly 屬原有 472 格，Brockman 兩格由原件表列讀回的相鄰數值獨立定位。正式 4,743 格比較含 4,677 格完全一致、66 格僅收據血緣改變。兩次候選 SQLite 回讀及兩次冷重播皆核對 SHA，F0–F4 通過，F5 因缺乏獨立故障域維持 `BLOCKED`。基準 `fb3b0aa` 補跑 Exact resource 及 Frozen reference integrity，後者核對封存參照與 Golden 時間稽核，V2 完整原件重播仍受阻。 [基準補跑](https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46180027612)
+
+相同候選母體的回讀兩次為 67.67／67.91 秒，峰值 136,112 KiB。基準回讀約 58 秒，舊新版分開量測。兩次研究冷重播為 21.44／19.56 秒。正式程式模組 72→73，靜態內部相依 352→362，AST Max/P90 維持 82／20，循環見證維持 1、跨模組完全重複函式群維持 3。候選版本 `1dafd509e5311250b168fafafa21ba382c1798973ec5f0e74005012f235db701` 固定程式提交 `407de5c171751c29734c9cb5b922465758a6d11f`。
+
+以固定 CAS、同版候選 SQLite、基準及新研究目錄重現。
+
+```sh
+PYTHONPATH=src python tools/audit_resource_statement_holds.py \
+  --profile "$PROFILE" --manifest "$SOURCES" --assets "$CAS" --build "$BUILD" \
+  --recovered-statements "$RECOVERY" "$CANDIDATE_SQLITE" tests/fixtures/historical_resource_statement_review_v1.json \
+  --out "$STATEMENT_REVIEW"
+
+PYTHONPATH=src python -m au_ree_v3 research audit-cohort-admission \
+  --recovery "$RECOVERY" --database "$CANDIDATE_SQLITE" \
+  --baseline-recovery "$BASELINE_RECOVERY" --baseline-build "$BASELINE_BUILD" \
+  --current-build "$BUILD" --baseline-display "$BASELINE_DISPLAY" --current-display "$DISPLAY" \
+  --statement-review "$STATEMENT_REVIEW" --out "$ADMISSION_RECEIPT"
+```
+
+候選網站由 `research build-display --historical-cohort "$RECOVERY" "$CANDIDATE_SQLITE"` 接入同版原件回讀。 [逐格機器收據](historical_cohort_admission_receipt_v1.json)
