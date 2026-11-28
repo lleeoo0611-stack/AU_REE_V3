@@ -1,0 +1,1051 @@
+{
+  "artifacts": [
+    {
+      "path": "work/scientific-admission/inventory-verified-a/source_case_inventory_receipt.json",
+      "sha256": "83376a17b7c6bd4dd1e543283dee29cc2d580fc41abcdf5355535c1513402ed0"
+    },
+    {
+      "path": "work/scientific-admission/inventory-verified-a/source_case_sha_receipt.json",
+      "sha256": "409c52c800f0c0c7c38ad4b8c3eb94cf518ebb90ff287f675cfdffefa8e8cb44"
+    },
+    {
+      "path": "work/scientific-admission/inventory-verified-a/source_recovery_gaps.json",
+      "sha256": "e903a324543766ad45fc0061ec7d1ef7fd5cc6cbb39be90a7a66e2c5da0d312e"
+    },
+    {
+      "path": "work/scientific-admission/binding-b-6fdb97f-run1/typed_candidate_observations.jsonl",
+      "sha256": "8e8f684b9d217326ac578b6061e0a623e13f98ae6f696fa11b5037c02c8fc521"
+    },
+    {
+      "path": "work/scientific-admission/binding-b-6fdb97f-run1/unbound_numeric_tokens.jsonl",
+      "sha256": "bee20b74ce7809e5676bbd0965f36dd6768fad8a5f8cdb6f1fc4157883534917"
+    },
+    {
+      "path": "work/scientific-admission/binding-b-6fdb97f-run1/table_binding_receipt.json",
+      "sha256": "604c62a572b1a2b7c6380e47337d903ef5a73aa181d7708ca6a591c43e8dbd64"
+    },
+    {
+      "path": "work/scientific-admission/binding-b-6fdb97f-run1/value_evidence_lineage.jsonl",
+      "sha256": "f09a4f264ba5aa45a480855543aba87d73161759f3a7c36786fb0daf960e7221"
+    },
+    {
+      "path": "work/scientific-admission/binding-b-final-performance.json",
+      "sha256": "ba18f9cbe8b84edb25f68f6d56f82941f00b774c65d1761cfbca9285013800c3"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/build/observations/admission_decisions.jsonl",
+      "sha256": "bfade10c03a61cd7553d80fceed0f199769d8c9a7ab55175f66806f389b9b4db"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/build/observations/scientific_conflicts.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/browser-exact-native-values.json",
+      "sha256": "2cd7411c38ea0404ad2d49007dcf8f046dbd4fd45a515677badd2a6e319c6f3e"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/independent-science/release_audit.json",
+      "sha256": "fc7c46758c692a34d846f834f8f8c43dddf813ce947fbc38455521271d58eba8"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/independent-native-verification.json",
+      "sha256": "339c247d51e11d788fbb26b55e98bc70d3e7a0f0622072a4f308bbaac0405cdb"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/cold-a/replay_receipt.json",
+      "sha256": "57cab5a2caa71e9c706544df128a871383ff84942c7ecb72c1dd42406f391cba"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/cold-b/replay_receipt.json",
+      "sha256": "1ec513b464fb92086f28dbdf0031d223191144713224692868a890840f8d6a54"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/delta/census_delta.csv",
+      "sha256": "f700b3754ffb59e324b3f932c793f9acde8166a34be54684fc09e9ae24c1d570"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/delta/cohort_and_mcda.json",
+      "sha256": "24650c6db70ba0834fb39b8fce5e982baab4cb6ac87cab926c23b18c8155f33d"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/delta/comparability_delta.json",
+      "sha256": "10ad9f4600f4a6c6c8e3b4b3f3ff633190484c46d54d9c63089fd32d8b858b9a"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/delta/release_and_replay.json",
+      "sha256": "930022a638eb4246cd05af14f708173a355dd35ec560d6f6ca6fe483118835ed"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388/verify-site/site_verification.json",
+      "sha256": "5f4352c3e94a7d0f2ffdf51f296ec0755884196ae8e412c650fbedb1fe94f36e"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388-faults/candidate_faults_receipt.json",
+      "sha256": "a681c9d27fc2fc47bc0e7685dfeae905c24922cdd18fcefb878bc2065ddb3062"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388-scientific-faults/scientific_fault_verified.json",
+      "sha256": "d38bd1506488cc6a6ea2e51070e3d765f6e3bfa830701d5ce6b288836e8c37e3"
+    },
+    {
+      "path": "work/scientific-yield-independent/revision-d114c388-corrupt-cas/corrupt_cas_receipt.json",
+      "sha256": "63dd617960602aead79e58fcb5b3441472a6a0321493ed7d7519c089461bd3b8"
+    },
+    {
+      "path": "work/scientific-admission/heldout-family-review/heldout_family_review_receipt.json",
+      "sha256": "843d8f2cd1be42bd3981e58e182055c205ed4982d87440c82887ecd50adc2a2e"
+    },
+    {
+      "path": "work/scientific-yield-independent/heldout-binding-91c97fc.json",
+      "sha256": "5dd80e3ae62ca1a9f02b61cd38492df57dda4f87e76c461b679b7e4867b772a8"
+    },
+    {
+      "path": "work/scientific-admission/reference-review/scientific_conflicts_review_receipt.json",
+      "sha256": "0a56247edb9cf683b405c03ef6457393421aaaaa94617b134bbef205d9852515"
+    },
+    {
+      "path": "work/scientific-yield-independent/old-shadow-cold/shadow_replay_receipt.json",
+      "sha256": "e8cbd70ef174729888109a6f907cbfc1268712dd51a00900def468803ecc4595"
+    },
+    {
+      "path": "work/scientific-admission/reference-review/scientific_conflicts.jsonl",
+      "sha256": "dc7faffb268afc017d399bbacbf926b4ad418801a962629c5387048d1c6e4f5b"
+    },
+    {
+      "path": "work/scientific-admission/scientific-yield-preview-de50379.zip",
+      "sha256": "711818bd65aaa8ae5e480866d85fe1feb729a27d79ff2dffe6a4fdb98a4adf63"
+    },
+    {
+      "path": "work/scientific-yield-independent/d114c388-v4-document-cache/cache_workload_receipt.json",
+      "sha256": "64e10b24cde199508056de2ba7bbc913b90af359d0ac531cf526827355e54d06"
+    }
+  ],
+  "baseline_commit": "704de116e0d1bb5acc067855ab023826b5ee7d24",
+  "candidate_code_commit": "d114c388440ad7db9b1b3de25d3e7646d4a84953",
+  "candidate_release_id": "de50379f50e49fdd74ac536deb51b8b03dade8f442565644564c5cef1f2a17ef",
+  "checks": {
+    "exact_all_original_suite": {
+      "path": "work/scientific-yield/d114c38-full-exact-tests.log",
+      "run": 288,
+      "sha256": "cd1cea9e0dbdf61880c1deb2aad4a27eed14a742f36fdde9ad7a951378728e7f",
+      "skipped": 0,
+      "wall_seconds": 42.626
+    },
+    "independent_holdout_auto_binding": [
+      {
+        "FN": 9,
+        "FP": 0,
+        "TN": 11,
+        "TP": 1
+      },
+      {
+        "FN": 30,
+        "FP": 0,
+        "TP": 1
+      }
+    ],
+    "independent_holdout_statement_formal_precision_and_recall": "UNMEASURED"
+  },
+  "cold_replay": {
+    "current_runs": [
+      {
+        "elapsed_seconds": 9.614386768000259,
+        "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+        "receipt_sha256": "57cab5a2caa71e9c706544df128a871383ff84942c7ecb72c1dd42406f391cba",
+        "reported_F4": "PASS",
+        "status": "PASS",
+        "verified_output_count": 8,
+        "verified_outputs": {
+          "census/cell_status.csv": "4ab2dae609dc8e827b1d7079e5068185ed4b844ef8ac0b9ef82e3f6ccfac0c2e",
+          "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+          "census/census_receipt.json": "6fae6084b310d0f5714777e0780a1814303bb2d229f69a88a700e0c659c46edc",
+          "decision/decision_receipt.json": "692183297bb005af62df3ced043564f54eb765f6279907324bcd3d53e0b35d84",
+          "decision/mcda_inputs.json": "8d24545a7d1109f2ede71ab2de5120fabc3b205fc2ec628a8570cdb1a9862b68",
+          "decision/mcda_results.json": "75c70b44b3755784544529302b13882c1e32c6c8f6fe6fd8ad1748d2ba560539",
+          "observations/extraction.json": "9a250e7f4523b4cb08dcca4f94c6fd6057c0f2c296c6a0421cacbae647b702a8",
+          "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+        }
+      },
+      {
+        "elapsed_seconds": 9.03213563799909,
+        "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+        "receipt_sha256": "1ec513b464fb92086f28dbdf0031d223191144713224692868a890840f8d6a54",
+        "reported_F4": "PASS",
+        "status": "PASS",
+        "verified_output_count": 8,
+        "verified_outputs": {
+          "census/cell_status.csv": "4ab2dae609dc8e827b1d7079e5068185ed4b844ef8ac0b9ef82e3f6ccfac0c2e",
+          "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+          "census/census_receipt.json": "6fae6084b310d0f5714777e0780a1814303bb2d229f69a88a700e0c659c46edc",
+          "decision/decision_receipt.json": "692183297bb005af62df3ced043564f54eb765f6279907324bcd3d53e0b35d84",
+          "decision/mcda_inputs.json": "8d24545a7d1109f2ede71ab2de5120fabc3b205fc2ec628a8570cdb1a9862b68",
+          "decision/mcda_results.json": "75c70b44b3755784544529302b13882c1e32c6c8f6fe6fd8ad1748d2ba560539",
+          "observations/extraction.json": "9a250e7f4523b4cb08dcca4f94c6fd6057c0f2c296c6a0421cacbae647b702a8",
+          "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+        }
+      }
+    ],
+    "pinned_scientific_sha256": {
+      "census/cell_status.csv": "4ab2dae609dc8e827b1d7079e5068185ed4b844ef8ac0b9ef82e3f6ccfac0c2e",
+      "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+      "census/census_receipt.json": "6fae6084b310d0f5714777e0780a1814303bb2d229f69a88a700e0c659c46edc",
+      "decision/decision_receipt.json": "692183297bb005af62df3ced043564f54eb765f6279907324bcd3d53e0b35d84",
+      "decision/mcda_inputs.json": "8d24545a7d1109f2ede71ab2de5120fabc3b205fc2ec628a8570cdb1a9862b68",
+      "decision/mcda_results.json": "75c70b44b3755784544529302b13882c1e32c6c8f6fe6fd8ad1748d2ba560539",
+      "observations/extraction.json": "9a250e7f4523b4cb08dcca4f94c6fd6057c0f2c296c6a0421cacbae647b702a8",
+      "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+    },
+    "prior_runs": [
+      {
+        "path": "work/scientific-yield-independent/baseline-704de11/cold-a/replay_receipt.json",
+        "sha256": "6ed44cf5f004b832845d2635326dc23fc51fad62250b8f45f962bd86a1a55c18",
+        "status": "PASS"
+      },
+      {
+        "path": "work/scientific-yield-independent/baseline-704de11/cold-b/replay_receipt.json",
+        "sha256": "fccc05065f94be628c92f850bd19fc23e9b98a9ba47c36cd25dc97724dc156a6",
+        "status": "PASS"
+      }
+    ]
+  },
+  "engineering": {
+    "billing_or_long_term_maintenance": "UNMEASURED",
+    "browser": {
+      "chromium": "156.0.8078.79",
+      "corpus": "EXACT_RESEARCH_PREVIEWS",
+      "metrics": {
+        "browser_history_load_wall_ms": 420,
+        "browser_js_heap_used_bytes": 8485288,
+        "browser_load_census_wall_ms": 393,
+        "exact_new_census_evidence_dialogs": 4,
+        "formal_pointer_rejects_candidate": "PASS",
+        "history_csv_update_link": "PASS",
+        "map_ree_mcda_language": "PASS",
+        "mixed_cache_missing_atomic": "PASS",
+        "mobile": "PASS",
+        "no_formal_pointer": "PASS",
+        "rehashed_unqualified_pin_rank_lineage": "PASS",
+        "search_filter_sort_columns_evidence": "PASS",
+        "xss_and_source_link": "PASS"
+      },
+      "runtime": "v24.22.3",
+      "status": "PASS",
+      "versions": [
+        "de50379f50e49fdd74ac536deb51b8b03dade8f442565644564c5cef1f2a17ef",
+        "200a950a0c257bca4698c6fe71bfab9fc3f724f55980bb658a54cca1f4b7311b"
+      ]
+    },
+    "candidate_and_cold_replay": {
+      "baseline": {
+        "build": {
+          "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+          "exit_code": 0,
+          "peak_rss_kib": 59964,
+          "system_seconds": 0.472848,
+          "user_seconds": 1.658693,
+          "wall_seconds": 2.487115886000538
+        },
+        "cold-a": {
+          "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+          "exit_code": 0,
+          "peak_rss_kib": 59736,
+          "system_seconds": 2.441892,
+          "user_seconds": 4.225653,
+          "wall_seconds": 6.678735683999548
+        },
+        "cold-b": {
+          "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+          "exit_code": 0,
+          "peak_rss_kib": 59744,
+          "system_seconds": 1.839127,
+          "user_seconds": 4.189465,
+          "wall_seconds": 6.050144435999755
+        }
+      },
+      "candidate": {
+        "build": {
+          "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+          "exit_code": 0,
+          "peak_rss_kib": 92224,
+          "system_seconds": 0.503421,
+          "user_seconds": 2.515687,
+          "wall_seconds": 2.9807573709986173
+        },
+        "cold-a": {
+          "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+          "exit_code": 0,
+          "peak_rss_kib": 91700,
+          "system_seconds": 3.586979,
+          "user_seconds": 6.158779,
+          "wall_seconds": 9.741225998001028
+        },
+        "cold-b": {
+          "cache": "fresh child process; Linux filesystem page cache uncontrolled",
+          "exit_code": 0,
+          "peak_rss_kib": 91700,
+          "system_seconds": 3.225389,
+          "user_seconds": 6.07164,
+          "wall_seconds": 9.280032021000807
+        }
+      }
+    },
+    "expanded_workload": {
+      "comparison": {
+        "baseline": {
+          "AST_branch_score_max": 79,
+          "AST_branch_score_p90": 20,
+          "cross_module_exact_repeated_body_groups": 1,
+          "python_peak_rss_median_kib": 61384,
+          "reached_functions": 207,
+          "reached_modules": 25,
+          "runtime_internal_edges": 56,
+          "static_internal_edges": 74,
+          "wall_median_seconds": 2.042269261999536
+        },
+        "current": {
+          "AST_branch_score_max": 119,
+          "AST_branch_score_p90": 20,
+          "cross_module_exact_repeated_body_groups": 1,
+          "python_peak_rss_median_kib": 93624,
+          "reached_functions": 265,
+          "reached_modules": 26,
+          "runtime_internal_edges": 64,
+          "static_internal_edges": 87,
+          "wall_median_seconds": 3.405278651000117
+        }
+      },
+      "path": "work/scientific-yield-independent/engineering-d114c388-v4/engineering_comparison.json",
+      "sha256": "a7bc660267d9196aa2b3e289c7a3b754337987e5afeb210cb6ea53d1471e15b6",
+      "status": "MEASURED"
+    },
+    "instrumented_workload": {
+      "baseline": {
+        "binding_sha256": "7eab84d027e772052e314590ebb62e29f2950944e67573ebb0a5703cf707c899",
+        "code_commit": "704de116e0d1bb5acc067855ab023826b5ee7d24",
+        "decoded_pages": 49,
+        "distinct_pdfs": 6,
+        "elapsed_seconds_under_instrumentation": 1.9794916989994817,
+        "note": "Actual native PDF opens before OCR; DocumentCache fresh; image extraction subprocesses and OS page cache separate; count includes BEGIN and COMMIT.",
+        "output_counts": {
+          "candidate_count": 38,
+          "selected_count": 17,
+          "validated_count": 23
+        },
+        "pdf_decodes": [
+          {
+            "pages_decoded": 2,
+            "requested_last_page": 2,
+            "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503"
+          },
+          {
+            "pages_decoded": 6,
+            "requested_last_page": 6,
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0"
+          },
+          {
+            "pages_decoded": 11,
+            "requested_last_page": 11,
+            "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5"
+          },
+          {
+            "pages_decoded": 3,
+            "requested_last_page": 3,
+            "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864"
+          },
+          {
+            "pages_decoded": 12,
+            "requested_last_page": 12,
+            "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0"
+          },
+          {
+            "pages_decoded": 15,
+            "requested_last_page": 15,
+            "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb"
+          }
+        ],
+        "pdf_opens": 6,
+        "schema": "scientific-yield-instrumented-workload-v1",
+        "science_artifacts": {
+          "census/cell_status.csv": "500dfd51a27889586f45327b9255aa632f8f99e6a928ab18e4d6179a3fef8fdb",
+          "census/census.csv": "77599d4697c1d157f245e4e68c4ac193bf8d78519e131b032b53055135465bd3",
+          "census/census_receipt.json": "992953e0880d8ff94fb8ac238cf48d3af7db6c734df69d5f3e9d9643447b79f0",
+          "decision/decision_receipt.json": "f22e7833f459557db2eca54b171461a0c806029750d29cfea729c28bef34e44b",
+          "decision/mcda_inputs.json": "28a77340110f7c05b7547a33754e39048dd184cac94d328b8715af846d8df56f",
+          "decision/mcda_results.json": "ab5bbe6e9281f5523449353d1fba886e67ab10b47175dd463c786224ce1a5e38",
+          "observations/extraction.json": "e74908891868f4e771eda47cfe284788396e0c95aeff39d31128ffe75029207a",
+          "observations/observations.jsonl": "0c5958adcb70c2798f72aa5ed56fcfe2ee05f7a2d672bfc614b3fb14077a5ce3"
+        },
+        "scope": "separate instrumentation run",
+        "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+        "sqlite_statements": {
+          "BEGIN": 3,
+          "COMMIT": 3,
+          "CREATE": 22,
+          "INSERT": 284,
+          "PRAGMA": 12,
+          "SELECT": 1829
+        },
+        "total_sqlite_statements": 2153
+      },
+      "candidate": {
+        "binding_sha256": "cb4f92a8cc50c03decb2c1923e04818b9d3e87848f05d39625be680273bdd17c",
+        "code_commit": "d114c388440ad7db9b1b3de25d3e7646d4a84953",
+        "decoded_pages": 224,
+        "distinct_pdfs": 8,
+        "elapsed_seconds_under_instrumentation": 3.4162234909999825,
+        "note": "Actual native PDF opens before OCR; DocumentCache fresh; image extraction subprocesses and OS page cache separate; count includes BEGIN and COMMIT.",
+        "output_counts": {
+          "candidate_count": 42,
+          "selected_count": 21,
+          "validated_count": 27
+        },
+        "pdf_decodes": [
+          {
+            "pages_decoded": 2,
+            "requested_last_page": 2,
+            "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503"
+          },
+          {
+            "pages_decoded": 6,
+            "requested_last_page": 6,
+            "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0"
+          },
+          {
+            "pages_decoded": 11,
+            "requested_last_page": 11,
+            "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5"
+          },
+          {
+            "pages_decoded": 3,
+            "requested_last_page": 3,
+            "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864"
+          },
+          {
+            "pages_decoded": 12,
+            "requested_last_page": 12,
+            "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0"
+          },
+          {
+            "pages_decoded": 15,
+            "requested_last_page": 15,
+            "source_sha256": "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb"
+          },
+          {
+            "pages_decoded": 39,
+            "requested_last_page": 39,
+            "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e"
+          },
+          {
+            "pages_decoded": 136,
+            "requested_last_page": 136,
+            "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491"
+          }
+        ],
+        "pdf_opens": 8,
+        "schema": "scientific-yield-instrumented-workload-v1",
+        "science_artifacts": {
+          "census/cell_status.csv": "4ab2dae609dc8e827b1d7079e5068185ed4b844ef8ac0b9ef82e3f6ccfac0c2e",
+          "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+          "census/census_receipt.json": "6fae6084b310d0f5714777e0780a1814303bb2d229f69a88a700e0c659c46edc",
+          "decision/decision_receipt.json": "692183297bb005af62df3ced043564f54eb765f6279907324bcd3d53e0b35d84",
+          "decision/mcda_inputs.json": "8d24545a7d1109f2ede71ab2de5120fabc3b205fc2ec628a8570cdb1a9862b68",
+          "decision/mcda_results.json": "75c70b44b3755784544529302b13882c1e32c6c8f6fe6fd8ad1748d2ba560539",
+          "observations/extraction.json": "9a250e7f4523b4cb08dcca4f94c6fd6057c0f2c296c6a0421cacbae647b702a8",
+          "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+        },
+        "scope": "separate instrumentation run",
+        "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+        "sqlite_statements": {
+          "BEGIN": 3,
+          "COMMIT": 3,
+          "CREATE": 22,
+          "INSERT": 322,
+          "PRAGMA": 12,
+          "SELECT": 2225
+        },
+        "total_sqlite_statements": 2587
+      }
+    },
+    "same_workload": {
+      "comparison": {
+        "baseline": {
+          "AST_branch_score_max": 79,
+          "AST_branch_score_p90": 20,
+          "cross_module_exact_repeated_body_groups": 1,
+          "python_peak_rss_median_kib": 61132,
+          "reached_functions": 207,
+          "reached_modules": 25,
+          "runtime_internal_edges": 56,
+          "static_internal_edges": 74,
+          "wall_median_seconds": 1.8690723319996323
+        },
+        "current": {
+          "AST_branch_score_max": 119,
+          "AST_branch_score_p90": 20,
+          "cross_module_exact_repeated_body_groups": 1,
+          "python_peak_rss_median_kib": 61704,
+          "reached_functions": 211,
+          "reached_modules": 26,
+          "runtime_internal_edges": 57,
+          "static_internal_edges": 87,
+          "wall_median_seconds": 1.879722080000647
+        }
+      },
+      "path": "work/scientific-yield-independent/engineering-d114c388-v3/engineering_comparison.json",
+      "sha256": "3e702b2ec078b79b31052433b3630b9b94c4f0aa5e0989a349dbe7fd26ba5f26",
+      "status": "PASS"
+    }
+  },
+  "fixed_scope": {
+    "columns": 51,
+    "eligible_public_captures": 148,
+    "physical_sources": 144,
+    "projects": 93
+  },
+  "gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED",
+    "SY0": "PASS",
+    "SY1": "PASS",
+    "SY2": "PASS",
+    "SY3": "PASS",
+    "SY4": "PASS",
+    "SY5": "PASS",
+    "frozen_O4_replay": "PASS",
+    "historical_O2": "FAIL"
+  },
+  "git": {
+    "integrations": [
+      {
+        "ci": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46086834438",
+        "code": "a2e77572",
+        "exact_resource_integration": "PASS",
+        "frozen_reference_job": "NOT_RUN",
+        "pr": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/24",
+        "static_and_unit": "PASS"
+      },
+      {
+        "ci": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46087655360",
+        "code": "704de116",
+        "exact_resource_integration": "PASS",
+        "frozen_reference_job": "NOT_RUN",
+        "pr": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/25",
+        "static_and_unit": "PASS"
+      },
+      {
+        "ci": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46089186246",
+        "code": "2f3682384c09eb8191f97301efdd7f31d576db80",
+        "exact_resource_integration": "PASS",
+        "frozen_reference_job": "NOT_RUN",
+        "pr": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/26",
+        "static_and_unit": "PASS"
+      },
+      {
+        "ci": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46090161846",
+        "code": "91c97fc06a97e31d585e56c476ccd915df69355e",
+        "exact_resource_integration": "PASS",
+        "frozen_reference_job": "NOT_RUN",
+        "pr": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/27",
+        "static_and_unit": "PASS"
+      },
+      {
+        "ci": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46090316171",
+        "code": "d114c388440ad7db9b1b3de25d3e7646d4a84953",
+        "exact_resource_integration": "PASS",
+        "frozen_reference_job": "NOT_RUN",
+        "pr": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/28",
+        "static_and_unit": "PASS"
+      }
+    ],
+    "merged_files": [],
+    "new_immutable_archives": [
+      "200a950a0c257bca4698c6fe71bfab9fc3f724f55980bb658a54cca1f4b7311b",
+      "de50379f50e49fdd74ac536deb51b8b03dade8f442565644564c5cef1f2a17ef"
+    ],
+    "removed_files": [],
+    "tracked_files": [
+      {
+        "change": "MODIFIED",
+        "path": ".github/workflows/migration.yml",
+        "reason": "Run exact-verified Jupiter and North Stanmore originals in resource integration CI."
+      },
+      {
+        "change": "ADDED",
+        "path": "config/research_profiles/resource_bindings_v4.json",
+        "reason": "Version exact-source context and authorized Census use with the pinned research inputs."
+      },
+      {
+        "change": "ADDED",
+        "path": "docs/research/scientific_value_admission.md",
+        "reason": "Record the methods, results, scientific exceptions and immutable evidence links."
+      },
+      {
+        "change": "ADDED",
+        "path": "docs/research/scientific_value_admission_receipt.json",
+        "reason": "Record the methods, results, scientific exceptions and immutable evidence links."
+      },
+      {
+        "change": "ADDED",
+        "path": "docs/research/source_case_inventory.md",
+        "reason": "Record the methods, results, scientific exceptions and immutable evidence links."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/census_science.py",
+        "reason": "Expose direct scoped pairs and derived contained shadows without MCDA promotion."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/cli.py",
+        "reason": "Dispatch the existing research command to native table binding."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/comparability.py",
+        "reason": "Reuse the strict reported inventory interval and native scope and precision."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/composition_review.py",
+        "reason": "Verify multi-image chemistry against exact original bitmap fingerprints."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/fresh_census.py",
+        "reason": "Project exact Census-only resource values and native precision."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/fresh_observations.py",
+        "reason": "Verify, store and audit provenance and authorized native uses."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/normalization.py",
+        "reason": "Recognize exact units and issuer-reported significant figures."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/research_inputs.py",
+        "reason": "Enforce Census-only use after full accepted release provenance validation."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/resource_extraction.py",
+        "reason": "Build exact native resource statements through the existing strategy interface."
+      },
+      {
+        "change": "ADDED",
+        "path": "src/au_ree_v3/resource_table_binding.py",
+        "reason": "Bind native columns, units, row identities, and positions without scientific adoption."
+      },
+      {
+        "change": "ADDED",
+        "path": "src/au_ree_v3/source_case_inventory.py",
+        "reason": "Verify frozen source bytes and inventory native positions and historical gaps."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "src/au_ree_v3/store.py",
+        "reason": "Reject a mismatch between declared evidence use and accepted purpose."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/fixtures/native_resource_v1/acquisition_manifest.json",
+        "reason": "Freeze the two exact issuer editions used by original-source tests."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/fixtures/native_resource_v1/captures/3df5436d06eafadbddcfd59b12401b47f19de724394f19bedb9245c9ecb4e9d2.json",
+        "reason": "Pin the original anonymous capture receipt and temporal proof."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/fixtures/native_resource_v1/captures/dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322.json",
+        "reason": "Pin the original anonymous capture receipt and temporal proof."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/fixtures/native_resource_v1/expected_census.json",
+        "reason": "Freeze independently annotated values, scopes and raw precision."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/test_native_resource_positives.py",
+        "reason": "Exercise provenance, native quantities, purpose guards or release projection regressions."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "tests/test_research_inputs.py",
+        "reason": "Exercise provenance, native quantities, purpose guards or release projection regressions."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/test_resource_table_binding.py",
+        "reason": "Exercise provenance, native quantities, purpose guards or release projection regressions."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/test_scoped_resource_admission.py",
+        "reason": "Exercise provenance, native quantities, purpose guards or release projection regressions."
+      },
+      {
+        "change": "ADDED",
+        "path": "tests/test_source_case_inventory.py",
+        "reason": "Exercise provenance, native quantities, purpose guards or release projection regressions."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "tests/test_web_publication.py",
+        "reason": "Exercise provenance, native quantities, purpose guards or release projection regressions."
+      },
+      {
+        "change": "MODIFIED",
+        "path": "tools/evaluate_semantic_resource_holdout.py",
+        "reason": "Preserve historical O3 design partition while current SY holdout remains independent."
+      },
+      {
+        "change": "ADDED",
+        "path": "tools/verify_native_resource_values.py",
+        "reason": "Independently re-read original coordinates and check the frozen Census Oracle."
+      }
+    ]
+  },
+  "observations": {
+    "after": {
+      "candidate_count": 42,
+      "selected_count": 21,
+      "validated_count": 27
+    },
+    "before": {
+      "candidate_count": 38,
+      "selected_count": 17,
+      "validated_count": 23
+    }
+  },
+  "prior_release_id": "200a950a0c257bca4698c6fe71bfab9fc3f724f55980bb658a54cca1f4b7311b",
+  "release_status": "RESEARCH_CANDIDATE",
+  "research_cutoff": "2026-11-28",
+  "schema": "scientific-value-admission-verification-v1",
+  "scientific_delta": {
+    "Census_filled": {
+      "after": 1108,
+      "before": 1104
+    },
+    "Census_science": {
+      "after": 16,
+      "before": 12
+    },
+    "Census_science_loss": 0,
+    "census_delta_counts": {
+      "CONTEXT_OR_REASON_CHANGED": 52,
+      "FORMAL_ADDED": 4,
+      "PROVENANCE_RECEIPT_CHANGED": 16,
+      "UNCHANGED": 4671
+    },
+    "complete_composition_cohort": {
+      "after": 2,
+      "before": 2
+    },
+    "criterion_keys": {
+      "R1": 4,
+      "S1": 2,
+      "after": 6,
+      "before": 6
+    },
+    "legacy_comparison_target": "EVIDENCE_INSUFFICIENT",
+    "new_contained_shadows": 2,
+    "new_direct": 4,
+    "new_formal_derived": 0,
+    "ranking_or_sensitivity_changed": false,
+    "science_gain_challenge": "ACHIEVED_BY_CENSUS_CELLS",
+    "tested_false_formal_admissions": 0,
+    "verified_new_observations": [
+      {
+        "category": "INDICATED_INFERRED_TOTAL",
+        "chemical_basis": "TREO",
+        "column": "Tonnes",
+        "coordinates": {
+          "end_column": 123,
+          "line": 11,
+          "locator": "PDF page 4, line 11, columns 121-123",
+          "physical_page": 4,
+          "start_column": 121,
+          "text": "1.7"
+        },
+        "cutoff": [
+          "1000",
+          "ppm",
+          "TREO"
+        ],
+        "effective_date": "2026-09",
+        "formula": "raw_value * normalization_factor",
+        "material_basis": "WHOLE_ORE",
+        "normalization_factor": "1000",
+        "normalized_unit": "Mt",
+        "normalized_value": "1700",
+        "observation_id": "a5adc1623553722b5f5cbf8930351c99624e9b44d049649dd97f42028be30ddc",
+        "physical_page": 4,
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "publication_date": "2026-10-12",
+        "quantity_kind": "ore_mt",
+        "raw_rounding_interval": [
+          "1.65",
+          "1.75"
+        ],
+        "raw_token": "1.7",
+        "raw_unit": "Bt",
+        "reporting_standard": "JORC 2012",
+        "row": "Total",
+        "scope": "Jupiter Mineral Resource September 2026 Total",
+        "scope_id": "2a909fca28c88c5d5a2ea7157f7ad4cd43272bd2c09c021a0233b76a7096e625",
+        "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf",
+        "statement_id": "e13a8e719360c76a6ea09dc502d27c6cf02d5353318827d96c38fe66f94a7daa",
+        "table": "Table 2 | Comparison of February 2025 and updated Jupiter Mineral Resource Estimates at 1,000 ppm TREO cut-off grade",
+        "temporal_decision_id": "cba9006d540e261745d76c918ec9dab7e3d69bf578914c4035452ee5627f45e2",
+        "treo_members": [
+          "CeO2",
+          "Dy2O3",
+          "Er2O3",
+          "Eu2O3",
+          "Gd2O3",
+          "Ho2O3",
+          "La2O3",
+          "Lu2O3",
+          "Nd2O3",
+          "Pr6O11",
+          "Sm2O3",
+          "Tb4O7",
+          "Tm2O3",
+          "Y2O3",
+          "Yb2O3"
+        ],
+        "versioned_use_policy": "approved-census-resource-observation-v1"
+      },
+      {
+        "category": "INDICATED_INFERRED_TOTAL",
+        "chemical_basis": "TREO",
+        "column": "TREO (ppm)",
+        "coordinates": {
+          "end_column": 147,
+          "line": 11,
+          "locator": "PDF page 4, line 11, columns 143-147",
+          "physical_page": 4,
+          "start_column": 143,
+          "text": "1,700"
+        },
+        "cutoff": [
+          "1000",
+          "ppm",
+          "TREO"
+        ],
+        "effective_date": "2026-09",
+        "formula": "raw_value * normalization_factor",
+        "material_basis": "WHOLE_ORE",
+        "normalization_factor": "1",
+        "normalized_unit": "ppm",
+        "normalized_value": "1700",
+        "observation_id": "35b70af79dc135a8b53c3ba1e96a24b6c52e9263803660d4ac062b9891095fdc",
+        "physical_page": 4,
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "publication_date": "2026-10-12",
+        "quantity_kind": "grade",
+        "raw_rounding_interval": [
+          "1650",
+          "1750"
+        ],
+        "raw_token": "1,700",
+        "raw_unit": "ppm",
+        "reporting_standard": "JORC 2012",
+        "row": "Total",
+        "scope": "Jupiter Mineral Resource September 2026 Total",
+        "scope_id": "2a909fca28c88c5d5a2ea7157f7ad4cd43272bd2c09c021a0233b76a7096e625",
+        "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf",
+        "statement_id": "e13a8e719360c76a6ea09dc502d27c6cf02d5353318827d96c38fe66f94a7daa",
+        "table": "Table 2 | Comparison of February 2025 and updated Jupiter Mineral Resource Estimates at 1,000 ppm TREO cut-off grade",
+        "temporal_decision_id": "cba9006d540e261745d76c918ec9dab7e3d69bf578914c4035452ee5627f45e2",
+        "treo_members": [
+          "CeO2",
+          "Dy2O3",
+          "Er2O3",
+          "Eu2O3",
+          "Gd2O3",
+          "Ho2O3",
+          "La2O3",
+          "Lu2O3",
+          "Nd2O3",
+          "Pr6O11",
+          "Sm2O3",
+          "Tb4O7",
+          "Tm2O3",
+          "Y2O3",
+          "Yb2O3"
+        ],
+        "versioned_use_policy": "approved-census-resource-observation-v1"
+      },
+      {
+        "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+        "chemical_basis": "TREO",
+        "column": "Tonnes (Mt)",
+        "coordinates": {
+          "end_column": 69,
+          "line": 28,
+          "locator": "PDF page 97, line 28, columns 64-69",
+          "physical_page": 97,
+          "start_column": 64,
+          "text": "278.80"
+        },
+        "cutoff": [
+          "300",
+          "ppm",
+          "TREO"
+        ],
+        "effective_date": "2026-08",
+        "formula": "raw_value * normalization_factor",
+        "material_basis": "WHOLE_ORE",
+        "normalization_factor": "1",
+        "normalized_unit": "Mt",
+        "normalized_value": "278.80",
+        "observation_id": "c14a8e3df1b0e778827bc96a75368f80914b48e4f403913b7200011e2d317ad8",
+        "physical_page": 97,
+        "project_id": "AU-216d0983f6892f9b58f9",
+        "publication_date": "2026-08-18",
+        "quantity_kind": "ore_mt",
+        "raw_rounding_interval": [
+          "278.795",
+          "278.805"
+        ],
+        "raw_token": "278.80",
+        "raw_unit": "Mt",
+        "reporting_standard": "JORC 2012",
+        "row": "Total",
+        "scope": "North Stanmore August 2026 global Mineral Resource reported at 300 ppm TREO",
+        "scope_id": "09862894c0a1e0cc195ad5012ce369889a65ae34c30abe57e67c35800f04cc7f",
+        "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf",
+        "statement_id": "93a7ad3794fb431b95a3388b10492b10bf5eff36811f35776f59a74fa14badd0",
+        "table": "Mineral Resource Estimate The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO and comprises:",
+        "temporal_decision_id": "6f7830730f4021a344b9753764f638c8ddbfd9ae450478bce2d3425d8749cdee",
+        "treo_members": [
+          "CeO2",
+          "Dy2O3",
+          "Er2O3",
+          "Eu2O3",
+          "Gd2O3",
+          "Ho2O3",
+          "La2O3",
+          "Lu2O3",
+          "Nd2O3",
+          "Pr6O11",
+          "Sm2O3",
+          "Tb4O7",
+          "Tm2O3",
+          "Y2O3",
+          "Yb2O3"
+        ],
+        "versioned_use_policy": "approved-census-resource-observation-v1"
+      },
+      {
+        "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+        "chemical_basis": "TREO",
+        "column": "TREO (ppm)",
+        "coordinates": {
+          "end_column": 84,
+          "line": 28,
+          "locator": "PDF page 97, line 28, columns 79-84",
+          "physical_page": 97,
+          "start_column": 79,
+          "text": "482.64"
+        },
+        "cutoff": [
+          "300",
+          "ppm",
+          "TREO"
+        ],
+        "effective_date": "2026-08",
+        "formula": "raw_value * normalization_factor",
+        "material_basis": "WHOLE_ORE",
+        "normalization_factor": "1",
+        "normalized_unit": "ppm",
+        "normalized_value": "482.64",
+        "observation_id": "6c382e0a6172bb40604ffce900713f60c586025d0a72cc4b16ae4a8b469e485d",
+        "physical_page": 97,
+        "project_id": "AU-216d0983f6892f9b58f9",
+        "publication_date": "2026-08-18",
+        "quantity_kind": "grade",
+        "raw_rounding_interval": [
+          "482.635",
+          "482.645"
+        ],
+        "raw_token": "482.64",
+        "raw_unit": "ppm",
+        "reporting_standard": "JORC 2012",
+        "row": "Total",
+        "scope": "North Stanmore August 2026 global Mineral Resource reported at 300 ppm TREO",
+        "scope_id": "09862894c0a1e0cc195ad5012ce369889a65ae34c30abe57e67c35800f04cc7f",
+        "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf",
+        "statement_id": "93a7ad3794fb431b95a3388b10492b10bf5eff36811f35776f59a74fa14badd0",
+        "table": "Mineral Resource Estimate The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO and comprises:",
+        "temporal_decision_id": "6f7830730f4021a344b9753764f638c8ddbfd9ae450478bce2d3425d8749cdee",
+        "treo_members": [
+          "CeO2",
+          "Dy2O3",
+          "Er2O3",
+          "Eu2O3",
+          "Gd2O3",
+          "Ho2O3",
+          "La2O3",
+          "Lu2O3",
+          "Nd2O3",
+          "Pr6O11",
+          "Sm2O3",
+          "Tb4O7",
+          "Tm2O3",
+          "Y2O3",
+          "Yb2O3"
+        ],
+        "versioned_use_policy": "approved-census-resource-observation-v1"
+      }
+    ]
+  },
+  "scientific_policy": {
+    "census": "approved-census-resource-observation-v1",
+    "rules_sha256": "2253754a3736492e0293b8e84bb7acf6433cb322c4648528f87b0790eddbc2a5",
+    "temporal": "temporal-evidence-v1"
+  },
+  "source_binding_funnel": {
+    "duplicate_reviewed_native_sightings": 2,
+    "existing_reviewed_identities": 33,
+    "fresh_typed_native_positions": 102,
+    "fresh_typed_sightings": 110,
+    "historical_exact_shas_absent_from_v3": 4,
+    "historical_exact_shas_recovered_from_read_only_v2": 2,
+    "historical_hints": 424,
+    "live_public_gap_retrieval_this_round": "NOT_RUN",
+    "missing_version_hints": 35,
+    "pdf_opens_per_binding_run": 15,
+    "physical_pages_per_binding_run": 1292,
+    "same_sha_index_hints": 389,
+    "scoped_native_rows": 47,
+    "typed_native_sightings": 112,
+    "unbound_reasons": {
+      "AMBIGUOUS_OR_CONFLICTING_COLUMN_ALIGNMENT": 13,
+      "HEADER_OR_UNIT_UNBOUND": 210,
+      "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+    },
+    "unbound_sightings": 225,
+    "unique_native_positions": 298,
+    "unique_typed_native_positions": 103,
+    "unrecognized_source_projects": 19
+  },
+  "sources_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "timezone": "Asia/Taipei"
+}
