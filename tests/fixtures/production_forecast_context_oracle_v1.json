@@ -1,0 +1,158 @@
+{
+  "schema": "native-production-forecast-context-oracle-v1",
+  "cases": [
+    {
+      "case_id": "jupiter-base-case-annual-contained-treo",
+      "role": "FORECAST",
+      "amount": "8,300",
+      "native_unit": "tonnes per annum",
+      "material": "MREC",
+      "chemistry": "TREO",
+      "period": "LIFE_OF_MINE_ANNUAL_AVERAGE_INCLUDING_RAMP_UP_AND_SCHEDULING",
+      "date": "2026-10-20",
+      "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            2,
+            2
+          ],
+          "contains": "20 October 2026 | ASX: CRI"
+        },
+        {
+          "page": 8,
+          "lines": [
+            2,
+            4
+          ],
+          "contains": "financial model assuming a life-of-mine average of approximately 8,300 tonnes per annum of contained TREO in MREC"
+        },
+        {
+          "page": 21,
+          "lines": [
+            14,
+            14
+          ],
+          "contains": "Average annual contained TREO in MREC tpa 8,300 9,300"
+        },
+        {
+          "page": 21,
+          "lines": [
+            20,
+            22
+          ],
+          "contains": "Base Case annual production represents the life-of-mine annual average and includes ramp-up and scheduling effects"
+        },
+        {
+          "page": 17,
+          "lines": [
+            16,
+            18
+          ],
+          "contains": "first MREC production and sales commencing in 2032"
+        }
+      ]
+    },
+    {
+      "case_id": "jupiter-nominal-design-annual-contained-treo",
+      "role": "ENGINEERING_PLAN",
+      "amount": "9,300",
+      "native_unit": "tonnes per annum",
+      "material": "MREC",
+      "chemistry": "TREO",
+      "period": "NOMINAL_RATE_AT_8_0_MTPA_FEED_NOT_LIFE_OF_MINE_AVERAGE",
+      "date": "2026-10-20",
+      "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            2,
+            2
+          ],
+          "contains": "20 October 2026 | ASX: CRI"
+        },
+        {
+          "page": 8,
+          "lines": [
+            1,
+            2
+          ],
+          "contains": "process design basis provides for production of MREC containing approximately 9,300 tonnes per annum of TREO at nominal processing capacity"
+        },
+        {
+          "page": 21,
+          "lines": [
+            14,
+            14
+          ],
+          "contains": "Average annual contained TREO in MREC tpa 8,300 9,300"
+        },
+        {
+          "page": 21,
+          "lines": [
+            21,
+            22
+          ],
+          "contains": "Scoping Study Process Design Basis production represents performance at the nominal 8.0 Mtpa processing rate"
+        }
+      ]
+    },
+    {
+      "case_id": "north-stanmore-pfs-base-case-annual-wet-concentrate",
+      "role": "FORECAST",
+      "amount": "29,000",
+      "native_unit": "wet tonnes per annum",
+      "material": "FLOTATION_CONCENTRATE",
+      "chemistry": null,
+      "period": "PFS_ANNUAL_BASE_CASE_AVERAGING_WINDOW_UNSPECIFIED",
+      "date": "2026-08-18",
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            1,
+            1
+          ],
+          "contains": "ASX RELEASE 18 AUGUST 2026"
+        },
+        {
+          "page": 62,
+          "lines": [
+            8,
+            10
+          ],
+          "contains": "produces approximately 29,000 wet tonnes per annum of heavy rare earth enriched flotation concentrate for sale to third party refiners"
+        },
+        {
+          "page": 66,
+          "lines": [
+            7,
+            8
+          ],
+          "contains": "approximately 29,000 wet tpa of flotation concentrate"
+        },
+        {
+          "page": 143,
+          "lines": [
+            62,
+            62
+          ],
+          "contains": "There has been no production at the North Stanmore project"
+        }
+      ]
+    }
+  ],
+  "negative": {
+    "case_id": "jupiter-lifetime-mrec-is-not-annual-treo",
+    "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+    "page": 21,
+    "lines": [
+      16,
+      16
+    ],
+    "contains": "Life-of-mine MREC production tonnes 201,400"
+  }
+}

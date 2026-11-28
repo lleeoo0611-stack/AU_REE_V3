@@ -1,0 +1,254 @@
+{
+  "baseline_commit": "2fc644dc3fadca64cf9cb75db921bd728ea4160a",
+  "cold_replay": {
+    "byte_identical": true,
+    "combined": [
+      {
+        "child_pdf_peak_rss_kib": 46728,
+        "method": "cold Python process, OS file cache retained",
+        "pages": 250,
+        "pdf_opens": 5,
+        "python_peak_rss_kib": 46984,
+        "seconds": 1.644699
+      },
+      {
+        "child_pdf_peak_rss_kib": 46748,
+        "method": "cold Python process, OS file cache retained",
+        "pages": 250,
+        "pdf_opens": 5,
+        "python_peak_rss_kib": 47004,
+        "seconds": 1.596316
+      }
+    ],
+    "scoped": {
+      "EXPANDED_MANIFEST": [
+        {
+          "child_pdf_peak_rss_kib": 27948,
+          "pdf_opens": 1,
+          "pdf_pages": 3,
+          "python_peak_rss_kib": 27948,
+          "scope": "EXPANDED_MANIFEST",
+          "seconds": 0.070715,
+          "sqlite_statements": 0
+        },
+        {
+          "child_pdf_peak_rss_kib": 27964,
+          "pdf_opens": 1,
+          "pdf_pages": 3,
+          "python_peak_rss_kib": 28084,
+          "scope": "EXPANDED_MANIFEST",
+          "seconds": 0.078256,
+          "sqlite_statements": 0
+        }
+      ],
+      "FIXED_144": [
+        {
+          "child_pdf_peak_rss_kib": 46256,
+          "pdf_opens": 4,
+          "pdf_pages": 247,
+          "python_peak_rss_kib": 46552,
+          "scope": "FIXED_144",
+          "seconds": 1.642986,
+          "sqlite_statements": 0
+        },
+        {
+          "child_pdf_peak_rss_kib": 46256,
+          "pdf_opens": 4,
+          "pdf_pages": 247,
+          "python_peak_rss_kib": 46556,
+          "scope": "FIXED_144",
+          "seconds": 1.766997,
+          "sqlite_statements": 0
+        }
+      ]
+    },
+    "sha256_by_receipt": {
+      "government_native_points_shadow.json": "6c4ed54c7565b1632121017a3c4520cd685b6c6ccad2c322e0ae8d68acc10180",
+      "production_forecast_context_oracle.json": "f585ab4bcc2ae709614c120bc39ec7e417bab295cfce49f1ddf81c6bdcfa2187",
+      "production_shadows.json": "977b06e6e237f65f9e2cc2d6354c18b2caf86a52c7be09cc9d6c7c4c96e9cb6c"
+    },
+    "warm_cache_comparison": "UNMEASURED"
+  },
+  "controls": {
+    "cross_scenario_annual_amount": "REJECTED",
+    "official_roles": {
+      "jupiter-prospect-wa": [
+        "FEATURE_SURVEY_OR_APPLICABILITY_DATE_UNBOUND",
+        "METRIC_POSITIONAL_ACCURACY_UNDISCLOSED",
+        "EXACT_FIXED_PROJECT_TO_GOVERNMENT_SITE_LINK_UNBOUND",
+        "FEATURE_ROLE_OUTSIDE_MINE_OR_DEPOSIT_POINT"
+      ],
+      "mt-weld-gold-homonym-wa": [
+        "FEATURE_SURVEY_OR_APPLICABILITY_DATE_UNBOUND",
+        "METRIC_POSITIONAL_ACCURACY_UNDISCLOSED",
+        "NATIVE_GOVERNMENT_PROJECT_ID_MISMATCH",
+        "EXACT_FIXED_PROJECT_TO_GOVERNMENT_SITE_LINK_UNBOUND",
+        "NATIVE_COMMODITY_SCOPE_MISMATCH"
+      ],
+      "mt-weld-road-wa": [
+        "FEATURE_SURVEY_OR_APPLICABILITY_DATE_UNBOUND",
+        "METRIC_POSITIONAL_ACCURACY_UNDISCLOSED",
+        "EXACT_FIXED_PROJECT_TO_GOVERNMENT_SITE_LINK_UNBOUND",
+        "FEATURE_ROLE_OUTSIDE_MINE_OR_DEPOSIT_POINT"
+      ]
+    },
+    "tampered_government_body": "SCIENTIFIC_CONFLICT"
+  },
+  "expanded_manifest": {
+    "advertised_points_read": 91,
+    "captures": [
+      {
+        "captured_at": "2026-11-28T06:48:24.136724+00:00",
+        "proof_replay": true,
+        "receipt_sha256": "f59a2e45a8d2f6a6b57ef8f0c9a80400751a1465fe1a539142671772198097cd",
+        "source_sha256": "708de5c7a72d93a74e1ad318a514e19675e108f779cc7a91489cb624a08838cc",
+        "source_url": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Industry_and_Mining/MapServer/0/query?f=json&where=UPPER%28proj_title%29+LIKE+%27%25MT+WELD%25%27+OR+UPPER%28site_title%29+LIKE+%27%25MT+WELD%25%27&outFields=oid%2Cgid%2Csite_code%2Csite_title%2Cshort_name%2Csite_commo%2Csite_type_%2Csite_sub_t%2Csite_stage%2Cproj_code%2Cproj_title%2Cpoint_conf%2Clatitude%2Clongitude%2Cweb_link%2Cextract_da&returnGeometry=true&orderByFields=site_code&resultRecordCount=60"
+      },
+      {
+        "captured_at": "2026-11-28T06:48:24.716880+00:00",
+        "proof_replay": true,
+        "receipt_sha256": "18c4d18262cb73bd3f2f92a945fd5673af63eca44fc2c19eba8f734dae29956a",
+        "source_sha256": "967c6984ebe44bb2ca7acc0ce32f2d94ad6878f3dc2c8246ecdc6f155caf7e47",
+        "source_url": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Industry_and_Mining/MapServer/0/query?f=json&where=UPPER%28proj_title%29+LIKE+%27%25NORTH+STANMORE%25%27+OR+UPPER%28site_title%29+LIKE+%27%25NORTH+STANMORE%25%27+OR+UPPER%28proj_title%29+LIKE+%27%25JUPITER%25%27+OR+UPPER%28site_title%29+LIKE+%27%25JUPITER%25%27&outFields=oid%2Cgid%2Csite_code%2Csite_title%2Cshort_name%2Csite_commo%2Csite_type_%2Csite_sub_t%2Csite_stage%2Cproj_code%2Cproj_title%2Cpoint_conf%2Clatitude%2Clongitude%2Cweb_link%2Cextract_da&returnGeometry=true&orderByFields=site_code&resultRecordCount=150"
+      },
+      {
+        "captured_at": "2026-11-28T06:48:26.054202+00:00",
+        "proof_replay": true,
+        "receipt_sha256": "cd9dcd8629ff783dd9094f8d8d73d39084a2d8a1b651ba0ec98f632fef7dd438",
+        "source_sha256": "3c04e7efda3a648e2a5235e4b0b104b57e96195f1cde35b92ce9145b1a230a8c",
+        "source_url": "https://services.ga.gov.au/gis/rest/services/AustralianCriticalMineralsOperatingMinesAndDeposits/MapServer/7/query?f=json&where=UPPER%28projectname%29+IN+%28%27AILERON%27%2C%27WIM+150%27%2C%27WIM150%27%2C%27COPI%27%29&outFields=objectid%2Cprojectname%2Cstate%2Clatitude%2Clongitude%2Cstatus%2Ccommodities%2Csource&returnGeometry=true&orderByFields=objectid&resultRecordCount=30"
+      },
+      {
+        "captured_at": "2026-11-28T06:48:27.550505+00:00",
+        "proof_replay": true,
+        "receipt_sha256": "dd30f75c40467717c3160eabe92d386db4315dea001f38e0cc5a972e27ccf2ed",
+        "source_sha256": "c4c75eb61d345789c777764f58ef9be29cff6985285c5c855632f3242b440a00",
+        "source_url": "https://services.ga.gov.au/gis/earthresource/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ama%3AMineralOccurrences&outputFormat=application%2Fjson&maxFeatures=20&CQL_FILTER=OCCURRENCE_NAME+ILIKE+%27Mt+Weld%25%27"
+      },
+      {
+        "captured_at": "2026-11-28T06:50:04.426712+00:00",
+        "proof_replay": true,
+        "receipt_sha256": "d2ef4bdb75c988631111b87fc174418c0a1a5d21209ae00a42aec759c3e17e64",
+        "source_sha256": "8028cf64ebf22118a6a17d9b84ad10da1f9951d1e3aec62f7a1c3d0d7eb165d7",
+        "source_url": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Industry_and_Mining/MapServer/0?f=json"
+      },
+      {
+        "captured_at": "2026-11-28T06:50:05.776370+00:00",
+        "proof_replay": true,
+        "receipt_sha256": "8df47a82683c9a5a4841043092be8592265c6a12d1e66872f5d7087abf172632",
+        "source_sha256": "ab93bcdf011f41431a167f898d8bf43db1c74d1b363c95debfecdde6f9e34af8",
+        "source_url": "https://services.ga.gov.au/gis/rest/services/AustralianCriticalMineralsOperatingMinesAndDeposits/MapServer/7?f=json"
+      },
+      {
+        "captured_at": "2026-11-28T06:50:05.501029+00:00",
+        "proof_replay": true,
+        "receipt_sha256": "b92b577a8ec819547d74a3c3cba4333e83766f84811f16cf8d0ea9f6dde593d1",
+        "source_sha256": "c30632c1386d7c955a7eebc59d000c550273165fdfe8990da31ac853ef1d4420",
+        "source_url": "https://services.ga.gov.au/gis/rest/services/AustraliasIdentifiedMineralResources/MapServer/52?f=json"
+      }
+    ],
+    "counts_by_proposed_site_use": {
+      "EVIDENCE_INSUFFICIENT": 8,
+      "REJECTED": 3
+    },
+    "formal_census_delta": 0,
+    "formal_i1_i4_delta": 0,
+    "immutable_replay_package_sha256": "0ba2c0942330d3ea23a093fc1acf4272b8a10f874a2f5a46575e0af4b710ee03",
+    "native_cross_authority": [
+      {
+        "case_ids": [
+          "mt-weld-resource-group-ga",
+          "mt-weld-resource-group-wa"
+        ],
+        "exact_native_cross_reference": true,
+        "scope_equivalence": false,
+        "source_roles_agree": false,
+        "verdict": "CROSS_AUTHORITY_ROLE_MISMATCH"
+      }
+    ],
+    "new_source_bodies": 7,
+    "reviewed_points": 11,
+    "source_manifest_sha256": "226c08be42beea1f085760f3fc7a0c0647b77eeb1bd361cdc7414fd582efee23",
+    "source_request_statuses": {
+      "MIME_MISMATCH": 3,
+      "PUBLIC_CAPTURED": 7
+    }
+  },
+  "fixed_144": {
+    "forecast_oracle_sha256": "3db34d7949618bf2a27fde25fbd5d17d17fb2952c82fc7a3d27dc519c1bde3c9",
+    "formal_census_delta": 0,
+    "formal_mcda_delta": 0,
+    "negative": {
+      "reason": "LIFETIME_PRODUCT_MASS_IS_NOT_ANNUAL_CONTAINED_TREO",
+      "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "source_span": {
+        "excerpt": "Life-of-mine MREC production tonnes 201,400",
+        "first_line": 16,
+        "last_line": 16,
+        "layout_sha256": "0c40499667d32e5987281b8065106d885fcd53ddc8723da3f1e42c3e863548e7",
+        "physical_page": 21
+      }
+    },
+    "new_observations": 0,
+    "source_cases": [
+      {
+        "amount": "8,300",
+        "case_id": "jupiter-base-case-annual-contained-treo",
+        "chemistry": "TREO",
+        "date": "2026-10-20",
+        "material": "MREC",
+        "native_unit": "tonnes per annum",
+        "observation_id": "c603cae1d97a2ae0b4d2325adef4fb9436f8bd6eefd11ea7508b441d4ec1ebf0",
+        "period": "LIFE_OF_MINE_ANNUAL_AVERAGE_INCLUDING_RAMP_UP_AND_SCHEDULING",
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "receipt_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce",
+        "role": "FORECAST",
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7794821.pdf?v=63959663947",
+        "state": "SHADOW"
+      },
+      {
+        "amount": "9,300",
+        "case_id": "jupiter-nominal-design-annual-contained-treo",
+        "chemistry": "TREO",
+        "date": "2026-10-20",
+        "material": "MREC",
+        "native_unit": "tonnes per annum",
+        "observation_id": "7856482623bbc4e04bd82d9abade7ec35ef5da3847c4e9f367beeccee281e6e1",
+        "period": "NOMINAL_RATE_AT_8_0_MTPA_FEED_NOT_LIFE_OF_MINE_AVERAGE",
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "receipt_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce",
+        "role": "ENGINEERING_PLAN",
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "source_url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7794821.pdf?v=63959663947",
+        "state": "SHADOW"
+      },
+      {
+        "amount": "29,000",
+        "case_id": "north-stanmore-pfs-base-case-annual-wet-concentrate",
+        "chemistry": null,
+        "date": "2026-08-18",
+        "material": "FLOTATION_CONCENTRATE",
+        "native_unit": "wet tonnes per annum",
+        "observation_id": "9e1d5e22bdca2c057179c7dd6c6c9f3bac868bff83a1353e1da9314f79ab2ba4",
+        "period": "PFS_ANNUAL_BASE_CASE_AVERAGING_WINDOW_UNSPECIFIED",
+        "project_id": "AU-216d0983f6892f9b58f9",
+        "receipt_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+        "role": "FORECAST",
+        "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+        "source_url": "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf",
+        "state": "SHADOW"
+      }
+    ],
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "focused_suite": {
+    "executed": 37,
+    "log_sha256": "5cbe2fed193ce3b57d9af3dc13140f03ed52dfa3aeac229e501b0aff56ed717b",
+    "seconds": 11.325,
+    "skipped": 0,
+    "status": "PASS"
+  },
+  "schema": "government-point-expansion-and-forecast-context-v1",
+  "status": "PASS"
+}
