@@ -12,7 +12,7 @@ from tempfile import TemporaryDirectory
 
 from .census import COLUMNS
 from .census_metadata import CensusMetadata, SHA256, coverage_report, metadata_projection, public_source_url
-from .census_science import project_science_views, resource_presence_cells
+from .census_science import magnet_disclosure_cells, project_science_views, resource_presence_cells
 from .comparability import census_quantity, resource_context, resource_observation_compatible
 from .contracts import ContractViolation, ResearchRelease, canonical_json
 from .registry import PROJECT_ID_COLUMN, load_census_columns, load_profile, load_registry
@@ -52,6 +52,7 @@ class CensusAxes:
     profile_sha: str
     registry_sha: str
     columns_sha: str
+    member_disclosure: bool = False
 
     @classmethod
     def load(cls, path: Path):
@@ -67,7 +68,7 @@ class CensusAxes:
             raise ContractViolation("Census axes lack the pinned identity and resource headings")
         return cls(
             profile.profile_id, profile.research_cutoff.isoformat(), profile.timezone.key, projects, columns, profile.sha256,
-            registry.sha256, _sha(profile.census_columns_path),
+            registry.sha256, _sha(profile.census_columns_path), profile.census_member_disclosure,
         )
 
 
@@ -151,9 +152,12 @@ def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxe
             else:
                 projected[key] = _accepted_cell(alternatives[0], enriched=science)
 
-    scientific_views = project_science_views(release_inputs, release, axes.columns) if science else None
+    scientific_views = project_science_views(
+        release_inputs, release, axes.columns, member_disclosure=axes.member_disclosure,
+    ) if science else None
     if scientific_views is not None:
         projected.update(resource_presence_cells(scientific_views))
+        projected.update(magnet_disclosure_cells(scientific_views))
         from .census_derivations import governed_derived_projection
 
         derived_cells, assessed = governed_derived_projection(store, release, release_inputs)

@@ -30,7 +30,7 @@ ORACLE = {
         "precision_page": 19,
         "precision": "Grades and tonnages are rounded to 2 significant figures in accordance with the JORC Code (2012 Edition)",
         "input_tokens": ("1.7", "1,700"), "ore": ("1700", "1650", "1750"), "grade": ("1700", "1650", "1750"),
-        "raw_units": ("Bt", "ppm"), "cutoff_grade_ppm": "1000", "effective_date": "2026-09",
+        "raw_units": ("Bt", "ppm"), "cutoff": ("1000", "ppm", "TREO"), "effective_date": "2026-09",
     },
     "AU-216d0983f6892f9b58f9": {
         "sha": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
@@ -39,8 +39,18 @@ ORACLE = {
         "precision": "Numbers have been rounded to reflect the appropriate precision of the estimate and may not sum due to rounding.",
         "input_tokens": ("278.80", "482.64"), "ore": ("278.8", "278.795", "278.805"),
         "grade": ("482.64", "482.635", "482.645"), "raw_units": ("Mt", "ppm"),
-        "cutoff_grade_ppm": "300", "effective_date": "2026-08",
+        "cutoff": ("300", "ppm", "TREO"), "effective_date": "2026-08",
     },
+}
+NOLANS = "AU-1345edd8165c10930e94"
+NOLANS_ORACLE = {
+    "sha": "5f72a08840640987e8d619c6d55ca047a2fe26c0194ffd1a46521f76eda7b06f",
+    "row_page": 2, "row": "TOTAL 56 2.6 11 26.4",
+    "precision_page": 27, "precision": "All tonnages are estimated on a dry basis.",
+    "other_quotes": ((2, "Figure 1: Mineral Resources for the Nolans Bore deposit as at 07 June 2017 using a 1% TREO Cut-Off Grade."),
+                     (4, "JORC TABLE 1 ASSESSMENT CRITERIA FOR NOLANS BORE MINERAL RESOURCE STATEMENT AS AT 7 JUNE 2017")),
+    "input_tokens": ("56", "2.6"), "ore": ("56", "55.5", "56.5"), "grade": ("26000", "25500", "26500"),
+    "raw_units": ("Mt", "%"), "cutoff": ("1", "%", "TREO"), "effective_date": "2017-06-07",
 }
 _HOLD_REASONS = {
     "mreo_kt": "NO_APPROVED_CENSUS_MREO_MASS_FORMULA",
@@ -61,14 +71,14 @@ def _page(path: Path, page: int) -> str:
     return " ".join(text.split())
 
 
-def _source_oracle(assets: Path) -> dict:
+def _source_oracle(assets: Path, specifications: dict) -> dict:
     observations = {}
-    for project, spec in sorted(ORACLE.items()):
+    for project, spec in sorted(specifications.items()):
         sha = spec["sha"]
         asset = next(path for path in (assets / "objects" / sha, assets / sha) if path.is_file())
         if _hash(asset) != sha:
             raise ValueError(f"original SHA mismatch for {project}")
-        quotes = ((spec["row_page"], spec["row"]), (spec["precision_page"], spec["precision"]))
+        quotes = ((spec["row_page"], spec["row"]), (spec["precision_page"], spec["precision"]), *spec.get("other_quotes", ()))
         for page, quote in quotes:
             if _page(asset, page).count(quote) != 1:
                 raise ValueError(f"source quote is unavailable for {project}, PDF page {page}")
@@ -88,7 +98,7 @@ def _store_path(build: Path, directory: Path, label: str) -> Path:
     return path
 
 
-def _derived(build: Path, directory: Path, expected: dict, *, baseline: bool) -> dict:
+def _derived(build: Path, directory: Path, expected: dict, specifications: dict, *, baseline: bool) -> dict:
     store_path = _store_path(build, directory, "baseline" if baseline else "candidate")
     extraction = json.loads((build / "observations/extraction.json").read_bytes())
     with Store(store_path, trusted_temporal_evidence_ids=extraction["trusted_temporal_evidence_ids"]) as ledger:
@@ -100,16 +110,17 @@ def _derived(build: Path, directory: Path, expected: dict, *, baseline: bool) ->
             raise ValueError("derived review projects differ from the independent original evidence")
         for name, row in rows.items():
             reference = expected[name]
-            spec = ORACLE[name]
+            spec = specifications[name]
             if (not verify_derivation_assessment(row.to_dict()) or row.source_sha256 != reference["source_sha256"]
                     or row.value != reference["value"] or list(row.rounding_interval) != reference["interval"]
                     or tuple(record["raw_token"] for record in row.inputs) != spec["input_tokens"]
                     or tuple(record["raw_unit"] for record in row.inputs) != spec["raw_units"]
-                    or row.effective_date != spec["effective_date"] or row.cutoff != (spec["cutoff_grade_ppm"], "ppm", "TREO")):
+                    or row.effective_date != spec["effective_date"] or row.cutoff != spec["cutoff"]):
                 raise ValueError(f"derivation differs from the source transcription for {name}")
         official = checked_census_derivations(ledger, release)
-        return (_check_shadow_phase(ledger, release, official, expected) if baseline
-                else _check_candidate_phase(ledger, release, official, rows, build))
+        if baseline:
+            return _check_shadow_phase(ledger, release, official, expected)
+        return _check_candidate_phase(official, rows, build, expanded=NOLANS in specifications)
 
 
 def _check_shadow_phase(ledger, release, official, expected) -> dict:
@@ -138,10 +149,21 @@ def _check_shadow_phase(ledger, release, official, expected) -> dict:
             "formal_derivation_count": 0, "write_rejection": "UNPINNED_BASELINE_RELEASE"}
 
 
-def _check_candidate_phase(ledger, release, official, rows, build) -> dict:
+def _check_candidate_phase(official, rows, build, *, expanded) -> dict:
     if {item.derived_id for item in official} != {row.assessment_id for row in rows.values()}:
         raise ValueError("candidate does not persist the exact expected derived values")
     record = json.loads((build / "census/census_receipt.json").read_bytes())
+    if expanded:
+        from au_ree_v3.research_delta import ResearchBuild
+
+        report = ResearchBuild.load(build)
+        r1 = report.decision_inputs["criteria_by_project"][NOLANS]["R1"]
+        nolans = report.census[NOLANS, "總TREO蘊藏量_kt"]
+        if (r1["reason"] != "INCOMPLETE_SELECTED_RESOURCE_BUNDLE" or r1["accepted_value"] is not None
+                or nolans["value_origin"] != "FORMAL_DERIVED" or Decimal(nolans["value"]) != Decimal(rows[NOLANS].value)):
+            raise ValueError("Nolans' governed Census estimate must not supply a formal R1 value")
+        return {"status": "PASS", "formal_treo_derivation_count": len(official), "nolans_r1": r1["reason"],
+                "derived_values": [value.to_dict() for value in official]}
     shadows = record["science_views"]["derived_candidates"]
     remaining = [{"project_id": row["project_id"], "formula": row["key"], "layer": "SHADOW",
                   "reason": _HOLD_REASONS[row["key"]]} for row in shadows]
@@ -157,12 +179,17 @@ def main():
     parser.add_argument("--candidate", type=Path)
     parser.add_argument("--assets", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--compare-stage6", action="store_true",
+                        help="Require both Stage6 and its successor to retain three approved TREO derivations")
     args = parser.parse_args()
-    expected = _source_oracle(args.assets)
+    if args.compare_stage6 and not args.candidate:
+        parser.error("--compare-stage6 requires --candidate")
+    specifications = {**ORACLE, NOLANS: NOLANS_ORACLE} if args.compare_stage6 else ORACLE
+    expected = _source_oracle(args.assets, specifications)
     with TemporaryDirectory() as temporary:
         folder = Path(temporary)
-        baseline = _derived(args.baseline, folder, expected, baseline=True)
-        candidate = (_derived(args.candidate, folder, expected, baseline=False) if args.candidate
+        baseline = _derived(args.baseline, folder, expected, specifications, baseline=not args.compare_stage6)
+        candidate = (_derived(args.candidate, folder, expected, specifications, baseline=False) if args.candidate
                      else {"status": "NOT_RUN"})
     receipt = {"schema_version": "census-contained-treo-independent-oracle-v1", "formula_registry_sha256": FORMULA_REGISTRY_SHA256,
                "source_oracle": expected, "baseline_shadow_comparison": baseline, "candidate_comparison": candidate}

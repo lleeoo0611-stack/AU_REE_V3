@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING
 from urllib.parse import parse_qsl, urlsplit
 
 from .census_metadata import METADATA_ORIGINS, load_projection_policy
+from .census_science import MAGNET_DISCLOSURE_COLUMN, MAGNET_DISCLOSURE_ROLE
 from .contracts import canonical_json
 from .fresh_research import BUILD_SCHEMA
 from .observations import OXIDE_VARIABLES
@@ -66,6 +67,7 @@ _METADATA_FIELDS = {
     "snapshot_cutoff", "source_capture_sha256", "source_manifest_sha256", "source_sha256",
     "temporal_status", "temporal_decision_id", "geometry_role",
     "attribute_kind", "attribute_role", "policy_sha256", "publication_date", "event_date_token",
+    "precision_review",
 }
 _CONTEXT_FIELDS = {
     "category", "chemical_basis", "cutoff_analyte", "cutoff_grade", "cutoff_unit", "denominator_basis",
@@ -268,7 +270,7 @@ def _build_grid(headings, project_ids, census_payload, ledger_payload):
     return projects, evidence
 
 
-def _composition_view(payload, evidence, project_ids, decision_inputs):
+def _composition_view(payload, evidence, project_ids, decision_inputs, disclosures):
     # The selected artifact contains the display measurements. The same exact
     # Project+edition Census evidence can supply the public URL for their PDF.
     urls = {
@@ -280,6 +282,8 @@ def _composition_view(payload, evidence, project_ids, decision_inputs):
         for row in cells.values():
             for item in row.get("lineage", ()):
                 lineage[(project_id, item["observation_id"], item["source_sha256"])] = item
+    disclosed = {(project_id, item["observation_id"], item["source_sha256"]): item
+                 for project_id, proof in disclosures.items() for item in proof["inputs"]}
     output = defaultdict(list)
     for line in payload.splitlines():
         row = _read_json(line)
@@ -293,10 +297,11 @@ def _composition_view(payload, evidence, project_ids, decision_inputs):
         lineage_id = f"observation:{row['observation_id']}"
         if lineage_id in evidence:
             raise WebPublicationError("Composition display observation has duplicate identity")
-        bound = lineage.get((project_id, row["observation_id"], row["source_sha256"]), {})
+        key = project_id, row["observation_id"], row["source_sha256"]
+        bound = disclosed.get(key) or lineage.get(key, {})
         temporal = bound.get("temporal_decision") or {}
         selected = {
-            **_scalar_fields(bound, {"anchor_id", "candidate_id", "selection_id", "validation_id"}),
+            **_scalar_fields(bound, {"anchor_id", "candidate_id", "selection_id", "validation_id", "locator"}),
             **row, "temporal_status": temporal.get("status"), "temporal_decision_id": temporal.get("decision_id"),
             "temporal_policy_version": temporal.get("policy_version"),
             "temporal_evidence_ids": temporal.get("matching_evidence_ids"), "source_url": urls.get((project_id, row["source_sha256"])),
@@ -673,6 +678,7 @@ def _export_web(*, profile, research_build, release_id, out, release_root, autho
     projects, evidence = _build_grid(headings, project_ids, artifacts["census/census.csv"], artifacts["census/cell_status.csv"])
     composition = _composition_view(
         artifacts["observations/observations.jsonl"], evidence, set(project_ids), decision_inputs,
+        census_receipt.get("science_views", {}).get("verified_magnet_oxide_disclosure", {}),
     )
     mcda = _mcda_view(decision_inputs, decision_results, decision_receipt, project_ids)
     views = {
@@ -820,8 +826,7 @@ def _check_census(manifest, census, evidence, csv_payload):
             ):
                 raise WebPublicationError("Unsafe or unbound public composition selection")
             _allowed_public_evidence(entry)
-            if variable == "mreo_ppm":
-                direct[(project_id, entry["observation_id"])] = entry
+            direct[(project_id, entry["observation_id"])] = entry
             used.add(lineage_id)
     _check_evidence_references(references, direct)
     _check_derived_references(derived, direct)
@@ -875,6 +880,17 @@ def _check_evidence_references(references, direct):
             {item["column_id"] for item in measurements} != _RESOURCE_MEASUREMENT_HEADINGS
         ):
             raise WebPublicationError("TREO resource evidence reference lacks a complete accepted statement")
+        if entry["column_id"] == MAGNET_DISCLOSURE_COLUMN:
+            metadata = entry.get("metadata", {})
+            if (metadata.get("evidence_type") != MAGNET_DISCLOSURE_ROLE or metadata.get("display_only") is not True
+                    or {item["column_id"] for item in measurements} != set(OXIDE_VARIABLES.values())
+                    or any(item.get("chemical_basis") not in OXIDE_VARIABLES
+                           or OXIDE_VARIABLES[item["chemical_basis"]] != item["column_id"]
+                           or item.get("material_basis") != "WHOLE_ORE" or item.get("category") != entry.get("category")
+                           or not item.get("locator") or not _sha(item.get("anchor_id"))
+                           or item.get("temporal_status") != "ELIGIBLE"
+                           or item.get("temporal_decision_id") != entry["temporal_decision_id"] for item in measurements)):
+                raise WebPublicationError("Magnet oxide evidence reference lacks four governed original disclosures")
         if not any(
             all(entry.get(key) == item.get(key) for key in ("anchor_id", "locator", "temporal_decision_id"))
             for item in measurements

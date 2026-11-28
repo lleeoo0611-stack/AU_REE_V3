@@ -12,7 +12,9 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from au_ree_v3.census_metadata import load_projection_policy
-from au_ree_v3.census_science import _derive_components, census_science_views, validate_resource_presence
+from au_ree_v3.census_science import (
+    MAGNET_DISCLOSURE_COLUMN, _derive_components, _magnet_disclosure, census_science_views, validate_resource_presence,
+)
 from au_ree_v3.comparability import composition_comparison, resource_bundle
 from au_ree_v3.contracts import AcceptedResearchValue, Entity, EvidenceAnchor, ResearchRelease, ResourceScope
 from au_ree_v3.documents import DocumentCache
@@ -86,6 +88,22 @@ def _evaluate(grouped):
 
 
 class CompositionProjectionTests(unittest.TestCase):
+    def test_magnet_disclosure_requires_four_individual_members_with_one_resource_context(self):
+        rows = _bundle()
+        grade = rows["grade"][0]
+        evidence = _magnet_disclosure(rows, grade)
+        self.assertEqual({item["chemical_basis"] for item in evidence["inputs"]}, {"Nd2O3", "Pr6O11", "Dy2O3", "Tb4O7"})
+        self.assertEqual(evidence["value"], "是")
+        self.assertTrue(evidence["display_only"])
+        self.assertNotIn("formula", evidence)
+        member = rows["tb4o7_ppm"].pop()
+        rows["mreo_ppm"] = [_input("mreo_ppm", "1300", "ppm", "MREO", oxide=True)]
+        self.assertIsNone(_magnet_disclosure(rows, grade))
+        rows["tb4o7_ppm"].append(replace(member, raw=replace(member.raw, statement_id="different")))
+        self.assertIsNone(_magnet_disclosure(rows, grade))
+        rows["tb4o7_ppm"].extend((member, member))
+        self.assertIsNone(_magnet_disclosure(rows, grade))
+
     def test_complete_formula_and_missing_members(self):
         full, _ = _evaluate(_bundle())
         self.assertEqual(Decimal(full["complete_oxide_sum_kt"]["value"]), Decimal("69.715"))
@@ -259,6 +277,8 @@ class NativeCensusScienceTest(unittest.TestCase):
             with (root / "census/cell_status.csv").open(newline="", encoding="utf-8") as stream:
                 cells = list(csv.DictReader(stream))
             presence = [row for row in cells if row["column"] == "有TREO資源估計"]
+            self.assertTrue(all(row["value_state"] == "UNKNOWN" for row in cells
+                                if row["column"] == MAGNET_DISCLOSURE_COLUMN))
             self.assertEqual(len(presence), 93)
             present = [row for row in presence if row["value_state"] == "PRESENT"]
             self.assertEqual(len(present), 4)

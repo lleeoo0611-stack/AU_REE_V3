@@ -13,7 +13,9 @@ import re
 
 from .census import COLUMNS
 from .census_metadata import METADATA_ORIGINS, coverage_report, load_projection_policy, metadata_projection
-from .census_science import RESOURCE_PRESENCE_COLUMN, validate_resource_presence
+from .census_science import (
+    MAGNET_DISCLOSURE_COLUMN, RESOURCE_PRESENCE_COLUMN, validate_magnet_disclosure, validate_resource_presence,
+)
 from .comparability import census_quantity
 from .contracts import canonical_json
 from .fresh_census import FORMAL_CENSUS_ORIGINS, PROJECTION_SCHEMA, STATUS_FIELDS, validate_projected_cell
@@ -257,6 +259,8 @@ def _census(artifacts, receipt, observations):
             _check_display_metadata(cell, definition, receipt, census_receipt)
         elif state == "PRESENT" and policy and origin == "EVIDENCE_REFERENCE" and key[1] == RESOURCE_PRESENCE_COLUMN:
             validate_resource_presence(cell, definition, census_receipt, observations, ledger)
+        elif state == "PRESENT" and policy and origin == "EVIDENCE_REFERENCE" and key[1] == MAGNET_DISCLOSURE_COLUMN:
+            validate_magnet_disclosure(cell, definition, census_receipt, observations)
         elif state == "PRESENT" and policy and origin == "FORMAL_DERIVED":
             from .census_derivations import verify_census_derivation
 
