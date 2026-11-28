@@ -386,6 +386,7 @@ def validate_attribute_cell(cell):
             key: value for key, value in temporal.items() if key != "decision_id"
         }) and temporal["status"] == "ELIGIBLE" and temporal["matching_evidence_ids"]
         and assessment.verdict == "VALIDATED" and not cell.get("observation_id")
+        and _verdict(assertion, TemporalDecision(**temporal), "")[0] == "VALIDATED"
         and cell.get("comparable") in (None, "", "NO")
         and saved["source_manifest_sha256"] == selection.source_manifest_sha256
         and saved["attribute_kind"] == assertion.attribute_kind and saved["attribute_role"] == assertion.role

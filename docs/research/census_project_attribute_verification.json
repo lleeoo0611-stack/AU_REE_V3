@@ -1,0 +1,57 @@
+{
+  "attribute_gain": {
+    "distinct_original_pdfs_verified": 4,
+    "native_anchors_oracle_verified": 22,
+    "validated_attributes": 2,
+    "validated_descriptive_cells": 5
+  },
+  "baseline_reference": "074e00daf69360cd71cab2554f651b4b6e76a668",
+  "candidate_preview": "work/census-stage2-attributes/preview",
+  "candidate_release_id": "8397756b1a8259d5019f5f37019951c0b766b702703ff581ed54ac1bbddb9654",
+  "ci": "NOT_RUN_FOR_LOCAL_ATTRIBUTE_COMMIT",
+  "counts": {
+    "census_after": 1113,
+    "census_before": 1108,
+    "comparable_project_criteria_after": 6,
+    "comparable_project_criteria_before": 6,
+    "formal_science_after": 16,
+    "formal_science_before": 16,
+    "observations_after": [
+      42,
+      27,
+      21
+    ],
+    "observations_before": [
+      42,
+      27,
+      21
+    ]
+  },
+  "formal_pointer_written": false,
+  "gates": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED"
+  },
+  "profile_sha256": "f1e82f3ad5c31938acdd80e803db75ece2bccadc99ecc8085adc357667b93ff0",
+  "replay_artifacts_per_run": 8,
+  "schema": "census-project-attribute-verification-v1",
+  "scientific_delta": "Existing observation artifacts SHA-identical. MCDA scientific content identical, with expected study profile and linked artifact hashes.",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "source_negative": {
+    "independent_retained_cells": 3,
+    "suppressed_descriptive_cells": 2,
+    "verdict": "SOURCE_UNAVAILABLE"
+  },
+  "tested_code_commit": "cdfb12c6234a54e8615d5fb9618a88ada7b12fd6",
+  "verification": {
+    "census-stage2-attributes/cold-a/replay_receipt.json": "f9a6e45a59f3f82d049886bd83c577765487293bfc0dc08fd5c1b9c67d7e8ce1",
+    "census-stage2-attributes/cold-b/replay_receipt.json": "b2f257d1537a26956cddafa3b786405d7ffa601550a4c2081d10a1dc660a58e6",
+    "census-stage2-attributes/delta/census_delta.csv": "c1cde13532987d7b9fe1469b11e03abb0ba17921a4feab5443378401c030b0c6",
+    "census-stage2-attributes/independent_verification.json": "d6067886aa7c8b616b8596406ef2efd877ef5b6a518256cccc3c027c35e1893f",
+    "census-stage2-attributes/site-verification/site_verification.json": "f492014eae48d2c5d7c6daa22c8433d6462c848b17a71685be223c478d34625d"
+  }
+}

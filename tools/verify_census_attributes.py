@@ -79,10 +79,28 @@ def verify(before, after, assets):
     for directory, receipt in ((before, baseline), (after, candidate)):
         for name, checksum in receipt["scientific_artifacts"].items():
             require(digest(directory / name) == checksum, f"Build artifact differs: {name}")
-    fixed = ("observations/observations.jsonl", "observations/extraction.json",
-             "decision/mcda_inputs.json", "decision/mcda_results.json", "decision/decision_receipt.json")
+    fixed = ("observations/observations.jsonl", "observations/extraction.json")
     require(all(baseline["scientific_artifacts"][name] == candidate["scientific_artifacts"][name] for name in fixed),
-            "Numeric observations or MCDA changed")
+            "Numeric observations changed")
+    decision_documents = {
+        "decision/mcda_inputs.json": (),
+        "decision/mcda_results.json": ("mcda_inputs",),
+        "decision/decision_receipt.json": ("mcda_inputs", "mcda_results"),
+    }
+    checked_hashes = {}
+    for name, references in decision_documents.items():
+        comparable = []
+        for directory, receipt in ((before, baseline), (after, candidate)):
+            document = read_json(directory / name)
+            require(document.pop("profile_sha256") == receipt["input_artifacts"]["profile"],
+                    "Decision profile fingerprint differs")
+            for reference in references:
+                require(document.pop(reference + "_sha256") ==
+                        receipt["scientific_artifacts"][f"decision/{reference}.json"],
+                        "Decision artifact cross-reference differs")
+            comparable.append(document)
+        require(comparable[0] == comparable[1], "MCDA inputs, panels, methods, weights or ranks changed")
+        checked_hashes[name] = sha256(json.dumps(comparable[0], ensure_ascii=False, sort_keys=True).encode()).hexdigest()
     old, new = ledger(before), ledger(after)
     require(old.keys() == new.keys(), "Census grid keys differ")
     changed = {key for key, row in new.items() if row != old[key]}
@@ -107,6 +125,7 @@ def verify(before, after, assets):
         "existing_formal_scientific_cells": candidate["scientific_output_count"],
         "comparable_project_criteria": candidate["comparable_project_criteria"],
         "unchanged_artifacts": {name: candidate["scientific_artifacts"][name] for name in fixed},
+        "unchanged_mcda_content_excluding_profile_and_linked_artifact_hashes": checked_hashes,
         "source_evidence": verify_proofs(cases, assets),
         "verdicts": dict(Counter(row["verdict"] for row in cases)),
         "cases": {row["case_id"]: row["reason"] for row in cases},
