@@ -72,7 +72,9 @@ def _load_prior(path, identity, hashes, cases):
     receipt = json.loads(content)
     if (receipt.get("schema") != RULE or receipt.get("candidate_only") is not True
             or receipt.get("formal_scientific_values_added") != 0 or receipt.get("status") != "PASS"
-            or receipt.get("detection_rule") not in {"native-resource-table-detection-v2", "native-resource-table-detection-v3"}
+            or receipt.get("detection_rule") not in {
+                "native-resource-table-detection-v2", "native-resource-table-detection-v3", "native-resource-table-detection-v4",
+            }
             or receipt.get("inputs") != hashes or _identity(receipt) != identity):
         raise ValueError("Prior table binding does not match the exact same inventory, manifest and profile")
     ledgers = []

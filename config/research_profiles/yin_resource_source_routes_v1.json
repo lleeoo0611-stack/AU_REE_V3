@@ -1,0 +1,34 @@
+{
+  "schema": "public-source-version-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "yin-november-primary",
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "native_namespace": "DREADNOUGHT_ASX_ISSUER_ANNOUNCEMENT",
+      "native_id": "5449464",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896",
+          "publisher": "Dreadnought Resources Limited"
+        }
+      ]
+    },
+    {
+      "case_id": "yin-agm-reaffirmation",
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "native_namespace": "DREADNOUGHT_ASX_ISSUER_ANNOUNCEMENT",
+      "native_id": "7861720",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7861720.pdf?v=63962977864",
+          "publisher": "Dreadnought Resources Limited"
+        }
+      ]
+    }
+  ]
+}

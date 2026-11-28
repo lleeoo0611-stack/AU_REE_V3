@@ -41,6 +41,36 @@ EXPECTED = {
 @unittest.skipUnless(os.environ.get("AU_REE_NATIVE_RESOURCE_ASSETS") and shutil.which("pdftotext")
                      and shutil.which("pdfimages"), "exact ASX originals and Poppler required")
 class NativeResourcePositiveTests(unittest.TestCase):
+    def test_shortened_issuer_captions_keep_neighboring_deposit_and_cutoff_separate(self):
+        doc = self._exact_document("eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5", 16)
+        detailed = discover_page_rows(doc, page=11)
+        self.assertEqual(len(detailed), 3)
+
+        def values(row):
+            return [(cell.variable, cell.value.text, cell.unit) for cell in row.cells if cell.variable]
+
+        self.assertIn(("contained_treo_kt", "312,300", "t"), values(detailed[0]))
+        self.assertIn("0.20% TREO", detailed[0].context_anchors[0].text)
+        summary, *neighbor = discover_page_rows(doc, page=16)
+        self.assertIn("Yin", summary.cells[1].caption[0].text)
+        self.assertEqual([row.context_anchors[-1].text for row in neighbor], ["0.90", "0.70", "0.50", "0.30"])
+        self.assertTrue(all("Gifford Creek Carbonatite" in row.cells[1].caption[0].text for row in neighbor))
+        self.assertEqual(values(neighbor[1]), [("ore_mt", "10.84", "Mt"), ("grade", "1.00", "%"),
+                                              ("contained_treo_kt", "108,000", "t")])
+
+    def test_linked_assemblage_note_holds_oxide_percentages_at_exact_issuer_positions(self):
+        doc = self._exact_document("5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0", 12)
+        lines = doc.locate(12).text.splitlines()
+        caption, = [i for i, line in enumerate(lines, start=1) if line.strip().startswith("Table 8:")]
+        assays, = [i for i, line in enumerate(lines, start=1) if "0.48" in line and "0.43" in line]
+        found = bind_page_row(doc, page=12, row_line=assays, caption_line=caption)
+        self.assertFalse(any(cell.variable for cell in found))
+        pr, = [cell for cell in found if cell.value.text == "0.12"]
+        self.assertEqual(pr.reason, "NON_WHOLE_ORE_DENOMINATOR_PROVED_BY_LINKED_NOTE")
+        self.assertTrue(any("percentage of in situ THM" in part.text for part in pr.header_tiers))
+        bulk, = discover_page_rows(doc, page=12)
+        self.assertEqual([cell.variable for cell in bulk.cells], ["ore_mt", None, None])
+
     def _exact_document(self, source_sha, page):
         bases = Path(os.environ["AU_REE_NATIVE_RESOURCE_ASSETS"])
         source = next(path for path in (bases / source_sha, bases / "objects" / source_sha) if path.is_file())

@@ -1,0 +1,104 @@
+{
+  "actual_mcda_inputs_sha256": "d58ab88c664e013fde904f45a38dfe29ffb3b31b3c955dd4a2aab1f4368a6955",
+  "base_commit": "c8bce8a893358a63bf2c587e44e0bc3f84523db7",
+  "cases": [
+    {
+      "blockers": [
+        "COMPETING_CONTAINED_MASSES_AT_IDENTICAL_CUTOFF",
+        "ESTIMATE_EFFECTIVE_DATE_UNVERIFIED",
+        "REISSUE_WITHOUT_FORMAL_CORRECTION"
+      ],
+      "case_id": "mangaroon-yin-primary-inventory-conflict",
+      "current_r1_state": "UNKNOWN",
+      "formal_admission": false,
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "source_sha256": [
+        "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+        "2feb8b4356d6a5c1aa2634384cc97a6b01a03c9ed7d68ba57638b2364688c91e"
+      ],
+      "state": "SCIENTIFIC_CONFLICT"
+    },
+    {
+      "blockers": [
+        "ALL_DEPOSIT_TOTAL_COMBINES_TREO_AND_NDPR_CUTOFFS",
+        "REPRINT_HAS_RESERVE_LABEL_AND_DIFFERENT_INFERRED_MASS"
+      ],
+      "case_id": "yangibana-mixed-cutoff-and-reprint",
+      "current_r1_state": "UNKNOWN",
+      "formal_admission": false,
+      "project_id": "AU-908fd6f4461622e89548",
+      "source_sha256": [
+        "fac1ad3e47308a2f68e73e2a41951c7069de7e56d40d876ed90ad657b2c99c20",
+        "f22255aade55553234342ebf41d0b4ef05f182cfad3d0e5c2086eaf5179de098",
+        "99233befa81a1e193848122f00dfaa25079d0b2adbc2f19ef96326ca63c38f2a"
+      ],
+      "state": "SCIENTIFIC_CONFLICT"
+    },
+    {
+      "blockers": [
+        "ORE_RESERVE_CONTAINED_MASS_HAS_DIFFERENT_REPORTING_ROLE",
+        "RESOURCE_ROW_MISSING_DIRECT_CONTAINED_MASS"
+      ],
+      "case_id": "north-stanmore-same-cutoff-distinct-ore-reserve",
+      "current_r1_state": "UNKNOWN",
+      "formal_admission": false,
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "source_sha256": [
+        "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491"
+      ],
+      "state": "EVIDENCE_INSUFFICIENT"
+    }
+  ],
+  "ci": "NOT_RUN_IN_WORK_PACKAGE",
+  "configuration_sha256": "c5c2da5faf9041ab4e75a33f2aae9f187c5ab399ae8ead4ce8bb29a1a1b8791d",
+  "cutoff": "2026-11-28",
+  "formal_admission_false_positives": 0,
+  "known_admission_negatives": 3,
+  "manifest_sha256": {
+    "fixed": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "yangibana": "8f43eb977bd54b34af7b1124d2c81ddd2f0b5919b3c9c10e1b528f14dd1f8b81",
+    "yin": "0581c8b94a231b467b5f6d53b12beb01881c62769fb3df9c243acf4a4f3edf41"
+  },
+  "native_pdf_decodes": 6,
+  "native_pdf_pages": 233,
+  "new_comparable_project_criterion_keys": 0,
+  "new_complete_panel_projects": 0,
+  "new_formal_scientific_values": 0,
+  "policy_sha256": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+  "prior_known_holds": "PASS",
+  "r1_gain_hypothesis": "HYPOTHESIS_NOT_SUPPORTED_IN_NAMED_CASES",
+  "runtime": {
+    "byte_equal_across_python_hashseed": true,
+    "cpu_seconds": 1.593338,
+    "native_child_peak_rss_kib": 55024,
+    "peak_rss_kib": 55024,
+    "sha256": "398df6e6f8524ca96198e080b643708e8906a66289341add98ec6712b44de0e7",
+    "wall_seconds": 1.5352617209864547
+  },
+  "schema": "resource-comparability-challenge-verification-v1",
+  "scope": "NAMED_R1_CHALLENGE_NEGATIVES",
+  "source_capture": {
+    "yangibana": {
+      "capture_statuses": {
+        "PUBLIC_CAPTURED": 3
+      },
+      "new_source_sha256": 3,
+      "receipt_sha256": "d65fec745e6e682826d73c44e0aff384bfad90d6b6471ae2926898249bd3e53f"
+    },
+    "yin": {
+      "capture_statuses": {
+        "PUBLIC_CAPTURED": 2
+      },
+      "new_source_sha256": 1,
+      "receipt_sha256": "1014236c2ee8135623ad74648bec353dc396e518de7919849a0f9357d44e07e0"
+    }
+  },
+  "status": "PASS",
+  "tests_local": {
+    "passed": 2,
+    "skipped": 0
+  },
+  "timezone": "Asia/Taipei",
+  "unseen_family_precision_recall": "UNMEASURED",
+  "work_root": "work/census-stage6/r1"
+}

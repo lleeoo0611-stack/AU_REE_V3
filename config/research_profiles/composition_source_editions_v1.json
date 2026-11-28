@@ -1,0 +1,50 @@
+{
+  "schema": "public-source-version-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "mt-weld-2025-separate-resource-edition",
+      "project_id": "AU-efff91a06cf344122d88",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "06ngtkbmf2fb5g",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {"url": "https://announcements.asx.com.au/asxpdf/20250828/pdf/06ngtkbmf2fb5g.pdf", "publisher": "Lynas Rare Earths Limited"}
+      ]
+    },
+    {
+      "case_id": "mt-weld-2026-separate-resource-edition",
+      "project_id": "AU-efff91a06cf344122d88",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "0737nx07s3tnf7",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {"url": "https://announcements.asx.com.au/asxpdf/20260826/pdf/0737nx07s3tnf7.pdf", "publisher": "Lynas Rare Earths Limited"}
+      ]
+    },
+    {
+      "case_id": "goschen-2025-half-year-composition-role",
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "06x1tj0ylqrm7t",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {"url": "https://announcements.asx.com.au/asxpdf/20260304/pdf/06x1tj0ylqrm7t.pdf", "publisher": "VHM Limited"}
+      ]
+    },
+    {
+      "case_id": "wolverine-2025-issuer-presentation-restatement",
+      "project_id": "AU-9bd8e5ed8408cd84d876",
+      "native_namespace": "ASX_ANNOUNCEMENT_ID",
+      "native_id": "6A1292999",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {"url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7228264.pdf?v=63945818196", "publisher": "Northern Minerals Limited"}
+      ]
+    }
+  ]
+}

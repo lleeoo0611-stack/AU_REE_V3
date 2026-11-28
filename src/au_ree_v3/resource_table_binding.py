@@ -11,7 +11,7 @@ from .normalization import KNOWN_OXIDE_SPECIES, reported_interval
 from .observations import NUMBER
 
 RULE = "native-resource-table-layout-v1"
-DETECTION_RULE = "native-resource-table-detection-v4"
+DETECTION_RULE = "native-resource-table-detection-v5"
 _CAPTION = re.compile(r"^\s*(?:table|figure)\s+[A-Z]?\d+(?:[.-]\d+)*\b", re.I)
 _RESOURCE = re.compile(r"\bmineral\s+resources?\b", re.I)
 _REVIEWED_RESOURCE_HEADING = re.compile(r"\s*mineral resource estimate\s*", re.I)
@@ -60,7 +60,19 @@ _UNIT_NOTE = re.compile(
     r"(?:is |are )?(?:reported|stated|expressed)\s+in\s+(?P<unit>ppm|kg/t|%|Mt|kt|Bt|t)\.?\s*$", re.I,
 )
 _NOTE_HEADER = re.compile(r"\s*(?:[:\-–—]\s*)?(?:notes?|units?)\s*[:.]?\s*", re.I)
-_THRESHOLD_HEADER = re.compile(r"\b(?:cut[ -]?off|threshold|COG)\b", re.I)
+_THRESHOLD_HEADER = re.compile(r"\b(?:cut[ -]?offs?|thresholds?|COG)\b", re.I)
+_CANDIDATE_RESOURCE = re.compile(r"(?<![A-Za-z])mineral\s+resources?\b", re.I)
+_CLASSIFIED_RESOURCE = re.compile(r"\b(?:measured|indicated|inferred)\s+resources?\b", re.I)
+_BARE_TONNES = re.compile(r"tonnes?", re.I)
+_EXPLICIT_WEIGHT = re.compile(
+    r"(?:[‘’']?000\s+tonnes?|(?:billion|million|thousand|M)\s+tonnes?|Bt|Mt|kt)", re.I,
+)
+_WEIGHT_TIER = re.compile(r"(?:billion(?:s)?|million(?:s)?|thousand(?:s)?|[‘’']?000s?)", re.I)
+_SCALED_TONNES = re.compile(r"\btonnes?\s*\(([^()]*)\)\s*$", re.I)
+_DENOMINATOR_PARENT = re.compile(r"^\s*(?:rare earth oxides?|(?:mineral )?assemblage)\s*\((\d{1,2})\)\s*$", re.I)
+_NON_ORE_DENOMINATOR = re.compile(
+    r"\bpercentage of\s+(?:in[ -]situ\s+)?(?:THM|HM|heavy minerals?|concentrate)\b", re.I,
+)
 _RESOURCE_MASS_HEADER = re.compile(r"(?:mineral )?resources?\s*\(?\s*(?:Bt|Mt|kt|t)\s*\)?", re.I)
 _MATERIAL_MASS = re.compile(r"material\s*\(?(?:Bt|Mt|kt|t)\)?", re.I)
 _IN_SITU = re.compile(r"\bin[- ]situ\b", re.I)
@@ -187,6 +199,18 @@ def _unit_label(label: str) -> str | None:
     return next(iter(units)) if len(units := _units(label)) == 1 else None
 
 
+def _scale_tier(text):
+    text = _plain(text).strip("()[] ").casefold()
+    if not _WEIGHT_TIER.fullmatch(text):
+        return None
+    return {"billion": "Bt", "million": "Mt", "thousand": "kt"}.get(text.rstrip("s"), "kt")
+
+
+def _candidate_header_unit(label):
+    match = _SCALED_TONNES.search(_plain(label))
+    return (_scale_tier(match[1]) if match else _scale_tier(label)) or _unit_label(label)
+
+
 def _role(label: str, unit: str) -> tuple[str, str | None] | None:
     label = _plain(label)
     treo = bool(_TREO.search(label))
@@ -256,6 +280,33 @@ def _resource_type(caption: tuple[Span, ...]) -> str | None:
     return "MINERAL_RESOURCE" if _RESOURCE.search(text) else None
 
 
+def _resource_class_heading(headers):
+    labels = [header for header in headers if _plain(header.text).casefold() == "resource"]
+    classes = [header for header in headers if _plain(header.text).casefold() == "classification"]
+    return any(_overlap(left, right) for left in labels for right in classes) or any(
+        _plain(header.text).casefold() == "resource classification" for header in headers
+    )
+
+
+def _candidate_caption_type(lines, page, caption, first_header, first_data):
+    existing = _resource_type(caption)
+    if existing:
+        return existing
+    text = " ".join(span.text for span in caption)
+    if _CANDIDATE_RESOURCE.search(text):
+        return "MINERAL_RESOURCE"
+    if not (re.match(r"^\s*table\s+\w", text, re.I) and _THRESHOLD_HEADER.search(text)
+            and _TREO.search(text) and re.search(r"\bresources?\b", text, re.I)):
+        return None
+    headers = tuple(span for line in range(first_header, first_data)
+                    for span in _spans(lines[line - 1], page, line))
+    if not any(_unit_label(span.text) in _MASS for span in headers):
+        return None
+    if _CLASSIFIED_RESOURCE.search(text) or _resource_class_heading(headers):
+        return "PRINTED_CLASSIFIED_RESOURCE_CUTOFF"
+    return None
+
+
 def _line_match(column: Column, value: Span, inline: Span | None) -> bool:
     return _overlap(column.header, value) and (
         _overlap(column.unit_label, value) if column.unit_label else inline is not None
@@ -285,7 +336,7 @@ def _automatic_columns(lines, page, header_indices):
     entries = tuple(span for index in header_indices for span in _spans(lines[index - 1], page, index))
     columns = []
     for entry in entries:
-        unit = _unit_label(entry.text)
+        unit = _candidate_header_unit(entry.text)
         if not unit:
             continue
         aligned = [label for label in entries if label.line != entry.line and _overlap(label, entry)]
@@ -322,16 +373,16 @@ def _native_column_unit(anchor: Span, tiers: tuple[Span, ...]):
     # Keep the exact unit-bearing source span. A preliminary class word such as
     # "Tonnes" cannot override a physically paired explicit "(Mt)".
     combined = _plain(" ".join(span.text for span in tiers))
-    explicit = [(span, unit) for span in tiers if (unit := _unit_label(span.text)) is not None
+    explicit = [(span, unit) for span in tiers if (unit := _candidate_header_unit(span.text)) is not None
                 and not re.fullmatch(r"tonnes?", _plain(span.text), re.I)]
     if len({unit for _, unit in explicit}) > 1:
         return None
     if explicit:
         unit = explicit[0][1]
         return unit, explicit[-1][0]
-    unit = _unit_label(combined)
+    unit = _candidate_header_unit(combined)
     if unit:
-        source = next((span for span in reversed(tiers) if _unit_label(span.text) == unit), anchor)
+        source = next((span for span in reversed(tiers) if _candidate_header_unit(span.text) == unit), anchor)
         return unit, source
     return None
 
@@ -364,7 +415,7 @@ def _header_cells(raw: str, page: int, index: int) -> tuple[Span, ...]:
 
 def _header_rail(span, rails, unit_tier):
     hits = tuple(rail for rail in rails if _overlap(span, rail))
-    if not hits and unit_tier and _UNIT.fullmatch(_plain(span.text).strip("()[] ")):
+    if not hits and unit_tier and (_UNIT.fullmatch(_plain(span.text).strip("()[] ")) or _scale_tier(span.text)):
         nearby = tuple(rail for rail in rails if 0 < max(span.start_column - rail.end_column,
                                                        rail.start_column - span.end_column) <= 2)
         return nearby[0] if len(nearby) == 1 else None
@@ -386,7 +437,7 @@ def _layered_columns(lines, page, header_indices, *, notes=None):
     for row in rows:
         if row == rails or row == parents:
             continue
-        unit_tier = sum(_UNIT.fullmatch(_plain(span.text).strip("()[] ")) is not None for span in row) >= 2
+        unit_tier = sum(bool(_UNIT.fullmatch(_plain(span.text).strip("()[] ")) or _scale_tier(span.text)) for span in row) >= 2
         for span in row:
             if rail := _header_rail(span, rails, unit_tier):
                 stacks[rail].append(span)
@@ -586,10 +637,12 @@ def _first_body(lines, page, start, end):
     return next((index for index in range(start, end) if len(_candidate_tokens(lines[index - 1], page, index)) >= 2), end)
 
 
-def _source_caption(document, lines, page, caption_line, first_header):
+def _source_caption(document, lines, page, caption_line, first_header, first_data):
     local = _caption_block(lines, page, caption_line, first_header - 1)
     continued = _SAME_TABLE_CONTINUED.search(" ".join(span.text for span in local))
-    if not continued and _resource_type(local) == "MINERAL_RESOURCE":
+    if not continued and _candidate_caption_type(lines, page, local, first_header, first_data) in {
+        "MINERAL_RESOURCE", "PRINTED_CLASSIFIED_RESOURCE_CUTOFF",
+    }:
         return local, False
     marker = _CAPTION.match(lines[caption_line - 1])
     if page <= 1 or not continued or _resource_type(local) in {"ORE_RESERVE", "EXPLORATION_TARGET"}:
@@ -606,6 +659,49 @@ def _source_caption(document, lines, page, caption_line, first_header):
     if _resource_type(prior) != "MINERAL_RESOURCE":
         raise DocumentError("SCIENTIFIC_CONFLICT", "MINERAL_RESOURCE_SCOPE_REQUIRED")
     return (*prior, *local), True
+
+
+def _latest_header_panel(lines, page, first_header, first_data, row_line):
+    """Do not carry the first grid's header into a printed sibling grid."""
+    latest = first_header, first_data, first_header
+    previous = first_data
+    for line in range(first_data + 1, row_line + 1):
+        if len(_candidate_tokens(lines[line - 1], page, line)) < 2:
+            continue
+        header = _header_start(lines, page, max(previous + 1, line - 12), line)
+        if header < line:
+            _, columns, tiers = _layered_columns(lines, page, range(header, line))
+            shapes = len(columns) + sum(_explicit_hold(group) is not None for group in tiers.values())
+            units = sum(any(_candidate_header_unit(span.text) for span in group) for group in tiers.values())
+            if shapes >= 2 and units >= 2:
+                latest = header, line, previous + 1
+        previous = line
+    return latest
+
+
+def _scope_notes(lines, page, start, header_end, row_line):
+    contexts = []
+    for line in range(start, header_end):
+        parent = _DENOMINATOR_PARENT.fullmatch(lines[line - 1])
+        if not parent:
+            continue
+        notes = []
+        for number in range(row_line + 1, min(row_line + 22, len(lines) + 1)):
+            raw = lines[number - 1]
+            if _CAPTION.match(raw):
+                break
+            if re.match(rf"^\s*{parent[1]}[.)]?\s+", raw) and _NON_ORE_DENOMINATOR.search(raw):
+                notes.append(_line_span(lines, number, page))
+        if len(notes) == 1:
+            contexts.append((_line_span(lines, line, page), notes[0]))
+    return contexts[0] if len(contexts) == 1 else ()
+
+
+def _scope_hold(cells, witnesses):
+    return tuple(replace(cell, variable=None, unit=None, chemical_basis=None, raw_rounding_interval=None,
+                         reason="NON_WHOLE_ORE_DENOMINATOR_PROVED_BY_LINKED_NOTE",
+                         header_tiers=(*cell.header_tiers, *witnesses), layout_method="EXPLICIT_PANEL_DENOMINATOR_HOLD")
+                 if cell.reason != "CUTOFF_THRESHOLD_IS_NOT_A_RESOURCE_GRADE" else cell for cell in cells)
 
 
 def _continued_values(document, page, row, row_line, caption):
@@ -717,14 +813,20 @@ def bind_page_row(document: PDFDocument, *, page: int, row_line: int, caption_li
     if any(_CAPTION.match(item) for item in lines[caption_line:row_line - 1]):
         raise DocumentError("SCIENTIFIC_CONFLICT", "ROW_OUTSIDE_SOURCE_TABLE")
     first_header = _header_start(lines, page, caption_line + 1, row_line)
-    caption, continued = _source_caption(document, lines, page, caption_line, first_header)
     first_data = _first_body(lines, page, first_header, row_line)
+    caption, continued = _source_caption(document, lines, page, caption_line, first_header, first_data)
+    if continued:
+        panel_start = first_header
+    else:
+        first_header, first_data, panel_start = _latest_header_panel(lines, page, first_header, first_data, row_line)
     continuation = (_continued_values(document, page, lines[row_line - 1], row_line, caption)
                     if continued and first_header == first_data else None)
     marked_header = any(any(mark in raw for mark in "*†‡") for raw in lines[first_header - 1:first_data - 1])
     notes = _printed_unit_notes(document, lines, page, row_line, caption, marked_header)
     cells = _classify_layout_row(lines, page, row_line, first_header, first_data, caption,
                                  continued=continued, continuation=continuation, notes=notes)
+    if scope := _scope_notes(lines, page, panel_start, first_data, row_line):
+        return _scope_hold(cells, scope)
     return _companion_grade(document, page, lines, row_line, first_header, first_data, caption, cells)
 
 
@@ -743,7 +845,9 @@ def _classify_layout_row(lines, page, row_line, first_header, first_data, captio
         value, inline = _parsed_value(number)
         cell = known.get(value.start_column, CellBinding(None, None, None, value, caption, None, inline, "HEADER_OR_UNIT_UNBOUND"))
         alternative = layered.get(cell.value.start_column)
-        if alternative and cell.variable and (alternative.variable, alternative.unit, alternative.chemical_basis) != (
+        if alternative and _explicit_mass_scale_over_bare(cell, alternative):
+            cell = alternative
+        elif alternative and cell.variable and (alternative.variable, alternative.unit, alternative.chemical_basis) != (
             cell.variable, cell.unit, cell.chemical_basis,
         ):
             cell = replace(cell, variable=None, unit=None, chemical_basis=None, header=None,
@@ -756,6 +860,16 @@ def _classify_layout_row(lines, page, row_line, first_header, first_data, captio
                            layout_method="UNBOUND_PRINTED_HEADER_CONTEXT")
         results.append(replace(cell, footnote_marker=marker) if marker else cell)
     return tuple(results)
+
+
+def _explicit_mass_scale_over_bare(generic, candidate):
+    if (generic.variable != "ore_mt" or candidate.variable != "ore_mt" or generic.unit != "t"
+            or candidate.unit not in {"Bt", "Mt", "kt"} or generic.unit_label is None or candidate.unit_label is None):
+        return False
+    if not _BARE_TONNES.fullmatch(_plain(generic.unit_label.text)):
+        return False
+    qualifier = _plain(candidate.unit_label.text).strip("()[] ")
+    return bool(_EXPLICIT_WEIGHT.fullmatch(qualifier) or _scale_tier(qualifier))
 
 
 def _selected_header(document, page, expected, *, after, through):

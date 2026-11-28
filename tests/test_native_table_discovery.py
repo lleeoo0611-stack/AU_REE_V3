@@ -19,6 +19,30 @@ def document(*pages):
 
 
 class NativeTableDiscoveryTests(unittest.TestCase):
+    def test_scale_tier_is_read_with_its_literal_mass_header(self):
+        label = f"{'Resource Classification':26}{'Tonnes':23}{'TREO':23}Contained TREO"
+        units = f"{'':26}{'(Millions)':23}{'(ppm)':23}('000 tonnes)"
+        body = f"{'Total':26}{'2.3':23}{'905':23}2.08"
+        pdf = document(("Table 8: Synthetic Mineral Resource Estimate", label, units, body))
+        row, = discover_page_rows(pdf, page=1)
+        self.assertEqual([(cell.variable, cell.value.text, cell.unit) for cell in row.cells], [
+            ("ore_mt", "2.3", "Mt"), ("grade", "905", "ppm"), ("contained_treo_kt", "2.08", "kt"),
+        ])
+        self.assertEqual(row.cells[0].unit_label.text, "(Millions)")
+
+    def test_shortened_caption_requires_resource_classification_and_rejects_reserves(self):
+        title = "Table 1: Summary of Synthetic Resources at 400 ppm TREO cut-off."
+        head = f"{'Resource Classification':26}{'Tonnes (Mt)':23}{'TREO (ppm)':23}Contained TREO (t)"
+        body = f"{'Total':26}{'12':23}{'450':23}5,400"
+        pdf = document((title, head, body))
+        row, = discover_page_rows(pdf, page=1)
+        self.assertEqual(row.strategy, "PRINTED_CLASSIFIED_RESOURCE_CUTOFF")
+        self.assertIn("400 ppm", row.context_anchors[0].text)
+        negative = document((title.replace("Resources", "Ore Reserves"), head, body),
+                            (title, HEADER, *BODY))
+        self.assertEqual(discover_page_rows(negative, page=1), ())
+        self.assertEqual(discover_page_rows(negative, page=2), ())
+
     def test_explicit_single_class_below_a_printed_section_heading(self):
         single_class = BODY[0].replace("Measured", "Inferred")
         pdf = document(("3.2 Synthetic Mineral Resource Estimate (JORC 2012)", HEADER, single_class))
