@@ -134,4 +134,14 @@ def geometry_resource_reviews(review, *, editions, registry, manifest_sha, conte
                     if cell.role != "ore_mt" and cell.chemical_basis != "TREO":
                         raise ValueError("Only the printed TREO basis can display in a TREO Census column")
                     records.append(_cell_record(row, cell, edition, project, method, runtime, context))
+    if positioned := review.get("positioned_cases"):
+        if method != "pymupdf":
+            raise ValueError("Positioned resource review requires its pinned PyMuPDF coordinates")
+        from .resource_display_witnesses import positioned_resource_records
+
+        records.extend(positioned_resource_records(positioned, editions=editions, projects=projects,
+                                                   content=content, cache=cache))
+    keys = {(record["project_id"], record["variable"]) for record in records}
+    if len(keys) != len(records):
+        raise ValueError("Multiple reviewed original values target the same Census quantity")
     return tuple(historical_resource_reviews({"schema": SCHEMA, "observations": records}, editions, archived))

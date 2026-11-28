@@ -141,7 +141,9 @@ jobs:
             python -m unittest discover -s tests -p 'test_table_geometry.py' -v
           tower_sha=0ae98cfd93d554b8d948267a50f9c821761fee97c5a230440055c06029fc9d63
           get_fixture 'https://announcements.asx.com.au/asxpdf/20230808/pdf/05sf46x92l83s0.pdf' "$tower_sha"
-          AU_REE_GEOMETRY_TOWER_PDF="$directory/$tower_sha" \
+          get_fixture 'https://announcements.asx.com.au/asxpdf/20250122/pdf/06dr1z91839kfx.pdf' 1417f7495f8101992bd14719c42975d83eaba067b83dda56aa93187e030c9d43
+          get_fixture 'https://announcements.asx.com.au/asxpdf/20260625/pdf/070zynmdxyzqzd.pdf' 7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01
+          AU_REE_GEOMETRY_TOWER_PDF="$directory/$tower_sha" AU_REE_POSITIONED_REVIEW_ASSETS="$directory" \
             python -m unittest discover -s tests -p 'test_table_geometry_review.py' -v
       - name: Verify native technical measurement and process anchors
         run: |
