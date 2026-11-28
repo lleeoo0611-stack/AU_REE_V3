@@ -63,6 +63,7 @@ def main(argv: list[str] | None = None) -> int:
     search.add_argument("--query")
     search.add_argument("--project-id")
     search.add_argument("--limit", type=int, default=20)
+    search.add_argument("--strategy", choices=("bm25", "oxide-table"), default="bm25")
 
     geography = commands.add_parser("geography", help="Verify official spatial evidence")
     geo_commands = geography.add_subparsers(dest="operation", required=True)
@@ -224,7 +225,7 @@ def _run_sources(args) -> dict:
         if args.operation == "index-evidence":
             return build_candidate_index(args.manifest, args.store, args.out)
         return search_candidates(args.index, args.purpose, args.out, query=args.query,
-                                 project_id=args.project_id, limit=args.limit)
+                                 project_id=args.project_id, limit=args.limit, strategy=args.strategy)
     if args.operation == "inventory":
         from .source_inventory import inventory_sources
 
