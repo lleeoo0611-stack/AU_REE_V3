@@ -1,3 +1,4 @@
+from copy import deepcopy
 from hashlib import sha256
 from io import BytesIO
 import json
@@ -105,11 +106,21 @@ class HistoricalPointRecoveryTest(unittest.TestCase):
                 self.assertEqual(capture["historical_sha256"], digest)
                 self.assertEqual(capture["source_sha256"], sha256(response).hexdigest())
                 self.assertEqual(capture["temporal_decision"]["status"], "CANDIDATE")
+                self.assertEqual(capture["temporal_decision"]["reason"], "PRE_CUTOFF_PUBLIC_EVIDENCE_MISSING")
 
                 def no_network(*_):
                     self.fail("Offline capture replay attempted network access")
 
                 self.assertEqual(live, replay_historical_points(v2, store, prior=live, fetcher=no_network))
+                changed = deepcopy(live)
+                changed["captures"][0]["acquired_at"] = "2026-10-01T00:10:00+00:00"
+                with self.assertRaisesRegex(IntegrityError, "verified query receipt"):
+                    replay_historical_points(v2, store, prior=changed, fetcher=no_network)
+                different_query = replay_historical_points(v2, store, fetcher=lambda request, *_: HttpResult(
+                    "FETCHED", url + "?where=1%3D1", "2026-11-29T00:10:00+00:00", 200, "application/json", response,
+                ))
+                self.assertEqual(different_query["captures"][0]["status"], "GOVERNMENT_QUERY_REDIRECTED")
+                self.assertEqual(different_query["points"][0]["comparison"], "SOURCE_UNAVAILABLE")
                 ContentStore(store).path(capture["source_sha256"]).write_bytes(b"a different source edition")
                 with self.assertRaisesRegex(IntegrityError, "SHA-256 mismatch"):
                     replay_historical_points(v2, store, prior=live, fetcher=no_network)

@@ -16,7 +16,9 @@ from au_ree_v3.census_resource_display import (
 )
 from au_ree_v3.display_package import compile_display_package
 from au_ree_v3.documents import DocumentCache, PDFDocument
+from au_ree_v3.publication import _extract_code, load_release
 from au_ree_v3.resource_extraction import ResourceStatement
+from au_ree_v3.sources import ContentStore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,6 +49,16 @@ def _linked_date_fixture():
 
 def _phrase(text):
     return _Phrase(1, "PDF page 1, line 1", text)
+
+
+def _archived_profile(test, candidate, release):
+    archive = load_release(candidate / "archive", release)
+    store = ContentStore(candidate / "cas")
+    directory = tempfile.TemporaryDirectory()
+    test.addCleanup(directory.cleanup)
+    code = Path(directory.name) / "code"
+    _extract_code(store.read(archive["code_archive_sha256"]), code)
+    return code / "config/research_profiles"
 
 
 class ResourceDisplayContextTests(unittest.TestCase):
@@ -84,7 +96,7 @@ class AsReportedResourceTests(unittest.TestCase):
         workspace = Path(os.environ["AU_REE_REPORTED_RESOURCE_WORKSPACE"])
         candidate = workspace / "work/census-fill/verified"
         release = json.loads((candidate / "archive.json").read_text())["release_id"]
-        profile = ROOT / "config/research_profiles"
+        profile = _archived_profile(self, candidate, release)
         package = compile_display_package(
             profile=profile / "au_ree_census_evidence_fill_v1.json",
             columns_path=profile / "census_display_columns_v2.json",
@@ -116,7 +128,7 @@ class HistoricalResourceReviewTests(unittest.TestCase):
         workspace = Path(os.environ["AU_REE_REPORTED_RESOURCE_WORKSPACE"])
         candidate = workspace / "work/census-as-reported/verified"
         release = json.loads((candidate / "archive.json").read_bytes())["release_id"]
-        profile = ROOT / "config/research_profiles"
+        profile = _archived_profile(self, candidate, release)
         package = compile_display_package(
             profile=profile / "au_ree_census_evidence_fill_v1.json",
             columns_path=profile / "census_display_columns_v2.json",

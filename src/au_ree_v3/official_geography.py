@@ -9,13 +9,13 @@ import json
 import math
 from pathlib import Path
 import re
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import parse_qs, urlencode, urlsplit
 from zoneinfo import ZoneInfo
 
 from .contracts import EntityKind, canonical_json
 from .documents import DocumentCache, DocumentError
 from .geography import SITE_ROLES, _decision, _edition, infrastructure_site_compatibility, official_point_role
-from .sources import ContentStore, IntegrityError, fetch_public, validate_edition_proofs
+from .sources import CAPTURE_SCHEMA, ContentStore, IntegrityError, fetch_public, validate_capture_proof, validate_edition_proofs
 
 
 OFFICIAL_POINTS_SCHEMA = "government-native-point-candidates-v1"
@@ -171,29 +171,58 @@ def _point_recovery(row, dataset, points, capture):
     return result
 
 
-def _read_point_capture(dataset, url, store, recorded, fetcher):
+def _same_point_request(dataset, requested, final):
+    redirected = urlsplit(final)
+    return (_is_government_layer(final, dataset) and not redirected.fragment
+            and parse_qs(redirected.query, keep_blank_values=True)
+            == parse_qs(urlsplit(requested).query, keep_blank_values=True))
+
+
+def _read_point_capture(dataset, url, store, recorded, fetcher, timezone):
+    fields = ("requested_url", "final_url", "acquired_at", "status", "http_status", "source_sha256", "receipt_sha256")
     if recorded is None:
         response = fetcher(url, "GET", 18, 12_000_000)
-        digest = store.put(response.payload) if response.status == "FETCHED" and response.payload else None
         capture = {"requested_url": url, "final_url": response.final_url, "acquired_at": response.at,
-                   "status": response.status, "http_status": response.http_status, "source_sha256": digest}
-        if response.status == "FETCHED" and digest is None:
-            capture["status"] = "EMPTY_RESPONSE"
+                   "status": response.status, "http_status": response.http_status,
+                   "source_sha256": None, "receipt_sha256": None}
+        if response.status == "FETCHED":
+            if not _same_point_request(dataset, url, response.final_url):
+                capture["status"] = "GOVERNMENT_QUERY_REDIRECTED"
+            elif response.http_status != 200 or not response.payload:
+                capture["status"] = "INCOMPLETE_RESPONSE"
+            else:
+                capture["source_sha256"] = store.put(response.payload)
+                receipt = {
+                    **{key: capture[key] for key in ("requested_url", "final_url", "acquired_at", "http_status")},
+                    "schema": CAPTURE_SCHEMA, "status": "PUBLIC_CAPTURED", "method": "ANONYMOUS_HTTPS_GET",
+                    "kind": "json", "response_mime": response.response_mime, "sha256": capture["source_sha256"],
+                    "bytes": len(response.payload),
+                    "acquired_at_utc": datetime.fromisoformat(response.at).astimezone(UTC).isoformat(),
+                }
+                capture["receipt_sha256"] = store.put(canonical_json(receipt).encode())
     else:
-        capture = {key: recorded[key] for key in
-                   ("requested_url", "final_url", "acquired_at", "status", "http_status", "source_sha256")}
-        if capture["requested_url"] != url:
-            raise IntegrityError("Recorded point capture disagrees with the frozen native query")
+        capture = {key: recorded[key] for key in fields}
     if capture["status"] != "FETCHED":
-        return capture, {}
-    payload = store.read(capture["source_sha256"])
+        if capture["source_sha256"] is not None or capture["receipt_sha256"] is not None:
+            raise IntegrityError("A failed point request cannot attest source bytes")
+        return capture, {}, ()
+    digest, receipt_sha = capture["source_sha256"], capture["receipt_sha256"]
+    receipt = json.loads(store.read(receipt_sha))
+    if (any(capture[key] != receipt[key] for key in ("requested_url", "final_url", "acquired_at", "http_status"))
+            or not _same_point_request(dataset, url, receipt["final_url"])):
+        raise IntegrityError("Point capture metadata differs from its verified query receipt")
     try:
-        if not _is_government_layer(capture["final_url"], dataset):
-            raise IntegrityError("Point capture redirected outside its government layer")
-        return capture, _point_index(json.loads(payload), dataset)
+        proof = validate_capture_proof(store, receipt_sha, digest, timezone)
+    except (AttributeError, KeyError, TypeError, ValueError) as error:
+        if recorded is not None and recorded.get("layer_error") != str(error):
+            raise
+        capture["layer_error"] = str(error)
+        return capture, {}, ()
+    try:
+        return capture, _point_index(json.loads(store.read(digest)), dataset), (proof,)
     except (AttributeError, KeyError, TypeError, ValueError) as error:
         capture["layer_error"] = str(error)
-        return capture, {}
+        return capture, {}, (proof,)
 
 
 def replay_historical_points(v2_root, store_path, *, prior=None, fetcher=fetch_public):
@@ -213,6 +242,7 @@ def replay_historical_points(v2_root, store_path, *, prior=None, fetcher=fetch_p
 
     store = ContentStore(store_path)
     cutoff = RESEARCH_CUTOFF.isoformat()
+    timezone = ZoneInfo(TIMEZONE)
     routes = _historical_routes(checked_csv(data), json.loads(assets))
     recorded = {}
     if prior is not None:
@@ -225,12 +255,12 @@ def replay_historical_points(v2_root, store_path, *, prior=None, fetcher=fetch_p
     captures, results = [], []
     for (dataset, digest, archive_url), rows in sorted(routes.items()):
         url = _point_query(dataset, rows)
-        capture, points = _read_point_capture(dataset, url, store, recorded.get(url), fetcher)
+        capture, points, proofs = _read_point_capture(dataset, url, store, recorded.get(url), fetcher, timezone)
         if capture["source_sha256"]:
             capture["temporal_decision"] = _decision(
                 {"sha256": capture["source_sha256"], "publication_date": None,
                  "acquired_at": capture["acquired_at"], "reacquired_at": None},
-                {"cutoff": cutoff}, (),
+                {"cutoff": cutoff}, proofs,
             ).to_dict()
         capture.update(dataset=dataset, historical_sha256=digest, historical_url=archive_url)
         captures.append(capture)
