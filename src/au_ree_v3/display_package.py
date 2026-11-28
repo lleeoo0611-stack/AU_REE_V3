@@ -122,9 +122,28 @@ def _edition_join(fact: DisplayFact, editions: dict):
         raise ValueError("Display fact does not bind an eligible exact Project capture and source edition")
 
 
+def _opt_in_context(profile, sources, assets, forecast, geography):
+    extras, review = (), ()
+    pins = {}
+    if forecast is not None:
+        from .forecast import forecast_display_facts
+
+        forecast_rules, oracle = forecast
+        extras = forecast_display_facts(profile, sources, assets, forecast_rules, oracle_path=oracle)
+        pins.update(forecast_rules=_sha(forecast_rules.read_bytes()), forecast_oracle=_sha(oracle.read_bytes()))
+    if geography is not None:
+        from .official_geography import official_geography_evidence
+
+        geo_rules, expanded_manifest, expanded_assets = geography
+        review = official_geography_evidence(geo_rules, sources, assets, expanded_manifest, expanded_assets)
+        pins.update(geography_rules=_sha(geo_rules.read_bytes()), expanded_review_manifest=_sha(expanded_manifest.read_bytes()))
+    return extras, review, pins
+
+
 def compile_display_package(
     *, profile: Path, columns_path: Path, build_directory: Path, release_root: Path, release_id: str,
-    sources: Path, bindings: Path, assets: Path,
+    sources: Path, bindings: Path, assets: Path, forecast: tuple[Path, Path] | None = None,
+    geography: tuple[Path, Path, Path] | None = None,
 ) -> DisplayPackage:
     """Rebind display evidence to raw frozen bytes with no Store or decision write path."""
     from .census_resource_display import reported_resource_facts
@@ -158,8 +177,10 @@ def compile_display_package(
         diagnostics=resource_diagnostics, bindings=binding_spec, manifest_sha=source_sha,
     )
     dates = _statement_dates(census_receipt, editions, content, cache)
-    review = tuple(item["review_evidence"] for item in resource_diagnostics if "review_evidence" in item)
-    facts = (*resources, *dates)
+    extras, region_review, context_pins = _opt_in_context(profile, sources, assets, forecast, geography)
+    resource_review = tuple(item["review_evidence"] for item in resource_diagnostics if "review_evidence" in item)
+    review = (*resource_review, *region_review)
+    facts = (*resources, *dates, *extras)
     for fact in facts:
         _edition_join(fact, editions)
     document = display_document(release_id=release_id, columns=columns, project_ids=project_ids,
@@ -172,7 +193,7 @@ def compile_display_package(
         "code_commit": archive["code_commit"], "build_receipt_sha256": build.receipt_sha,
         "source_manifest_sha256": source_sha, "source_editions": len(status["verified_sha256"]),
         "verified_source_captures": len(verified), "contract_sha256": document["contract_sha256"],
-        "input_files": {"columns": _sha(columns_path.read_bytes())},
+        "input_files": {"columns": _sha(columns_path.read_bytes()), **context_pins},
         "coverage": document["coverage"], "fact_records": len(facts), "fact_roles": role_counts,
         "distinct_original_subjects": len({(fact.project_id, fact.source_sha256, fact.subject_id) for fact in facts}),
         "distinct_original_editions": len({fact.source_sha256 for fact in facts}),

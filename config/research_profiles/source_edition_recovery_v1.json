@@ -1,0 +1,74 @@
+{
+  "schema": "source-edition-recovery-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "wudinna-lse-html",
+      "project_id": "AU-0098e17a63e7c05c213f",
+      "expected_sha256": "e41fa365bd85fe16c468809804da59a3918326cd9990997e0c9ce8535b5e0950",
+      "kind": "html",
+      "routes": [
+        {
+          "publisher": "London Stock Exchange",
+          "url": "https://www.londonstockexchange.com/en/news/article/COBR/maiden-rare-earth-mineral-resource-estimate/637e-cb-eb-9d-8e-465a87"
+        },
+        {
+          "publisher": "Cobra Resources",
+          "url": "https://investors.cobraplc.com/announcements/VQ0lGG-cobra-resources-plc-maiden-rare-earth-mineral-resource-estimate"
+        }
+      ]
+    },
+    {
+      "case_id": "yttria-markit-pdf",
+      "project_id": "AU-ee5ca893d12883df35f1",
+      "expected_sha256": "73936d124c5ce52038f968db521713ba86e72b92c847fb391254ebc47c0f0d51",
+      "kind": "pdf",
+      "routes": [
+        {
+          "publisher": "ASX announcement via Markit",
+          "url": "https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02795766-6A1202739"
+        },
+        {
+          "publisher": "ASX announcement via Aspect Huntley",
+          "url": "https://www.aspecthuntley.com.au/asxdata/20240416/pdf/02795766.pdf"
+        },
+        {
+          "publisher": "ASX announcement via Market Index",
+          "url": "https://data-api.marketindex.com.au/api/v1/announcements/XASX%3AGA8%3A6A1202739/pdf/inline/asra-declares-maiden-mre-for-yttria-ree-deposit"
+        },
+        {
+          "url": "https://web.archive.org/web/20251008132942id_/https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02795766-6A1202739",
+          "publisher": "Internet Archive replay of Markit Digital public ASX edition"
+        }
+      ]
+    },
+    {
+      "case_id": "mt-stirling-yttria-historical-pdf",
+      "project_id": "AU-d0ce731e1d8198ffaf58",
+      "expected_sha256": "bb46f35ad584143bdf7915b53b84c7ff55b6e8dc2aa23bab52f45eb0da057726",
+      "kind": "pdf",
+      "routes": [
+        {
+          "publisher": "ASX announcement via Markit",
+          "url": "https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02795766-6A1202739"
+        },
+        {
+          "url": "https://web.archive.org/web/20251008132942id_/https://cdn-api.markitdigital.com/apiman-gateway/ASX/asx-research/1.0/file/2924-02795766-6A1202739",
+          "publisher": "Internet Archive replay of Markit Digital public ASX edition"
+        }
+      ]
+    },
+    {
+      "case_id": "splinter-wamex-report",
+      "project_id": "AU-574465211976ec57b1ef",
+      "expected_sha256": "428c8f759ec2f4dc393177f0fccce12cc96c9b1359638d003f7ea30b6d388df7",
+      "kind": "pdf",
+      "routes": [
+        {
+          "publisher": "Western Australia WAMEX",
+          "url": "https://wamex.dmp.wa.gov.au/Wamex/Search/ReportDetails?ANumber=109432"
+        }
+      ]
+    }
+  ]
+}
