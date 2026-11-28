@@ -9,8 +9,9 @@ from hashlib import sha256
 from pathlib import Path
 
 from .census_metadata import CensusMetadata, prepare_census_metadata
-from .contracts import canonical_json
+from .contracts import ResearchRelease, canonical_json
 from .contracts.temporal import evaluate_temporal
+from .derivations import FORMULA_REGISTRY_SHA256, RELEASE_REGISTRY_PIN, persist_census_treo
 from .fresh_census import build_census
 from .fresh_decision import build_decision
 from .fresh_observations import extract_sources
@@ -161,6 +162,10 @@ def _research_projections(
             build_decision(profile, out / "decision"),
         )
     with Store(database, trusted_temporal_evidence_ids=observation_receipt["trusted_temporal_evidence_ids"]) as store:
+        release = store.get(ResearchRelease, release_id)
+        if release.result_fingerprints.get(RELEASE_REGISTRY_PIN) == FORMULA_REGISTRY_SHA256:
+            with store.transaction():
+                persist_census_treo(store, release)
         return (
             build_census(
                 profile, out / "census", store=store, release_id=release_id,
@@ -198,7 +203,10 @@ def build_research(
         ]}
         extraction_sources.write_text(canonical_json(subset) + "\n", encoding="utf-8")
     db = out / "observations" / "research.sqlite"
-    extraction = extract_sources(bindings, extraction_sources, assets, db, out / "observations", code_commit=code_commit)
+    extraction = extract_sources(
+        bindings, extraction_sources, assets, db, out / "observations", code_commit=code_commit,
+        census_derivation_registry_sha256=FORMULA_REGISTRY_SHA256,
+    )
     if _sha(sources) != source_sha:
         raise ValueError("source manifest changed during research build")
     census, decision = _research_projections(profile, out, db, extraction, source_receipt["project_statuses"], metadata)
@@ -223,5 +231,7 @@ def build_research(
         "observation_release_id": extraction["release_id"],
         "observation_counts": {name: extraction[name] for name in ("candidate_count", "validated_count", "selected_count")},
     }
+    if "census_derivation_registry_sha256" in extraction:
+        result["census_derivation_registry_sha256"] = extraction["census_derivation_registry_sha256"]
     (out / "build_receipt.json").write_text(canonical_json(result) + "\n", encoding="utf-8")
     return result

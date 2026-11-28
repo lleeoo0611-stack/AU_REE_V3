@@ -17,7 +17,7 @@ from .census_science import RESOURCE_PRESENCE_COLUMN, validate_resource_presence
 from .comparability import census_quantity
 from .contracts import canonical_json
 from .decision import leave_one_out, rank_panel
-from .fresh_census import PROJECTION_SCHEMA, STATUS_FIELDS, validate_projected_cell
+from .fresh_census import FORMAL_CENSUS_ORIGINS, PROJECTION_SCHEMA, STATUS_FIELDS, validate_projected_cell
 from .publication import ContentReplica, load_release
 from .registry import PROJECT_ID_COLUMN
 from .research_artifacts import ARTIFACTS
@@ -187,8 +187,19 @@ def _census(artifacts, receipt, observations):
     definitions = policy.by_name if policy else {}
     tabular = {(row[PROJECT_ID_COLUMN], column): row[column] for row in table for column in columns}
     ledger = {(cell["project_id"], cell["column"]): cell for cell in cells}
+    assessments = census_receipt.get("science_views", {}).get("formal_derivations", [])
+    if assessments:
+        from .derivations import FORMULA_REGISTRY_SHA256
+
+        extraction = _object(artifacts["observations/extraction.json"], "extraction.json")
+        if any(item.get("census_derivation_registry_sha256") != FORMULA_REGISTRY_SHA256 for item in (receipt, extraction)):
+            raise ValueError("Census derivations require the release-pinned Formula Registry")
+    by_project = {record["project_id"]: record for record in assessments}
+    if len(by_project) != len(assessments):
+        raise ValueError("Duplicate per-project authorized Census derivation")
     result = {}
     formal = 0
+    derived = 0
     for cell in cells:
         key = cell["project_id"], cell["column"]
         if key in result or key not in tabular or tabular[key] != cell["value"] or not cell["reason"]:
@@ -210,6 +221,14 @@ def _census(artifacts, receipt, observations):
             _check_display_metadata(cell, definition, receipt)
         elif state == "PRESENT" and policy and origin == "EVIDENCE_REFERENCE" and key[1] == RESOURCE_PRESENCE_COLUMN:
             validate_resource_presence(cell, definition, census_receipt, observations, ledger)
+        elif state == "PRESENT" and policy and origin == "FORMAL_DERIVED":
+            from .census_derivations import verify_census_derivation
+
+            if census_receipt["release_mode"] != "FORMAL" or key[0] not in by_project:
+                raise ValueError(f"Census value has no authorized derivation: {key}")
+            verify_census_derivation(cell, by_project.pop(key[0]), observations, ledger, receipt["observation_release_id"])
+            formal += 1
+            derived += 1
         elif state == "PRESENT":
             observation = observations.get(cell["observation_id"])
             _check_observation(cell, observation, key[0], receipt["observation_release_id"])
@@ -223,11 +242,13 @@ def _census(artifacts, receipt, observations):
             ):
                 raise ValueError(f"Census value lacks an exact eligible selection: {key}")
             formal += 1
-        elif origin == "FORMAL_SELECTION":
+        elif origin in FORMAL_CENSUS_ORIGINS:
             raise ValueError(f"Missing Census value incorrectly marked as formally present: {key}")
         result[key] = cell
     if census_receipt["formal_scientific_cells"] != formal or receipt["scientific_output_count"] != formal:
         raise ValueError("Formal Census value count differs from its exact evidence rows")
+    if by_project or census_receipt.get("formal_derived_cells", 0) != derived:
+        raise ValueError("Formal Census derivation count differs from its exact records")
     return result, projects, columns
 
 
@@ -354,10 +375,10 @@ def _census_delta(baseline, current):
             key = project, column
             before, after = baseline.census[key], current.census[key]
             changed = _fields_changed(before, after)
-            formal_before = before["value_origin"] == "FORMAL_SELECTION"
-            formal_after = after["value_origin"] == "FORMAL_SELECTION"
+            formal_before = before["value_origin"] in FORMAL_CENSUS_ORIGINS
+            formal_after = after["value_origin"] in FORMAL_CENSUS_ORIGINS
             if formal_after and not formal_before:
-                kind = "FORMAL_ADDED"
+                kind = "FORMAL_DERIVED_ADDED" if after["value_origin"] == "FORMAL_DERIVED" else "FORMAL_ADDED"
             elif formal_before and not formal_after:
                 kind = "FORMAL_RETURNED"
             elif not formal_before and not formal_after and before["value"] != after["value"]:

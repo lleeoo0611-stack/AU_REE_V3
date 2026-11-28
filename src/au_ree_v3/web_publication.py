@@ -50,10 +50,10 @@ _URL_QUERY_KEYS = {"announcementid", "asxcode", "documentid", "file", "headlinei
 _INTERNAL_PATH = re.compile(r"(?:file://|(?:^|[\s'\"])(?:/(?:tmp|workspace|home|root|mnt)/|[A-Za-z]:[\\/]))", re.I)
 _CREDENTIAL = re.compile(r"(?i)(?:bearer\s+[A-Za-z0-9._~+/=-]+|(?:api[_-]?key|secret|password|token)\s*[:=]\s*\S+)")
 _EVIDENCE_FIELDS = {
-    "anchor_id", "candidate_id", "category", "chemical_basis", "crs", "data_role", "denominator_basis",
+    "anchor_id", "assessment_id", "candidate_id", "category", "chemical_basis", "crs", "data_role", "denominator_basis",
     "derived_value_id", "effective_date", "evidence_state", "formula", "formula_id", "formula_sha256", "geometry_role", "locator",
     "material_basis", "observation_id", "projection_policy_sha256", "projection_policy_version",
-    "publication_date", "raw_record_id", "raw_unit", "raw_value", "reason", "registry_sha256", "source_capture_sha256",
+    "formula_registry_sha256", "publication_date", "raw_record_id", "raw_unit", "raw_value", "reason", "registry_sha256", "source_capture_sha256",
     "rules_sha256", "scope", "scope_id", "selection_id", "source_column", "source_row", "source_search_status",
     "source_sha256", "source_table", "source_url", "statement_id", "temporal_decision_id",
     "temporal_policy_version", "temporal_status", "unit", "validation_id",
@@ -195,6 +195,8 @@ def _evidence(row: dict) -> dict:
     metadata = _json_field(row, "metadata_evidence")
     if isinstance(metadata, dict) and (public := _scalar_fields(metadata, _METADATA_FIELDS)):
         evidence["metadata"] = public
+    if origin == "FORMAL_DERIVED" and isinstance(metadata, dict):
+        evidence.update(_scalar_fields(metadata, {"derived_value_id", "assessment_id", "formula", "formula_registry_sha256"}))
     for field in ("input_observation_ids", "temporal_evidence_ids"):
         if ids := _id_list(_json_field(row, field)):
             evidence[field] = ids
@@ -514,7 +516,9 @@ def _coverage_view(columns, projects, evidence, receipt, build_receipt, mcda):
     references = origins["EVIDENCE_REFERENCE"]
     comparable = sum(cell.get("state") == "COMPARABLE" for row in mcda["project_criteria"].values() for cell in row.values())
     if (dict(states) != {key: value for key, value in receipt["cell_states"].items() if value}
-            or comparable != build_receipt["comparable_project_criteria"]):
+            or comparable != build_receipt["comparable_project_criteria"]
+            or derived != receipt.get("formal_derived_cells", 0)
+            or ("formal_scientific_cells" in receipt and direct + derived != receipt["formal_scientific_cells"])):
         raise WebPublicationError("Coverage disagrees with verified research artifacts")
     metadata_coverage, applicability = _coverage_applicability(receipt, columns, column_states, column_reasons)
     if metadata_coverage is not None and metadata_coverage["present"] != identity + metadata:
@@ -733,7 +737,7 @@ def _check_census(manifest, census, evidence, csv_payload):
         raise WebPublicationError("Web Census does not preserve the pinned CSV headings")
     used = set()
     direct = {}
-    references = []
+    references, derived = [], []
     for project, row in zip(projects, raw, strict=True):
         if set(project) != {"id", "cells"} or project["id"] != row[PROJECT_ID_COLUMN] or len(project["cells"]) != len(columns):
             raise WebPublicationError("Web Census Project does not preserve its CSV row")
@@ -761,11 +765,8 @@ def _check_census(manifest, census, evidence, csv_payload):
                 direct[(project["id"], entry["observation_id"])] = entry
             if state == "PRESENT" and cell["origin"] == "EVIDENCE_REFERENCE":
                 references.append(entry)
-            if state == "PRESENT" and cell["origin"] == "FORMAL_DERIVED" and (
-                not _sha(entry.get("formula_sha256")) or not entry.get("input_observation_ids")
-                or not _sha(entry.get("source_sha256")) or entry.get("evidence_state") != "FORMAL_DERIVED"
-            ):
-                raise WebPublicationError("Formal derived Census cell lacks complete input and formula evidence")
+            if state == "PRESENT" and cell["origin"] == "FORMAL_DERIVED":
+                derived.append(entry)
             used.add(lineage_id)
     for project_id, rows in census["selected_composition"].items():
         if project_id not in valid_ids or not isinstance(rows, list):
@@ -785,9 +786,36 @@ def _check_census(manifest, census, evidence, csv_payload):
             _allowed_public_evidence(entry)
             used.add(lineage_id)
     _check_evidence_references(references, direct)
+    _check_derived_references(derived, direct)
     if set(evidence) != used:
         raise WebPublicationError("Web evidence contains orphaned entries or missing cell lineage")
     return valid_ids
+
+
+def _check_derived_references(derived, direct):
+    if not derived:
+        return
+    from .derivations import FORMULA_REGISTRY_SHA256, registered_formula
+
+    fields = ("source_sha256", "scope_id", "statement_id", "effective_date", "category", "temporal_decision_id")
+    for entry in derived:
+        ids = _id_list(entry.get("input_observation_ids"))
+        inputs = [direct.get((entry["project_id"], observation)) for observation in ids]
+        formula = registered_formula(entry.get("formula_id"))
+        if (
+            entry["column_id"] != "總TREO蘊藏量_kt" or entry["evidence_state"] != "FORMAL_DERIVED"
+            or len(set(ids)) != 2 or len(inputs) != 2 or not all(inputs)
+            or any(not _sha(entry.get(key)) for key in (
+                "formula_sha256", "formula_registry_sha256", "assessment_id", "derived_value_id",
+                "source_sha256", "temporal_decision_id",
+            )) or formula is None or entry.get("formula") != formula.expression
+            or entry.get("formula_sha256") != formula.sha256
+            or entry.get("formula_registry_sha256") != FORMULA_REGISTRY_SHA256 or entry.get("raw_value")
+            or tuple(item["column_id"] for item in inputs) != ("礦石蘊藏量_Mt", "TREO品位_pct")
+            or any(not entry.get(key) or item.get(key) != entry[key] for item in inputs for key in fields)
+            or any(item.get("material_basis") != "WHOLE_ORE" or item.get("chemical_basis") != "TREO" for item in inputs)
+        ):
+            raise WebPublicationError("Formal derived Census cell lacks matching scoped inputs or approved formula evidence")
 
 
 def _check_evidence_references(references, direct):
@@ -851,7 +879,7 @@ def _check_mcda(mcda, manifest, project_ids):
 def _check_coverage(coverage, census, entries, mcda):
     keys = {"schema_version", "release_id"}
     content = {key: value for key, value in coverage.items() if key not in keys}
-    receipt = {**coverage, "coverage": {
+    receipt = {**coverage, "formal_scientific_cells": coverage["formal_direct_cells"] + coverage["formal_derived_cells"], "coverage": {
         "metadata": coverage["metadata_coverage"], "scientific": {"by_column": coverage["scientific_applicability"]},
     }}
     derived = _coverage_view(census["columns"], census["projects"], entries, receipt, {

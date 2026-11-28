@@ -223,8 +223,10 @@ class RealResearchWebTests(unittest.TestCase):
             self.assertEqual(verify_web_release(target, expected_release_id=release_id), manifest)
             self.assertEqual((target / "census.csv").read_bytes(), (build / "census/census.csv").read_bytes())
             coverage = _read(target / "coverage.json")
-            self.assertIn(receipt["scientific_output_count"], {12, 16})
-            self.assertEqual(coverage["formal_direct_cells"], receipt["scientific_output_count"])
+            self.assertIn(receipt["scientific_output_count"], {12, 16, 18})
+            derived = coverage["formal_derived_cells"]
+            self.assertEqual(coverage["formal_direct_cells"] + derived, receipt["scientific_output_count"])
+            self.assertEqual(derived, 2 if receipt["scientific_output_count"] == 18 else 0)
             self.assertEqual(coverage["comparable_project_criteria"], 6)
             self.assertEqual((coverage["projects"], coverage["columns"], coverage["present_source_count"]), (93, 51, 144))
             real_results = _read(build / "decision/mcda_results.json")["panels"]
@@ -255,15 +257,30 @@ class RealResearchWebTests(unittest.TestCase):
                     self.assertEqual(anchor["source_sha256"], reference["source_sha256"])
                     self.assertEqual(anchor["input_observation_ids"], json.loads(reference["input_observation_ids"]))
                     self.assertEqual(len(anchor["input_observation_ids"]), 3)
-            if receipt["scientific_output_count"] == 16:
-                self.check_scoped_resource_values(projects, columns, evidence)
+            if receipt["scientific_output_count"] >= 16:
+                self.check_scoped_resource_values(projects, columns, evidence, derived=bool(derived))
             self.assertEqual(_read(target / "gis.geojson")["features"], [])
 
-    def check_scoped_resource_values(self, projects, columns, evidence):
+    def check_scoped_resource_values(self, projects, columns, evidence, *, derived):
         oracle = _read(ROOT / "tests/fixtures/native_resource_v1/expected_census.json")
         for case in oracle["cases"]:
             cells = projects[case["project_id"]]
-            self.assertIsNone(cells[columns["總TREO蘊藏量_kt"]]["value"])
+            contained = cells[columns["總TREO蘊藏量_kt"]]
+            if derived:
+                ore, grade = (cells[columns[value["column"]]] for value in case["values"])
+                provenance = evidence[contained["lineage_id"]]
+                point = Decimal(ore["value"]) * Decimal(grade["value"]) * 10
+                self.assertEqual(Decimal(contained["value"]), point)
+                self.assertEqual(contained["origin"], "FORMAL_DERIVED")
+                self.assertIn("formula", provenance)
+                self.assertEqual(provenance["input_observation_ids"], [
+                    evidence[cell["lineage_id"]]["observation_id"] for cell in (ore, grade)
+                ])
+                low, high = map(Decimal, contained["precision"]["rounding_interval"])
+                self.assertLess(low, point)
+                self.assertGreater(high, point)
+            else:
+                self.assertIsNone(contained["value"])
             for expected in case["values"]:
                 with self.subTest(project=case["project_id"], column=expected["column"]):
                     cell = cells[columns[expected["column"]]]
