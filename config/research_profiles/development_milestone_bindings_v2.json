@@ -1,0 +1,156 @@
+{
+  "schema": "source-bound-development-events-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "bindings": [
+    {
+      "case_id": "koppamurra-pfs-asserted-date-unreported",
+      "project_id": "AU-49b538453133bd968e8d",
+      "source_sha256": "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01",
+      "receipt_sha256": "e0dc32af19f3f36aba6282dd7883bd00f5cdadb5cf2a379bef02f0604c194512",
+      "page": 1,
+      "quote": "Australian Rare Earths Limited (AR3 or the Company) has completed a Pre-Feasibility Study (PFS) for its flagship 100%- owned Koppamurra Rare Earths Project (Koppamurra or the Project) in South Australia",
+      "scope": "Koppamurra Rare Earths Project",
+      "scope_quote": "owned Koppamurra Rare Earths Project (Koppamurra or the Project) in South Australia",
+      "stage": "PFS",
+      "publication": {
+        "page": 1,
+        "quote": "ASX Release: 25 June 2026",
+        "date_token": "25 June 2026"
+      }
+    },
+    {
+      "case_id": "koppamurra-dfs-engineering-plan",
+      "project_id": "AU-49b538453133bd968e8d",
+      "source_sha256": "7595d024b25438cd5795635cb43f5f87717b9b5ac9a935eff7d1d3c07562fd01",
+      "receipt_sha256": "e0dc32af19f3f36aba6282dd7883bd00f5cdadb5cf2a379bef02f0604c194512",
+      "page": 51,
+      "quote": "Detailed engineering to support the Definitive Feasibility Study (DFS) will commence upon completion of the pilot plant at ANSTO in late 2026.",
+      "scope": "Koppamurra Rare Earths Project",
+      "scope_quote": "Figure 14 Koppamurra Milestone Schedule",
+      "stage": "DFS",
+      "publication": {
+        "page": 1,
+        "quote": "ASX Release: 25 June 2026",
+        "date_token": "25 June 2026"
+      }
+    },
+    {
+      "case_id": "donald-phase-one-dfs-completed",
+      "project_id": "AU-2fc429d0556dfa0b95c4",
+      "source_sha256": "82a4a37bf3a073c799b49bf5ff67d55add185d88a26485e322d64d86f7374097",
+      "receipt_sha256": "aa6c4b5a9364ed561b7ed3de91ffd31148540d4a3ec196fba76fa3c0834c096c",
+      "page": 56,
+      "quote": "Astron completed a “definitive feasibility study” in April 2023 for the Phase 1 operation within MIN5532",
+      "scope": "Donald Phase 1 · MIN5532",
+      "scope_quote": "Donald Project Pty Ltd (DPPL). Astron completed a “definitive feasibility study” in April 2023 for the Phase 1 operation within MIN5532",
+      "stage": "DFS",
+      "event_date_token": "April 2023",
+      "publication": {
+        "page": 1,
+        "quote": "27 February 2026",
+        "date_token": "27 February 2026"
+      }
+    },
+    {
+      "case_id": "donald-phase-two-pfs-completed",
+      "project_id": "AU-2fc429d0556dfa0b95c4",
+      "source_sha256": "82a4a37bf3a073c799b49bf5ff67d55add185d88a26485e322d64d86f7374097",
+      "receipt_sha256": "aa6c4b5a9364ed561b7ed3de91ffd31148540d4a3ec196fba76fa3c0834c096c",
+      "page": 239,
+      "quote": "Astron completed the Phase 2 – RL2002 “pre-feasibility study” for the Donald project in June 2023.",
+      "scope": "Donald Phase 2 · RL2002",
+      "scope_quote": "Phase 2 – RL2002 “pre-feasibility study” for the Donald project",
+      "stage": "PFS",
+      "event_date_token": "June 2023",
+      "publication": {
+        "page": 1,
+        "quote": "27 February 2026",
+        "date_token": "27 February 2026"
+      }
+    },
+    {
+      "case_id": "balranald-dfs-completed",
+      "project_id": "AU-524c37fc04cf47bf8dca",
+      "source_sha256": "94a57655d74ead667ce7adbbb0923b68b011641b9249992ff12a017c2e96252f",
+      "receipt_sha256": "2ce00387b5f8aed2a71fbf489ab6cf69764f5cc8324c6b0a74306bf0cdcedeae",
+      "page": 1,
+      "quote": "The definitive feasibility study (DFS) for Balranald was completed in late 2022",
+      "scope": "Balranald critical minerals development",
+      "scope_quote": "definitive feasibility study (DFS) for Balranald",
+      "stage": "DFS",
+      "event_date_token": "late 2022",
+      "publication": {
+        "page": 1,
+        "quote": "21 February 2023",
+        "date_token": "21 February 2023"
+      }
+    },
+    {
+      "case_id": "avonbank-dfs-completed",
+      "project_id": "AU-329908ab8d4c1d1d3e03",
+      "page": 46,
+      "quote": "The Avonbank Project Definitive Feasibility Study completed in 2021 demonstrated attractive economics for the Project.",
+      "scope": "Avonbank Mineral Sands Project",
+      "scope_quote": "The Avonbank Project Definitive Feasibility Study",
+      "event_date_token": "2021",
+      "source_sha256": "af0a8ff9a1b194a45f16dc56dd3b71c04c5f426f15dd23d0511de087f9ec8ac5",
+      "receipt_sha256": "c75bd82388ad8a43e12a337a7f232298106b5220195901f4be66fe6904dd5179",
+      "stage": "DFS",
+      "publication": {
+        "page": 2,
+        "quote": "Publication date: March 2026",
+        "date_token": "March 2026"
+      }
+    },
+    {
+      "case_id": "copi-dfs-completed",
+      "project_id": "AU-fe65cb1bd28eacb7a67f",
+      "page": 47,
+      "quote": "Attractive returns are demonstrated by the Copi DFS completed in January 2024",
+      "scope": "Copi Mineral Sands Project",
+      "scope_quote": "the Copi DFS completed in January 2024",
+      "event_date_token": "January 2024",
+      "source_sha256": "af0a8ff9a1b194a45f16dc56dd3b71c04c5f426f15dd23d0511de087f9ec8ac5",
+      "receipt_sha256": "c75bd82388ad8a43e12a337a7f232298106b5220195901f4be66fe6904dd5179",
+      "stage": "DFS",
+      "publication": {
+        "page": 2,
+        "quote": "Publication date: March 2026",
+        "date_token": "March 2026"
+      }
+    },
+    {
+      "case_id": "goschen-dfs-explicit-completion-date-unreported",
+      "project_id": "AU-6d807eb7caec9db0f35e",
+      "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "receipt_sha256": "7eda9f170de582afca2ee3216998058ba2170ef52221f9d2384bdfd0f3270f92",
+      "page": 8,
+      "quote": "the 2023 Definitive Feasibility Study completed for Area 1 by VHM.",
+      "scope": "Goschen Area 1",
+      "scope_quote": "Definitive Feasibility Study completed for Area 1 by VHM",
+      "stage": "DFS",
+      "publication": {
+        "page": 1,
+        "quote": "ASX Release 15 October 2025",
+        "date_token": "15 October 2025"
+      }
+    },
+    {
+      "case_id": "dubbo-dfs-project-scope-not-local",
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "source_sha256": "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab",
+      "receipt_sha256": "b6818686e177845967d3311bfa5511ee62c7499036ff6767bc7e7014ac5036f2",
+      "page": 23,
+      "quote": "A Definitive Feasibility Study based on a flowsheet to recover the above products, was completed in 2013 by TZ Minerals International Pty Ltd (TZMI)",
+      "scope": "Dubbo Project",
+      "scope_quote": "The Dubbo Project was originally developed by Alkane Resources Limited (Alkane)",
+      "stage": "DFS",
+      "event_date_token": "2013",
+      "publication": {
+        "page": 1,
+        "quote": "ASX Release 11 July 2025",
+        "date_token": "11 July 2025"
+      }
+    }
+  ]
+}

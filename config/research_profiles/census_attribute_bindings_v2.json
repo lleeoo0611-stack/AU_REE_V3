@@ -1,0 +1,79 @@
+{
+  "schema": "source-bound-project-attributes-v1",
+  "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "deposit_types": [
+    {
+      "case_id": "mt-weld-issuer-deposit-type",
+      "project_id": "AU-efff91a06cf344122d88",
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "receipt_sha256": "29b68c0bab8fb6e8054c35407658960fcef73802cf1739d88d3ba27dc5dbf7f4",
+      "page": 38,
+      "quote": "The Mt Weld Rare Earth deposit is hosted within a supergene enriched zone of the Mt Weld Carbonatite (MWC) regolith.",
+      "scope_quote": "The Mt Weld Rare Earth deposit",
+      "classification_quote": "Deposit type, geological setting and style of mineralisation.",
+      "term": "CARBONATITE_SUPERGENE_REGOLITH",
+      "scope": "Mt Weld Rare Earth Deposit",
+      "scope_kind": "NAMED_PROJECT_DEPOSIT",
+      "publication": {
+        "page": 1,
+        "quote": "5 August 2024",
+        "date_token": "5 August 2024"
+      }
+    },
+    {
+      "case_id": "mt-weld-issuer-host-description-only",
+      "project_id": "AU-efff91a06cf344122d88",
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "receipt_sha256": "29b68c0bab8fb6e8054c35407658960fcef73802cf1739d88d3ba27dc5dbf7f4",
+      "page": 6,
+      "quote": "The REO mineralisation at Mt Weld is hosted within lateritic regolith comprising supergene-enriched material derived from the underlying intrusive carbonatite.",
+      "scope_quote": "The REO mineralisation at Mt Weld",
+      "term": "CARBONATITE_SUPERGENE_REGOLITH",
+      "scope": "Mt Weld described mineralisation",
+      "scope_kind": "NAMED_PROJECT_DEPOSIT",
+      "publication": {
+        "page": 1,
+        "quote": "5 August 2024",
+        "date_token": "5 August 2024"
+      }
+    }
+  ],
+  "development_milestones": [
+    {
+      "case_id": "koppamurra-pfs-asserted-date-unreported",
+      "scope_kind": "PROJECT"
+    },
+    {
+      "case_id": "koppamurra-dfs-engineering-plan",
+      "scope_kind": "PROJECT"
+    },
+    {
+      "case_id": "donald-phase-one-dfs-completed",
+      "scope_kind": "PROJECT_PHASE"
+    },
+    {
+      "case_id": "donald-phase-two-pfs-completed",
+      "scope_kind": "PROJECT_PHASE"
+    },
+    {
+      "case_id": "balranald-dfs-completed",
+      "scope_kind": "PROJECT"
+    },
+    {
+      "case_id": "avonbank-dfs-completed",
+      "scope_kind": "PROJECT"
+    },
+    {
+      "case_id": "copi-dfs-completed",
+      "scope_kind": "PROJECT"
+    },
+    {
+      "case_id": "goschen-dfs-explicit-completion-date-unreported",
+      "scope_kind": "PROJECT"
+    },
+    {
+      "case_id": "dubbo-dfs-project-scope-not-local",
+      "scope_kind": "PROJECT"
+    }
+  ]
+}

@@ -1,15 +1,20 @@
 from dataclasses import replace
+from hashlib import sha256
 from pathlib import Path
 from types import SimpleNamespace
 import json
+import os
 import unittest
 
+from au_ree_v3.census_metadata import prepare_census_metadata
 from au_ree_v3.contracts import ContractViolation
+from au_ree_v3.fresh_research import verify_source_manifest
 from au_ree_v3.project_attributes import (
     AttributeAssertion, AttributeSelection, POLICY_SHA, ValidatedAttribute,
     _development_role, _select_attributes, _verdict,
 )
-from au_ree_v3.registry import load_profile
+from au_ree_v3.registry import load_profile, load_registry
+from au_ree_v3.sources import ContentStore
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE_DIR = ROOT / "config/research_profiles"
@@ -34,6 +39,21 @@ class ProjectAttributeTests(unittest.TestCase):
         self.assertTrue(enabled.attribute_bindings_path.is_file())
         self.assertTrue(enabled.attribute_milestones_path.is_file())
         self.assertEqual((enabled.profile_id, enabled.research_cutoff), (disabled.profile_id, disabled.research_cutoff))
+
+    def test_expanded_opt_in_keeps_original_bindings(self):
+        previous = load_profile(PROFILE_DIR / "au_ree_census_attributes_v1.json")
+        expanded = load_profile(PROFILE_DIR / "au_ree_census_attributes_v2.json")
+        self.assertEqual((expanded.registry_path, expanded.census_columns_path, expanded.source_catalog_path),
+                         (previous.registry_path, previous.census_columns_path, previous.source_catalog_path))
+        self.assertNotEqual(previous.sha256, expanded.sha256)
+        original_attrs, new_attrs = (json.loads(settings.attribute_bindings_path.read_bytes())
+                                     for settings in (previous, expanded))
+        self.assertEqual(original_attrs["deposit_types"], new_attrs["deposit_types"])
+        self.assertEqual(original_attrs["development_milestones"],
+                         new_attrs["development_milestones"][:len(original_attrs["development_milestones"])])
+        original_cases, new_cases = (json.loads(settings.attribute_milestones_path.read_bytes())["bindings"]
+                                       for settings in (previous, expanded))
+        self.assertEqual(original_cases, new_cases[:len(original_cases)])
 
     def test_identity_prevents_rewriting_reported_terms(self):
         row = assertion()
@@ -84,27 +104,27 @@ class ProjectAttributeTests(unittest.TestCase):
 
 
 class ExactAttributeEvidenceTests(unittest.TestCase):
-    def test_real_pdf_positive_and_missing_source_isolation(self):
-        import os
-        from hashlib import sha256
-        from shutil import copyfile
-        from tempfile import TemporaryDirectory
-        from au_ree_v3.census_metadata import prepare_census_metadata
-        from au_ree_v3.fresh_research import verify_source_manifest
-        from au_ree_v3.registry import load_registry
-        from au_ree_v3.sources import ContentStore
-
+    def setUp(self):
         if not (os.environ.get("AU_REE_MILESTONE_MANIFEST") and os.environ.get("AU_REE_MILESTONE_ASSETS")):
             self.skipTest("fixed 144-SHA manifest and source CAS are required")
-        assets = Path(os.environ["AU_REE_MILESTONE_ASSETS"])
-        profile = PROFILE_DIR / "au_ree_census_attributes_v1.json"
+        self.assets = Path(os.environ["AU_REE_MILESTONE_ASSETS"])
+        self.manifest_bytes = Path(os.environ["AU_REE_MILESTONE_MANIFEST"]).read_bytes()
+        self.manifest = json.loads(self.manifest_bytes)
+        self.pinned = {"source_manifest_sha256": sha256(self.manifest_bytes).hexdigest(), "release_id": "b" * 64}
+
+    def _real_profile(self, version):
+        profile = PROFILE_DIR / f"au_ree_census_attributes_v{version}.json"
         settings = load_profile(profile)
         registry = load_registry(settings.registry_path)
-        manifest_bytes = Path(os.environ["AU_REE_MILESTONE_MANIFEST"]).read_bytes()
-        manifest = json.loads(manifest_bytes)
-        source_receipt = verify_source_manifest(settings, manifest, registry, ContentStore(assets))
-        pinned = {"source_manifest_sha256": sha256(manifest_bytes).hexdigest(), "release_id": "b" * 64}
-        metadata = prepare_census_metadata(profile, manifest, source_receipt, attribute_assets=assets, **pinned)
+        receipt = verify_source_manifest(settings, self.manifest, registry, ContentStore(self.assets))
+        return profile, receipt
+
+    def test_real_pdf_positive_and_missing_source_isolation(self):
+        from shutil import copyfile
+        from tempfile import TemporaryDirectory
+
+        profile, receipt = self._real_profile(1)
+        metadata = prepare_census_metadata(profile, self.manifest, receipt, attribute_assets=self.assets, **self.pinned)
         self.assertEqual(metadata.attribute_receipt["selected_attributes"], 2)
         self.assertEqual(metadata.attribute_receipt["display_cells"], 5)
         self.assertEqual(metadata.cells["AU-efff91a06cf344122d88", "礦床型態代碼"]["value"],
@@ -119,12 +139,37 @@ class ExactAttributeEvidenceTests(unittest.TestCase):
             objects.mkdir()
             captures = {row["capture_sha256"] for row in metadata.attribute_receipt["cases"]}
             needed = {
-                digest for edition in manifest["editions"] if edition["receipt_sha256"] in captures
+                digest for edition in self.manifest["editions"] if edition["receipt_sha256"] in captures
                 for digest in (edition["sha256"], *(ref["reference_sha256"] for ref in edition["temporal_evidence"]))
             }
             for digest in needed - {missing}:
-                copyfile(assets / "objects" / digest, objects / digest)
-            isolated = prepare_census_metadata(profile, manifest, source_receipt, attribute_assets=limited, **pinned)
+                copyfile(self.assets / "objects" / digest, objects / digest)
+            isolated = prepare_census_metadata(profile, self.manifest, receipt, attribute_assets=limited, **self.pinned)
         self.assertNotIn(("AU-efff91a06cf344122d88", "礦床型態代碼"), isolated.cells)
         self.assertIn(("AU-524c37fc04cf47bf8dca", "開發階段代碼"), isolated.cells)
         self.assertEqual(isolated.attribute_receipt["verdicts"]["SOURCE_UNAVAILABLE"], 2)
+
+    def test_expanded_profile_exact_completed_studies_and_refusals(self):
+        profile, receipt = self._real_profile(2)
+        metadata = prepare_census_metadata(profile, self.manifest, receipt, attribute_assets=self.assets, **self.pinned)
+        self.assertEqual(metadata.attribute_receipt["selected_attributes"], 4)
+        self.assertEqual(metadata.attribute_receipt["display_cells"], 11)
+        self.assertEqual(metadata.attribute_receipt["mcda_inputs_added"], 0)
+        expected = {"avonbank-dfs-completed": ("AU-329908ab8d4c1d1d3e03", "2021", 46),
+                    "copi-dfs-completed": ("AU-fe65cb1bd28eacb7a67f", "2024-01", 47)}
+        cases = {row["case_id"]: row for row in metadata.attribute_receipt["cases"]}
+        for case, (project, event_date, page) in expected.items():
+            with self.subTest(case=case):
+                entry = cases[case]
+                self.assertEqual((entry["project_id"], entry["assertion"]["event_date"], entry["page"]),
+                                 (project, event_date, page))
+                self.assertEqual(entry["assertion"]["publication_date"], "2026-03")
+                self.assertEqual(entry["selection"]["purpose"], "CENSUS_DISPLAY_ONLY")
+                self.assertEqual(metadata.cells[project, "開發階段代碼"]["value"], "DFS")
+        for case, reason in (
+            ("goschen-dfs-explicit-completion-date-unreported", "HISTORICAL_OBSERVATION_DATE_MISSING"),
+            ("dubbo-dfs-project-scope-not-local", "PROJECT_SCOPE_NOT_LOCAL_TO_MILESTONE"),
+        ):
+            self.assertEqual(cases[case]["reason"], reason)
+            self.assertIsNone(cases[case]["selection"])
+            self.assertNotIn((cases[case]["project_id"], "開發階段代碼"), metadata.cells)
