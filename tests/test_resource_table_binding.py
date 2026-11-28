@@ -195,6 +195,58 @@ class NativeLayoutTests(unittest.TestCase):
         self.assertEqual(item.unit, "kt")
         self.assertIn("‘000 tonnes", item.unit_label.text)
 
+    def test_second_header_tier_proves_explicit_scale_and_rejects_reo_share(self):
+        caption = "Table 20 Synthetic Mineral Resource Estimate"
+        header = "Classification       Tonnes            TREO             MREO/TREO"
+        units = "                       (Mt)            (ppm)                  (%)"
+        row = "Total                   15             1,700                   22"
+        doc = PDFDocument(SHA, ("\n".join((caption, header, units, row)),), "test")
+        actual = bind_page_row(doc, page=1, row_line=4, caption_line=1)
+        self.assertEqual([(item.variable, item.unit) for item in actual],
+                         [("ore_mt", "Mt"), ("grade", "ppm"), (None, None)])
+        self.assertIn("(Mt)", actual[0].unit_label.text)
+
+    def test_same_year_groups_keep_distinct_physical_scope_anchors(self):
+        caption = "Table 20 Synthetic Mineral Resource Estimate"
+        heading = f"{'':20}{'MRE 2026 upper zone':38}MRE 2026 lower zone"
+        columns = f"{'Category':20}{'Tonnes (Mt)':19}{'TREO (ppm)':19}{'Tonnes (Mt)':19}TREO (ppm)"
+        row = f"{'Total':20}{'15':19}{'1,700':19}{'10':19}1,200"
+        document = PDFDocument(SHA, ("\n".join((caption, heading, columns, row)),), "test")
+        actual = bind_page_row(document, page=1, row_line=4, caption_line=1)
+        self.assertEqual([(item.variable, item.value.text, item.parent_header.text) for item in actual], [
+            ("ore_mt", "15", "MRE 2026 upper zone"), ("grade", "1,700", "MRE 2026 upper zone"),
+            ("ore_mt", "10", "MRE 2026 lower zone"), ("grade", "1,200", "MRE 2026 lower zone"),
+        ])
+
+    def test_consistent_table_shift_requires_two_complete_distinct_witness_rows(self):
+        caption = "Table 21 Synthetic Mineral Resource Estimate"
+        # The unfamiliar numeric lane stays in the layout, even though it
+        # contributes no claimed measured quantity.
+        header = "Category        M Tonnes         TREO %            Density           TREO t"
+        first = "Measured                    30             3.0              1.75              900"
+        second = "Indicated                   80             4.0              1.65            3,200"
+        total = "Total                      110             3.7              1.70            4,100"
+        doc = PDFDocument(SHA, ("\n".join((caption, header, first, second, total)),), "test")
+        actual = bind_page_row(doc, page=1, row_line=5, caption_line=1)
+        self.assertEqual([item.variable for item in actual], ["ore_mt", "grade", None, "contained_treo_kt"])
+        self.assertEqual(actual[0].layout_method, "TABLE_WIDE_ROW_ALIGNMENT")
+        no_second = PDFDocument(SHA, ("\n".join((caption, header, first, total)),), "test")
+        incomplete = bind_page_row(no_second, page=1, row_line=4, caption_line=1)
+        self.assertNotIn("ore_mt", {item.variable for item in incomplete})
+
+    def test_auto_continuation_keeps_previous_physical_header_and_no_scope_guess(self):
+        caption = "Table 22 Synthetic Mineral Resource Estimate"
+        header = "Classification        Tonnes (Mt)        TREO (ppm)        Contained TREO (t)"
+        first = "Measured                 30               1,200                36,000"
+        total = "Total                    45               1,100                49,500"
+        pages = ("\n".join((caption, header, first)), "Table 22 Continued\n" + total)
+        result = bind_page_row(PDFDocument(SHA, pages, "test"), page=2, row_line=2, caption_line=1)
+        self.assertEqual({item.variable for item in result}, {"ore_mt", "grade", "contained_treo_kt"})
+        self.assertTrue(all(item.header.physical_page == 1 and item.value.physical_page == 2 for item in result))
+        mismatched = (pages[0], pages[1].replace("Table 22", "Table 23"))
+        with self.assertRaisesRegex(DocumentError, "CONTINUATION_MISMATCH"):
+            bind_page_row(PDFDocument(SHA, mismatched, "test"), page=2, row_line=2, caption_line=1)
+
     def test_original_non_resource_category_and_mixed_scope_do_not_authorize(self):
         spec = deepcopy(BINDING)
         next_caption = CAPTION.replace("Mineral Resource Estimate", "Ore Reserve Estimate")

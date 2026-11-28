@@ -1,6 +1,7 @@
 """Check independently transcribed native values through both authorized research uses."""
 
 from decimal import Decimal
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
@@ -9,8 +10,10 @@ import tempfile
 import unittest
 
 from au_ree_v3.contracts import ResearchRelease, canonical_json
+from au_ree_v3.documents import DocumentCache, DocumentError
 from au_ree_v3.fresh_observations import extract_sources
 from au_ree_v3.research_inputs import CENSUS_RESOURCE_RULE, checked_research_inputs
+from au_ree_v3.resource_table_binding import bind_page_row
 from au_ree_v3.sources import ContentStore
 from au_ree_v3.store import Store
 
@@ -37,6 +40,30 @@ EXPECTED = {
 @unittest.skipUnless(os.environ.get("AU_REE_NATIVE_RESOURCE_ASSETS") and shutil.which("pdftotext")
                      and shutil.which("pdfimages"), "exact ASX originals and Poppler required")
 class NativeResourcePositiveTests(unittest.TestCase):
+    def test_exact_issuer_total_uses_same_table_alignment_witnesses(self):
+        source_sha = "a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb"
+        bases = Path(os.environ["AU_REE_NATIVE_RESOURCE_ASSETS"])
+        source = next(path for path in (bases / source_sha, bases / "objects" / source_sha) if path.is_file())
+        original = source.read_bytes()
+        self.assertEqual(sha256(original).hexdigest(), source_sha)
+        document = DocumentCache().pdf(original, source_sha, 14)
+        rows = document.locate(14).text.splitlines()
+        caption, = [i for i, row in enumerate(rows, start=1) if row.strip().startswith("Table 2: Total Yangibana Project")]
+        total = next(i for i in range(caption + 1, len(rows) + 1) if rows[i - 1].strip().startswith("TOTAL "))
+        result = bind_page_row(document, page=14, row_line=total, caption_line=caption)
+        self.assertEqual([(cell.value.text, cell.variable, cell.unit) for cell in result], [
+            ("29.93", "ore_mt", "Mt"), ("0.93", "grade", "%"),
+            ("0.32", None, None), ("276,955", "contained_treo_kt", "t"),
+        ])
+        self.assertEqual({cell.layout_method for cell in result[:2]}, {"TABLE_WIDE_ROW_ALIGNMENT"})
+        for cell in result:
+            located_value = document.locate(14, line=cell.value.line, column=cell.value.start_column,
+                                            end_column=cell.value.end_column)
+            self.assertEqual(located_value.text, cell.value.text)
+        reserve, = [i for i, row in enumerate(rows, start=1) if row.strip().startswith("Table 1: Total Yangibana Project")]
+        with self.assertRaisesRegex(DocumentError, "ROW_OUTSIDE_SOURCE_TABLE"):
+            bind_page_row(document, page=14, row_line=total, caption_line=reserve)
+
     def test_exact_source_pairs_through_store_and_purpose_gate(self):
         bases = Path(os.environ["AU_REE_NATIVE_RESOURCE_ASSETS"])
         with tempfile.TemporaryDirectory() as folder:

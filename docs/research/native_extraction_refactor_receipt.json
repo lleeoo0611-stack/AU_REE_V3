@@ -1,0 +1,592 @@
+{
+  "artifacts": [
+    {
+      "path": "work/census-stage2-extraction/engineering/engineering_comparison.json",
+      "sha256": "7ba401932f57311aaffe7f85e2ab430b69e54159e07658e734c591448dac4bdd"
+    },
+    {
+      "measurements": {
+        "baseline_code_commit": "074e00daf69360cd71cab2554f651b4b6e76a668",
+        "byte_parity_sha256": "416bc257dc5dec76b48eefc655509b5232f59ab4a2e735865c92997cfe1bb20e",
+        "ci_cost_same_input": "UNMEASURED",
+        "current_code_commit": "acc6525dd6c38dcf9275fcce0be9a154816b5656",
+        "dependency_cycles_among_reached_modules": {
+          "baseline": {
+            "runtime_calls": [],
+            "static": [
+              [
+                "au_ree_v3.research_inputs",
+                "au_ree_v3.store"
+              ]
+            ]
+          },
+          "current": {
+            "runtime_calls": [],
+            "static": [
+              [
+                "au_ree_v3.research_inputs",
+                "au_ree_v3.store"
+              ]
+            ]
+          }
+        },
+        "extraction_responsibility_branch_scores": {
+          "baseline": {
+            "maximum": 119,
+            "named_functions": 12,
+            "p90": 43
+          },
+          "current": {
+            "maximum": 25,
+            "named_functions": 42,
+            "p90": 13
+          }
+        },
+        "full_fixed_real_suite_sha256": "871a8581af7ba0bc31b019174d02e6a97581a5dc3af86464d27be74a7b2fb2ed",
+        "instrumented_workload": {
+          "baseline": {
+            "code_commit": "074e00daf69360cd71cab2554f651b4b6e76a668",
+            "process_peak_rss_kib": 114396,
+            "samples": [
+              {
+                "cas_reads": {
+                  "capture_or_proof": 468,
+                  "original": 168
+                },
+                "mode": "initial_decode",
+                "pdf_decodes": 8,
+                "pdf_physical_pages": 224,
+                "scientific_artifacts": {
+                  "census/cell_status.csv": "0fef3421994493fecddddf0b0a72bb6acb1038354b04132bf8ce32587e152279",
+                  "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+                  "census/census_receipt.json": "a5cadb4405c9cb36b2b58bfda6a22d8d4a0f1df093fd7daed36f12e7a5c861cb",
+                  "decision/decision_receipt.json": "12d61a9cc96ff49d14c0d72102cf22f0a535595c301b1f9a27ed51bcecf728f9",
+                  "decision/mcda_inputs.json": "d4e68182f5ec8fb1735437162127fd022fcd7621a52d7843271fb42886b42abc",
+                  "decision/mcda_results.json": "1c651808ac41ab0202ec1da85f8235ac01db25929401a349424de24369ac5c8d",
+                  "observations/extraction.json": "ada674e8f88130be473a812e7cb949260968b69d516659fe2747398b668ecb7c",
+                  "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+                },
+                "sql_operation_counts": {
+                  "BEGIN": 3,
+                  "COMMIT": 3,
+                  "CREATE": 22,
+                  "INSERT": 322,
+                  "PRAGMA": 12,
+                  "SELECT": 2225
+                },
+                "sql_statements": 2587,
+                "wall_seconds": 2.9386363829980837
+              },
+              {
+                "cas_reads": {
+                  "capture_or_proof": 468,
+                  "original": 168
+                },
+                "mode": "reused_document_cache",
+                "pdf_decodes": 0,
+                "pdf_physical_pages": 0,
+                "scientific_artifacts": {
+                  "census/cell_status.csv": "0fef3421994493fecddddf0b0a72bb6acb1038354b04132bf8ce32587e152279",
+                  "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+                  "census/census_receipt.json": "a5cadb4405c9cb36b2b58bfda6a22d8d4a0f1df093fd7daed36f12e7a5c861cb",
+                  "decision/decision_receipt.json": "12d61a9cc96ff49d14c0d72102cf22f0a535595c301b1f9a27ed51bcecf728f9",
+                  "decision/mcda_inputs.json": "d4e68182f5ec8fb1735437162127fd022fcd7621a52d7843271fb42886b42abc",
+                  "decision/mcda_results.json": "1c651808ac41ab0202ec1da85f8235ac01db25929401a349424de24369ac5c8d",
+                  "observations/extraction.json": "ada674e8f88130be473a812e7cb949260968b69d516659fe2747398b668ecb7c",
+                  "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+                },
+                "sql_operation_counts": {
+                  "BEGIN": 3,
+                  "COMMIT": 3,
+                  "CREATE": 22,
+                  "INSERT": 322,
+                  "PRAGMA": 12,
+                  "SELECT": 2225
+                },
+                "sql_statements": 2587,
+                "wall_seconds": 1.5327322280027147
+              }
+            ],
+            "scope": "Instrumented single process with explicitly reused DocumentCache; all CAS byte/proof validation and SQLite rebuilt; Poppler image checks separate; OS cache uncontrolled",
+            "status": "PASS"
+          },
+          "current": {
+            "code_commit": "acc6525dd6c38dcf9275fcce0be9a154816b5656",
+            "process_peak_rss_kib": 113552,
+            "samples": [
+              {
+                "cas_reads": {
+                  "capture_or_proof": 468,
+                  "original": 168
+                },
+                "mode": "initial_decode",
+                "pdf_decodes": 8,
+                "pdf_physical_pages": 224,
+                "scientific_artifacts": {
+                  "census/cell_status.csv": "2c7f882b8a2dd24cd1f9ca9e07e65156de83e907f32975a4343972f656181ac8",
+                  "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+                  "census/census_receipt.json": "3f529105fd6196c9b966c791a3d07e53f1f3cee7b374d35ea0a9cc1f3504fb13",
+                  "decision/decision_receipt.json": "703e2790758dc11b33f4d8daa21514739afb8a4e0486a9f7f4f482bea6449606",
+                  "decision/mcda_inputs.json": "4c8c47b33f1962e58a9054c2387b28b7926edc43bd07b20bb8fe5db35fa9b32b",
+                  "decision/mcda_results.json": "ed317a8238f290fead3fb765c54beb38c12f552d69c35320e894db9be34a0aa4",
+                  "observations/extraction.json": "0a36d1a8d5584713870a9ec927ef46e3942360f5f4770d397faf5a53acebf24d",
+                  "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+                },
+                "sql_operation_counts": {
+                  "BEGIN": 3,
+                  "COMMIT": 3,
+                  "CREATE": 22,
+                  "INSERT": 322,
+                  "PRAGMA": 12,
+                  "SELECT": 2225
+                },
+                "sql_statements": 2587,
+                "wall_seconds": 3.2239871849997144
+              },
+              {
+                "cas_reads": {
+                  "capture_or_proof": 468,
+                  "original": 168
+                },
+                "mode": "reused_document_cache",
+                "pdf_decodes": 0,
+                "pdf_physical_pages": 0,
+                "scientific_artifacts": {
+                  "census/cell_status.csv": "2c7f882b8a2dd24cd1f9ca9e07e65156de83e907f32975a4343972f656181ac8",
+                  "census/census.csv": "4aa3bda1830df00237d3ca04724911ee1cd0b75cebcb5b9855dd7ff7c637f9f0",
+                  "census/census_receipt.json": "3f529105fd6196c9b966c791a3d07e53f1f3cee7b374d35ea0a9cc1f3504fb13",
+                  "decision/decision_receipt.json": "703e2790758dc11b33f4d8daa21514739afb8a4e0486a9f7f4f482bea6449606",
+                  "decision/mcda_inputs.json": "4c8c47b33f1962e58a9054c2387b28b7926edc43bd07b20bb8fe5db35fa9b32b",
+                  "decision/mcda_results.json": "ed317a8238f290fead3fb765c54beb38c12f552d69c35320e894db9be34a0aa4",
+                  "observations/extraction.json": "0a36d1a8d5584713870a9ec927ef46e3942360f5f4770d397faf5a53acebf24d",
+                  "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+                },
+                "sql_operation_counts": {
+                  "BEGIN": 3,
+                  "COMMIT": 3,
+                  "CREATE": 22,
+                  "INSERT": 322,
+                  "PRAGMA": 12,
+                  "SELECT": 2225
+                },
+                "sql_statements": 2587,
+                "wall_seconds": 1.9466398789991217
+              }
+            ],
+            "scope": "Instrumented single process with explicitly reused DocumentCache; all CAS byte/proof validation and SQLite rebuilt; Poppler image checks separate; OS cache uncontrolled",
+            "status": "PASS"
+          }
+        },
+        "same_input_engineering_sha256": "7ba401932f57311aaffe7f85e2ab430b69e54159e07658e734c591448dac4bdd",
+        "schema": "resource-extraction-orchestration-engineering-v1",
+        "status": "PASS"
+      },
+      "path": "work/census-stage2-extraction/engineering_supplement.json",
+      "sha256": "eeffb6d013519d260212b30ec45e4634ba9e7491830de08e4f808ed4697c0494"
+    },
+    {
+      "path": "work/census-stage2-extraction/additional-parity/byte_parity.json",
+      "sha256": "416bc257dc5dec76b48eefc655509b5232f59ab4a2e735865c92997cfe1bb20e"
+    },
+    {
+      "path": "work/census-stage2-extraction/holdout_blind_comparison.json",
+      "sha256": "665a45e2e84ce9a16e845ccd5b2a67fef61d5e52fdf79f3603590ab0a9258ee9"
+    },
+    {
+      "measurements": {
+        "artifact_sha256": {
+          "blinded-binding-074e00d/raw-binding-10.json": "4df82ff8017765773484c9b5e911f7c03d95cef0d57793f15e7daa5a38434bf3",
+          "blinded-binding-074e00d/raw-binding-31-performance.json": "ab72f732a71f3992ae0207c72c8ba1d8b9be83637152ccbbcaa44e710b6fe54d",
+          "blinded-binding-074e00d/raw-binding-31.json": "647ff97007f9cb41177dc2b6edf4df46ac48a50e8d6767ab15ff9d0ad478901e",
+          "blinded-binding-fc48f81/raw-binding-10.json": "20121fde7b9af68263e7b67879c88a19bfd98094a2a6c998484e2bf1d747c87c",
+          "blinded-binding-fc48f81/raw-binding-31-performance.json": "2a76b2533159671a07f16d4d38df4049257bafb055e67e661b7c37bb96238395",
+          "blinded-binding-fc48f81/raw-binding-31.json": "efc290255f899a8c5cbe601f1f681ca01abbacc71311a0a37b9546201dec3e45"
+        },
+        "baseline_commit": "074e00daf69360cd71cab2554f651b4b6e76a668",
+        "detector_commit": "fc48f814b56372a13f811169469b2dfdc27289c7",
+        "formal_precision_recall": "UNMEASURED",
+        "formal_use": "NOT_RUN",
+        "input_annotation_sha256": {
+          "raw-binding-10": "840cf4ce2cc3330af8772d2b8593c050fab50e59069b694610c9ee5e2a77705c",
+          "raw-binding-31": "ad27468ea501eb060e37cc0370e7861110477b074149864305a91176f1ca26e2"
+        },
+        "limits": "Operator supplies original table and row locators. Two sets overlap by family and must not be summed. Metrics do not measure automatic retrieval or formal adoption. RAM is the process high-water and OS filesystem cache was not controlled.",
+        "old_positive_tokens_preserved_per_set": [
+          1,
+          1
+        ],
+        "schema": "census-stage2-blinded-binding-comparison-v1",
+        "scores": {
+          "raw-binding-10": {
+            "baseline": {
+              "confusion": {
+                "fn": 9,
+                "fp": 0,
+                "independent_negative_probes": 11,
+                "positive_eligible": 10,
+                "precision": 1.0,
+                "recall": 0.1,
+                "tn": 11,
+                "tp": 1
+              },
+              "performance": {
+                "cold_document_cache": {
+                  "child_peak_rss_kib": 34648,
+                  "decoded_physical_pages": 11,
+                  "pdf_opens": 3,
+                  "process_peak_rss_kib": 34648,
+                  "seconds": 0.25462946399784414,
+                  "sqlite_queries": 0
+                },
+                "limitations": "OS filesystem cache was not flushed. Process RSS is cumulative high-water.",
+                "warm_document_cache": {
+                  "child_peak_rss_kib": 34648,
+                  "decoded_physical_pages": 0,
+                  "pdf_opens": 0,
+                  "process_peak_rss_kib": 39512,
+                  "seconds": 0.043669115999364294,
+                  "sqlite_queries": 0
+                }
+              }
+            },
+            "detector": {
+              "confusion": {
+                "fn": 8,
+                "fp": 0,
+                "independent_negative_probes": 11,
+                "positive_eligible": 10,
+                "precision": 1.0,
+                "recall": 0.2,
+                "tn": 11,
+                "tp": 2
+              },
+              "performance": {
+                "cold_document_cache": {
+                  "child_peak_rss_kib": 36220,
+                  "decoded_physical_pages": 11,
+                  "pdf_opens": 3,
+                  "process_peak_rss_kib": 36220,
+                  "seconds": 0.25152368700219085,
+                  "sqlite_queries": 0
+                },
+                "limitations": "OS filesystem cache was not flushed. Process RSS is cumulative high-water.",
+                "warm_document_cache": {
+                  "child_peak_rss_kib": 36220,
+                  "decoded_physical_pages": 0,
+                  "pdf_opens": 0,
+                  "process_peak_rss_kib": 41212,
+                  "seconds": 0.05724514200119302,
+                  "sqlite_queries": 0
+                }
+              }
+            }
+          },
+          "raw-binding-31": {
+            "baseline": {
+              "confusion": {
+                "FN": 30,
+                "FP": 0,
+                "TP": 1,
+                "precision": 1.0,
+                "recall": 0.03225806451612903,
+                "status": "MEASURED"
+              },
+              "performance": {
+                "child_peak_rss_kib": 31224,
+                "elapsed_seconds": 2.5543520329993044,
+                "os_filesystem_cache": "NOT_CONTROLLED",
+                "process_peak_rss_kib": 31224
+              }
+            },
+            "detector": {
+              "confusion": {
+                "FN": 29,
+                "FP": 0,
+                "TP": 2,
+                "precision": 1.0,
+                "recall": 0.06451612903225806,
+                "status": "MEASURED"
+              },
+              "performance": {
+                "child_peak_rss_kib": 31936,
+                "elapsed_seconds": 2.053161014999205,
+                "os_filesystem_cache": "NOT_CONTROLLED",
+                "process_peak_rss_kib": 31936
+              }
+            }
+          }
+        }
+      },
+      "path": "work/census-stage2/holdout_binding_comparison.json",
+      "sha256": "62e379110cfbcb5c8216c6529b091356a93f13e7bdd204c924e504b1b40fcf59"
+    },
+    {
+      "measurements": {
+        "base_commit": "074e00daf69360cd71cab2554f651b4b6e76a668",
+        "candidate_commit": "fc48f814b56372a13f811169469b2dfdc27289c7",
+        "measurements": {
+          "baseline": [
+            {
+              "distinct_native_source_positions": 298,
+              "distinct_resolved_native_positions": 103,
+              "formal_scientific_values_added": 0,
+              "issue_by_case": {
+                "AMBIGUOUS_OR_CONFLICTING_COLUMN_ALIGNMENT": 13,
+                "HEADER_OR_UNIT_UNBOUND": 210,
+                "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+              },
+              "native_pages_decoded": 1292,
+              "outputs": {
+                "typed_candidate_observations.jsonl": "8e8f684b9d217326ac578b6061e0a623e13f98ae6f696fa11b5037c02c8fc521",
+                "unbound_numeric_tokens.jsonl": "bee20b74ce7809e5676bbd0965f36dd6768fad8a5f8cdb6f1fc4157883534917",
+                "value_evidence_lineage.jsonl": "f09a4f264ba5aa45a480855543aba87d73161759f3a7c36786fb0daf960e7221"
+              },
+              "peak_rss_kib": 48280,
+              "receipt_sha256": "604c62a572b1a2b7c6380e47337d903ef5a73aa181d7708ca6a591c43e8dbd64",
+              "resolved_by_layout_method": null,
+              "resolved_typed_sightings": 112,
+              "seconds": 5.5225,
+              "source_documents_verified_and_parsed": 15,
+              "status_by_case": {
+                "EVIDENCE_INSUFFICIENT": 225,
+                "EXISTING_REVIEWED_CELL_OVERLAP": 2,
+                "EXISTING_REVIEWED_TOKEN": 33,
+                "NO_TABLE_STRUCTURE": 19,
+                "TYPED_CANDIDATE": 110
+              },
+              "typed_candidate_sightings": 110,
+              "unbound_candidate_sightings": 225
+            },
+            {
+              "distinct_native_source_positions": 298,
+              "distinct_resolved_native_positions": 103,
+              "formal_scientific_values_added": 0,
+              "issue_by_case": {
+                "AMBIGUOUS_OR_CONFLICTING_COLUMN_ALIGNMENT": 13,
+                "HEADER_OR_UNIT_UNBOUND": 210,
+                "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+              },
+              "native_pages_decoded": 1292,
+              "outputs": {
+                "typed_candidate_observations.jsonl": "8e8f684b9d217326ac578b6061e0a623e13f98ae6f696fa11b5037c02c8fc521",
+                "unbound_numeric_tokens.jsonl": "bee20b74ce7809e5676bbd0965f36dd6768fad8a5f8cdb6f1fc4157883534917",
+                "value_evidence_lineage.jsonl": "f09a4f264ba5aa45a480855543aba87d73161759f3a7c36786fb0daf960e7221"
+              },
+              "peak_rss_kib": 48604,
+              "receipt_sha256": "604c62a572b1a2b7c6380e47337d903ef5a73aa181d7708ca6a591c43e8dbd64",
+              "resolved_by_layout_method": null,
+              "resolved_typed_sightings": 112,
+              "seconds": 5.3802,
+              "source_documents_verified_and_parsed": 15,
+              "status_by_case": {
+                "EVIDENCE_INSUFFICIENT": 225,
+                "EXISTING_REVIEWED_CELL_OVERLAP": 2,
+                "EXISTING_REVIEWED_TOKEN": 33,
+                "NO_TABLE_STRUCTURE": 19,
+                "TYPED_CANDIDATE": 110
+              },
+              "typed_candidate_sightings": 110,
+              "unbound_candidate_sightings": 225
+            },
+            {
+              "distinct_native_source_positions": 298,
+              "distinct_resolved_native_positions": 103,
+              "formal_scientific_values_added": 0,
+              "issue_by_case": {
+                "AMBIGUOUS_OR_CONFLICTING_COLUMN_ALIGNMENT": 13,
+                "HEADER_OR_UNIT_UNBOUND": 210,
+                "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+              },
+              "native_pages_decoded": 1292,
+              "outputs": {
+                "typed_candidate_observations.jsonl": "8e8f684b9d217326ac578b6061e0a623e13f98ae6f696fa11b5037c02c8fc521",
+                "unbound_numeric_tokens.jsonl": "bee20b74ce7809e5676bbd0965f36dd6768fad8a5f8cdb6f1fc4157883534917",
+                "value_evidence_lineage.jsonl": "f09a4f264ba5aa45a480855543aba87d73161759f3a7c36786fb0daf960e7221"
+              },
+              "peak_rss_kib": 48420,
+              "receipt_sha256": "604c62a572b1a2b7c6380e47337d903ef5a73aa181d7708ca6a591c43e8dbd64",
+              "resolved_by_layout_method": null,
+              "resolved_typed_sightings": 112,
+              "seconds": 5.2576,
+              "source_documents_verified_and_parsed": 15,
+              "status_by_case": {
+                "EVIDENCE_INSUFFICIENT": 225,
+                "EXISTING_REVIEWED_CELL_OVERLAP": 2,
+                "EXISTING_REVIEWED_TOKEN": 33,
+                "NO_TABLE_STRUCTURE": 19,
+                "TYPED_CANDIDATE": 110
+              },
+              "typed_candidate_sightings": 110,
+              "unbound_candidate_sightings": 225
+            }
+          ],
+          "candidate": [
+            {
+              "distinct_native_source_positions": 298,
+              "distinct_resolved_native_positions": 167,
+              "formal_scientific_values_added": 0,
+              "issue_by_case": {
+                "HEADER_OR_UNIT_UNBOUND": 141,
+                "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+              },
+              "native_pages_decoded": 1292,
+              "outputs": {
+                "typed_candidate_observations.jsonl": "4a9ff662ba1aa0a586025781cee89697dfa54b1c919a9a435785e6cba67a6797",
+                "unbound_numeric_tokens.jsonl": "8a12d7dd99493d3020fd7bffff72960e30b562552fd7b0a8437c16398e127c5e",
+                "value_evidence_lineage.jsonl": "ef4d86f5768640b411ca5a21b65a288b698aa3827784d497f3c2b489cebd71a1"
+              },
+              "peak_rss_kib": 48332,
+              "receipt_sha256": "870460207dc4e27b281b8f419305a977f009a0f2fe1452a3b073e0a69196c1f7",
+              "resolved_by_layout_method": {
+                "BASELINE_NATIVE_ALIGNMENT": 110,
+                "MULTI_TIER_HEADER_EXACT_ALIGNMENT": 19,
+                "TABLE_WIDE_ROW_ALIGNMENT": 65
+              },
+              "resolved_typed_sightings": 194,
+              "seconds": 5.5169,
+              "source_documents_verified_and_parsed": 15,
+              "status_by_case": {
+                "EVIDENCE_INSUFFICIENT": 143,
+                "EXISTING_REVIEWED_CELL_OVERLAP": 4,
+                "EXISTING_REVIEWED_TOKEN": 33,
+                "NO_TABLE_STRUCTURE": 19,
+                "TYPED_CANDIDATE": 190
+              },
+              "typed_candidate_sightings": 190,
+              "unbound_candidate_sightings": 143
+            },
+            {
+              "distinct_native_source_positions": 298,
+              "distinct_resolved_native_positions": 167,
+              "formal_scientific_values_added": 0,
+              "issue_by_case": {
+                "HEADER_OR_UNIT_UNBOUND": 141,
+                "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+              },
+              "native_pages_decoded": 1292,
+              "outputs": {
+                "typed_candidate_observations.jsonl": "4a9ff662ba1aa0a586025781cee89697dfa54b1c919a9a435785e6cba67a6797",
+                "unbound_numeric_tokens.jsonl": "8a12d7dd99493d3020fd7bffff72960e30b562552fd7b0a8437c16398e127c5e",
+                "value_evidence_lineage.jsonl": "ef4d86f5768640b411ca5a21b65a288b698aa3827784d497f3c2b489cebd71a1"
+              },
+              "peak_rss_kib": 48968,
+              "receipt_sha256": "870460207dc4e27b281b8f419305a977f009a0f2fe1452a3b073e0a69196c1f7",
+              "resolved_by_layout_method": {
+                "BASELINE_NATIVE_ALIGNMENT": 110,
+                "MULTI_TIER_HEADER_EXACT_ALIGNMENT": 19,
+                "TABLE_WIDE_ROW_ALIGNMENT": 65
+              },
+              "resolved_typed_sightings": 194,
+              "seconds": 5.2004,
+              "source_documents_verified_and_parsed": 15,
+              "status_by_case": {
+                "EVIDENCE_INSUFFICIENT": 143,
+                "EXISTING_REVIEWED_CELL_OVERLAP": 4,
+                "EXISTING_REVIEWED_TOKEN": 33,
+                "NO_TABLE_STRUCTURE": 19,
+                "TYPED_CANDIDATE": 190
+              },
+              "typed_candidate_sightings": 190,
+              "unbound_candidate_sightings": 143
+            },
+            {
+              "distinct_native_source_positions": 298,
+              "distinct_resolved_native_positions": 167,
+              "formal_scientific_values_added": 0,
+              "issue_by_case": {
+                "HEADER_OR_UNIT_UNBOUND": 141,
+                "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+              },
+              "native_pages_decoded": 1292,
+              "outputs": {
+                "typed_candidate_observations.jsonl": "4a9ff662ba1aa0a586025781cee89697dfa54b1c919a9a435785e6cba67a6797",
+                "unbound_numeric_tokens.jsonl": "8a12d7dd99493d3020fd7bffff72960e30b562552fd7b0a8437c16398e127c5e",
+                "value_evidence_lineage.jsonl": "ef4d86f5768640b411ca5a21b65a288b698aa3827784d497f3c2b489cebd71a1"
+              },
+              "peak_rss_kib": 48992,
+              "receipt_sha256": "870460207dc4e27b281b8f419305a977f009a0f2fe1452a3b073e0a69196c1f7",
+              "resolved_by_layout_method": {
+                "BASELINE_NATIVE_ALIGNMENT": 110,
+                "MULTI_TIER_HEADER_EXACT_ALIGNMENT": 19,
+                "TABLE_WIDE_ROW_ALIGNMENT": 65
+              },
+              "resolved_typed_sightings": 194,
+              "seconds": 5.264,
+              "source_documents_verified_and_parsed": 15,
+              "status_by_case": {
+                "EVIDENCE_INSUFFICIENT": 143,
+                "EXISTING_REVIEWED_CELL_OVERLAP": 4,
+                "EXISTING_REVIEWED_TOKEN": 33,
+                "NO_TABLE_STRUCTURE": 19,
+                "TYPED_CANDIDATE": 190
+              },
+              "typed_candidate_sightings": 190,
+              "unbound_candidate_sightings": 143
+            }
+          ]
+        },
+        "median_seconds": {
+          "baseline": 5.3802,
+          "candidate": 5.264
+        },
+        "peak_rss_kib": {
+          "baseline": 48604,
+          "candidate": 48992
+        },
+        "poppler": "pdftotext version 25.03.0",
+        "python": "3.12.14",
+        "workload": "Identical source-case inventory and temporal source manifest, local CAS, fresh Python process per run; alternating serial order"
+      },
+      "path": "work/census-stage2/binding-benchmark/engineering_benchmark.json",
+      "sha256": "595ede955734580413d3be912af72a8178d29d0b4b785b0e83b05d1d4584f158"
+    }
+  ],
+  "baseline": "074e00daf69360cd71cab2554f651b4b6e76a668",
+  "detector_code_under_measurement": "fc48f814",
+  "engineering_same_v4": {
+    "baseline": {
+      "branch_score_max": 119,
+      "branch_score_p90": 20,
+      "exact_repeated_bodies": 1,
+      "median_parent_peak_rss_kib": 93548,
+      "median_seconds": 2.9990364450022753,
+      "median_subprocess_peak_rss_kib": 93548,
+      "reached_module_count": 26,
+      "runtime_internal_edge_count": 64,
+      "static_internal_import_edge_count_among_reached_modules": 87
+    },
+    "current": {
+      "branch_score_max": 61,
+      "branch_score_p90": 20,
+      "exact_repeated_bodies": 1,
+      "median_parent_peak_rss_kib": 93220,
+      "median_seconds": 2.8218990310015215,
+      "median_subprocess_peak_rss_kib": 93220,
+      "reached_module_count": 30,
+      "runtime_internal_edge_count": 78,
+      "static_internal_import_edge_count_among_reached_modules": 112
+    }
+  },
+  "fixed_candidate_funnel": {
+    "formal_admissions_added": 0,
+    "native_positions_before_after": [
+      103,
+      167
+    ],
+    "no_structure_before_after": [
+      19,
+      19
+    ],
+    "scoped_total": 337,
+    "typed_sightings_before_after": [
+      112,
+      194
+    ],
+    "unbound_before_after": [
+      225,
+      143
+    ]
+  },
+  "orchestration_code_under_measurement": "acc6525dd6c38dcf9275fcce0be9a154816b5656",
+  "schema": "census-native-extraction-refactor-verification-v1"
+}
