@@ -1,0 +1,63 @@
+unit,action,path,responsibility
+A,ADD,docs/research/census_gap_inventory.md,Document frozen input and missing-edition boundaries
+A,ADD,docs/research/census_gap_inventory_receipt.json,"Pin grid, original editions and historical replay results"
+A,ADD,tests/test_census_gap_inventory.py,Test reason precedence and exact queue repeatability
+A,ADD,tools/census_gap_inventory.py,Close every fixed grid key and emit role-based work queues
+A,KEEP,AU_REE_V2@2af6f611e51eb4ac9dda73419d1afeba70d1307e,Read-only history for evidence hints
+A,KEEP,docs/research/census_stage2_verification.json,Preserve signed research record and Stage 2 fingerprints
+A,KEEP,work/research-yield/source-inputs/source_manifest.json,Exact 144-source and 148-capture population
+B,ADD,docs/research/native_resource_table_recovery.md,Separate fixed-backlog gain from blind generalization
+B,ADD,docs/research/native_resource_table_recovery_receipt.json,Record real candidate dispositions and holdout results
+B,ADD,src/au_ree_v3/native_table_discovery.py,Recognize native resource structure and conservative table context
+B,ADD,src/au_ree_v3/native_table_work.py,Replay previous work once and preserve per-target evidence dispositions
+B,ADD,tests/test_native_table_discovery.py,"Exercise title, continuation and inherited-unit counterexamples"
+B,REFACTOR,src/au_ree_v3/cli.py,Expose prior-bound ledger replay through the existing research command
+B,REFACTOR,src/au_ree_v3/resource_table_binding.py,Keep lexical assignment and reusable positioning in the binding module
+B,REFACTOR,tests/test_native_resource_positives.py,Verify actual issuer layout and edition markers
+C,ADD,config/research_profiles/au_ree_census_attributes_v2.json,Opt in to expanded exact descriptive bindings
+C,ADD,config/research_profiles/census_attribute_bindings_v2.json,Pin verified original phrases and reviewed candidates
+C,ADD,config/research_profiles/development_milestone_bindings_v2.json,"Pin source, event date and project-stage scope"
+C,ADD,docs/research/census_attribute_breadth.md,Document selected and unselected descriptive evidence
+C,ADD,tools/verify_census_attribute_breadth.py,Independently read original phrases and compare all Census cells
+C,KEEP,config/research_profiles/au_ree_census_attributes_v1.json,Prior opt-in profile remains usable
+C,REFACTOR,tests/test_project_attributes.py,Verify actual attribute admission and unchanged refusal rules
+C,REFACTOR,tests/test_web_publication.py,Check exact expanded source-bearing attributes and science profile counts
+C,REFACTOR,tools/verify_census_attributes.py,Share prior-attribute and science-equivalence assertions
+D,ADD,config/research_profiles/au_ree_census_evidence_v1.json,Opt in to the independent Census aggregate formula and expanded attributes
+D,ADD,config/research_profiles/census_oxide_derivations_v1.json,Fingerprint the approved formula and exact source review
+D,ADD,docs/research/census_reported_mreo.md,"Show original scope, dry basis, group identity and interval"
+D,ADD,src/au_ree_v3/oxide_derivations.py,Approve and recompute one exact reported-group Derivation
+D,ADD,tests/test_oxide_derivations.py,"Test the exact original, independent purpose and fail-closed linkage"
+D,ADD,tools/verify_reported_mreo.py,Independently re-read the original PDF and recalculate Decimal bounds
+D,KEEP,src/au_ree_v3/fresh_decision_policy_v1.json,Fixed R1/S1 admission and weights
+D,REFACTOR,.github/workflows/migration.yml,Use the already pinned Wudinna original in CI
+D,REFACTOR,src/au_ree_v3/census_derivations.py,Route formula proofs and validate the three scoped inputs
+D,REFACTOR,src/au_ree_v3/comparability.py,Expose the shared native unit witness with identical S1 behavior
+D,REFACTOR,src/au_ree_v3/derivations.py,Keep the existing TREO validator scoped to its own output variable
+D,REFACTOR,src/au_ree_v3/fresh_census.py,Validate registered formula input counts during projection
+D,REFACTOR,src/au_ree_v3/fresh_observations.py,Pin formula usage only after reading its exact original evidence
+D,REFACTOR,src/au_ree_v3/fresh_research.py,Verify the opt-in policy and persist governed formulas in the existing transaction
+D,REFACTOR,src/au_ree_v3/registry.py,Resolve and hash-check the optional formula policy path
+D,REFACTOR,src/au_ree_v3/research_delta.py,Verify per-cell formula and current source lineage during comparison
+D,REFACTOR,src/au_ree_v3/resource_sources.py,Read additional required pages through the existing edition cache
+D,REFACTOR,src/au_ree_v3/store.py,Dispatch a versioned MREO result through existing DerivedValue validation
+D,REFACTOR,src/au_ree_v3/web_publication.py,Require exact chemistry and three links in public formula evidence
+E,ADD,config/research_profiles/official_geography_bindings_v1.json,Pin shadow review to official identifiers and fixed Project links
+E,ADD,docs/research/government_point_expansion_and_forecast_context.md,Document separate manifest and shadow decisions
+E,ADD,docs/research/government_point_expansion_and_forecast_context_receipt.json,"Pin expansion bytes, replay and forecast Oracle"
+E,ADD,src/au_ree_v3/official_geography.py,"Verify point-role, precision and native identity without formal projection"
+E,ADD,tests/fixtures/government_point_expansion_v1.zip,Preserve exact public responses and offline readback capture receipts
+E,ADD,tests/fixtures/production_forecast_context_oracle_v1.json,"Freeze independently verified role, material and date tokens"
+E,ADD,tests/test_context_expansion.py,"Exercise sealed originals and wrong site, time and engineering roles"
+E,ADD,tools/verify_context_expansion.py,Replay the separate expansion independently of fixed scientific builds
+F,ADD,docs/research/census_stage3_file_lifecycle.csv,"Inventory every tracked change, retained precedent and candidate archive"
+F,ADD,docs/research/census_stage3_holdout_verification.json,Carry independent family-separated confusion matrices and fingerprints
+F,ADD,docs/research/census_stage3_results.md,"Summarize exact integration, measured results and replay procedure"
+F,ADD,docs/research/census_stage3_verification.json,"Bind final output, comparison, browser, CI and replay receipts"
+F,ADD,tools/census_stage3_engineering.py,Run matched Git archive benchmarks with runtime traces and cache instrumentation
+F,ADD,tools/verify_census_stage3_release.py,"Independently verify formal equivalence, whole CAS closure and both cached replays"
+F,ARCHIVE,work/census-stage3/final/archive,New immutable fixed-input Stage 3 candidate manifest
+F,ARCHIVE,work/census-stage3/final/census-stage3-candidate-preview.zip,Two evidenced versions and preview pointer
+F,KEEP,web/index.html and web/assets/*,"Reuse the existing static site, styles and behavior"
+F,KEEP,work/census-stage2/typed-attributes-22f8565/archive,Preserve the archived Stage 2 candidate
+F,REFACTOR,web/tests/browser.mjs,"Exercise real candidate formula links, attributes, and immutable history"

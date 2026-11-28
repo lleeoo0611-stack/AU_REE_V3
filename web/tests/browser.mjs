@@ -205,6 +205,102 @@ try {
     await page.selectOption("#state-filter","");
   }
   metrics.search_filter_sort_columns_evidence="PASS";
+  if (flags.includes("--stage3")) {
+    assert(!synthetic, "Stage 3 regressions require exact archived candidate data");
+    const expectedProducts = [
+      ["AU-dac3c8e40326b8244cdb", "2890", 4, "總TREO蘊藏量_kt", 2],
+      ["AU-216d0983f6892f9b58f9", "134.560032", 97, "總TREO蘊藏量_kt", 2],
+    ];
+    expectedProducts.push(["AU-0098e17a63e7c05c213f", "16.8", 3, "磁鐵稀土氧化物蘊藏量_kt", 3]);
+    const newEvidence = JSON.parse(served.get(exactEvidencePath)).entries;
+    const oldGrid = JSON.parse(served.get(art(priorId,"census.json")));
+    await page.click("#columns summary");
+    await page.getByRole("button",{name:"顯示全部 51 欄"}).click();
+    for (const [id, value, physicalPage, field, inputCount] of expectedProducts) {
+      const row = newCensus.projects.find(project => project.id === id);
+      const column = newCensus.columns.findIndex(item => item.id === field);
+      const current = row.cells[column];
+      assert.equal(Number(current.value), Number(value));
+      assert.equal(current.origin, "FORMAL_DERIVED");
+      const evidence = newEvidence[current.lineage_id];
+      assert.equal(evidence.physical_page, physicalPage);
+      assert.equal(evidence.input_observation_ids.length, inputCount);
+      if (inputCount === 3) {
+        assert.equal(evidence.chemical_basis, "PrNdDyTb_REO");
+        assert.deepEqual(current.precision.rounding_interval.map(Number), [16.66925, 16.93125]);
+      }
+      assert(evidence.formula.includes("0.001"));
+      const historical = oldGrid.projects.find(project => project.id === id).cells[column].value;
+      assert.equal(historical, inputCount === 2 ? current.value : null);
+      await page.fill("#search", id);
+      await expectText(page,"#table-count",/^1 \/ 93/);
+      await page.locator("#census-table tbody").getByRole("button",{name:new RegExp(`^${field}`)}).click();
+      const dialog = page.locator("#evidence-detail");
+      await page.locator("dialog[open]").waitFor();
+      const detail = await dialog.textContent();
+      assert(detail.includes(evidence.formula));
+      assert(detail.includes(evidence.source_sha256));
+      assert(evidence.input_observation_ids.every(id => detail.includes(id)));
+      await page.keyboard.press("Escape");
+    }
+
+    if (process.env.AU_REE_STAGE3_CAS) {
+      const [id, , , field] = expectedProducts.at(-1);
+      const project = newCensus.projects.find(row => row.id === id);
+      const column = newCensus.columns.findIndex(item => item.id === field);
+      const evidence = newEvidence[project.cells[column].lineage_id];
+      const bytes = await readFile(resolve(process.env.AU_REE_STAGE3_CAS, "objects", evidence.source_sha256));
+      assert.equal(digest(bytes), evidence.source_sha256);
+      await page.fill("#search", id);
+      await expectText(page, "#table-count", /^1 \/ 93/);
+      await page.locator("#census-table tbody").getByRole("button", {name:new RegExp(`^${field}`)}).click();
+      const context = page.context();
+      const source = evidence.source_url;
+      await context.route(url => url.toString() === source, route => route.fulfill({
+        body:bytes, contentType:"application/pdf", status:200,
+      }));
+      const requested = context.waitForEvent("request", request => request.url() === source);
+      await page.locator("#evidence-detail a").click();
+      assert.equal((await requested).url(), source);
+      await page.keyboard.press("Escape");
+      metrics.original_source_link_readback = "PASS";
+    }
+    metrics.exact_derived_evidence_dialogs = expectedProducts.length;
+    {
+      let checked = 0, preserved = 0;
+      const oldEvidence = JSON.parse(served.get(art(priorId,"census_evidence.json"))).entries;
+      for (const project of newCensus.projects) {
+        for (const [index, cell] of project.cells.entries()) {
+          const evidence = newEvidence[cell.lineage_id];
+          if (evidence.evidence_state !== "VALIDATED_DESCRIPTIVE") continue;
+          const priorCell = oldGrid.projects.find(row => row.id === project.id).cells[index];
+          if (priorCell.value !== null) {
+            assert.equal(priorCell.value, cell.value);
+            assert.equal(oldEvidence[priorCell.lineage_id].source_sha256, evidence.source_sha256);
+            preserved++;
+          }
+          await page.fill("#search", project.id);
+          await expectText(page,"#table-count",/^1 \/ 93/);
+          const heading = newCensus.columns[index].id;
+          await page.locator("#census-table tbody").getByRole("button",{name:new RegExp(`^${heading} · `)}).click();
+          await page.locator("dialog[open]").waitFor();
+          const detail = await page.locator("#evidence-detail").textContent();
+          assert(detail.includes(evidence.source_sha256));
+          assert(detail.includes(evidence.locator));
+          assert(await page.locator("#evidence-detail a").count());
+          await page.keyboard.press("Escape");
+          checked++;
+        }
+      }
+      assert.equal(checked, 11);
+      assert.equal(preserved, 5);
+      metrics.preserved_historical_attributes = preserved;
+      metrics.typed_attribute_evidence_dialogs = checked;
+      await page.getByRole("button",{name:"恢復預設欄位"}).click();
+      await page.click("#columns summary");
+    }
+  }
+  await page.fill("#search","");
 
   await page.click('[data-tab="map"]');
   await expectText(page,"#map-details",/無可驗證座標/);
