@@ -1,0 +1,289 @@
+{
+  "schema": "native-production-forecast-context-oracle-v2",
+  "cases": [
+    {
+      "case_id": "jupiter-base-case-annual-contained-treo",
+      "role": "FORECAST",
+      "amount": "8,300",
+      "native_unit": "tonnes per annum",
+      "material": "MREC",
+      "chemistry": "TREO",
+      "period": "LIFE_OF_MINE_ANNUAL_AVERAGE_INCLUDING_RAMP_UP_AND_SCHEDULING",
+      "date": "2026-10-20",
+      "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            2,
+            2
+          ],
+          "contains": "20 October 2026 | ASX: CRI"
+        },
+        {
+          "page": 8,
+          "lines": [
+            2,
+            4
+          ],
+          "contains": "financial model assuming a life-of-mine average of approximately 8,300 tonnes per annum of contained TREO in MREC"
+        },
+        {
+          "page": 21,
+          "lines": [
+            14,
+            14
+          ],
+          "contains": "Average annual contained TREO in MREC tpa 8,300 9,300"
+        },
+        {
+          "page": 21,
+          "lines": [
+            20,
+            22
+          ],
+          "contains": "Base Case annual production represents the life-of-mine annual average and includes ramp-up and scheduling effects"
+        },
+        {
+          "page": 17,
+          "lines": [
+            16,
+            18
+          ],
+          "contains": "first MREC production and sales commencing in 2032"
+        }
+      ],
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "study": "Jupiter Scoping Study",
+      "scenario": "BASE_CASE_LIFE_OF_MINE_AVERAGE",
+      "receipt_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce"
+    },
+    {
+      "case_id": "jupiter-nominal-design-annual-contained-treo",
+      "role": "ENGINEERING_PLAN",
+      "amount": "9,300",
+      "native_unit": "tonnes per annum",
+      "material": "MREC",
+      "chemistry": "TREO",
+      "period": "NOMINAL_RATE_AT_8_0_MTPA_FEED_NOT_LIFE_OF_MINE_AVERAGE",
+      "date": "2026-10-20",
+      "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            2,
+            2
+          ],
+          "contains": "20 October 2026 | ASX: CRI"
+        },
+        {
+          "page": 8,
+          "lines": [
+            1,
+            2
+          ],
+          "contains": "process design basis provides for production of MREC containing approximately 9,300 tonnes per annum of TREO at nominal processing capacity"
+        },
+        {
+          "page": 21,
+          "lines": [
+            14,
+            14
+          ],
+          "contains": "Average annual contained TREO in MREC tpa 8,300 9,300"
+        },
+        {
+          "page": 21,
+          "lines": [
+            21,
+            22
+          ],
+          "contains": "Scoping Study Process Design Basis production represents performance at the nominal 8.0 Mtpa processing rate"
+        }
+      ],
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "study": "Jupiter Scoping Study",
+      "scenario": "NOMINAL_PROCESSING_CAPACITY",
+      "receipt_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce"
+    },
+    {
+      "case_id": "north-stanmore-pfs-base-case-annual-wet-concentrate",
+      "role": "FORECAST",
+      "amount": "29,000",
+      "native_unit": "wet tonnes per annum",
+      "material": "FLOTATION_CONCENTRATE",
+      "chemistry": null,
+      "period": "PFS_ANNUAL_BASE_CASE_AVERAGING_WINDOW_UNSPECIFIED",
+      "date": "2026-08-18",
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            1,
+            1
+          ],
+          "contains": "ASX RELEASE 18 AUGUST 2026"
+        },
+        {
+          "page": 62,
+          "lines": [
+            8,
+            10
+          ],
+          "contains": "produces approximately 29,000 wet tonnes per annum of heavy rare earth enriched flotation concentrate for sale to third party refiners"
+        },
+        {
+          "page": 66,
+          "lines": [
+            7,
+            8
+          ],
+          "contains": "approximately 29,000 wet tpa of flotation concentrate"
+        },
+        {
+          "page": 143,
+          "lines": [
+            62,
+            62
+          ],
+          "contains": "There has been no production at the North Stanmore project"
+        }
+      ],
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "study": "North Stanmore PFS",
+      "scenario": "BASE_CASE_WET_FLOTATION_CONCENTRATE",
+      "receipt_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322"
+    },
+    {
+      "case_id": "nolans-dfs-average-ndpr-oxide",
+      "source_sha256": "63bc0386c935658dc977d4a5552390ad51ba2f0c7ce0e5c2b31754b8e7a1a5eb",
+      "role": "FORECAST",
+      "scenario": "POST_RAMP_UP_AVERAGE_NDPR_OXIDE",
+      "amount": "4,357",
+      "native_unit": "tonnes per annum",
+      "material": "NDPR_OXIDE",
+      "chemistry": "NDPR_OXIDE",
+      "date": "2019-02-07",
+      "period": "ANNUAL_AVERAGE_AFTER_THREE_YEAR_RAMP_UP_EXCLUDING_PARTIAL_FINAL_YEAR",
+      "period_display": [
+        "excluding the partial final year of production",
+        "Annual average after three-year ramp-up, excluding the partial final year"
+      ],
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            4,
+            4
+          ],
+          "contains": "7 February 2019"
+        },
+        {
+          "page": 13,
+          "lines": [
+            18,
+            18
+          ],
+          "contains": "Annual NdPr Oxide Production* tpa 4,357"
+        },
+        {
+          "page": 13,
+          "lines": [
+            41,
+            42
+          ],
+          "contains": "Average production and costs are calculated as the arithmetic annual average following the anticipated three year ramp up period and excluding the partial final year of production"
+        }
+      ],
+      "project_id": "AU-1345edd8165c10930e94",
+      "study": "Nolans DFS (2019)",
+      "receipt_sha256": "1fca3dec3a708ddea1a2719a7684bd0632a5b5e640d83f275953c6afc65f0e91"
+    },
+    {
+      "case_id": "dubbo-heap-leach-years-3-15-ndpr-oxide",
+      "source_sha256": "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab",
+      "role": "FORECAST",
+      "scenario": "TARGET_WINDOW_AVERAGE_NDPR_OXIDE",
+      "amount": "1,157",
+      "native_unit": "tpa",
+      "material": "NDPR_OXIDE",
+      "chemistry": "NDPR_OXIDE",
+      "date": "2025-07-11",
+      "period": "ANNUAL_TARGET_YEARS_3_15",
+      "period_display": [
+        "during years 3-15",
+        "Average annual production target, years 3–15"
+      ],
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            1,
+            1
+          ],
+          "contains": "ASX Release 11 July 2025"
+        },
+        {
+          "page": 17,
+          "lines": [
+            19,
+            20
+          ],
+          "contains": "Average annual production target Years 3-15 LOM NdPr oxide (tpa) 1,157 1,037"
+        }
+      ],
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "study": "Dubbo Project Heap Leach Scoping Study (2025)",
+      "receipt_sha256": "b6818686e177845967d3311bfa5511ee62c7499036ff6767bc7e7014ac5036f2"
+    },
+    {
+      "case_id": "dubbo-heap-leach-life-of-mine-ndpr-oxide",
+      "source_sha256": "734d9ea35fd9617eb2bad21c48fec17cdae08a5c66fa3e3cf7857390d04218ab",
+      "role": "FORECAST",
+      "scenario": "LIFE_OF_MINE_TARGET_AVERAGE_NDPR_OXIDE",
+      "amount": "1,037",
+      "native_unit": "tpa",
+      "material": "NDPR_OXIDE",
+      "chemistry": "NDPR_OXIDE",
+      "date": "2025-07-11",
+      "period": "LIFE_OF_MINE_ANNUAL_TARGET",
+      "period_display": [
+        "over LOM",
+        "Life-of-mine average annual production target"
+      ],
+      "spans": [
+        {
+          "page": 1,
+          "lines": [
+            1,
+            1
+          ],
+          "contains": "ASX Release 11 July 2025"
+        },
+        {
+          "page": 17,
+          "lines": [
+            19,
+            20
+          ],
+          "contains": "Average annual production target Years 3-15 LOM NdPr oxide (tpa) 1,157 1,037"
+        }
+      ],
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "study": "Dubbo Project Heap Leach Scoping Study (2025)",
+      "receipt_sha256": "b6818686e177845967d3311bfa5511ee62c7499036ff6767bc7e7014ac5036f2"
+    }
+  ],
+  "negative": {
+    "case_id": "jupiter-lifetime-mrec-is-not-annual-treo",
+    "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+    "page": 21,
+    "lines": [
+      16,
+      16
+    ],
+    "contains": "Life-of-mine MREC production tonnes 201,400"
+  }
+}

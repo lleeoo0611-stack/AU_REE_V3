@@ -27,6 +27,8 @@ if TYPE_CHECKING:
 
 SCHEMA = "source-bound-production-forecasts-v1"
 _CONTEXT_ORACLE_SHA256 = "3db34d7949618bf2a27fde25fbd5d17d17fb2952c82fc7a3d27dc519c1bde3c9"
+_CONTEXT_ORACLE_V2_SHA256 = "d2af32c8cc08509e7d8eeb58306c8427c65b38b611eb0a87c34b58715644a871"
+_ANNUAL_NDPR_TARGET = rf"\bAverage {NUMBER} tpa NdPr production during years [0-9]+-[0-9]+"
 
 
 @dataclass(frozen=True, slots=True)
@@ -66,6 +68,18 @@ _SCENARIOS = {
             rf"heavy rare earth enriched flotation concentrate\b",
             re.I,
         ),
+    ),
+    "POST_RAMP_UP_AVERAGE_NDPR_OXIDE": StudyScenario(
+        "FORECAST", "annual_ndpr_oxide", "NDPR_OXIDE", "tonnes per annum", "NDPR_OXIDE", "NDPR_OXIDE",
+        re.compile(rf"\bAverage annual production (?P<token>{NUMBER}) tonnes per annum of NdPr oxide\b", re.I),
+    ),
+    "TARGET_WINDOW_AVERAGE_NDPR_OXIDE": StudyScenario(
+        "FORECAST", "annual_ndpr_oxide", "NDPR_OXIDE", "tpa", "NDPR_OXIDE", "NDPR_OXIDE",
+        re.compile(rf"\bAverage (?P<token>{NUMBER}) tpa NdPr production during years [0-9]+-[0-9]+\b", re.I),
+    ),
+    "LIFE_OF_MINE_TARGET_AVERAGE_NDPR_OXIDE": StudyScenario(
+        "FORECAST", "annual_ndpr_oxide", "NDPR_OXIDE", "tpa", "NDPR_OXIDE", "NDPR_OXIDE",
+        re.compile(rf"{_ANNUAL_NDPR_TARGET} \((?P<token>{NUMBER}) tpa over LOM\)", re.I),
     ),
 }
 _LIFETIME = re.compile(r"\blife-of-mine MREC production tonnes (?:" + NUMBER + r")\b", re.I)
@@ -112,6 +126,7 @@ def _review(document, edition, binding, proofs, cutoff, project_name):
     match, = matches
     rate_anchor = bind_native_quote(document, key, statement.page, match[0], "STUDY_ANNUAL_RATE_VALUE")
     token = match["token"]
+    qualifier = match.groupdict().get("qualifier")
     point, low, high = reported_interval(token)
     if point <= 0:
         raise DocumentError("SCIENTIFIC_CONFLICT", "ANNUAL_PRODUCTION_RATE_MUST_BE_POSITIVE")
@@ -124,8 +139,7 @@ def _review(document, edition, binding, proofs, cutoff, project_name):
         "scenario": binding["scenario"], "study": binding["study"],
         "product_basis": scenario.product, "chemical_basis": scenario.chemistry,
         "study_publication_date": publication_date, "role": scenario.role, "annual_rate_basis": scenario.unit,
-        "source_edition_id": edition["edition_id"], "precision_qualifier": match["qualifier"].strip()
-        if match["qualifier"] else None,
+        "source_edition_id": edition["edition_id"], "precision_qualifier": qualifier.strip() if qualifier else None,
         "printed_decimal_interval": [format(low, "f"), format(high, "f")],
         "forecast_uncertainty_interval": None,
         "scope_anchor_id": scope.anchor_id, "publication_anchor_id": publication.anchor_id,
@@ -275,7 +289,11 @@ def verify_forecast_context(production, frozen_sources, assets, oracle_path):
     """Corroborate shadow values with independently pinned source rows and notes."""
     manifest = json.loads(frozen_sources.read_bytes())
     oracle = json.loads(oracle_path.read_bytes())
-    if oracle["schema"] != "native-production-forecast-context-oracle-v1":
+    scope = {
+        "native-production-forecast-context-oracle-v1": "FIXED_144",
+        "native-production-forecast-context-oracle-v2": "FIXED_NATIVE_EDITION",
+    }.get(oracle["schema"])
+    if scope is None:
         raise ValueError("Unknown forecast context oracle")
     if production["source_manifest_sha256"] != _file_sha256(frozen_sources):
         raise ValueError("Forecast source lineage differs from the independent oracle input")
@@ -288,7 +306,13 @@ def verify_forecast_context(production, frozen_sources, assets, oracle_path):
                            for span in item["spans"])
             views[digest] = cache.pdf(content.read(digest), digest, required)
         row = cases[expected["case_id"]]
-        raw = row["raw_observation"]
+        if scope == "FIXED_NATIVE_EDITION" and any(row[key] != expected[key] for key in (
+            "project_id", "study", "scenario", "receipt_sha256",
+        )):
+            raise ValueError(f"Original forecast project, study, scenario or edition disagrees: {expected['case_id']}")
+        raw = row.get("raw_observation")
+        if row["status"] != "VERIFIED_SHADOW" or raw is None:
+            raise ValueError(f"Expected source forecast did not qualify: {expected['case_id']}")
         pins = ("role", "amount", "native_unit", "material", "chemistry", "date", "source_sha256")
         columns = ("observation_role", "raw_value", "raw_unit", "material_basis", "chemical_basis",
                    "reported_publication_date", "source_sha")
@@ -303,7 +327,7 @@ def verify_forecast_context(production, frozen_sources, assets, oracle_path):
         if not (tuple(raw[key] for key in columns) == tuple(expected[key] for key in pins)
                 and proofs and temporal.status == "ELIGIBLE"
                 and canonical_json(temporal.to_dict()) == canonical_json(row["temporal_decision"])
-                and row["status"] == "VERIFIED_SHADOW" and not row["formal_selection"] and not row["formal_mcda"]
+                and not row["formal_selection"] and not row["formal_mcda"]
                 and raw["status"] == "SHADOW" and raw["denominator_basis"] == "YEAR"
                 and raw["effective_date"] is None and raw["event_date"] is None):
             raise ValueError(f"Original forecast quantity, role, basis or date disagrees: {expected['case_id']}")
@@ -311,13 +335,13 @@ def verify_forecast_context(production, frozen_sources, assets, oracle_path):
             "project_id": row["project_id"], "source_url": source["url"], "receipt_sha256": source["receipt_sha256"],
             "state": "SHADOW", "observation_id": raw["observation_id"],
             "source_spans": [_literal(views[digest], span) for span in expected["spans"]],
-        })
+        } | {key: expected[key] for key in ("period_display",) if key in expected})
     negative = oracle["negative"]
     row = cases[negative["case_id"]]
     if row["status"] != "REJECTED" or row["reason"] != "LIFETIME_PRODUCT_MASS_IS_NOT_ANNUAL_CONTAINED_TREO":
         raise ValueError("Life-of-mine product mass is not an annual contained TREO observation")
     return {
-        "schema": oracle["schema"], "scope": "FIXED_144", "status": "PASS",
+        "schema": oracle["schema"], "scope": scope, "status": "PASS",
         "source_manifest_sha256": _file_sha256(frozen_sources), "oracle_sha256": _file_sha256(oracle_path),
         "cases": confirmed, "negative": {"reason": row["reason"], "source_sha256": negative["source_sha256"],
                                        "source_span": _literal(views[negative["source_sha256"]], negative)},
@@ -332,6 +356,9 @@ _DISPLAY_PRODUCT = {
     "BASE_CASE_WET_FLOTATION_CONCENTRATE": (
         "heavy rare earth enriched flotation concentrate", "Heavy rare earth enriched flotation concentrate (wet)",
     ),
+    "POST_RAMP_UP_AVERAGE_NDPR_OXIDE": ("NdPr oxide", "NdPr oxide"),
+    "TARGET_WINDOW_AVERAGE_NDPR_OXIDE": ("NdPr oxide", "NdPr oxide"),
+    "LIFE_OF_MINE_TARGET_AVERAGE_NDPR_OXIDE": ("NdPr oxide", "NdPr oxide"),
 }
 _DISPLAY_PERIOD = {
     "BASE_CASE_LIFE_OF_MINE_AVERAGE": (
@@ -344,12 +371,23 @@ _DISPLAY_PERIOD = {
 }
 
 
+def _display_quote(anchor, spans, token):
+    if token in anchor["quote"]:
+        return anchor["quote"], anchor["locator"]
+    matching = [span for span in spans if token in span["excerpt"]]
+    if len(matching) != 1:
+        raise ValueError(f"Forecast display token lacks a unique native witness: {token}")
+    span, = matching
+    return (span["excerpt"], f"PDF page {span['physical_page']}, native layout lines "
+            f"{span['first_line']}–{span['last_line']}")
+
+
 def forecast_display_facts(profile: Path, sources: Path, assets: Path, bindings: Path, *,
                            oracle_path: Path) -> tuple[DisplayFact, ...]:
     """Project independently corroborated study context into display-only fields."""
     from .census_display import DisplayFact
 
-    if _file_sha256(oracle_path) != _CONTEXT_ORACLE_SHA256:
+    if _file_sha256(oracle_path) not in {_CONTEXT_ORACLE_SHA256, _CONTEXT_ORACLE_V2_SHA256}:
         raise ValueError("Forecast display requires the registered independent native context oracle")
     production = _production_forecast_review(profile, sources, assets, bindings)
     verified = verify_forecast_context(production, sources, assets, oracle_path)
@@ -369,7 +407,8 @@ def forecast_display_facts(profile: Path, sources: Path, assets: Path, bindings:
             "scenario": scenario, "period": case["period"], "material_basis": case["material"],
             "chemical_basis": case["chemistry"] or "UNKNOWN_CONTEXT", "study": row["study"],
             "raw_observation_id": case["observation_id"], "precision_qualifier": qualifier or "UNREPORTED",
-            "forecast_uncertainty": "UNREPORTED", "source_scope": "FIXED_144",
+            "forecast_uncertainty": "UNREPORTED",
+            "source_scope": verified["scope"] if "period_display" in case else "FIXED_144",
         }
         common = {
             "project_id": case["project_id"], "source_sha256": case["source_sha256"],
@@ -378,24 +417,16 @@ def forecast_display_facts(profile: Path, sources: Path, assets: Path, bindings:
             "data_role": case["role"], "context": context,
         }
         product_token, product_value = _DISPLAY_PRODUCT[scenario]
-        period_token, period_value = _DISPLAY_PERIOD[scenario]
-        product_quote = anchor["quote"]
-        if product_token not in product_quote:
-            raise ValueError("Forecast product label lacks its bound native token")
-        if period_token in product_quote:
-            period_quote, period_locator = product_quote, anchor["locator"]
-        else:
-            span, = (span for span in case["source_spans"] if period_token in span["excerpt"])
-            period_quote = span["excerpt"]
-            period_locator = (f"PDF page {span['physical_page']}, native layout lines "
-                              f"{span['first_line']}–{span['last_line']}")
+        period_token, period_value = case["period_display"] if "period_display" in case else _DISPLAY_PERIOD[scenario]
+        product_quote, product_locator = _display_quote(anchor, case["source_spans"], product_token)
+        period_quote, period_locator = _display_quote(anchor, case["source_spans"], period_token)
         rate_value = " ".join(part for part in (qualifier, case["amount"], case["native_unit"]) if part)
         facts.extend((
             DisplayFact(field_id="forecast_product_and_basis", value=product_value, raw_token=product_token,
-                        raw_unit="", locator=anchor["locator"], quote=product_quote, **common),
+                        raw_unit="", locator=product_locator, quote=product_quote, **common),
             DisplayFact(field_id="forecast_scenario_or_period", value=period_value, raw_token=period_token,
                         raw_unit="", locator=period_locator, quote=period_quote, **common),
             DisplayFact(field_id="forecast_annual_rate_as_reported", value=rate_value, raw_token=case["amount"],
-                        raw_unit=case["native_unit"], locator=anchor["locator"], quote=product_quote, **common),
+                        raw_unit=case["native_unit"], locator=anchor["locator"], quote=anchor["quote"], **common),
         ))
     return tuple(facts)

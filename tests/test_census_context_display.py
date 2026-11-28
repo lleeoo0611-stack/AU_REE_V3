@@ -68,6 +68,40 @@ class CensusContextDisplayTest(unittest.TestCase):
                 forecast_display_facts(PROFILE, sources, assets, PROFILES / "production_forecast_bindings_v1.json",
                                        oracle_path=oracle)
 
+    def test_ndpr_issuer_study_rates_preserve_product_period_and_prior_display(self):
+        sources, assets = map(Path, (os.environ["AU_REE_CONTEXT_FIXED_MANIFEST"], os.environ["AU_REE_CONTEXT_FIXED_CAS"]))
+        old = forecast_display_facts(PROFILE, sources, assets, PROFILES / "production_forecast_bindings_v1.json",
+                                     oracle_path=FIXTURES / "production_forecast_context_oracle_v1.json")
+        expanded = forecast_display_facts(PROFILE, sources, assets, PROFILES / "production_forecast_bindings_v2.json",
+                                          oracle_path=FIXTURES / "production_forecast_context_oracle_v2.json")
+        self.assertEqual(expanded[:len(old)], old)
+        new = expanded[len(old):]
+        rates = [fact for fact in new if fact.field_id == "forecast_annual_rate_as_reported"]
+        self.assertEqual([(fact.raw_token, fact.raw_unit, fact.context["period"]) for fact in rates], [
+            ("4,357", "tonnes per annum", "ANNUAL_AVERAGE_AFTER_THREE_YEAR_RAMP_UP_EXCLUDING_PARTIAL_FINAL_YEAR"),
+            ("1,157", "tpa", "ANNUAL_TARGET_YEARS_3_15"),
+            ("1,037", "tpa", "LIFE_OF_MINE_ANNUAL_TARGET"),
+        ])
+        self.assertEqual(len({fact.subject_id for fact in rates}), 3)
+        self.assertEqual(len({(fact.project_id, fact.field_id) for fact in new}), 6)
+        self.assertTrue(all(fact.data_role == "FORECAST" and fact.context["material_basis"] == "NDPR_OXIDE"
+                            and fact.raw_token in fact.quote for fact in new))
+        dubbo_product = [fact for fact in new if fact.field_id == "forecast_product_and_basis"
+                         and fact.project_id == "AU-2cfeb25aefee0c4f95fb"]
+        self.assertTrue(all("PDF page 17" in fact.locator and "1,157 1,037" in fact.quote for fact in dubbo_product))
+
+    def test_original_rate_cannot_authorize_a_different_study_title(self):
+        sources, assets = map(Path, (os.environ["AU_REE_CONTEXT_FIXED_MANIFEST"], os.environ["AU_REE_CONTEXT_FIXED_CAS"]))
+        with tempfile.TemporaryDirectory() as folder:
+            bindings = Path(folder) / "wrong.json"
+            altered = json.loads((PROFILES / "production_forecast_bindings_v2.json").read_bytes())
+            row = next(row for row in altered["cases"] if row["case_id"] == "nolans-dfs-average-ndpr-oxide")
+            row["study"] = "Nolans Bankable Feasibility Study (2025)"
+            bindings.write_text(json.dumps(altered))
+            with self.assertRaisesRegex(ValueError, "Original forecast project, study, scenario or edition disagrees"):
+                forecast_display_facts(PROFILE, sources, assets, bindings,
+                                       oracle_path=FIXTURES / "production_forecast_context_oracle_v2.json")
+
 
 class EditionRecoveryTest(unittest.TestCase):
     def test_exact_bytes_are_required_and_tampered_capture_cannot_replay(self):
