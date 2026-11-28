@@ -31,6 +31,7 @@ _METADATA_METHODS = {
     "registry_snapshot", "registry_state_mapping", "profile_country_rule", "verified_source_manifest",
     "bounded_metadata_summary",
 }
+_ATTRIBUTE_METHODS = {"reviewed_geological_classification", "approved_completed_stage"}
 METADATA_ORIGINS = {"IDENTITY", "REGISTRY_SNAPSHOT", "REGISTRY_MAPPING", "SOURCE_EVIDENCE", "METADATA_SUMMARY"}
 
 
@@ -54,6 +55,10 @@ class CensusMetadata:
     registry_sha256: str
     cells: dict[tuple[str, str], dict]
     source_reasons: dict[str, str]
+    attribute_receipt: dict | None = None
+
+    def can_project(self, definition: dict) -> bool:
+        return metadata_projection(definition, include_attributes=self.attribute_receipt is not None)
 
 
 def load_projection_policy(columns: tuple[str, ...] | list[str]) -> CensusProjectionPolicy:
@@ -123,8 +128,9 @@ def _registry_metadata(project, policy, registry_sha, snapshot_cutoff) -> dict[s
     return cells
 
 
-def metadata_projection(definition: dict) -> bool:
-    return definition["projection_method"] in _METADATA_METHODS
+def metadata_projection(definition: dict, *, include_attributes: bool = False) -> bool:
+    method = definition["projection_method"]
+    return method in _METADATA_METHODS or (include_attributes and method in _ATTRIBUTE_METHODS)
 
 
 def _source_metadata(manifest, manifest_sha, source_receipt) -> tuple[dict[str, dict], dict[str, str]]:
@@ -188,7 +194,7 @@ def _source_metadata(manifest, manifest_sha, source_receipt) -> tuple[dict[str, 
 
 def prepare_census_metadata(
     profile: Path, source_manifest: dict | None = None, source_receipt: dict | None = None,
-    *, source_manifest_sha256: str | None = None,
+    *, source_manifest_sha256: str | None = None, attribute_assets: Path | None = None, release_id: str | None = None,
 ) -> CensusMetadata:
     """Project Registry snapshot display and already verified exact source captures."""
     settings = load_profile(profile)
@@ -219,7 +225,19 @@ def prepare_census_metadata(
             "metadata_evidence": canonical_json(evidence),
         }
         cells.update({(project.project_id, headings[key]): value for key, value in projected.items()})
-    return CensusMetadata(policy, settings.sha256, registry.sha256, cells, reasons)
+    attribute_receipt = None
+    if settings.attribute_bindings_path:
+        from .project_attributes import review_attributes
+
+        attributes, attribute_receipt = review_attributes(
+            settings, registry, source_manifest, source_manifest_sha256, source_receipt, attribute_assets, release_id,
+        )
+        for (project_id, column_id), value in attributes.items():
+            key = project_id, headings[column_id]
+            if key in cells:
+                raise ContractViolation("Text attribute would overwrite an existing display cell")
+            cells[key] = value
+    return CensusMetadata(policy, settings.sha256, registry.sha256, cells, reasons, attribute_receipt)
 
 
 def _coverage(present: int, denominator: int) -> dict:
@@ -229,11 +247,12 @@ def _coverage(present: int, denominator: int) -> dict:
     }
 
 
-def coverage_report(cells: list[dict], policy: CensusProjectionPolicy) -> dict:
+def coverage_report(cells: list[dict], policy: CensusProjectionPolicy, *, include_attributes: bool = False) -> dict:
     present = [cell for cell in cells if cell["value_state"] == "PRESENT"]
     direct = [cell for cell in present if cell["evidence_state"] == "FORMAL_DIRECT"]
     derived = [cell for cell in present if cell["evidence_state"] == "FORMAL_DERIVED"]
-    supported = {column["display_name"] for column in policy.rows if metadata_projection(column)}
+    supported = {column["display_name"] for column in policy.rows
+                 if metadata_projection(column, include_attributes=include_attributes)}
     metadata = [cell for cell in present if cell["value_origin"] in METADATA_ORIGINS]
     states = defaultdict(Counter)
     reasons = defaultdict(Counter)

@@ -139,8 +139,25 @@ def _same_census_quantity(cell, observation) -> bool:
     )
 
 
-def _check_display_metadata(cell, definition, receipt):
+def _check_display_metadata(cell, definition, receipt, census_receipt):
     origin = cell["value_origin"]
+    if cell["evidence_state"] == "VALIDATED_DESCRIPTIVE":
+        evidence = _object(cell["metadata_evidence"].encode("utf-8"), "attribute metadata")
+        attributes = census_receipt.get("attribute_assessments")
+        matching = [case for case in (attributes or {}).get("cases", ()) if case.get("selection") == evidence["selection"]]
+        if (not attributes or len(matching) != 1
+                or attributes["source_manifest_sha256"] != receipt["input_artifacts"]["sources"]
+                or evidence["selection"]["profile_sha256"] != receipt["input_artifacts"]["profile"]
+                or attributes["release_id"] != receipt["observation_release_id"]
+                or cell["release_id"] != receipt["observation_release_id"]
+                or matching[0]["assertion"] != evidence["assertion"]
+                or matching[0]["assessment"] != evidence["assessment"]
+                or matching[0]["evidence"] != evidence["anchors"]
+                or matching[0]["source"]["url"] != cell["source_url"]
+                or matching[0]["temporal_decision"] != evidence["temporal_decision"]
+                or matching[0]["capture_sha256"] != evidence["source_capture_sha256"]):
+            raise ValueError("Census attribute differs from its release-scoped assessment")
+        return
     if origin not in METADATA_ORIGINS or not metadata_projection(definition) or cell["evidence_state"] != "DESCRIPTIVE_ONLY":
         raise ValueError("Census display value lacks an allowed metadata projection")
     evidence = _object(cell["metadata_evidence"].encode("utf-8"), "metadata_evidence")
@@ -180,7 +197,9 @@ def _census(artifacts, receipt, observations):
         if (fields != STATUS_FIELDS or receipt.get("census_projection_policy_sha256") != policy.sha256
             or census_receipt.get("projection_policy_sha256") != policy.sha256
             or census_receipt.get("projection_policy_version") != policy.version
-            or census_receipt.get("coverage") != coverage_report(cells, policy)):
+            or census_receipt.get("coverage") != coverage_report(
+                cells, policy, include_attributes="attribute_assessments" in census_receipt,
+            )):
             raise ValueError("Census projection or coverage differs from the pinned column policy")
     elif "census_projection_policy_sha256" in receipt:
         raise ValueError("Census projection is missing its versioned ledger")
@@ -218,7 +237,7 @@ def _census(artifacts, receipt, observations):
             if origin != "IDENTITY" or cell["value"] != key[0] or cell["registry_sha256"] != receipt["project_registry_hash"]:
                 raise ValueError(f"Registry identity differs from its pinned Census key: {key}")
         elif state == "PRESENT" and policy and origin in METADATA_ORIGINS:
-            _check_display_metadata(cell, definition, receipt)
+            _check_display_metadata(cell, definition, receipt, census_receipt)
         elif state == "PRESENT" and policy and origin == "EVIDENCE_REFERENCE" and key[1] == RESOURCE_PRESENCE_COLUMN:
             validate_resource_presence(cell, definition, census_receipt, observations, ledger)
         elif state == "PRESENT" and policy and origin == "FORMAL_DERIVED":
@@ -245,6 +264,12 @@ def _census(artifacts, receipt, observations):
         elif origin in FORMAL_CENSUS_ORIGINS:
             raise ValueError(f"Missing Census value incorrectly marked as formally present: {key}")
         result[key] = cell
+    validated_attributes = [cell for cell in cells if cell.get("evidence_state") == "VALIDATED_DESCRIPTIVE"]
+    if attributes := census_receipt.get("attribute_assessments"):
+        if (attributes["display_cells"] != len(validated_attributes)
+                or attributes["selected_attributes"] != len({cell["selection_id"] for cell in validated_attributes})
+                or attributes["mcda_inputs_added"] != 0):
+            raise ValueError("Census attribute count differs from its validated text ledger")
     if census_receipt["formal_scientific_cells"] != formal or receipt["scientific_output_count"] != formal:
         raise ValueError("Formal Census value count differs from its exact evidence rows")
     if by_project or census_receipt.get("formal_derived_cells", 0) != derived:

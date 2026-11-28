@@ -193,7 +193,6 @@ def build_research(
     source_sha = sha256(source_bytes).hexdigest()
     source_manifest = json.loads(source_bytes)
     source_receipt = verify_source_manifest(settings, source_manifest, registry, ContentStore(assets))
-    metadata = prepare_census_metadata(profile, source_manifest, source_receipt, source_manifest_sha256=source_sha)
     extraction_sources = sources
     if source_receipt["failures"]:
         verified = set(source_receipt["verified_capture_sha256"])
@@ -209,6 +208,10 @@ def build_research(
     )
     if _sha(sources) != source_sha:
         raise ValueError("source manifest changed during research build")
+    metadata = prepare_census_metadata(
+        profile, source_manifest, source_receipt, source_manifest_sha256=source_sha,
+        attribute_assets=assets, release_id=extraction["release_id"],
+    )
     census, decision = _research_projections(profile, out, db, extraction, source_receipt["project_statuses"], metadata)
     artifact_hashes = {name: _sha(out / name) for name in ARTIFACTS}
     result = {
