@@ -154,8 +154,11 @@ def _fold(text):
 def _insert_row(db, split, origin, family, issuer, project, source, page, line, label, context, row):
     if type(label) is not bool:
         raise ValueError("An original row requires an explicit reviewed label")
-    db.execute("INSERT INTO nlp_rows VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-               (split, origin, family, issuer, project, source, page, line, label, context, row))
+    try:
+        db.execute("INSERT INTO nlp_rows VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                   (split, origin, family, issuer, project, source, page, line, label, context, row))
+    except sqlite3.IntegrityError as error:
+        raise ValueError("An exact original PDF row appears more than once in the labelled corpus") from error
 
 
 def _archive_training(db, manifest, bindings, cached, assets, manifest_sha, bound_sha):
@@ -342,6 +345,7 @@ def _grouped_report(args):
         sqlite3.connect(":memory:")
     ) as db:
         disk.backup(db)
+        db.execute("PRAGMA temp_store=MEMORY")
         db.execute("""CREATE TEMP TABLE nlp_rows(split TEXT, origin TEXT, family TEXT, issuer TEXT, project TEXT, source TEXT,
                       page INTEGER, line INTEGER, label INTEGER, context TEXT, row_text TEXT, UNIQUE(source,page,line))""")
         db.row_factory = sqlite3.Row
@@ -381,6 +385,7 @@ def _grouped_report(args):
         "training": {"rows": len(training), "families": len({r["family"] for r in training}),
                      "positive": sum(row["label"] for row in training), "by_origin": dict(Counter(r["origin"] for r in training))},
         "evidence": proof,
+        "split_checks": ["report_family", "known_issuer", "project", "exact_source_sha", "normalized_exact_feature_text"],
         "dataset_sha256": sha256(json.dumps([list(row) for row in rows], ensure_ascii=False, separators=(",", ":")).encode()).hexdigest(),
         "model": {"method": "stdlib character TF-IDF (3–5) class-balanced L2 logistic regression", "vocabulary": vocabulary,
                   "iterations": 150, "threshold": 0.5},
