@@ -182,6 +182,16 @@ def _resource_scope_rejection(bundle: tuple[ResearchInput, ...]) -> str | None:
     return None
 
 
+def reported_inventory_bounds(ore, ore_half, grade, grade_half, inventory, percent):
+    """Return the same report-precision bounds used by the existing R1 rule."""
+    factor = Decimal("10" if percent else "0.001")
+    with localcontext() as context:
+        context.prec = sum(len(value.as_tuple().digits) for value in (
+            ore, grade, inventory, ore_half, grade_half,
+        )) + 12
+        return (ore - ore_half) * (grade - grade_half) * factor, (ore + ore_half) * (grade + grade_half) * factor
+
+
 def resource_bundle(by_variable: dict[str, list[ResearchInput]]) -> Comparison:
     """Admit reported inventory only as part of a complete same-statement bundle."""
     if not all(by_variable.get(name) for name in RESOURCE_VARIABLES):
@@ -201,13 +211,7 @@ def resource_bundle(by_variable: dict[str, list[ResearchInput]]) -> Comparison:
     percent = grade.candidate.unit == "%"
     if not (ore_value > 0 and 0 < grade_value <= (100 if percent else 1_000_000) and inventory > 0):
         return Comparison("INVALID_RESOURCE_QUANTITIES", inputs=bundle)
-    factor = Decimal("10" if percent else "0.001")
-    with localcontext() as context:
-        context.prec = sum(len(value.as_tuple().digits) for value in (
-            ore_value, grade_value, inventory, ore_half, grade_half,
-        )) + 12
-        low = (ore_value - ore_half) * (grade_value - grade_half) * factor
-        high = (ore_value + ore_half) * (grade_value + grade_half) * factor
+    low, high = reported_inventory_bounds(ore_value, ore_half, grade_value, grade_half, inventory, percent)
     if not low <= inventory <= high:
         return Comparison("REPORTED_CONTAINED_OUTSIDE_ROUNDING_INTERVAL", inputs=bundle)
     return Comparison(
@@ -520,6 +524,14 @@ def _resource_semantics_and_evidence(item: ResearchInput) -> tuple["SemanticCont
     chemical_basis = raw.chemical_basis
     definitions = _treo_definitions(item, extended=True) if chemical_basis == "TREO" else []
     references = [dict(reference) for reference, _ in definitions]
+    treo_members = _stated_treo_members(definitions)
+    native = (payload.get("extraction_strategy") == "native-resource-table-v1"
+              and isinstance(payload.get("native_table_binding"), dict))
+    if native and chemical_basis == "TREO" and payload.get("treo_members"):
+        members = tuple(sorted(payload["treo_members"]))
+        if members == tuple(sorted(TOTAL_REO_15)) and (not treo_members or treo_members == members):
+            treo_members = members
+            references = [dict(reference) for reference in payload["statement_context"]]
     species = ()
     if chemical_basis in KNOWN_OXIDE_SPECIES or chemical_basis in {"Nd", "Pr", "Dy", "Tb"}:
         species = (chemical_basis,)
@@ -552,7 +564,7 @@ def _resource_semantics_and_evidence(item: ResearchInput) -> tuple["SemanticCont
         includes_stockpiles=included_stockpiles if type(included_stockpiles) is bool else None,
         combined_deposit_ids=tuple(combined_deposits) if isinstance(combined_deposits, list) else (),
         material=material, denominator_basis=denominator, unit=raw.raw_unit,
-        chemical_species=species, treo_members=_stated_treo_members(definitions),
+        chemical_species=species, treo_members=treo_members,
         temporal_status=item.temporal_trace.get("status"), research_cutoff=item.validation.cutoff,
         temporal_decision_id=item.temporal_trace.get("decision_id"),
         observation_role=raw.observation_role,
@@ -573,10 +585,14 @@ def normalize_input(
     from .normalization import normalize_measurement
 
     context, definitions = _resource_semantics_and_evidence(item)
+    payload = json.loads(item.raw.original_payload)
+    native = payload.get("native_table_binding", {}) if payload.get("extraction_strategy") == "native-resource-table-v1" else {}
+    significant_figures = native.get("reported_significant_figures")
     return normalize_measurement(
         item.raw.raw_value, item.raw.raw_unit, target_unit, source_context=context, context_evidence=definitions,
         target_context=target_context, observation_id=item.raw.raw_record_id,
         source_sha256=item.source.sha256, evidence_anchor_id=item.anchor.anchor_id,
+        reported_significant_figures=significant_figures,
     )
 
 

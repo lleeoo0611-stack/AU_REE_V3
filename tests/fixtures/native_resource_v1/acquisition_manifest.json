@@ -1,0 +1,194 @@
+{
+  "cutoff": "2026-11-28",
+  "editions": [
+    {
+      "acquired_at": "2026-11-27T22:00:35.379237+00:00",
+      "available_date": null,
+      "bytes": 18072766,
+      "edition_id": "6945da7f4a4b9a12ca293ccdd1e9dcda56b0b7a584e84a8a6dd8b9ab9a115456",
+      "event_acquired_at": "2026-11-27T22:00:35.379237+00:00",
+      "final_url": "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf",
+      "historical_reference_sha256": [
+        "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-216d0983f6892f9b58f9"
+      ],
+      "publication_date": null,
+      "publisher": "ASX",
+      "reacquired_at": null,
+      "receipt_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+      "same_url_predecessor_sha256": [],
+      "sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "source_changed": false,
+      "source_key": "seed-af5b34575af9709d52d1",
+      "source_keys": [
+        "seed-af5b34575af9709d52d1"
+      ],
+      "source_version": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T22:00:35.379237+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "1e6baf10a65c0bd103df07c398b6ae5d0d8b058cfcc06d9d6cca1385f346a267",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "dca3e39b5b3905db560d141622433356c8e82933319676b38838bf638f8aa043"
+        ],
+        "matching_evidence_ids": [
+          "dca3e39b5b3905db560d141622433356c8e82933319676b38838bf638f8aa043"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+          "reference_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+          "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491"
+        }
+      ],
+      "url": "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf",
+      "version_status": "EXACT_SHA_REUSED"
+    },
+    {
+      "acquired_at": "2026-11-27T22:00:45.404753+00:00",
+      "available_date": null,
+      "bytes": 2806260,
+      "edition_id": "892f9b6f9ff524640908b2bb2cf16bd6f0246c8f044147eccb89477b56f3e6ac",
+      "event_acquired_at": "2026-11-27T22:00:45.404753+00:00",
+      "final_url": "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf",
+      "historical_reference_sha256": [
+        "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e"
+      ],
+      "integrity": "EXACT_SHA",
+      "kind": "pdf",
+      "project_ids": [
+        "AU-dac3c8e40326b8244cdb"
+      ],
+      "publication_date": null,
+      "publisher": "ASX",
+      "reacquired_at": null,
+      "receipt_sha256": "3df5436d06eafadbddcfd59b12401b47f19de724394f19bedb9245c9ecb4e9d2",
+      "same_url_predecessor_sha256": [],
+      "sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "source_changed": false,
+      "source_key": "seed-03678827fc9d8c1e892c",
+      "source_keys": [
+        "seed-03678827fc9d8c1e892c"
+      ],
+      "source_version": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "temporal_decision": {
+        "acquired_at": "2026-11-27T22:00:45.404753+00:00",
+        "availability_role": "UNCLASSIFIED",
+        "available_date": null,
+        "cutoff": "2026-11-28",
+        "decision_id": "e3e44469c31f57bf6c48ce199a995a47ff0fb40203a7cd93397757a6550eace9",
+        "earliest_proven_public_date": "2026-11-28",
+        "effective_date": null,
+        "event_date": null,
+        "evidence_ids": [
+          "0b441f19ee315b7e9c3de5d09aa66605688c422ac4b7a07af9437253a4c09aab"
+        ],
+        "matching_evidence_ids": [
+          "0b441f19ee315b7e9c3de5d09aa66605688c422ac4b7a07af9437253a4c09aab"
+        ],
+        "observation_role": "DOCUMENT",
+        "policy_version": "temporal-evidence-v1",
+        "publication_date": null,
+        "reacquired_at": null,
+        "reason": "EXACT_EDITION_PUBLIC_BY_CUTOFF",
+        "reported_publication_date": null,
+        "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+        "status": "ELIGIBLE"
+      },
+      "temporal_evidence": [
+        {
+          "kind": "ARCHIVED_PUBLIC_CAPTURE",
+          "public_on": "2026-11-28",
+          "reference": "sha256:3df5436d06eafadbddcfd59b12401b47f19de724394f19bedb9245c9ecb4e9d2",
+          "reference_sha256": "3df5436d06eafadbddcfd59b12401b47f19de724394f19bedb9245c9ecb4e9d2",
+          "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e"
+        }
+      ],
+      "url": "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf",
+      "version_status": "EXACT_SHA_REUSED"
+    }
+  ],
+  "events": [
+    {
+      "acquired_at": "2026-11-27T22:00:35.379237+00:00",
+      "acquired_at_research_timezone": "2026-11-28T06:00:35.379237+08:00",
+      "acquired_at_utc": "2026-11-27T22:00:35.379237+00:00",
+      "bytes": 18072766,
+      "expected_kind": "pdf",
+      "final_url": "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf",
+      "http_status": 200,
+      "kind": "pdf",
+      "method": "ANONYMOUS_HTTPS_GET",
+      "project_ids": [
+        "AU-216d0983f6892f9b58f9"
+      ],
+      "publisher": "ASX",
+      "reason": null,
+      "receipt_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+      "requested_url": "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf",
+      "response_mime": "application/pdf",
+      "schema": "public-response-capture-v1",
+      "seed_references": [
+        "2af6f611e51eb4ac9dda73419d1afeba70d1307e:results/claims-locators-2026-11-16/asxpdf_receipt_audit.json#sha256=5fb225629efba67d7e837f07b1350e6c2450bbf414f45a9a05c7f9cb002d41b2"
+      ],
+      "sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "source_key": "seed-af5b34575af9709d52d1",
+      "source_keys": [
+        "seed-af5b34575af9709d52d1"
+      ],
+      "status": "PUBLIC_CAPTURED"
+    },
+    {
+      "acquired_at": "2026-11-27T22:00:45.404753+00:00",
+      "acquired_at_research_timezone": "2026-11-28T06:00:45.404753+08:00",
+      "acquired_at_utc": "2026-11-27T22:00:45.404753+00:00",
+      "bytes": 2806260,
+      "expected_kind": "pdf",
+      "final_url": "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf",
+      "http_status": 200,
+      "kind": "pdf",
+      "method": "ANONYMOUS_HTTPS_GET",
+      "project_ids": [
+        "AU-dac3c8e40326b8244cdb"
+      ],
+      "publisher": "ASX",
+      "reason": null,
+      "receipt_sha256": "3df5436d06eafadbddcfd59b12401b47f19de724394f19bedb9245c9ecb4e9d2",
+      "requested_url": "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf",
+      "response_mime": "application/pdf",
+      "schema": "public-response-capture-v1",
+      "seed_references": [
+        "2af6f611e51eb4ac9dda73419d1afeba70d1307e:results/claims-locators-2026-11-16/asxpdf_receipt_audit.json#sha256=5fb225629efba67d7e837f07b1350e6c2450bbf414f45a9a05c7f9cb002d41b2"
+      ],
+      "sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "source_key": "seed-03678827fc9d8c1e892c",
+      "source_keys": [
+        "seed-03678827fc9d8c1e892c"
+      ],
+      "status": "PUBLIC_CAPTURED"
+    }
+  ],
+  "profile_id": "au-ree-2026-11-28",
+  "schema": "fresh-source-manifest-v1",
+  "timezone": "Asia/Taipei"
+}

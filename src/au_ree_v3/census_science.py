@@ -10,13 +10,13 @@ from .census import COLUMNS
 from .comparability import (
     MREO_VARIABLE, NDPR_SPECIES, NDPR_VARIABLES, RESOURCE_VARIABLES, TOTAL_REO_15,
     composition_comparison, evaluate_comparability, normalize_input, reported_ndpr_evidence,
-    resource_bundle, resource_context, resource_semantic_context, scientific_context,
+    resource_bundle, resource_context, resource_semantic_context, scientific_context, shadow_contained_mass,
 )
 from .contracts import ResearchRelease, canonical_json
 from .fresh_decision import POLICY_SHA256, load_policy
 from .normalization import reported_interval
 from .observations import OXIDE_VARIABLES
-from .research_inputs import ResearchInput, checked_research_inputs
+from .research_inputs import CENSUS_RESOURCE_RULE, CENSUS_RESOURCE_USE, ResearchInput, checked_research_inputs
 
 
 SCHEMA = "census-science-views-v1"
@@ -387,8 +387,10 @@ def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRe
         if item.raw.variable in _STATEMENT_VARIABLES:
             grouped[item.raw.project_id][item.raw.variable].append(item)
     policy = load_policy()
-    comparisons = evaluate_comparability(sorted(grouped), inputs, policy=policy)
+    decision_inputs = tuple(item for item in inputs if item.accepted.reason != CENSUS_RESOURCE_RULE)
+    comparisons = evaluate_comparability(sorted(grouped), decision_inputs, policy=policy)
     statements, projections, derived, rejected = [], {}, [], []
+    scoped_reports = {}
     for project_id in sorted(grouped):
         values = grouped[project_id]
         for group in sorted({resource_context(item) for rows in values.values() for item in rows}, key=str):
@@ -396,6 +398,17 @@ def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRe
                            key=lambda item: (item.raw.variable, item.raw.observation_id))
             statements.append({"project_id": project_id, "statement": scientific_context(items[0]),
                                "observations": [_lineage(item) for item in items]})
+        scoped = {item.raw.variable: item for rows in values.values() for item in rows
+                  if item.accepted.reason == CENSUS_RESOURCE_RULE}
+        if formal and set(scoped) == {"ore_mt", "grade"}:
+            ore, grade = scoped["ore_mt"], scoped["grade"]
+            scoped_reports[project_id] = {
+                "research_use": CENSUS_RESOURCE_USE, "admission_policy": CENSUS_RESOURCE_RULE,
+                "statement": {**scientific_context(grade), "scope": grade.scope.name,
+                              "treo_members": resource_semantic_context(grade).treo_members},
+                "inputs": [_lineage(ore), _lineage(grade)],
+                "contained_shadow": shadow_contained_mass(ore, grade).to_dict(),
+            }
         resource = resource_bundle(values)
         if not resource.comparable:
             continue
@@ -427,8 +440,10 @@ def project_science_views(inputs: tuple[ResearchInput, ...], release: ResearchRe
         "resource_statements": statements, "verified_resource_presence": projections,
         "derived_candidates": derived, "rejected_derivations": rejected, "approved_mcda_s1_references": s1,
         "formal_selected_inputs": len(inputs) if formal else 0,
-        "new_formal_scientific_cells": 0,
+        "new_formal_scientific_cells": sum(len(report["inputs"]) for report in scoped_reports.values()),
     }
+    if scoped_reports:
+        view["scoped_reported_resources"] = scoped_reports
     return json.loads(canonical_json(view))
 
 

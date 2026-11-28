@@ -585,9 +585,21 @@ class Store:
         return json.loads(row[-1])
 
     def _validate_acceptance(self, accepted: AcceptedResearchValue) -> None:
+        from .research_inputs import (
+            CENSUS_RESOURCE_RULE, CENSUS_RESOURCE_USE, MCDA_RESOURCE_USE, NATIVE_RESOURCE_CANDIDATE, RESOURCE_RULE,
+        )
+
         release = self._required(ResearchRelease, accepted.release_id)
         validation = self._required(ValidatedObservation, accepted.validation_id)
         self.require_temporal_eligible(validation, release)
+        raw = self.raw_for_candidate(validation.candidate_id)
+        declared_use = json.loads(raw.original_payload).get("research_use")
+        if declared_use == NATIVE_RESOURCE_CANDIDATE:
+            raise ContractViolation("Candidate-only native resource cannot be selected")
+        if declared_use == MCDA_RESOURCE_USE and accepted.reason != RESOURCE_RULE:
+            raise ContractViolation("Native MCDA resource must use the governed resource selection rule")
+        if (accepted.reason == CENSUS_RESOURCE_RULE) != (declared_use == CENSUS_RESOURCE_USE):
+            raise ContractViolation("Census resource selection must match its declared scientific use")
 
     def _validate_derivation(self, derived: DerivedValue) -> None:
         scope = self._required(ResourceScope, derived.scope_id)

@@ -8,7 +8,10 @@ import unittest
 
 from au_ree_v3.contracts import ContractViolation
 from au_ree_v3.contracts.temporal import TEMPORAL_POLICY_VERSION, TemporalEvidence
-from au_ree_v3.research_inputs import checked_research_inputs, publication_temporal_lineage
+from au_ree_v3.research_inputs import (
+    CENSUS_RESOURCE_RULE, CENSUS_RESOURCE_USE, NATIVE_RESOURCE_CANDIDATE,
+    checked_research_inputs, publication_temporal_lineage,
+)
 from au_ree_v3.store import Store
 import test_store as fixtures
 
@@ -28,8 +31,11 @@ class ResearchInputTemporalTests(unittest.TestCase):
     )
 
     def _seed(self, store, *, mode="FORMAL", evidence=(), release_proofs=None,
-              role="HISTORICAL_MEASUREMENT", effective_date=fixtures.RAW.effective_date):
+              role="HISTORICAL_MEASUREMENT", effective_date=fixtures.RAW.effective_date,
+              research_use=None):
         raw = replace(fixtures.RAW, observation_role=role, effective_date=effective_date)
+        if research_use is not None:
+            raw = replace(raw, original_payload={"research_use": research_use})
         decision = fixtures.evidence_decision(
             raw, fixtures.VALIDATION.cutoff, self.source, evidence,
         )
@@ -76,6 +82,24 @@ class ResearchInputTemporalTests(unittest.TestCase):
             self.assertEqual(census.temporal_trace["available_date"], "2026-11-22")
             self.assertEqual(census.temporal_trace["earliest_proven_public_date"], "2026-08-19")
             self.assertEqual(census.temporal_trace["acquired_at"], self.source.acquired_at)
+
+    def test_census_only_selection_cannot_flow_into_mcda(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=(self.proof.evidence_id,)) as store:
+            release, _ = self._seed(store, evidence=(self.proof,), research_use=CENSUS_RESOURCE_USE)
+            with self.assertRaisesRegex(ContractViolation, "declared scientific use"), store.transaction():
+                store.add(fixtures.ACCEPTED)
+            selected = replace(fixtures.ACCEPTED, reason=CENSUS_RESOURCE_RULE)
+            with store.transaction():
+                store.add(selected)
+            self.assertEqual(checked_research_inputs(store, release, purpose="CENSUS")[0].accepted, selected)
+            self.assertEqual(checked_research_inputs(store, release, purpose="MCDA"), ())
+            self.assertEqual(publication_temporal_lineage(store, release)["accepted_selection_count"], 1)
+
+    def test_candidate_only_native_source_cannot_get_a_selection(self):
+        with Store(":memory:", trusted_temporal_evidence_ids=(self.proof.evidence_id,)) as store:
+            self._seed(store, evidence=(self.proof,), research_use=NATIVE_RESOURCE_CANDIDATE)
+            with self.assertRaisesRegex(ContractViolation, "Candidate-only"), store.transaction():
+                store.add(fixtures.ACCEPTED)
 
     def test_unapproved_public_proof_cannot_be_selected_for_formal_release(self):
         with Store(":memory:") as store:

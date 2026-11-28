@@ -218,10 +218,10 @@ def _check_partition(cases: tuple[dict, ...]) -> None:
         test_values = [row[key] for row in cases]
         if len(set(test_values)) != len(test_values) or set(test_values) & {row[key] for row in design}:
             raise ValueError(f"Holdout leaks into design or repeats its sampling unit: {key}")
-    bound_ids = {
-        binding["project"]["entity_id"] for path in PROFILE.glob("resource_bindings_v*.json")
-        for binding in json.loads(path.read_bytes())["bindings"]
-    }
+    # Replay the original O3 partition using the binding profiles available at its freeze.
+    design_profiles = (PROFILE / f"resource_bindings_v{version}.json" for version in (1, 2, 3))
+    bound_ids = {binding["project"]["entity_id"] for path in design_profiles
+                 for binding in json.loads(path.read_bytes())["bindings"]}
     if bound_ids & {row["project_id"] for row in cases}:
         raise ValueError("Holdout project occurs among previously configured resource binding projects")
 

@@ -24,6 +24,11 @@ if TYPE_CHECKING:
 
 
 ResearchPurpose = Literal["CENSUS", "MCDA", "PUBLICATION"]
+CENSUS_RESOURCE_USE = "CENSUS_RESOURCE_OBSERVATION"
+CENSUS_RESOURCE_RULE = "approved-census-resource-observation-v1"
+RESOURCE_RULE = "approved-whole-ore-jorc-resource-v1"
+MCDA_RESOURCE_USE = "MCDA_R1/S1"
+NATIVE_RESOURCE_CANDIDATE = "NATIVE_RESOURCE_CANDIDATE"
 _ACTUAL_ROLES = {"HISTORICAL_MEASUREMENT", "HISTORICAL_EVENT"}
 
 
@@ -96,6 +101,8 @@ def checked_research_inputs(
         consumed = {record.temporal_trace["decision_id"] for record in records}
         if consumed != set(release.temporal_decision_ids):
             raise ContractViolation(f"{purpose} selections must cover the exact temporal decision pins")
+    if purpose == "MCDA":
+        records = [record for record in records if record.accepted.reason != CENSUS_RESOURCE_RULE]
     return tuple(records)
 
 

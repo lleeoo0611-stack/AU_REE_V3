@@ -1,5 +1,6 @@
 """Corroborate a reported oxide aggregate with the reviewed original image table."""
 
+from datetime import date
 from decimal import Decimal, localcontext
 from hashlib import sha256
 from pathlib import Path
@@ -7,14 +8,16 @@ import re
 import subprocess
 from tempfile import TemporaryDirectory
 
+from .comparability import TOTAL_REO_15
 from .documents import DocumentError
+from .normalization import reported_interval
 from .observations import NUMBER, exact_value, half_width
 from .resource_extraction import ResourceCell, ResourceStatement
 
 SPECIES = ("Nd2O3", "Pr6O11", "Dy2O3", "Tb4O7")
 
 
-def _verify_image(content: bytes, page: int, slot: int, expected: str) -> str:
+def _verify_images(content: bytes, page: int, expected: dict[int, str]) -> str:
     """Read back the native image that bounds the independently reviewed cells."""
     with TemporaryDirectory() as directory:
         root = Path(directory)
@@ -25,15 +28,88 @@ def _verify_image(content: bytes, page: int, slot: int, expected: str) -> str:
                 ["pdfimages", "-f", str(page), "-l", str(page), str(original), str(root / "image")],
                 capture_output=True, check=True, timeout=30,
             )
-            image = (root / f"image-{slot:03d}.ppm").read_bytes()
+            images = {slot: sha256((root / f"image-{slot:03d}.ppm").read_bytes()).hexdigest()
+                      for slot in expected}
             runtime = subprocess.run(
                 ["pdfimages", "-v"], capture_output=True, text=True, check=True, timeout=5,
             ).stderr.splitlines()[0]
         except (OSError, IndexError, subprocess.SubprocessError) as error:
             raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_COMPOSITION_IMAGE_UNAVAILABLE") from error
-    if sha256(image).hexdigest() != expected:
+    if images != expected:
         raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_COMPOSITION_IMAGE_FINGERPRINT_MISMATCH")
     return runtime
+
+
+def _verify_image(content: bytes, page: int, slot: int, expected: str) -> str:
+    return _verify_images(content, page, {slot: expected})
+
+
+def verify_treo_image_context(pages, statement, review, content):
+    """Verify reviewed native image columns and their explicit same-MRE text link."""
+    page = review["physical_page"]
+    normalized = lambda text: " ".join(text.split())
+    text = normalized(pages[page - 1])
+    declaration = normalized(review["statement_quote"])
+    definition = normalized(review["definition_quote"])
+    if not declaration or not definition or text.count(declaration) != 1 or text.count(definition) != 1:
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_IMAGE_STATEMENT_OR_DEFINITION_UNBOUND")
+    expected = (statement.scope, statement.effective_date, [statement.cutoff, statement.cutoff_unit, statement.cutoff_analyte])
+    if (review["scope"], review["effective_date"], review["cutoff"]) != expected:
+        raise DocumentError("SCIENTIFIC_CONFLICT", "REVIEWED_IMAGE_RESOURCE_SCOPE_MISMATCH")
+    effective = statement.effective_date
+    if not effective or len(effective) not in {7, 10}:
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_IMAGE_ESTIMATE_MONTH_UNBOUND")
+    period = date.fromisoformat(effective if len(effective) == 10 else effective + "-01")
+    cutoff_token = re.escape(statement.cutoff or "")
+    unit = re.escape(statement.cutoff_unit)
+    cutoff = rf"(?<![0-9A-Za-z.,]){cutoff_token}\s*{unit}(?![A-Za-z0-9.])"
+    if (f"{period:%B %Y}" not in declaration or not re.search(cutoff, declaration, flags=re.I)
+            or not re.search(r"\b(?:MRE|Mineral Resource Estimate)\b", declaration, flags=re.I)
+            or not re.search(r"\bTREO\b", definition, flags=re.I)
+            or not re.search(r"\bsum(?:med|ming)?\b", definition, flags=re.I)
+            or not re.search(r"\bREO\b|\brare earth oxides?\b", definition, flags=re.I)):
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_IMAGE_CUTOFF_OR_CHEMICAL_RELATION_UNBOUND")
+    images = review["images"]
+    slots = {}
+    members = []
+    intervals = []
+    for item in images:
+        slot, digest = item["slot"], item["sha256"]
+        if type(slot) is not int or slot < 0 or slot in slots or not re.fullmatch(r"[0-9a-f]{64}", digest):
+            raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_IMAGE_IDENTITY_UNBOUND")
+        slots[slot] = digest
+        species, tokens = item["members"], item["total_tokens"]
+        if item["unit"] != "ppm" or item["row"] != "TOTAL" or len(species) != len(tokens):
+            raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_IMAGE_TOTAL_UNIT_OR_MEMBER_TOKEN_UNBOUND")
+        members.extend(species)
+        try:
+            intervals.extend(reported_interval(tok) for tok in tokens)
+        except (ValueError, ArithmeticError) as error:
+            raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_IMAGE_MEMBER_TOKEN_UNBOUND") from error
+    if sorted(members) != sorted(TOTAL_REO_15) or (
+        statement.treo_members and sorted(statement.treo_members) != sorted(members)
+    ):
+        raise DocumentError("SCIENTIFIC_CONFLICT", "REVIEWED_IMAGE_TREO_MEMBER_SET_MISMATCH")
+    grades = [item for item in statement.measurements if item.variable == "grade"]
+    if len(grades) != 1 or grades[0].raw_unit != "ppm":
+        raise DocumentError("EVIDENCE_INSUFFICIENT", "REVIEWED_IMAGE_GRADE_UNIT_UNBOUND")
+    grade, = grades
+    grade_point, grade_low, grade_high = reported_interval(grade.token)
+    runtime = _verify_images(content, page, slots)
+    with localcontext() as context:
+        context.prec = sum(len(entry[0].as_tuple().digits) for entry in intervals) + 12
+        species_total, species_low, species_high = map(sum, zip(*intervals, strict=True))
+    if species_low > grade_high or species_high < grade_low:
+        raise DocumentError("SCIENTIFIC_CONFLICT", "REVIEWED_IMAGE_TREO_SUM_OUTSIDE_PRINTED_PRECISION")
+    return tuple(sorted(members)), {
+        **review, "decoder_runtime": runtime,
+        "rounding_check": {
+            "method": "sum-member-display-intervals-v1", "unit": "ppm",
+            "reported": [str(value) for value in (grade_point, grade_low, grade_high)],
+            "species_sum": [str(value) for value in (species_total, species_low, species_high)],
+            "outcome": "OVERLAP",
+        },
+    }
 
 
 def _consistent_display(left: Decimal, right: Decimal) -> bool:
