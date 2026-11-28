@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 import csv
+from decimal import Decimal
 from hashlib import sha256
 import json
 import os
@@ -222,7 +223,9 @@ class RealResearchWebTests(unittest.TestCase):
             self.assertEqual(verify_web_release(target, expected_release_id=release_id), manifest)
             self.assertEqual((target / "census.csv").read_bytes(), (build / "census/census.csv").read_bytes())
             coverage = _read(target / "coverage.json")
-            self.assertEqual((coverage["formal_direct_cells"], coverage["comparable_project_criteria"]), (12, 6))
+            self.assertIn(receipt["scientific_output_count"], {12, 16})
+            self.assertEqual(coverage["formal_direct_cells"], receipt["scientific_output_count"])
+            self.assertEqual(coverage["comparable_project_criteria"], 6)
             self.assertEqual((coverage["projects"], coverage["columns"], coverage["present_source_count"]), (93, 51, 144))
             real_results = _read(build / "decision/mcda_results.json")["panels"]
             projected = {panel["id"]: panel for panel in _read(target / "mcda.json")["panels"]}
@@ -234,16 +237,16 @@ class RealResearchWebTests(unittest.TestCase):
             self.assertIsNone(manifest["authorization_sha256"])
             census = _read(target / "census.json")
             evidence = _read(target / "census_evidence.json")["entries"]
+            columns = {rule["id"]: index for index, rule in enumerate(census["columns"])}
+            projects = {row["id"]: row["cells"] for row in census["projects"]}
             with (build / "census/cell_status.csv").open(encoding="utf-8", newline="") as stream:
                 reference_rows = [row for row in csv.DictReader(stream) if row["value_origin"] == "EVIDENCE_REFERENCE"]
             self.assertEqual(coverage["evidence_reference_cells"], len(reference_rows))
             self.assertEqual(coverage["other_present_cells"], 0)
             if reference_rows:
                 self.assertEqual(len(reference_rows), 4)
-                self.assertEqual(coverage["cell_states"]["PRESENT"], 1104)
+                self.assertEqual(coverage["cell_states"]["PRESENT"], 1092 + receipt["scientific_output_count"])
                 self.assertEqual((coverage["identity_cells"], coverage["metadata_cells"]), (93, 995))
-                columns = {rule["id"]: index for index, rule in enumerate(census["columns"])}
-                projects = {row["id"]: row["cells"] for row in census["projects"]}
                 for reference in reference_rows:
                     cell = projects[reference["project_id"]][columns["有TREO資源估計"]]
                     anchor = evidence[cell["lineage_id"]]
@@ -252,4 +255,24 @@ class RealResearchWebTests(unittest.TestCase):
                     self.assertEqual(anchor["source_sha256"], reference["source_sha256"])
                     self.assertEqual(anchor["input_observation_ids"], json.loads(reference["input_observation_ids"]))
                     self.assertEqual(len(anchor["input_observation_ids"]), 3)
+            if receipt["scientific_output_count"] == 16:
+                self.check_scoped_resource_values(projects, columns, evidence)
             self.assertEqual(_read(target / "gis.geojson")["features"], [])
+
+    def check_scoped_resource_values(self, projects, columns, evidence):
+        oracle = _read(ROOT / "tests/fixtures/native_resource_v1/expected_census.json")
+        for case in oracle["cases"]:
+            cells = projects[case["project_id"]]
+            self.assertIsNone(cells[columns["總TREO蘊藏量_kt"]]["value"])
+            for expected in case["values"]:
+                with self.subTest(project=case["project_id"], column=expected["column"]):
+                    cell = cells[columns[expected["column"]]]
+                    anchor = evidence[cell["lineage_id"]]
+                    self.assertEqual(Decimal(cell["value"]), Decimal(expected["census_value"]))
+                    self.assertEqual(cell["origin"], "FORMAL_SELECTION")
+                    self.assertEqual(anchor["physical_page"], case["physical_page"])
+                    self.assertEqual(anchor["source_sha256"], case["source_sha256"])
+                    self.assertEqual((anchor["raw_value"], anchor["raw_unit"]),
+                                     (expected["raw_token"], expected["raw_unit"]))
+                    self.assertEqual(list(map(Decimal, cell["precision"]["rounding_interval"])),
+                                     list(map(Decimal, expected["raw_rounding_interval"])))

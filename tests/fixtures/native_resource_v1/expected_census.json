@@ -1,0 +1,97 @@
+{
+  "schema": "scientific-yield-independent-positive-oracle-v1",
+  "comparison_scope": "Current selected 2026 Jupiter and dry North Stanmore Mineral Resource rows; direct Census use only",
+  "cases": [
+    {
+      "project_id": "AU-dac3c8e40326b8244cdb",
+      "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "physical_page": 4,
+      "category": "INDICATED_INFERRED_TOTAL",
+      "effective_date": "2026-09",
+      "cutoff": [
+        "1000",
+        "ppm",
+        "TREO"
+      ],
+      "values": [
+        {
+          "quantity_kind": "ore_mt",
+          "raw_token": "1.7",
+          "raw_unit": "Bt",
+          "normalized_value": "1700",
+          "normalized_unit": "Mt",
+          "column": "礦石蘊藏量_Mt",
+          "census_value": "1700",
+          "raw_rounding_interval": [
+            "1.65",
+            "1.75"
+          ]
+        },
+        {
+          "quantity_kind": "grade",
+          "raw_token": "1,700",
+          "raw_unit": "ppm",
+          "normalized_value": "1700",
+          "normalized_unit": "ppm",
+          "column": "TREO品位_pct",
+          "census_value": "0.1700",
+          "raw_rounding_interval": [
+            "1650",
+            "1750"
+          ]
+        }
+      ],
+      "alternative_exclusions": [
+        "February 2025 Inferred-only 1.8 Bt",
+        "1,500 ppm scoping mine plan",
+        "No reported same-statement contained TREO"
+      ]
+    },
+    {
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "physical_page": 97,
+      "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+      "effective_date": "2026-08",
+      "cutoff": [
+        "300",
+        "ppm",
+        "TREO"
+      ],
+      "values": [
+        {
+          "quantity_kind": "ore_mt",
+          "raw_token": "278.80",
+          "raw_unit": "Mt",
+          "normalized_value": "278.80",
+          "normalized_unit": "Mt",
+          "column": "礦石蘊藏量_Mt",
+          "census_value": "278.80",
+          "raw_rounding_interval": [
+            "278.795",
+            "278.805"
+          ]
+        },
+        {
+          "quantity_kind": "grade",
+          "raw_token": "482.64",
+          "raw_unit": "ppm",
+          "normalized_value": "482.64",
+          "normalized_unit": "ppm",
+          "column": "TREO品位_pct",
+          "census_value": "0.048264",
+          "raw_rounding_interval": [
+            "482.635",
+            "482.645"
+          ]
+        }
+      ],
+      "alternative_exclusions": [
+        "600 ppm higher-grade subset already included in 300 ppm MRE",
+        "Probable Ore Reserve",
+        "TREO+Sc2O3"
+      ]
+    }
+  ],
+  "expected_new_mcda_criteria": []
+}
