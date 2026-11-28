@@ -9,7 +9,7 @@ import re
 
 from .contracts import RawObservation, canonical_json
 from .contracts.temporal import evaluate_temporal
-from .development import _anchor, _date_token
+from .development import bind_native_quote, reported_calendar_date
 from .documents import DocumentCache, DocumentError
 from .normalization import reported_interval
 from .observations import NUMBER
@@ -68,21 +68,21 @@ def _fingerprint(value) -> str:
 
 def _quote_anchors(document, source_key, binding, project_name):
     native = binding["statement"]
-    statement = _anchor(document, source_key, native["page"], native["quote"], "STUDY_PRODUCTION_CLAUSE")
-    scope = _anchor(document, source_key, native["page"], native["scope_quote"], "STUDY_PRODUCTION_SCOPE")
+    statement = bind_native_quote(document, source_key, native["page"], native["quote"], "STUDY_PRODUCTION_CLAUSE")
+    scope = bind_native_quote(document, source_key, native["page"], native["scope_quote"], "STUDY_PRODUCTION_SCOPE")
     gap = max(statement.text_span["start"], scope.text_span["start"]) - min(
         statement.text_span["end"], scope.text_span["end"],
     )
     if gap > 160:
         raise DocumentError("EVIDENCE_INSUFFICIENT", "STUDY_SCOPE_NOT_LOCAL_TO_PRODUCTION_CLAUSE")
     release = binding["publication"]
-    publication = _anchor(
+    publication = bind_native_quote(
         document, source_key, release["page"], release["quote"], "STUDY_PRODUCTION_PUBLICATION",
     )
     if release["date_token"] not in publication.quote:
         raise DocumentError("EVIDENCE_INSUFFICIENT", "STUDY_RELEASE_DATE_NOT_BOUND_TO_QUOTE")
     identity = binding["project_identity"]
-    project = _anchor(document, source_key, identity["page"], identity["quote"], "STUDY_PROJECT_IDENTITY")
+    project = bind_native_quote(document, source_key, identity["page"], identity["quote"], "STUDY_PROJECT_IDENTITY")
     marker = re.escape(identity["marker"])
     if not marker or not all(re.match(rf"^{marker}\b", label, re.I) for label in (project_name, project.quote, binding["study"])):
         raise DocumentError("SCIENTIFIC_CONFLICT", "NATIVE_STUDY_PROJECT_IDENTITY_MISMATCH")
@@ -101,12 +101,12 @@ def _review(document, edition, binding, proofs, cutoff, project_name):
                   else "EXACT_ANNUAL_TREO_PRODUCT_AND_SCENARIO_UNBOUND")
         return {"status": "REJECTED", "reason": reason, "evidence": [item.to_dict() for item in anchors]}
     match, = matches
-    rate_anchor = _anchor(document, key, statement.page, match[0], "STUDY_ANNUAL_RATE_VALUE")
+    rate_anchor = bind_native_quote(document, key, statement.page, match[0], "STUDY_ANNUAL_RATE_VALUE")
     token = match["token"]
     point, low, high = reported_interval(token)
     if point <= 0:
         raise DocumentError("SCIENTIFIC_CONFLICT", "ANNUAL_PRODUCTION_RATE_MUST_BE_POSITIVE")
-    publication_date = _date_token(binding["publication"]["date_token"])
+    publication_date = reported_calendar_date(binding["publication"]["date_token"])
     decision = evaluate_temporal(
         source_sha256=digest, cutoff=cutoff, observation_role=scenario.role, publication_date=publication_date,
         acquired_at=edition["acquired_at"], reacquired_at=edition["reacquired_at"], evidence=proofs,
