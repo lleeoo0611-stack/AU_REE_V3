@@ -1,0 +1,73 @@
+{
+  "schema": "wolverine-constituent-oracle-v1",
+  "partition": "NAMED_FAMILY_ORIGINAL",
+  "project_id": "AU-9bd8e5ed8408cd84d876",
+  "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+  "scope": "Wolverine Total Mineral Resource",
+  "effective_date": "2025-01-15",
+  "publication_date": "2025-01-16",
+  "classification": "MEASURED_INDICATED_INFERRED_TOTAL",
+  "cutoff": ["0.15", "%", "TREO"],
+  "material_and_denominator": "WHOLE_ORE",
+  "table": {
+    "page": 6,
+    "label": "Table 5",
+    "row": "Total",
+    "quote": "Total 7,300 170 420 60 280 200 40 560 120 840 170 490 70 380 50 5,700",
+    "published_ore_mass": ["7,300", "kt"],
+    "unit": "ppm"
+  },
+  "reference": {
+    "page": 5,
+    "label": "Table 2",
+    "row": "Total Total",
+    "quote": "Total 7.3 0.96 0.85 5.68 0.12 89 70,500",
+    "grade": ["0.96", "%"],
+    "chemistry_quote": "TREO = Total Rare Earth Oxides – La2O3, CeO2, Pr6O11, Nd2O3, Sm2O3, Eu2O3, Gd2O3, Tb4O7, Dy2O3, Ho2O3, Er2O3, Tm2O3, Yb2O3, Lu2O3, Y2O3."
+  },
+  "new_selected": {
+    "La2O3": "170",
+    "CeO2": "420",
+    "Sm2O3": "200",
+    "Eu2O3": "40",
+    "Gd2O3": "560",
+    "Ho2O3": "170",
+    "Er2O3": "490",
+    "Tm2O3": "70",
+    "Yb2O3": "380",
+    "Lu2O3": "50"
+  },
+  "legacy_selected": {
+    "Pr6O11": "60",
+    "Nd2O3": "280",
+    "Dy2O3": "840",
+    "Tb4O7": "120"
+  },
+  "held": {
+    "Y2O3": {
+      "table5_token": "5,700",
+      "table2_token": "5.68",
+      "table5_nominal_bounds_ppm": ["5699.5", "5700.5"],
+      "table2_nominal_bounds_ppm": ["5675", "5685"],
+      "reason": "COMPOSITION_SOURCE_PRECISION_CONFLICT"
+    }
+  },
+  "other_cases": {
+    "Dy2O3": {
+      "table5_token": "840",
+      "table2_token": "0.85",
+      "table5_nominal_bounds_ppm": ["839.5", "840.5"],
+      "table2_nominal_bounds_ppm": ["845", "855"],
+      "reason": "FROZEN_S1_INPUT_PRESERVED_AND_NEW_DERIVATIONS_HELD"
+    },
+    "Table 3": "WOLVERINE_OPEN_PIT_SUBSET",
+    "Table 4": "WOLVERINE_UNDERGROUND_SUBSET",
+    "Table 6": "GLOBAL_BROWNS_RANGE_INCLUDES_OTHER_DEPOSITS"
+  },
+  "printed_closure_ppm": {
+    "table5_sum": "9550",
+    "table5_nominal_interval": ["9542.5", "9557.5"],
+    "table2_treo_nominal_interval": ["9550", "9650"],
+    "use": "TABLE_CHECK_ONLY"
+  }
+}

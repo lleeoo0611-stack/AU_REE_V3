@@ -48,13 +48,15 @@ def _admission_record(decision: NativeAdmission) -> dict:
 
 def write_report(out: Path, receipt: dict, rows: list[dict]) -> dict:
     out.mkdir(parents=True, exist_ok=True)
-    if audit := receipt.get("census_resource_admission"):
+    audit = receipt.get("census_resource_admission", [])
+    oxide_conflicts = [row for row in rows if row.get("same_statement_precision_conflict")]
+    if audit or oxide_conflicts:
         outputs = {
             "admission_decisions.jsonl": audit,
-            "scientific_conflicts.jsonl": [
+            "scientific_conflicts.jsonl": [*(
                 entry for entry in audit if entry["verdict"] in {"SCIENTIFIC_CONFLICT", "CONFLICT"}
                 or any(row["outcome"] == "SCIENTIFIC_CONFLICT" for row in entry["observations"])
-            ],
+            ), *oxide_conflicts],
         }
         receipt["admission_artifact_sha256"] = {}
         for name, items in outputs.items():
