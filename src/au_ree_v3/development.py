@@ -36,11 +36,12 @@ _DATE_LITERAL = re.compile(r"(?:(?:[1-3]?[0-9])\s+)?(?:January|February|March|Ap
                            r"October|November|December)\s+[12][0-9]{3}", re.I)
 _STUDY_RESULTS_RELEASE = (
     r"(?:\b(?:released|published)\s+(?:the|a)\s+"
-    r"|\b(?:announce|report|release|publish)\s+the\s+results\s+of\s+(?:the|a)\s+)"
+    r"|\b(?:is\s+pleased\s+to\s+(?:announce|report)|announces|reports)\s+the\s+results\s+of\s+(?:the|a)\s+)"
     r"(?:(?:final|updated|revised|enhanced)\s+)?"
 )
 _ISSUER_NOTICE = re.compile(r"\b(?:ASX|RNS)\s+(?:announcement|release)\b", re.I)
 _PLANNED_STUDY_RELEASE = re.compile(r"\b(?:planned|expected|scheduled|targeted)\s+for\s+(?:release|publication)\b", re.I)
+_UNCERTAIN_STUDY_RELEASE = re.compile(r"\b(?:if|whether|unless|may have|could have|possibly|reportedly)\b", re.I)
 STUDY_RESULTS_RELEASED = "STUDY_RESULTS_RELEASED"
 STUDY_STAGES = frozenset({"Scoping", "PFS", "DFS"})
 DATED_STUDY_POLICY_VERSION = "census-dated-study-event-v1"
@@ -118,7 +119,8 @@ def bind_native_quote(document: PDFDocument, source_key: str, page: int, quote: 
 def study_results_released(stage: str, quote: str) -> bool:
     """Recognize the issuer's act of disclosing results for one named study type."""
     return (
-        stage in STUDY_STAGES and not (_FUTURE.search(quote) or _NEGATED.search(quote))
+        stage in STUDY_STAGES
+        and not (_FUTURE.search(quote) or _NEGATED.search(quote) or _UNCERTAIN_STUDY_RELEASE.search(quote))
         and bool(re.search(rf"{_STUDY_RESULTS_RELEASE}{_STAGE_TERMS[stage]}", quote, re.I))
     )
 
@@ -139,6 +141,7 @@ def dated_study_policy_definition() -> dict:
         "completion_date": _COMPLETION_DATE, "leading_event_date": _LEADING_EVENT_DATE,
         "planned": _FUTURE.pattern, "negated": _NEGATED.pattern,
         "planned_study_release": _PLANNED_STUDY_RELEASE.pattern,
+        "uncertain_study_release": _UNCERTAIN_STUDY_RELEASE.pattern,
         "issuer_notice": _ISSUER_NOTICE.pattern,
         "scope_section_limit": MILESTONE_SCOPE_SECTION_LIMIT,
         "history_order": "NONOVERLAPPING_REPORTED_CALENDAR_PRECISION",

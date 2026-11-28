@@ -84,6 +84,8 @@ class DevelopmentMilestoneTests(unittest.TestCase):
             ("The company was founded in August 2026 and released a Pre-Feasibility Study", native_date),
             ("The company mentioned the Pre-Feasibility Study in August 2026", native_date),
             ("In August 2026, the company will release a Pre-Feasibility Study", native_date),
+            ("The Company plans to announce the results of the Pre-Feasibility Study", own_notice),
+            ("In August 2026, the company possibly released a Pre-Feasibility Study", native_date),
             ("The Pre-Feasibility Study found testing was completed in August 2026", {
                 "event_date_token": "August 2026",
             }),
