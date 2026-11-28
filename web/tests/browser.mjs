@@ -400,17 +400,6 @@ try {
     await page.selectOption("#state-filter","");
   }
   metrics.search_filter_sort_columns_evidence="PASS";
-  if (flags.includes("--stage6")) {
-    await page.click("#columns summary");
-    await page.getByRole("button",{name:"顯示全部 51 欄"}).click();
-    await page.fill("#search", nolansId);
-    await expectText(page,"#table-count",/^1 \/ 93/);
-    await page.locator("#census-table tbody").getByRole("button",{name:new RegExp(`^${nolansInventoryField}`)}).click();
-    await expectText(page,"#evidence-detail",new RegExp(nolansSource));
-    await page.keyboard.press("Escape");
-    await page.fill("#search", "");
-    metrics.nolans_source_and_derived_lineage = "PASS";
-  }
   if (extended) await checkDisplay(page);
   if (flags.includes("--stage3")) {
     assert(!synthetic, "Stage 3 regressions require exact archived candidate data");
@@ -685,6 +674,18 @@ try {
   await expectText(mobile,"#map-details",/無可驗證座標/);
   if (capture) await mobile.screenshot({path:resolve(capture,"map-mobile.png"),fullPage:true});
   metrics.mobile="PASS";
+  if (flags.includes("--stage6")) {
+    const lineagePage = await browser.newPage({viewport:{width:1440,height:985}});
+    await instrument(lineagePage);
+    await lineagePage.goto(url+`?preview=1&project=${nolansId}`);
+    await expectText(lineagePage,"#table-count",/^1 \/ 93/);
+    await lineagePage.click("#columns summary");
+    await lineagePage.getByRole("button",{name:"顯示全部 51 欄"}).click();
+    await lineagePage.locator("#census-table tbody").getByRole("button",{name:new RegExp(`^${nolansInventoryField}`)}).click();
+    await expectText(lineagePage,"#evidence-detail",new RegExp(nolansSource));
+    await lineagePage.close();
+    metrics.nolans_source_and_derived_lineage = "PASS";
+  }
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({status:"PASS",runtime:process.version,chromium:browser.version(),
     corpus:synthetic?"SYNTHETIC_BROWSER_FIXTURE":"EXACT_RESEARCH_PREVIEWS",
