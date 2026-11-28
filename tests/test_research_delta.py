@@ -6,8 +6,11 @@ from decimal import Decimal
 from hashlib import sha256
 import json
 from pathlib import Path
+import runpy
+import sys
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from au_ree_v3.decision import leave_one_out, rank_panel
 from au_ree_v3.fresh_decision import _score_panel
@@ -183,6 +186,31 @@ class ResearchDeltaTest(unittest.TestCase):
         actual["topsis"]["A"]["score"] += 0.001
         with self.assertRaisesRegex(ValueError, "numerical result differs"):
             _match(actual, scored)
+
+    def test_independent_ore_percentage_formula_checks_both_precision_bounds(self):
+        tool_path = Path(__file__).resolve().parents[1] / "tools"
+        with patch.object(sys, "path", [str(tool_path), *sys.path]):
+            verify = runpy.run_path(str(tool_path / "verify_scientific_yield.py"))["verify_formula"]
+        scope = {"project_id": PROJECT, "statement_id": "statement", "scope_id": "scope", "source_sha": "a" * 64}
+        selected = []
+        proofs = []
+        for identifier, variable, amount, unit, bounds in (
+            ("ore", "ore_mt", "56", "Mt", ["55.5", "56.5"]),
+            ("grade", "grade", "2.6", "%", ["2.55", "2.65"]),
+        ):
+            selected.append({"raw": {**scope, "observation_id": identifier, "native_raw_id": None,
+                                     "variable": variable, "raw_value": amount, "raw_unit": unit},
+                             "normalized": {"raw_record_id": None, "value": amount, "unit": unit}})
+            proofs.append({"variable": variable, "raw_token": amount, "raw_unit": unit, "normalized_unit": unit,
+                           "normalized_value": amount, "normalized_rounding_interval": bounds})
+        value = {"project_id": PROJECT, "value": "1456", "input_observation_ids": ["ore", "grade"],
+                 "assessment": {"status": "APPROVED", "formula_id": "contained-treo-from-mt-pct-v1",
+                                "statement_id": "statement", "scope_id": "scope", "source_sha256": "a" * 64,
+                                "inputs": proofs, "rounding_interval": ["1415.25", "1497.25"]}}
+        self.assertEqual(verify(value, selected)["rounding_interval"], ["1415.25", "1497.25"])
+        value["assessment"]["rounding_interval"][1] = "1497.26"
+        with self.assertRaisesRegex(ValueError, "formula value or interval differs"):
+            verify(value, selected)
 
     def test_replay_pass_requires_actual_rebuilt_bytes(self):
         with TemporaryDirectory() as folder:

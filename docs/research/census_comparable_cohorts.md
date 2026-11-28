@@ -40,11 +40,18 @@ PYTHONPATH=src python -m unittest discover -s tests -p test_research_delta.py -v
 
 原件讀回使用 candidate 的確切來源與取得收據，兩個來源母體的 SHA 保留在收據。可加上封存版及離線重播參數驗證歷史候選。工作區基準收據位於 `work/census-stage6/comparison-baseline/`。
 
+## 擴大來源的實測
+
+工作區擴大清冊試建置含 147 個唯一來源 SHA、152 筆合格擷取。Nolans Bore 的 2017-06-07 同一聲明在物理第 2 頁明示 56 Mt、2.6% TREO、1% TREO cutoff。獨立 verifier 重讀兩個原件 token 和正式採納，依現行 Census 公式得到 1,456 kt TREO，原報精度傳遞區間為 1,415.25 至 1,497.25 kt。既有獨立公式核對延伸支援百分比輸入與原生 Observation ID，並驗算兩端精度界限。
+
+試建置新增兩個正式 Observation／選值鍵及三個核心科學格。另有六格來源清冊展示欄更新，分別是 Nolans 與 Dubbo 的來源名稱、URL、摘要。Nolans 的直接含量依據缺失，R1 仍為 `INCOMPLETE_SELECTED_RESOURCE_BUNDLE`，S1 仍為 `SAME_STATEMENT_RESOURCE_REQUIRED`。六個可比較鍵與兩案樣本維持原結果。固定及完整矩陣的權重、分數、名次與敏感度一致。兩項研究假說均為 `HYPOTHESIS_NOT_SUPPORTED`。擴大清冊試建置收據位於 `work/census-stage6/comparison-expanded-pilot/fixed-and-expanded-oracle.json`。
+
 ## 檔案清冊
 
 | 檔案 | 處置 |
 | --- | --- |
 | `src/au_ree_v3/research_delta.py` | REFACTOR。重用既有評分函式，輸出同樣本輸入效果與擴大樣本效果。增加權重對照。 |
 | `tools/verify_panel_cohorts.py` | 新增。獨立 Decimal 算法、全格證據核對及採納差異 Oracle。 |
+| `tools/verify_scientific_yield.py` | REFACTOR。沿用核准公式版本，獨立驗算 ppm／百分比與原報精度界限。 |
 | `tests/test_research_delta.py` | REFACTOR。覆蓋三案母體效應、權重變更、退回及漏報拒收。 |
 | `docs/research/census_comparable_cohorts.md` | 新增。記錄方法、基準及重播命令。 |
