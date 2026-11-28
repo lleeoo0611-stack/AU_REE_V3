@@ -45,6 +45,11 @@ _UNCERTAIN_STUDY_RELEASE = re.compile(r"\b(?:if|whether|unless|may have|could ha
 STUDY_RESULTS_RELEASED = "STUDY_RESULTS_RELEASED"
 STUDY_STAGES = frozenset({"Scoping", "PFS", "DFS"})
 DATED_STUDY_POLICY_VERSION = "census-dated-study-event-v1"
+DATED_STUDY_POLICY_V2 = "census-dated-study-event-v2"
+_STUDY_RELEASE_PATTERNS = {
+    DATED_STUDY_POLICY_VERSION: _STUDY_RESULTS_RELEASE,
+    DATED_STUDY_POLICY_V2: _STUDY_RESULTS_RELEASE.replace(r"\s+results\s+", r"\s+(?:results|outcomes)\s+"),
+}
 MILESTONE_SCOPE_SECTION_LIMIT = 950
 _COMPLETION_DATE = r"(?:\s+\((?:DFS|PFS|BFS)\))?(?:\s+(?:was|has been|had been))?\s+(?:completed|finalised|finalized|finished)\s+(?:in|on)\s+"
 _LEADING_EVENT_DATE = r"^(?:in|on)\s+{date},\s+[\w &’'.-]{{1,90}}?\s+{event}"
@@ -116,12 +121,12 @@ def bind_native_quote(document: PDFDocument, source_key: str, page: int, quote: 
     )
 
 
-def study_results_released(stage: str, quote: str) -> bool:
+def study_results_released(stage: str, quote: str, *, policy: str = DATED_STUDY_POLICY_VERSION) -> bool:
     """Recognize the issuer's act of disclosing results for one named study type."""
     return (
         stage in STUDY_STAGES
         and not (_FUTURE.search(quote) or _NEGATED.search(quote) or _UNCERTAIN_STUDY_RELEASE.search(quote))
-        and bool(re.search(rf"{_STUDY_RESULTS_RELEASE}{_STAGE_TERMS[stage]}", quote, re.I))
+        and bool(re.search(rf"{_STUDY_RELEASE_PATTERNS[policy]}{_STAGE_TERMS[stage]}", quote, re.I))
     )
 
 
@@ -134,10 +139,10 @@ def calendar_precedes(earlier: str, later: str) -> bool:
     return earlier < later and not later.startswith(earlier + "-")
 
 
-def dated_study_policy_definition() -> dict:
+def dated_study_policy_definition(policy: str) -> dict:
     return {
         "stage_patterns": {stage: _STAGE_TERMS[stage] for stage in sorted(STUDY_STAGES)},
-        "study_release": _STUDY_RESULTS_RELEASE, "study_completion": _COMPLETED.pattern,
+        "study_release": _STUDY_RELEASE_PATTERNS[policy], "study_completion": _COMPLETED.pattern,
         "completion_date": _COMPLETION_DATE, "leading_event_date": _LEADING_EVENT_DATE,
         "planned": _FUTURE.pattern, "negated": _NEGATED.pattern,
         "planned_study_release": _PLANNED_STUDY_RELEASE.pattern,
@@ -148,16 +153,16 @@ def dated_study_policy_definition() -> dict:
     }
 
 
-def dated_study_matches(stage, role, token, statement, publication):
+def dated_study_matches(stage, role, token, statement, publication, *, policy=DATED_STUDY_POLICY_VERSION):
     if not token or stage not in STUDY_STAGES:
         return False
     if role == "COMPLETED":
         return _classification(stage, statement.quote)[0] == role and bool(
             re.search(rf"{_STAGE_TERMS[stage]}{_COMPLETION_DATE}{re.escape(token)}\b", statement.quote, re.I)
         )
-    if role != STUDY_RESULTS_RELEASED or not study_results_released(stage, statement.quote):
+    if role != STUDY_RESULTS_RELEASED or not study_results_released(stage, statement.quote, policy=policy):
         return False
-    results = f"{_STUDY_RESULTS_RELEASE}{_STAGE_TERMS[stage]}"
+    results = f"{_STUDY_RELEASE_PATTERNS[policy]}{_STAGE_TERMS[stage]}"
     return (
         re.search(_LEADING_EVENT_DATE.format(date=re.escape(token), event=results), statement.quote, re.I)
         is not None or (
@@ -189,13 +194,16 @@ def _scope_anchors(binding, document, key, page, statement):
 
 def _event_claim(binding, statement, publication_anchor, published_date):
     claim_state, reason = _classification(binding["stage"], statement.quote)
-    dated_study_policy = binding.get("event_policy") == DATED_STUDY_POLICY_VERSION
+    policy = binding.get("event_policy", DATED_STUDY_POLICY_VERSION)
+    if policy not in _STUDY_RELEASE_PATTERNS:
+        raise DocumentError("CODE_ERROR", "UNRECOGNIZED_DATED_STUDY_POLICY")
+    dated_study_policy = "event_policy" in binding
     if (dated_study_policy and claim_state == "MENTIONED" and binding["stage"] in STUDY_STAGES
             and _PLANNED_STUDY_RELEASE.search(statement.quote)):
         claim_state, reason = "PLANNED", "FUTURE_OR_CONDITIONAL_LANGUAGE"
     date_token = binding.get("event_date_token")
     if binding.get("event_date_role") == STUDY_RESULTS_RELEASED:
-        if not study_results_released(binding["stage"], statement.quote):
+        if not study_results_released(binding["stage"], statement.quote, policy=policy):
             raise DocumentError("EVIDENCE_INSUFFICIENT", "ISSUER_STUDY_RESULTS_RELEASE_UNBOUND")
         claim_state, reason = STUDY_RESULTS_RELEASED, "EXPLICIT_ISSUER_STUDY_RESULTS_RELEASE"
     release_date = binding.get("event_date_source") == "SAME_ISSUER_NOTICE"
@@ -207,7 +215,8 @@ def _event_claim(binding, statement, publication_anchor, published_date):
     if date_token is not None and not release_date and not _date_in_event(date_token, statement.quote):
         raise DocumentError("EVIDENCE_INSUFFICIENT", "EVENT_DATE_NOT_BOUND_TO_QUOTE")
     if (dated_study_policy and claim_state in {"COMPLETED", STUDY_RESULTS_RELEASED}
-            and not dated_study_matches(binding["stage"], claim_state, date_token, statement, publication_anchor)):
+            and not dated_study_matches(binding["stage"], claim_state, date_token, statement, publication_anchor,
+                                        policy=policy)):
         raise DocumentError("EVIDENCE_INSUFFICIENT", "DATE_NOT_BOUND_TO_STUDY_EVENT")
     event_date = reported_calendar_date(date_token)
     if (dated_study_policy and event_date and published_date

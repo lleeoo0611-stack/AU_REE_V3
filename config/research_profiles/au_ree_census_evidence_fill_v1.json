@@ -8,11 +8,11 @@
     },
     "attribute_bindings": {
       "path": "census_attribute_bindings_v3.json",
-      "sha256": "acd799bf5654ff4f12de92ab659af294926d95ff0918d4fee85d7a7837922181"
+      "sha256": "c02a26d455ac8dcc12aa3961f40242c67473b26d6659061a7c92cf94195cfc0e"
     },
     "attribute_milestones": {
       "path": "development_milestone_bindings_v3.json",
-      "sha256": "0cb67c141eb5944c9de2fffd9dc8e77fb119f7a6e711480b0cfbd3e86e58960e"
+      "sha256": "5311dc306096e5badbb183372f5e504a67ba14367fa8588563ecd0ae86a26ef0"
     },
     "census_columns": {
       "path": "census_columns_v1.json",
