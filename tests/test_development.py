@@ -6,7 +6,7 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from au_ree_v3.contracts.temporal import TemporalEvidence
-from au_ree_v3.development import _classification, _review, review_milestones
+from au_ree_v3.development import DATED_STUDY_POLICY_VERSION, _classification, _review, review_milestones
 from au_ree_v3.documents import DocumentError, PDFDocument
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +24,8 @@ class DevelopmentMilestoneTests(unittest.TestCase):
             ("DFS", "The development update includes an estimate for the DFS.", "MENTIONED"),
             ("DFS", "The issuer completed the PFS and discussed a DFS.", "INSUFFICIENT_CONTEXT"),
             ("Construction", "The construction plans were completed in May 2023.", "MENTIONED"),
+            ("Construction", "Construction commenced with early site access works.", "EARLY_WORKS"),
+            ("PFS", "The issuer commenced a Pre-Feasibility Study in September 2025.", "ONGOING"),
             ("Production", "The demonstration plant commenced production in May 2023.", "INSUFFICIENT_CONTEXT"),
             ("Production", "The mine commenced commercial production in May 2023.", "ATTAINED"),
         )
@@ -56,6 +58,52 @@ class DevelopmentMilestoneTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(DocumentError, "PROJECT_SCOPE_NOT_LOCAL"):
             _review(binding, edition, distant, (proof,), "2026-11-28", 4)
+
+    def test_dated_study_result_event_requires_original_event_or_same_notice(self):
+        digest = "a" * 64
+        proof = TemporalEvidence(digest, "ARCHIVED_PUBLIC_CAPTURE", "2026-11-28", "fixture", "b" * 64)
+        edition = {"sha256": digest, "source_key": "test", "acquired_at": "2026-11-28T01:01:00+00:00",
+                   "reacquired_at": None}
+        publication = {"page": 1, "quote": "ASX Announcement 30 October 2026", "date_token": "30 October 2026"}
+        stated = {"page": 1, "stage": "PFS", "scope": "Example Project", "scope_quote": "Example Project",
+                  "project_id": "fixture", "event_policy": DATED_STUDY_POLICY_VERSION, "publication": publication}
+
+        def read(quote, **binding):
+            pdf = PDFDocument(digest, (f"ASX Announcement 30 October 2026\nExample Project\n{quote}",), "fixture")
+            return _review({**stated, "quote": quote, **binding}, edition, pdf, (proof,), "2026-11-28", 3)
+
+        native_date = {"event_date_role": "STUDY_RESULTS_RELEASED", "event_date_token": "August 2026"}
+        item = read("In August 2026, The Company released a Pre-Feasibility Study", **native_date)
+        self.assertEqual((item["claim_state"], item["event_date"], item["shadow_ordinal"]),
+                         ("STUDY_RESULTS_RELEASED", "2026-08", None))
+        self.assertEqual(item["temporal_decision"]["observation_role"], "HISTORICAL_EVENT")
+        own_notice = {"event_date_role": "STUDY_RESULTS_RELEASED", "event_date_source": "SAME_ISSUER_NOTICE"}
+        item = read("The Company is pleased to announce the results of the Pre-Feasibility Study", **own_notice)
+        self.assertEqual(item["event_date"], "2026-10-30")
+        negative = (
+            ("The company was founded in August 2026 and released a Pre-Feasibility Study", native_date),
+            ("The company mentioned the Pre-Feasibility Study in August 2026", native_date),
+            ("In August 2026, the company will release a Pre-Feasibility Study", native_date),
+            ("The Pre-Feasibility Study found testing was completed in August 2026", {
+                "event_date_token": "August 2026",
+            }),
+        )
+        for quote, binding in negative:
+            with self.subTest(quote=quote), self.assertRaises(DocumentError):
+                read(quote, **binding)
+        with self.assertRaisesRegex(DocumentError, "HISTORICAL_STUDY_EVENT_AFTER_ISSUER_PUBLICATION"):
+            read("The Pre-Feasibility Study was completed in November 2026", event_date_token="November 2026")
+
+    def test_a_scope_section_cannot_bind_a_claim_outside_its_boundaries(self):
+        digest = "a" * 64
+        record = {"sha256": digest, "source_key": "test", "acquired_at": None, "reacquired_at": None}
+        scope = "Named Project Evidence"
+        section = f"{scope}\nSection body."
+        quote = "The Scoping Study was completed in September, 2022"
+        pdf = PDFDocument(digest, (f"{section}\nDifferent Project Evidence\n{quote}",), "fixture")
+        with self.assertRaisesRegex(DocumentError, "MILESTONE_OUTSIDE_PROJECT_SCOPE_SECTION"):
+            _review({"page": 1, "stage": "Scoping", "scope_quote": scope, "scope_section_quote": section,
+                     "quote": quote, "event_date_token": "September, 2022"}, record, pdf, (), "2026-11-28", 2)
 
     @unittest.skipUnless(
         os.getenv("AU_REE_MILESTONE_ASSETS") and os.getenv("AU_REE_MILESTONE_MANIFEST"),
