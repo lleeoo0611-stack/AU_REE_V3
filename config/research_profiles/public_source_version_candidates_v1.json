@@ -1,0 +1,30 @@
+{
+  "schema": "public-source-version-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "barkly-updated-inferred-resource-2026",
+      "project_id": "AU-ad64122c217f0dbfabc8",
+      "native_namespace": "ASX_ANNOUNCEMENT_ID",
+      "native_id": "6A1357479",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {"url": "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7861346.pdf?v=63962951285", "publisher": "Barkly Rare Earths Limited"},
+        {"url": "https://www.marketindex.com.au/data-api/api/v1/announcements/XASX%3ABAK%3A6A1357479/pdf/inline/fivefold-growth-in-rare-earth-resource-at-barkly", "publisher": "Barkly Rare Earths Limited"}
+      ]
+    },
+    {
+      "case_id": "tower-maiden-resource-2022",
+      "project_id": "AU-a8258e4989c7bd95b7af",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "45ht5fzls7pc7t",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {"url": "https://announcements.asx.com.au/asxpdf/20221121/pdf/45ht5fzls7pc7t.pdf", "publisher": "Krakatoa Resources Limited"},
+        {"url": "https://wcsecure.weblink.com.au/pdf/KTA/02600437.pdf", "publisher": "Krakatoa Resources Limited"}
+      ]
+    }
+  ]
+}

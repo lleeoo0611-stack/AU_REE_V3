@@ -589,10 +589,109 @@ def run(v2, v3, out, baseline=None, sources=None, previous=None):
     return result
 
 
+_GAP_EVIDENCE = {
+    "resource": ("NATIVE_RESOURCE_STATEMENT_UNBOUND", "PROJECT_DEPOSIT_DATE_CUTOFF_CATEGORY_AND_EXACT_ORE_OR_TREO_ROW"),
+    "resource_formula": ("HISTORICAL_RESOURCE_FORMULA_UNREPRODUCED", "SAME_STATEMENT_VERIFIED_VALUES_AND_APPROVED_FORMULA"),
+    "composition": ("OXIDE_MEMBERS_AND_DENOMINATOR_UNVERIFIED", "SAME_STATEMENT_OXIDE_ROWS_UNITS_SPECIES_AND_MASS_BASIS"),
+    "location": ("OFFICIAL_FEATURE_ROLE_OR_TIME_UNVERIFIED", "OFFICIAL_NATIVE_FEATURE_ROLE_CRS_ACCURACY_AND_EFFECTIVE_DATE"),
+    "stage": ("DATED_COMPLETED_MILESTONE_SCOPE_UNBOUND", "ACTUAL_COMPLETED_MILESTONE_WITH_ISSUER_SCOPE_AND_DATE"),
+    "geology": ("GEOLOGIC_CLASS_AND_SCOPE_UNVERIFIED", "SCOPED_PRIMARY_DEPOSIT_GEOLOGY_DESCRIPTION"),
+    "corporate": ("LEGAL_LISTING_STATUS_AS_OF_UNVERIFIED", "DATED_OFFICIAL_LISTING_OR_ENTITY_REGISTRATION"),
+    "forecast": ("PRODUCT_SCENARIO_OR_PERIOD_UNVERIFIED", "SCOPED_STUDY_ENDPOINT_SCENARIO_AND_NAMED_TIME_BASIS"),
+    "source": ("VERIFIED_SOURCE_ATTRIBUTION_UNBOUND", "EXACT_EDITION_WITH_PROJECT_SCOPE_AND_PUBLIC_CAPTURE"),
+}
+
+
+def _historical_gap_type(column, method):
+    if column in DIRECT_RESOURCE:
+        is_calculated_mass = column == DIRECT_RESOURCE[2] and method not in {"SOURCE_REPORTED", "REPORTED"}
+        return "resource_formula" if is_calculated_mass else "resource"
+    if column == "有TREO資源估計":
+        return "resource"
+    if column in COMPOSITION_GROUPS or re.match(r"[A-Z][a-z]?[0-9]*O[0-9]+_氧化", column):
+        return "composition"
+    for fields, kind in ((POINT, "location"), (STAGE, "stage"), (DEPOSIT, "geology"), (FORECAST, "forecast"),
+                         (SOURCE, "source"), (("未上市公司",), "corporate")):
+        if column in fields:
+            return kind
+    raise ValueError(f"Unreviewed historical gap field {column}")
+
+
+def historical_source_gaps(v2, historical_csv, sources, out):
+    """Classify the pinned historical gap denominator with exact lookup evidence only."""
+    pinned = Path(__file__).resolve().parents[1] / "docs/research/census_science_historical_diagnostic.json"
+    reference = json.loads(pinned.read_bytes())
+    payload = historical_csv.read_bytes()
+    if hash_bytes(payload) != reference["outputs_sha256"]["v2_census_present_diagnostic.csv"]:
+        raise ValueError("Historical gaps require the exact 1,396-slot diagnostic ledger")
+    fixed = matching_source_objects(sources, reference["source_overlay_manifest_sha256"])
+    archived = {name: frozen(v2, f"{V2_DIR}/{name}") for name in (V2_FILES[0], "field_provenance.csv")}
+    if any(hash_bytes(data) != reference["v2_archive_sha256"][name] for name, data in archived.items()):
+        raise ValueError("Historical gap provenance differs from the pinned V2 tree")
+    columns, projects, grid_values = grid(archived[V2_FILES[0]], KEY)
+    proofs = ledger(archived["field_provenance.csv"], grid_values.keys())
+    _, prior = csv_input(payload)
+    output, field_counts, seen = [], defaultdict(Counter), set()
+    for row in prior:
+        if row["diagnostic"] != "FORMAL_UNAVAILABLE":
+            continue
+        project, column = key = row["project_id"], row["column"]
+        proof = proofs[key]
+        if (key in seen or proof["method"] != row["legacy_method"]
+                or hash_bytes(proof["value"].encode()) != row["legacy_value_sha256"]):
+            raise ValueError("Historical gap locator and canonical slot differ")
+        seen.add(key)
+        source_shas = set(SHA.findall(proof["source_sha256"]))
+        present = {digest for digest in source_shas if (project, digest) in fixed}
+        edition_status = ("EXACT_PROJECT_EDITION_IN_CURRENT_MANIFEST" if present
+                          else "EXACT_PROJECT_EDITION_NOT_IN_CURRENT_MANIFEST")
+        if not source_shas or not proof["locator"] or edition_status != row["legacy_edition_in_current_manifest"]:
+            raise ValueError("Historical root cause requires the pinned original Project and source edition")
+        evidence_type = _historical_gap_type(column, proof["method"])
+        blocker, next_evidence = _GAP_EVIDENCE[evidence_type]
+        state = "EVIDENCE_INSUFFICIENT" if present else "SOURCE_UNAVAILABLE"
+        field_counts[column][state] += 1
+        field_counts[column][blocker] += 1
+        output.append({
+            "project_id": project, "field_id": column, "historical_baseline_value_state": row["v3_state"],
+            "historical_baseline_reason": row["v3_reason"], "source_root_state": state,
+            "evidence_blocker": blocker, "next_evidence": next_evidence, "legacy_method": proof["method"],
+            "legacy_value_sha256": row["legacy_value_sha256"],
+            "exact_project_sha256_in_fixed": "|".join(sorted(present)),
+            "exact_project_sha256_outside_fixed": "|".join(sorted(source_shas - present)),
+            "source_url_hint": proof["source_url"], "original_locator_hint": proof["locator"],
+            "scope_hint": proof["scope"], "effective_date_hint": proof["effective_date"],
+            "mcda_relevance_hint": {"resource": "R1", "resource_formula": "R1", "composition": "S1",
+                                    "location": "I1–I4", "stage": "D1"}.get(evidence_type, "NONE"),
+            "historical_value_copied": False,
+        })
+    total = reference["v2_legacy_diagnostics"]["FORMAL_UNAVAILABLE"]
+    if len(output) != total or len(projects) != 93 or len(columns) != 51:
+        raise ValueError("Historical gap denominator disagrees with the pinned release")
+    if out.resolve().is_relative_to(v2.resolve()):
+        raise ValueError("Never write inside the V2 reference directory")
+    out.mkdir(parents=True, exist_ok=False)
+    listing = out / "historical_source_gap_cells.csv"
+    write_csv(listing, output)
+    result = {
+        "schema": "historical-display-source-gap-census-v1", "status": "PASS", "historical_gap_slots": total,
+        "fixed_source_manifest_sha256": reference["source_overlay_manifest_sha256"], "v2_reference": V2_REF,
+        "historical_v3_baseline_commit": reference["v3_code_commit"],
+        "historical_input_sha256": hash_bytes(payload), "gap_cells_sha256": hash_bytes(listing.read_bytes()),
+        "by_source_state": dict(Counter(row["source_root_state"] for row in output)),
+        "by_evidence_blocker": dict(Counter(row["evidence_blocker"] for row in output)),
+        "by_column": {column: dict(field_counts[column]) for column in columns},
+        "retained_scientific_values_from_v2": 0, "new_independent_verified_observations": 0,
+    }
+    (out / "historical_source_gap_receipt.json").write_bytes(json_bytes(result))
+    return result
+
+
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--v2-root",type=Path,required=True)
-    parser.add_argument("--v3-build",type=Path,required=True)
+    parser.add_argument("--v3-build",type=Path)
+    parser.add_argument("--historical-gaps", type=Path, help="Classify the pinned historical display gap CSV")
     parser.add_argument("--v3-baseline",type=Path)
     parser.add_argument("--sources", type=Path)
     parser.add_argument("--v3-previous", type=Path)
@@ -600,6 +699,14 @@ if __name__=="__main__":
     args=parser.parse_args()
     if args.out.resolve().is_relative_to(args.v2_root.resolve()):
         raise ValueError("Never write inside the V2 reference directory")
+    if args.historical_gaps:
+        if not args.sources or args.v3_build:
+            parser.error("--historical-gaps requires --sources and is independent of --v3-build")
+        result = historical_source_gaps(args.v2_root, args.historical_gaps, args.sources, args.out)
+        print({key: result[key] for key in ("status", "historical_gap_slots", "by_source_state", "gap_cells_sha256")})
+        raise SystemExit(result["status"] != "PASS")
+    if not args.v3_build:
+        parser.error("--v3-build is required for the standard coverage diagnostic")
     result=run(args.v2_root,args.v3_build,args.out,args.v3_baseline,args.sources,args.v3_previous)
     print({key:result[key] for key in ("status","v2_rule_dispositions","v2_legacy_diagnostics","v3_census_roles")})
     raise SystemExit(result["status"] != "PASS")
