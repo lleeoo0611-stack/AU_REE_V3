@@ -219,7 +219,8 @@ export async function readVersion(pointer, releaseId, signal) {
     && counts.PRESENT + counts.UNKNOWN + counts.NOT_APPLICABLE === 4743
   );
   checkDecision(mcda, projectIds);
-  const display = hasDisplay ? await readExtendedDisplay(data[DISPLAY_JSON], data[DISPLAY_CSV], census, {check, sourceURL: publicSourceURL}) : null;
+  const display = hasDisplay ? await readExtendedDisplay(data[DISPLAY_JSON], data[DISPLAY_CSV], census,
+    {check, sourceURL: publicSourceURL, cutoff: manifest.cutoff}) : null;
   return {entry, manifest, census, evidence, coverage, mcda, map, columnIds, csv: data["census.csv"], display};
 }
 

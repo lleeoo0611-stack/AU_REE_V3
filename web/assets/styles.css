@@ -102,6 +102,7 @@ th[aria-sort="ascending"] .sort::after { content: " ▲"; }
 th[aria-sort="descending"] .sort::after { content: " ▼"; }
 .cell-button:hover { color: var(--moss); text-decoration: underline; }
 .cell-button.missing { color: var(--muted); font-style: italic; }
+.reported-census-badge { display: block; color: var(--moss); font-size: .72rem; font-weight: 650; margin-top: .24rem; }
 #census-table td:first-child, #census-table th:first-child { position: sticky; left: 0; box-shadow: 1px 0 0 #d5e3da; z-index: 2; min-width: 10rem; }
 #census-table td:first-child { background: #fff; font-weight: 680; }
 .pages { display: flex; gap: .45rem; }
