@@ -246,6 +246,22 @@ def _criterion_keys(inputs, policy):
     return compared, count
 
 
+def _retained_criterion_changes(old, new, keys):
+    from verify_scientific_yield import PROTECTED_CONTEXT, without
+
+    exact, reissued = [], []
+    for project, code in sorted(keys):
+        before, after = (inputs["criteria_by_project"][project][code] for inputs in (old, new))
+        if before == after:
+            continue
+        change = {"project_id": project, "criterion_id": code}
+        if without(before, PROTECTED_CONTEXT) == without(after, PROTECTED_CONTEXT):
+            reissued.append(change)
+        else:
+            exact.append({**change, "before": before, "after": after})
+    return {"scientifically_revised_keys": exact, "lineage_only_keys": reissued}
+
+
 def _census_audit(before, after, delta):
     from verify_display_research_equivalence import read_census
 
@@ -381,6 +397,7 @@ def audit(before, after, delta, policy_path, *, sources=None, cas=None):
         "criterion_grid_keys_before_after": [old_count, new_count],
         "comparable_keys_before_after": [len(previous), len(current)],
         "added_comparable_keys": sorted(added), "withdrawn_comparable_keys": sorted(removed),
+        "retained_comparable_key_changes": _retained_criterion_changes(old, new, previous & current),
         "hypotheses": {
             "new_independent_r1_or_s1": {"net": net, "target": 1, **hypothesis(net >= 1)},
             "complete_r1_and_s1_panel": {"before": len(checked[_PANEL]["before_projects"]), "after": complete, "target": 3,

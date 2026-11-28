@@ -44,7 +44,9 @@ PYTHONPATH=src python -m unittest discover -s tests -p test_research_delta.py -v
 
 工作區擴大清冊試建置含 147 個唯一來源 SHA、152 筆合格擷取。Nolans Bore 的 2017-06-07 同一聲明在物理第 2 頁明示 56 Mt、2.6% TREO、1% TREO cutoff。獨立 verifier 重讀兩個原件 token 和正式採納，依現行 Census 公式得到 1,456 kt TREO，原報精度傳遞區間為 1,415.25 至 1,497.25 kt。既有獨立公式核對延伸支援百分比輸入與原生 Observation ID，並驗算兩端精度界限。
 
-試建置新增兩個正式 Observation／選值鍵及三個核心科學格。另有六格來源清冊展示欄更新，分別是 Nolans 與 Dubbo 的來源名稱、URL、摘要。Nolans 的直接含量依據缺失，R1 仍為 `INCOMPLETE_SELECTED_RESOURCE_BUNDLE`，S1 仍為 `SAME_STATEMENT_RESOURCE_REQUIRED`。六個可比較鍵與兩案樣本維持原結果。固定及完整矩陣的權重、分數、名次與敏感度一致。兩項研究假說均為 `HYPOTHESIS_NOT_SUPPORTED`。擴大清冊試建置收據位於 `work/census-stage6/comparison-expanded-pilot/fixed-and-expanded-oracle.json`。
+試建置新增兩個正式 Observation／選值鍵及三個核心科學格。另有六格來源清冊展示欄更新，分別是 Nolans 與 Dubbo 的來源名稱、URL、摘要。Nolans 的直接含量依據缺失，R1 仍為 `INCOMPLETE_SELECTED_RESOURCE_BUNDLE`，S1 仍為 `SAME_STATEMENT_RESOURCE_REQUIRED`。六個可比較鍵重新綁定版次識別碼，科學值、原件血緣及兩案樣本維持原結果。固定及完整矩陣的權重、分數、名次與敏感度一致。兩項研究假說均為 `HYPOTHESIS_NOT_SUPPORTED`。擴大清冊試建置收據位於 `work/census-stage6/comparison-expanded-pilot/`。
+
+舊／新比較器對相同凍結輸入，各交錯執行三次。全量比較 wall 中位數為 1.333／1.034 秒，CPU 中位數為 1.332／1.027 秒，峰值 RSS 中位數為 95,944／95,960 KiB。比較模組 AST 最大分支分數均為 68，重用評分流程後，面板健全性檢查由 25 降為 17。量測範圍是 4,743 格比較及收據輸出。擴大來源採納及候選建置另行量測。
 
 ## 檔案清冊
 
