@@ -1,0 +1,54 @@
+工作包,處置,路徑,理由
+A,ADD,docs/research/census_scientific_baseline_receipt.json,凍結 144 份原件與既有逐格基準
+A,ADD,docs/research/census_scientific_priority.md,保存缺口排序方法、分母與對應證據
+A,ADD,tests/test_census_scientific_priority.py,檢查去重語境及真實全格權重
+A,ADD,tools/census_scientific_priority.py,從現有 Census 和原件工作清冊導出全格優先序
+A,KEEP,config/research_profiles/census_columns_v1.json,保留既有 93×51 欄位契約
+A,KEEP,work/census-stage4/final/archive,保留不可變 Stage 4 候選和原始 CAS 指紋
+A,KEEP,work/census-stage4/final/preview,保留候選展示版本和指標
+A,KEEP,work/research-yield/source-inputs/source_manifest.json,保留 144 原件及 148 筆擷取清冊
+B,ADD,config/research_profiles/resource_bindings_v5.json,版控 Wolverine 原表與 Mt Weld 同版跨頁日期
+B,ADD,docs/research/native_resource_scoped_binding.md,報告原生辨識、既有家族及未見家族結果
+B,ADD,docs/research/native_resource_scoped_binding_verification.json,封存具獨立分母的辨識與同範圍工程量測
+B,ADD,docs/research/wolverine_oxide_constituents.md,記錄十項直接量測、兩種元素的衝突與採納邊界
+B,ADD,tests/fixtures/held_resource_statements_v1.json,具原件的四種 JORC 範圍衝突
+B,ADD,tests/fixtures/mt_weld_linked_estimate_date_v1.json,封存估算日三處精確證據
+B,ADD,tests/fixtures/wolverine_constituent_oracle_v1.json,獨立原表分母及單元精度基準
+B,ADD,tools/audit_resource_statement_holds.py,原件回讀與正式結果隔離驗收
+B,KEEP,config/research_profiles/au_ree_census_display_v1.json,保留研究截日與投影設定
+B,KEEP,config/research_profiles/resource_bindings_v4.json,保留既有核准版及原實驗版本
+B,REFACTOR,src/au_ree_v3/census_resource_display.py,驗證同版同資源聲明的跨頁估算日
+B,REFACTOR,src/au_ree_v3/composition_extraction.py,共用原件讀回，保存原報物種與精度證據
+B,REFACTOR,src/au_ree_v3/native_table_discovery.py,共用多 cutoff、父欄與原生語境定位
+B,REFACTOR,src/au_ree_v3/native_table_work.py,保持原始資料及已消解位置的身分
+B,REFACTOR,src/au_ree_v3/resource_audit.py,保留獨立成分量測的原表證據與衝突
+B,REFACTOR,src/au_ree_v3/resource_context.py,延伸截取後的精確場景及限定欄義
+B,REFACTOR,src/au_ree_v3/resource_table_binding.py,管控欄位標籤、原材料及多 cutoff 的角色
+B,REFACTOR,tests/test_census_resource_display.py,防止日期來源版本、範圍及 cutoff 錯配
+B,REFACTOR,tests/test_composition_extraction.py,測試原表、衝突與固定研究新舊結果
+B,REFACTOR,tests/test_native_resource_positives.py,校驗命名原件及對照案例
+B,REFACTOR,tests/test_native_table_discovery.py,校驗原生候選定位與角色
+C,ADD,config/research_profiles/public_source_version_candidates_v1.json,各公開通路與擴充版次意圖
+C,ADD,config/research_profiles/public_source_version_native_review_v1.json,固定版次時間、原文與不採納條件
+C,ADD,docs/research/census_source_version_recovery.md,報告歷史缺口及新公開版次
+C,ADD,docs/research/census_source_version_verification.json,驗證來源取得、CAS 讀回及逐格診斷
+C,ARCHIVE,work/census-stage5/sources,獨立保存新取得版次、CAS 及歷史逐格缺口
+C,KEEP,AU_REE_V2@2af6f611e51eb4ac9dda73419d1afeba70d1307e,唯讀來源及歷史展示比較
+C,REFACTOR,tests/test_census_context_display.py,保障擴充來源與正式展示的區隔
+C,REFACTOR,tools/census_v2_coverage_diagnostic.py,共用 V2 唯讀逐格鑑別及根因
+C,REFACTOR,tools/recover_source_editions.py,共用獨立公開來源取得及離線原件分析
+D,ADD,docs/research/census_context_comparability.md,報告 GIS 和工程情境的角色、時間及跨案適用性
+D,ARCHIVE,work/census-stage5/context,獨立封存政府地理和年產情境證據
+D,KEEP,src/au_ree_v3/fresh_decision_policy_v1.json,保留 MCDA 用途、權重、方法和最低樣本
+D,REFACTOR,src/au_ree_v3/geography.py,官方 feature 須有原生同點有效性證據才可提案
+D,REFACTOR,tests/test_context_expansion.py,保障原件取證、地理及固定科學產物
+D,REFACTOR,tests/test_infrastructure_compatibility.py,阻止文件或不對應 feature 提供正式有效日
+D,REFACTOR,tools/verify_context_expansion.py,以獨立原件核對位置、年產角色及正式比較
+E,ADD,docs/research/census_scientific_file_lifecycle.csv,逐檔記錄變更、保留與封存
+E,ADD,docs/research/census_scientific_yield_results.md,彙整科學增益、負面結果、運算與工程驗收
+E,ADD,docs/research/census_scientific_yield_verification.json,封存結果、收據指紋、Gate、CI 及研究版本
+E,ADD,tools/verify_replay_stability.py,驗證有效 hash seed、網路隔離、快取和讀取成本
+E,ADD,tools/verify_scientific_yield.py,獨立稽核逐格、每筆估算及跨案比較血緣
+E,ARCHIVE,work/census-stage5/final/archive,封存新研究候選與完整運算閉包
+E,ARCHIVE,work/census-stage5/final/census-stage5-candidate-preview.zip,封存兩版候選資料與靜態網站
+E,REFACTOR,web/tests/browser.mjs,以真實兩版擴充欄和損壞資產測試版本切換
