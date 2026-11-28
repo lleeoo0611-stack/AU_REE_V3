@@ -107,6 +107,7 @@ def main(argv: list[str] | None = None) -> int:
         display.add_argument(f"--{argument}", type=Path, required=True)
     display.add_argument("--release-id", required=True)
     display.add_argument("--forecast", type=Path, nargs=2, metavar=("BINDINGS", "ORACLE"))
+    display.add_argument("--reported-resources", action="store_true", help="Include source-bound unselected resource values for display")
     display.add_argument("--geography", type=Path, nargs=3, metavar=("BINDINGS", "MANIFEST", "STORE"))
     display.add_argument("--geography-base", type=Path, help="Exact parent source manifest for an expanded candidate")
     display.add_argument("--web-out", type=Path, help="Write an immutable candidate web release with the same verified display")
@@ -280,7 +281,7 @@ def _run_research(args) -> dict:
             profile=args.profile, columns_path=args.columns, build_directory=args.research_build,
             release_root=args.release_root, release_id=args.release_id, sources=args.sources,
             assets=args.assets, bindings=args.bindings, forecast=args.forecast, geography=args.geography,
-            geography_base=args.geography_base,
+            geography_base=args.geography_base, include_reported_resources=args.reported_resources,
         )
         receipt = write_display_package(bundle, args.out)
         if args.web_out is not None:

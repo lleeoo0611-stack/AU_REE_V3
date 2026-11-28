@@ -44,6 +44,16 @@ def _read(path: Path):
     return json.loads(payload), _sha(payload)
 
 
+def _display_observations(build, directory, include_reported_resources):
+    if not include_reported_resources:
+        return build.observations.values()
+    artifact = "observations/observations.jsonl"
+    payload = (directory / artifact).read_bytes()
+    if _sha(payload) != build.receipt["scientific_artifacts"][artifact]:
+        raise ValueError("Reported observation artifact changed after candidate verification")
+    return tuple(json.loads(line) for line in payload.splitlines())
+
+
 def _bind_parent(build: ResearchBuild, archive: dict, settings, source_sha: str, binding_sha: str):
     wanted = {"profile": settings.sha256, "sources": source_sha, "bindings": binding_sha}
     if (
@@ -150,6 +160,7 @@ def compile_display_package(
     *, profile: Path, columns_path: Path, build_directory: Path, release_root: Path, release_id: str,
     sources: Path, bindings: Path, assets: Path, forecast: tuple[Path, Path] | None = None,
     geography: tuple[Path, Path, Path] | None = None, geography_base: Path | None = None,
+    include_reported_resources: bool = False,
 ) -> DisplayPackage:
     """Rebind display evidence to raw frozen bytes with no Store or decision write path."""
     from .census_resource_display import reported_resource_facts
@@ -178,14 +189,21 @@ def compile_display_package(
         raise ValueError("Display input Census receipt changed after candidate verification")
     cache = DocumentCache()
     resource_diagnostics = []
+    reported_reviews = [] if include_reported_resources else None
+    observations = _display_observations(build, build_directory, include_reported_resources)
     resources = reported_resource_facts(
-        census_receipt, build.observations.values(), source_manifest, assets=assets, cache=cache,
+        census_receipt, observations, source_manifest, assets=assets, cache=cache,
         diagnostics=resource_diagnostics, bindings=binding_spec, manifest_sha=source_sha,
+        reported_reviews=reported_reviews,
     )
     dates = _statement_dates(census_receipt, editions, content, cache)
     extras, region_review, context_pins = _opt_in_context(profile, sources, assets, forecast, geography, geography_base)
     resource_review = tuple(item["review_evidence"] for item in resource_diagnostics if "review_evidence" in item)
-    review = (*resource_review, *region_review)
+    review = (*resource_review, *(reported_reviews or ()), *region_review)
+    if reported_reviews is not None:
+        if any(entry["source_capture_sha256"] not in editions for entry in reported_reviews):
+            raise ValueError("Reported resource review requires a verified source capture")
+        context_pins["reported_resource_review"] = _sha(_json(reported_reviews))
     facts = (*resources, *dates, *extras)
     for fact in facts:
         _edition_join(fact, editions)

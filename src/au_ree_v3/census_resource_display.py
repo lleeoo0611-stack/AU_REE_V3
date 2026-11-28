@@ -25,6 +25,8 @@ RULE = "exact-selected-resource-display-v1"
 ROLE = "REPORTED_RESOURCE"
 UNKNOWN = "UNKNOWN_CONTEXT"
 RESOURCE = ("ore_mt", "grade", "contained_treo_kt")
+_CORE_REPORT_COLUMNS = dict(zip(RESOURCE, ("ore_mt", "treo_grade_pct", "contained_treo_kt"), strict=True))
+_REVIEW_RULE = "as-reported-resource-review-v1"
 _FIELDS = (
     "resource_jorc_class_as_reported", "resource_estimate_effective_date", "resource_cutoff_as_reported",
     "resource_scope_or_deposit_name", "ree_grade_or_chemistry_basis",
@@ -379,6 +381,38 @@ def _category_review(project, bound, edition, grade, pdf, context):
     }
 
 
+def _reported_measurement(bound, measurement, archived, capture, edition):
+    raw, anchor = measurement.raw, measurement.anchor
+    if any(archived.get(key) != value for key, value in measurement.science().items()):
+        return None
+    phrase = _original_phrase(capture.pdf, anchor.page, anchor.quote)
+    amount = re.escape(raw.raw_value)
+    if not phrase or not re.search(rf"(?<![\d.,]){amount}(?![\d.,])", phrase.text) or not raw.raw_unit:
+        return None
+    return {
+        "project_id": raw.project_id, "data_role": ROLE,
+        "state": "SCIENTIFIC_CONFLICT" if archived["outcome"] == "SCIENTIFIC_CONFLICT" else "CANDIDATE",
+        "label": f"{raw.raw_value} {raw.raw_unit}", "reason": archived["reason"],
+        "source_sha256": raw.source_sha, "source_capture_sha256": edition["receipt_sha256"],
+        "source_url": bound.source.url, "publication_date": bound.source.publication_date or "",
+        "locator": phrase.locator, "quote": phrase.text, "scope": bound.scope.name,
+        "context": {
+            "census_column_id": _CORE_REPORT_COLUMNS[raw.variable], "display_value": f"{raw.raw_value} {raw.raw_unit}",
+            "raw_token": raw.raw_value, "raw_unit": raw.raw_unit, "observation_id": raw.observation_id,
+            "statement_id": bound.statement_id, "scope_id": bound.scope.scope_id,
+            "material_basis": raw.material_basis or UNKNOWN, "chemical_basis": raw.chemical_basis or UNKNOWN,
+            "effective_date": raw.effective_date or UNKNOWN, "category": raw.category or UNKNOWN,
+            "reported_cutoff": " ".join(str(part) for part in (
+                archived["cutoff_grade"], archived["cutoff_unit"], archived["cutoff_analyte"],
+            ) if part is not None) or UNKNOWN,
+            "observation_temporal_status": bound.decision.status, "temporal_decision_id": bound.decision.decision_id,
+            "publication_date_status": "AS_REPORTED" if bound.source.publication_date else UNKNOWN,
+            "first_proven_public_date": edition["temporal_decision"].get("earliest_proven_public_date") or UNKNOWN,
+            "physical_page": str(phrase.page), "display_rule": _REVIEW_RULE,
+        },
+    }
+
+
 def _facts_for(project, bound, measured, capture, edition, binding, diagnostics):
     grade = measured["grade"]
     statement = bound.statement
@@ -420,12 +454,19 @@ def _facts_for(project, bound, measured, capture, edition, binding, diagnostics)
 
 def reported_resource_facts(census_receipt: dict, observations, source_manifest: dict, *, assets: Path,
                             bindings: dict, manifest_sha: str, cache: DocumentCache | None = None,
-                            diagnostics: list[dict] | None = None) -> tuple[DisplayFact, ...]:
+                            diagnostics: list[dict] | None = None,
+                            reported_reviews: list[dict] | None = None) -> tuple[DisplayFact, ...]:
     """Rebind proof-pinned observations from original bytes for display only."""
     diagnostics = [] if diagnostics is None else diagnostics
+    observations = tuple(observations)
     reports = _report_inputs(census_receipt, observations)
     expected = {(project, statement["statement_id"]): (statement, joins) for project, statement, joins in reports}
     needed = {(project, statement["source_sha256"]) for project, statement, _ in reports}
+    review_inputs = {
+        row["observation_id"]: row for row in observations
+        if reported_reviews is not None and row["selected_for_census"] is False and row["variable"] in RESOURCE
+    }
+    needed.update((row["project_id"], row["source_sha256"]) for row in review_inputs.values())
     plan = plan_source_editions(bindings, source_manifest, manifest_sha)
     if plan.cutoff != census_receipt["research_cutoff"]:
         raise ValueError("Resource display has a different exact source cutoff")
@@ -440,6 +481,14 @@ def reported_resource_facts(census_receipt: dict, observations, source_manifest:
                                                                case.get("reason", "EXACT_SOURCE_UNAVAILABLE"))
             continue
         for bound in bind_context(binding, entity, capture, case, cutoff=plan.cutoff, rules_sha=plan.rules_sha):
+            if reported_reviews is not None and case["temporal_decision"]["status"] == "ELIGIBLE":
+                for measurement in bound.measurements:
+                    identity = measurement.raw.observation_id
+                    if identity in review_inputs and (entry := _reported_measurement(
+                        bound, measurement, review_inputs[identity], capture, edition,
+                    )) is not None:
+                        reported_reviews.append(entry)
+                        del review_inputs[identity]
             key = entity.entity_id, bound.statement_id
             if key in expected and (measured := _recheck_statement(bound, *expected[key])):
                 candidates[key].append((bound, measured, capture, edition, binding))
