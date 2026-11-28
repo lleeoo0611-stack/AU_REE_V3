@@ -56,3 +56,5 @@ A new output directory is required for each repeated run; compare hashes and sta
 Four synthetic isolated tests pass: seeded page priority and dual search queues; exact source/Project binding, no-source and mismatch isolation; immutable output protection; field/page syntax. The original 144 source objects and complete V2 provenance were not available locally during this integration, so full source-anchored re-extraction and its independent accuracy are NOT_RUN. Net new formally selected scientific cells and comparable Project x Criterion are 0, not PASS.
 
 A future science-yield cycle must record: candidate hints, unique source-page leads, original tokens revalidated, verified/selected observations, new distinct Census science cells, new comparable Project x Criterion, complete-case panel changes and false admission rates. Freeze evaluation by report family/Project to avoid leakage. Preserve all frozen research archives and O2/F5 failure or blocked statuses until genuine evidence changes them.
+
+The candidate queue has since been replayed against all retained originals in scope. See [native value recovery and actual verification](native_value_recovery.md).
