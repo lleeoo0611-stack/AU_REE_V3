@@ -1,17 +1,17 @@
 """Find native resource table rows before any Project or science admission."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import re
 
 from .documents import DocumentError, PDFDocument
 from .resource_table_binding import (
     CellBinding, Span, _CAPTION, _RESOURCE, _REVIEWED_RESOURCE_HEADING,
-    _candidate_tokens, _caption_block, _classify_layout_row, _first_body, _header_start,
+    _candidate_caption_type, _candidate_tokens, _caption_block, _classify_layout_row, _first_body, _header_start,
     _line_span, _overlap, _plain, _resource_type, _spans, bind_page_row,
 )
 
 
-DISCOVERY_RULE = "native-resource-table-discovery-v2"
+DISCOVERY_RULE = "native-resource-table-discovery-v3"
 _ROW_LABEL = re.compile(
     r"(?:total|(?:grand|global|combined) total|(?:total |global |combined |overall )?"
     r"(?:mineral )?resources?|(?:global|combined|overall)|total (?:mre|measured|indicated|inferred))"
@@ -25,13 +25,15 @@ _SECTION_PREFIX = re.compile(r"^\d+(?:\.\d+)*\.?\s+")
 _HEADING_CONTEXT = re.compile(
     r"\s*\((?:JORC(?: Code)?\s+20\d{2}|20\d{2}|[\w]+\s+20\d{2})\)\s*$", re.I,
 )
+_DATED_TITLE = re.compile(
+    r"\s*(?:[–—:-]\s*|(?:as at|as of|effective)\s+)(?:\d{1,2}\s+)?[A-Za-z]{3,9}\s+20\d{2}\s*$", re.I,
+)
 _NAMED_TOTAL = re.compile(
     r"[\w-]+(?: [\w-]+){0,5}\s+mineral resource(?:\s+(?:inventory|estimate|total))?"
     r"\s*\((?:M|Measured)(?:\s*\+\s*(?:I|Ind|Inf|Indicated|Inferred)){1,2}\)", re.I,
 )
-_RESOURCE_WORD = re.compile(r"(?<![A-Za-z])mineral\s+resources?\b", re.I)
 _RESOURCE_ALIAS = re.compile(r'\bMineral Resource\s*\([\"“]Resource[\"”]\)', re.I)
-_CUTOFF = re.compile(r"\bcut[- ]?off\b|\bCOG\b", re.I)
+_CUTOFF = re.compile(r"\bcut[- ]?offs?\b|\bCOG\b", re.I)
 _RESERVE_OR_TARGET = re.compile(r"\b(?:ore reserves?|exploration targets?)\b", re.I)
 _CONTINUATION = re.compile(r"\b(?:cont\.?|continued|continuation)\b", re.I)
 _HEADER_MASS = re.compile(r"\b(?:tonnage|tonnes?|Mt|kt|Bt|t)\b", re.I)
@@ -58,7 +60,7 @@ class NativeResourceRow:
 
 
 def _short_caption(raw: str) -> bool:
-    title = _HEADING_CONTEXT.sub("", _SECTION_PREFIX.sub("", _plain(raw).rstrip(":")))
+    title = _DATED_TITLE.sub("", _HEADING_CONTEXT.sub("", _SECTION_PREFIX.sub("", _plain(raw).rstrip(":"))))
     return bool(_REVIEWED_RESOURCE_HEADING.fullmatch(title)
                 or _SHORT_TABLE_TITLE.fullmatch(title) and not _PROSE.search(title))
 
@@ -71,7 +73,9 @@ def _row_kind(raw: str, page: int, line: int) -> str | None:
     if len(tokens) < 2:
         return None
     label = _plain(spans[0].text)
-    if _ROW_LABEL.fullmatch(label) or label.casefold() == "all" and _CLASS_LABEL.fullmatch(_plain(spans[1].text)):
+    if _ROW_LABEL.fullmatch(label) and tokens[0] == spans[1]:
+        return "TOTAL"
+    if label.casefold() == "all" and _CLASS_LABEL.fullmatch(_plain(spans[1].text)):
         return "TOTAL"
     if _NAMED_TOTAL.fullmatch(label):
         return "NAMED_SCOPE"
@@ -106,13 +110,11 @@ def _numbered_row(document, page, row_line, caption_line, strategy):
     return None
 
 
-def _accepted_caption(local, start, numbered, caption):
-    kind = _resource_type(caption)
+def _accepted_caption(local, page, start, numbered, caption, first, data):
+    kind = _candidate_caption_type(local, page, caption, first, data)
     if kind is not None:
         return kind
     raw = " ".join(part.text for part in caption)
-    if _RESOURCE_WORD.search(raw) and not _RESERVE_OR_TARGET.search(raw):
-        return "MINERAL_RESOURCE"
     if numbered and _CUTOFF.search(raw) and re.search(r"\bresource\b", raw, re.I):
         preceding = " ".join(_plain(line) for line in local[max(0, start - 13):start - 1])
         if _RESOURCE_ALIAS.search(preceding) and not _RESERVE_OR_TARGET.search(raw):
@@ -168,8 +170,12 @@ def _layout_row(local, document, page, start, first, data, caption, line, row_ki
     elif row_kind == "NAMED_SCOPE":
         first, data = _preceding_grid(local, page, line, first, data)
         context, strategy = (), "NAMED_RESOURCE_SUBTABLE"
-    elif numbered and kind == "MINERAL_RESOURCE" and _resource_type(caption) == kind:
-        return _numbered_row(document, page, line, start, "NUMBERED_RESOURCE_TABLE")
+    elif numbered and kind in {"MINERAL_RESOURCE", "PRINTED_CLASSIFIED_RESOURCE_CUTOFF"}:
+        strategy = ("PRINTED_CLASSIFIED_RESOURCE_CUTOFF" if kind == "PRINTED_CLASSIFIED_RESOURCE_CUTOFF"
+                    else "NUMBERED_RESOURCE_TABLE")
+        result = _numbered_row(document, page, line, start, strategy)
+        context = tuple(span for span in caption if _CUTOFF.search(span.text))
+        return replace(result, context_anchors=context) if result and context else result
     else:
         context, strategy = (), "UNNUMBERED_RESOURCE_HEADING" if not numbered else "NUMBERED_RESOURCE_TABLE"
     if not _registered_header(local, page, first, data):
@@ -189,9 +195,10 @@ def _leading(local, document, page, start, end, numbered):
     first_data = _first_body(local, page, first_header, end)
     caption = (_caption_block(local, page, start, first_header - 1) if numbered else
                (_line_span(local, start, page),))
-    kind = _accepted_caption(local, start, numbered, caption)
+    kind = _accepted_caption(local, page, start, numbered, caption, first_header, first_data)
     continuation = numbered and _CONTINUATION.search(" ".join(item.text for item in caption))
-    if kind not in {"MINERAL_RESOURCE", "MINERAL_RESOURCE_CUTOFF_ALIAS"} and not (continuation and kind is None):
+    positive = {"MINERAL_RESOURCE", "MINERAL_RESOURCE_CUTOFF_ALIAS", "PRINTED_CLASSIFIED_RESOURCE_CUTOFF"}
+    if kind not in positive and not (continuation and kind is None):
         return ()
     hits = []
     for line, row_kind in _row_candidates(local, page, first_data, end):
