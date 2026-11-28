@@ -48,6 +48,15 @@ def ledger(build):
     return values
 
 
+def pdf_pages(path, source, last_page):
+    require(digest(path) == source, "Source PDF fingerprint differs")
+    raw = subprocess.run(
+        ["pdftotext", "-f", "1", "-l", str(last_page), "-layout", "-enc", "UTF-8", str(path), "-"],
+        capture_output=True, timeout=30, check=True,
+    ).stdout
+    return [" ".join(page.split()) for page in raw.decode("utf-8").split("\f")]
+
+
 def verify_proofs(cases, assets):
     grouped = defaultdict(list)
     for item in cases:
@@ -55,13 +64,8 @@ def verify_proofs(cases, assets):
     anchors = 0
     for source, evidence in sorted(grouped.items()):
         path = assets / "objects" / source
-        require(digest(path) == source, "Source PDF fingerprint differs")
         last_page = max(record["page"] for record in evidence)
-        raw = subprocess.run(
-            ["pdftotext", "-f", "1", "-l", str(last_page), "-layout", "-enc", "UTF-8", str(path), "-"],
-            capture_output=True, timeout=30, check=True,
-        ).stdout
-        pages = [" ".join(page.split()) for page in raw.decode("utf-8").split("\f")]
+        pages = pdf_pages(path, source, last_page)
         for anchor in evidence:
             text = pages[anchor["page"] - 1]
             span = anchor["text_span"]
@@ -72,7 +76,7 @@ def verify_proofs(cases, assets):
     return {"source_pdfs": len(grouped), "anchors": anchors}
 
 
-def verify(before, after, assets):
+def verify_artifacts(before, after):
     baseline, candidate = (read_json(path / "build_receipt.json") for path in (before, after))
     require(baseline["input_artifacts"]["sources"] == candidate["input_artifacts"]["sources"],
             "Source corpora differ")
@@ -101,6 +105,11 @@ def verify(before, after, assets):
             comparable.append(document)
         require(comparable[0] == comparable[1], "MCDA inputs, panels, methods, weights or ranks changed")
         checked_hashes[name] = sha256(json.dumps(comparable[0], ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+    return baseline, candidate, {name: candidate["scientific_artifacts"][name] for name in fixed}, checked_hashes
+
+
+def verify(before, after, assets):
+    baseline, candidate, fixed, checked_hashes = verify_artifacts(before, after)
     old, new = ledger(before), ledger(after)
     require(old.keys() == new.keys(), "Census grid keys differ")
     changed = {key for key, row in new.items() if row != old[key]}
@@ -124,7 +133,7 @@ def verify(before, after, assets):
         "selected_attributes": assessment["selected_attributes"],
         "existing_formal_scientific_cells": candidate["scientific_output_count"],
         "comparable_project_criteria": candidate["comparable_project_criteria"],
-        "unchanged_artifacts": {name: candidate["scientific_artifacts"][name] for name in fixed},
+        "unchanged_artifacts": fixed,
         "unchanged_mcda_content_excluding_profile_and_linked_artifact_hashes": checked_hashes,
         "source_evidence": verify_proofs(cases, assets),
         "verdicts": dict(Counter(row["verdict"] for row in cases)),
