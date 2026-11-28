@@ -36,6 +36,167 @@
     "F4": "PASS",
     "F5": "BLOCKED"
   },
+  "integrated_profile_verification": {
+    "artifacts": [
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565/attribute-oracle.json",
+        "sha256": "21bd7ba8120f7ac2429cad0112bfe9848d598d63aebf26cff9a92e256141b8e9"
+      },
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565/contained-oracle.json",
+        "sha256": "37b9416fb3bd820fe1b88a5ccb7ee168aea16d665fd38e67a2d0351d6d78e089"
+      },
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565/delta/comparison_receipt.json",
+        "sha256": "e4cf87296d534cb58bacd05cc89ef14f23ec0e67d26bac5b60f992eaefa4e67a"
+      },
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565/delta/census_delta.csv",
+        "sha256": "dd1976e30c8a76756529f4ebde5037adcd68bdfd316738ca9f25affa200adf20"
+      },
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565/delta/release_and_replay.json",
+        "sha256": "899219103bea4eadce7b4c5093b7b4649b57354c0c58e534795a574d9cd23e7c"
+      },
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565/browser.json",
+        "sha256": "fe035bb7f9d58df9fefc4155f01f89849ed9d479edfee9b0ea9c50b615b9954c"
+      },
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565/verify-site/site_verification.json",
+        "sha256": "509c3d895b893e605ba9c2c31df7ceb9d860fc8037852cf4bc2f6a5eb4198152"
+      },
+      {
+        "path": "work/census-stage2/typed-attributes-22f8565-faults/candidate_faults_receipt.json",
+        "sha256": "10903bed51d9ee6f53a85ed3727049184c60b0dfcf00caeb83bfda33d236699d"
+      }
+    ],
+    "browser": {
+      "chromium": "156.0.8078.79",
+      "corpus": "EXACT_RESEARCH_PREVIEWS",
+      "metrics": {
+        "browser_history_load_wall_ms": 269,
+        "browser_js_heap_used_bytes": 8616440,
+        "browser_load_census_wall_ms": 600,
+        "exact_derived_evidence_dialogs": 2,
+        "formal_pointer_rejects_candidate": "PASS",
+        "history_csv_update_link": "PASS",
+        "map_ree_mcda_language": "PASS",
+        "mixed_cache_missing_atomic": "PASS",
+        "mobile": "PASS",
+        "no_formal_pointer": "PASS",
+        "rehashed_unqualified_pin_rank_lineage": "PASS",
+        "search_filter_sort_columns_evidence": "PASS",
+        "typed_attribute_evidence_dialogs": 5,
+        "xss_and_source_link": "PASS"
+      },
+      "runtime": "v24.22.3",
+      "status": "PASS",
+      "versions": [
+        "b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da",
+        "0410d7e7fe21a409645abe2c62cb3741abd1afa04d1e339f5f6028f888374de1"
+      ]
+    },
+    "candidate_replays": [
+      {
+        "elapsed_seconds": 9.729274675999477,
+        "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+        "receipt_sha256": "42879b9715913834489da4b64413177e201aead34e6864e5c184e5cc6245fbb3",
+        "reported_F4": "PASS",
+        "status": "PASS",
+        "verified_output_count": 8,
+        "verified_outputs": {
+          "census/cell_status.csv": "c3aa8cb871a89f1e04fd9f4e312051ebf1fc6fcba66600086df3ad556351e968",
+          "census/census.csv": "d5e71a450532a313840fb521c6c593d412550193e598aee8260e10b70b04494c",
+          "census/census_receipt.json": "9e5b9c929effdbd2b9992e2c6c68329ee47c43c4932b84790f708566b463f256",
+          "decision/decision_receipt.json": "c1bd9a8dcc29dd061617f250321859a459c3be289bcaa81f108744775f859393",
+          "decision/mcda_inputs.json": "066c48f7f552b141bd6fe49531412a1759c77be90f0970542881445e710208f4",
+          "decision/mcda_results.json": "e6a4e46b49fb51d1fdfd23f62dae0614eb73f614bfe0ba7b1f0829e039f43f8a",
+          "observations/extraction.json": "17dcc0f00b8526d607ef00e4f2b148c0f548c9d8d2dab7ce7807273edceaa81f",
+          "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+        }
+      },
+      {
+        "elapsed_seconds": 8.743142253002588,
+        "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+        "receipt_sha256": "fd48bf54b8dd728e7e4951ae428fbc038e730584576ae62dca80fdcde5a65e8e",
+        "reported_F4": "PASS",
+        "status": "PASS",
+        "verified_output_count": 8,
+        "verified_outputs": {
+          "census/cell_status.csv": "c3aa8cb871a89f1e04fd9f4e312051ebf1fc6fcba66600086df3ad556351e968",
+          "census/census.csv": "d5e71a450532a313840fb521c6c593d412550193e598aee8260e10b70b04494c",
+          "census/census_receipt.json": "9e5b9c929effdbd2b9992e2c6c68329ee47c43c4932b84790f708566b463f256",
+          "decision/decision_receipt.json": "c1bd9a8dcc29dd061617f250321859a459c3be289bcaa81f108744775f859393",
+          "decision/mcda_inputs.json": "066c48f7f552b141bd6fe49531412a1759c77be90f0970542881445e710208f4",
+          "decision/mcda_results.json": "e6a4e46b49fb51d1fdfd23f62dae0614eb73f614bfe0ba7b1f0829e039f43f8a",
+          "observations/extraction.json": "17dcc0f00b8526d607ef00e4f2b148c0f548c9d8d2dab7ce7807273edceaa81f",
+          "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+        }
+      }
+    ],
+    "census_science_cells": 18,
+    "code_commit": "22f85657ef7ef79abe651c1ba3485302dafd2d1a",
+    "comparable_keys_added": 0,
+    "delta_counts": {
+      "PROVENANCE_RECEIPT_CHANGED": 22,
+      "UNCHANGED": 4716,
+      "VALIDATED_ATTRIBUTE_ADDED": 5
+    },
+    "gates": {
+      "F0": "PASS",
+      "F1": "PASS",
+      "F2": "PASS",
+      "F3": "PASS",
+      "F4": "PASS",
+      "F5": "BLOCKED"
+    },
+    "oracle": {
+      "baseline_build_sha256": "10e98b1f52926f036f4b052ccb610161e74f5c8d3fc977070a093354aa817012",
+      "candidate_build_sha256": "24b107fe9222fbc86422f0da5311cd77cdf46f55b15db6c10bf0406aa91031dd",
+      "cases": {
+        "balranald-dfs-completed": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "donald-phase-one-dfs-completed": "NARROWER_REPORT_SCOPE_THAN_CENSUS_PROJECT",
+        "donald-phase-two-pfs-completed": "NARROWER_REPORT_SCOPE_THAN_CENSUS_PROJECT",
+        "koppamurra-dfs-engineering-plan": "FUTURE_OR_CONDITIONAL_LANGUAGE",
+        "koppamurra-pfs-asserted-date-unreported": "HISTORICAL_OBSERVATION_DATE_MISSING",
+        "mt-weld-issuer-deposit-type": "SOURCE_CONFIRMED_ATTRIBUTE_FOR_CENSUS_DISPLAY",
+        "mt-weld-issuer-host-description-only": "GEOLOGICAL_HOST_DESCRIPTION_ONLY"
+      },
+      "changed_attribute_cells": 5,
+      "cohort_cells": 4743,
+      "comparable_project_criteria": 6,
+      "existing_formal_scientific_cells": 18,
+      "policy_sha256": "7cc95b238c8731d356bce03b7244fa2965e497ab2d2e7e7b5c3a81a6c06b2bec",
+      "schema": "census-attribute-independent-review-v1",
+      "selected_attributes": 2,
+      "source_evidence": {
+        "anchors": 22,
+        "source_pdfs": 4
+      },
+      "status": "PASS",
+      "unchanged_artifacts": {
+        "observations/extraction.json": "17dcc0f00b8526d607ef00e4f2b148c0f548c9d8d2dab7ce7807273edceaa81f",
+        "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+      },
+      "unchanged_mcda_content_excluding_profile_and_linked_artifact_hashes": {
+        "decision/decision_receipt.json": "1223167ed1cff0138be12919fb6f2c23c651bfb789ba92f2bb954b113cbf001f",
+        "decision/mcda_inputs.json": "848a4df9db876530cef7861716ba29751db0b1e6b84133b61662099db33cf37b",
+        "decision/mcda_results.json": "5802657a0e24dea41940941c900080d8caac7d217347ab1ca57490275e3d86e7"
+      },
+      "verdicts": {
+        "CANDIDATE": 2,
+        "EVIDENCE_INSUFFICIENT": 3,
+        "VALIDATED": 2
+      }
+    },
+    "profile_sha256": "f1e82f3ad5c31938acdd80e803db75ece2bccadc99ecc8085adc357667b93ff0",
+    "raw_added": 0,
+    "release_id": "b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da",
+    "sources_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "validated_attributes": 2,
+    "validated_cells": 5
+  },
   "profile_sha256": "f1e82f3ad5c31938acdd80e803db75ece2bccadc99ecc8085adc357667b93ff0",
   "replay_artifacts_per_run": 8,
   "schema": "census-project-attribute-verification-v1",

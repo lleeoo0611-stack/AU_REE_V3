@@ -38,3 +38,5 @@ python tools/verify_census_attributes.py \
 AU_REE_MILESTONE_MANIFEST="$SOURCES" AU_REE_MILESTONE_ASSETS="$ASSETS" \
   python -m unittest discover -s tests -p test_project_attributes.py -v
 ```
+
+與正式 TREO 衍生值整合的固定候選為 `b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da`，程式提交 `22f85657ef7ef79abe651c1ba3485302dafd2d1a`。追加兩次冷重播、五個屬性證據視窗及原件 Oracle 均通過。5 格描述欄新增後總計 1,115 格有值，18 格正式科學數值及六個比較鍵維持。[整合驗證收據](census_project_attribute_verification.json)
