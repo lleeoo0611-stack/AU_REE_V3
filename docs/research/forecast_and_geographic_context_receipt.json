@@ -1,0 +1,233 @@
+{
+  "base_commit": "074e00daf69360cd71cab2554f651b4b6e76a668",
+  "focused_suite": {
+    "executed": 32,
+    "log_sha256": "431c64d2e859123b185430098eadba35bd329f61bf6261496c0b7ac72773766a",
+    "seconds": 11.903,
+    "skipped": 0,
+    "status": "PASS"
+  },
+  "forecast": {
+    "actual_consumer_role_rejection": [
+      "FORECAST",
+      "ENGINEERING_PLAN"
+    ],
+    "confirmed_roles": [
+      {
+        "capture_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce",
+        "native_rate_anchor": {
+          "anchor_id": "e82b0010a132715a17e9c34944b043ca0fdf0b2d31fbd8140d85c93abfad3d26",
+          "bbox": null,
+          "column": null,
+          "contract_version": "evidence-anchor-v1",
+          "locator": "PDF page 8, native whitespace-folded characters 176-299",
+          "offset": null,
+          "page": 8,
+          "quote": "Base Case financial model assuming a life-of-mine average of approximately 8,300 tonnes per annum of contained TREO in MREC",
+          "role": "STUDY_ANNUAL_RATE_VALUE",
+          "row": null,
+          "source_key": "seed-7b5711f8d3849d68d7962d15",
+          "source_sha": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+          "table": null,
+          "text_span": {
+            "end": 299,
+            "scope": "PAGE",
+            "start": 176,
+            "view": "NATIVE_PDF_WHITESPACE_FOLDED"
+          }
+        },
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "raw_unit": "tonnes per annum",
+        "raw_value": "8,300",
+        "role": "FORECAST",
+        "scenario": "BASE_CASE_LIFE_OF_MINE_AVERAGE",
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "temporal_decision_id": "64a4fb34b63717c379aa2b4df4a8dfb5c8d21d7f5c895674744f291fcbdc3e1f",
+        "variable": "annual_contained_treo_in_mrec"
+      },
+      {
+        "capture_sha256": "5363742c7a5ac1d294a6320b42b9318cdf98d521b3b6198598fafe66dfeffcce",
+        "native_rate_anchor": {
+          "anchor_id": "945792667d27294775936b34a91cbc8a11446a7f977d4d8e65b46d048c9451a1",
+          "bbox": null,
+          "column": null,
+          "contract_version": "evidence-anchor-v1",
+          "locator": "PDF page 8, native whitespace-folded characters 26-165",
+          "offset": null,
+          "page": 8,
+          "quote": "process design basis provides for production of MREC containing approximately 9,300 tonnes per annum of TREO at nominal processing capacity",
+          "role": "STUDY_ANNUAL_RATE_VALUE",
+          "row": null,
+          "source_key": "seed-7b5711f8d3849d68d7962d15",
+          "source_sha": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+          "table": null,
+          "text_span": {
+            "end": 165,
+            "scope": "PAGE",
+            "start": 26,
+            "view": "NATIVE_PDF_WHITESPACE_FOLDED"
+          }
+        },
+        "project_id": "AU-dac3c8e40326b8244cdb",
+        "raw_unit": "tonnes per annum",
+        "raw_value": "9,300",
+        "role": "ENGINEERING_PLAN",
+        "scenario": "NOMINAL_PROCESSING_CAPACITY",
+        "source_sha256": "ea4d6aead116a7db9547f251dac5a06c8f237595b4293669a1edab78a289367a",
+        "temporal_decision_id": "5501aa286edf46cda217dbd20a4e2e34e5a86f1b6fa21e947f101a6cdb7640a4",
+        "variable": "annual_contained_treo_in_mrec"
+      },
+      {
+        "capture_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+        "native_rate_anchor": {
+          "anchor_id": "69c3243f0e427062e73ef5bcfce5a1ec58880909df14bf17aab12788d45c7f1c",
+          "bbox": null,
+          "column": null,
+          "contract_version": "evidence-anchor-v1",
+          "locator": "PDF page 62, native whitespace-folded characters 222-373",
+          "offset": null,
+          "page": 62,
+          "quote": "selected base case treats 2.4 Mtpa of ROM ore and produces approximately 29,000 wet tonnes per annum of heavy rare earth enriched flotation concentrate",
+          "role": "STUDY_ANNUAL_RATE_VALUE",
+          "row": null,
+          "source_key": "seed-af5b34575af9709d52d1",
+          "source_sha": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+          "table": null,
+          "text_span": {
+            "end": 373,
+            "scope": "PAGE",
+            "start": 222,
+            "view": "NATIVE_PDF_WHITESPACE_FOLDED"
+          }
+        },
+        "project_id": "AU-216d0983f6892f9b58f9",
+        "raw_unit": "wet tonnes per annum",
+        "raw_value": "29,000",
+        "role": "FORECAST",
+        "scenario": "BASE_CASE_WET_FLOTATION_CONCENTRATE",
+        "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+        "temporal_decision_id": "34f7ef2ee6dda89f1192b82c9c61b38ef295c45f5a3513126ba879b1b58cf076",
+        "variable": "annual_wet_flotation_concentrate"
+      }
+    ],
+    "counts_by_state": {
+      "REJECTED": 1,
+      "VERIFIED_SHADOW": 3
+    },
+    "pdf_runtime": "pdftotext version 25.03.0",
+    "true_negative_reasons": [
+      "LIFETIME_PRODUCT_MASS_IS_NOT_ANNUAL_CONTAINED_TREO",
+      "NATIVE_STUDY_PROJECT_IDENTITY_MISMATCH"
+    ]
+  },
+  "formal_census_cells_delta": 0,
+  "formal_mcda_criteria_delta": 0,
+  "formal_selection_delta": 0,
+  "geography": {
+    "approved_representative_points": 0,
+    "candidate_counts": {
+      "CANDIDATE": 5,
+      "VERIFIED_BOUNDARY": 7
+    },
+    "controls": [
+      {
+        "assessment": {
+          "incompatible_dimensions": [
+            "location_role"
+          ],
+          "missing_dimensions": [
+            "positional_precision"
+          ],
+          "reason": "GEOGRAPHIC_ROLE_OR_TYPE_IS_NOT_A_MINE_OR_DEPOSIT_POINT",
+          "status": "NOT_COMPARABLE"
+        },
+        "control": "CENTROID_OF_ACTUAL_OFFICIAL_TENEMENT",
+        "crs": "EPSG:4283",
+        "geometry_sha256": "8fbb7e3f2e55dc014722836b4fa68f6d69578823813a77e472ef8effc3b76f31",
+        "method": "GDAL SQLite ST_Centroid",
+        "native_id": "E  7006397",
+        "project_id": "AU-794821a2df9b7a244f96",
+        "source_sha256": "f45f27a7d469cc71c57819461a1b5e9594ef67440a87adb8deb68a9cb467f278",
+        "test_point_sha256": "066ec4957c63d2c9cef545656a6279c8b4a90cd1381e2e5630fa423f87695a76"
+      },
+      {
+        "assessment": {
+          "incompatible_dimensions": [
+            "location_role"
+          ],
+          "missing_dimensions": [
+            "positional_precision"
+          ],
+          "reason": "GEOGRAPHIC_ROLE_OR_TYPE_IS_NOT_A_MINE_OR_DEPOSIT_POINT",
+          "status": "NOT_COMPARABLE"
+        },
+        "control": "CENTROID_OF_ACTUAL_OFFICIAL_TENEMENT",
+        "crs": "EPSG:7844",
+        "geometry_sha256": "5ec0b5d380f908ab98c1c96912da7c782043fa31701704738f074cbe6e1be1eb",
+        "method": "GDAL SQLite ST_Centroid",
+        "native_id": "E  1501495",
+        "project_id": "AU-cefbde90dc34312547d3",
+        "source_sha256": "0caf2754da4e2a4854fa2e8b2e450ed0585f75de985e1a393a24c590df4f3c90",
+        "test_point_sha256": "d6ce9a4b1e1a0b12a4bb22af5f5e328c93d30a02a14e02d481fcf319fc051deb"
+      }
+    ],
+    "covered_project_criteria": 372,
+    "gdal_runtime": {
+      "sha256": "8d6190a8ac360e4f2ffafd49a5ae3437f275c247e5379bcfa00e3dfe33c24cc7",
+      "version": "GDAL 3.10.3, released 2025/04/01"
+    },
+    "native_official_layer_sha256": [
+      "0caf2754da4e2a4854fa2e8b2e450ed0585f75de985e1a393a24c590df4f3c90",
+      "f45f27a7d469cc71c57819461a1b5e9594ef67440a87adb8deb68a9cb467f278"
+    ],
+    "unavailable_location_state": "EVIDENCE_INSUFFICIENT",
+    "unavailable_location_types": [
+      "OFFICIAL_DEPOSIT_POINT",
+      "OFFICIAL_MINE_POINT",
+      "VERIFIED_OFFICIAL_INFRASTRUCTURE_LAYER"
+    ]
+  },
+  "input": {
+    "cutoff": "2026-11-28",
+    "forecast_bindings_sha256": "36bb6c68bb7e1536e4664c8539a6fdca2fab685f64bcc1edad6b16c5a591fd06",
+    "geography_bindings_sha256": "c6f3a0ea00a14a29c0a09ae6aa2005e32d4f68c4193d283839cca3bc84c3232e",
+    "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "source_unique_sha256_count": 144,
+    "timezone": "Asia/Taipei"
+  },
+  "reproducibility": {
+    "byte_identical_outputs_sha256": {
+      "context_shadow_replay.json": "9687ad73628753e76cee47ed2d4bb781c39ce5627a7ba4e6e06a82a38054d333",
+      "government_geography_role_shadow.json": "861651896f58731107956f5357c90682acc7834204165f1caec36a3e2e31d852",
+      "infrastructure_compatibility.json": "b9da3e493e727defe8d77ff6fea2dbd4c345e13fc43a7255c341945510a44cbd",
+      "production_forecast_shadow.json": "977b06e6e237f65f9e2cc2d6354c18b2caf86a52c7be09cc9d6c7c4c96e9cb6c",
+      "tenements.json": "e681ca38c488385ba6dc7d5713d4f5bcb3e1f106ccc86add4a933583c4811bb4"
+    },
+    "cold_process_measurements": [
+      {
+        "cache": "new Python process and temporary GDAL inputs; operating-system page cache left intact",
+        "centroid_control_invocations": 2,
+        "child_parser_peak_rss_kib": 63488,
+        "native_geospatial_layer_opens": 2,
+        "pdf_pages": 174,
+        "pdf_parses": 6,
+        "python_peak_rss_kib": 46304,
+        "seconds": 2.551448
+      },
+      {
+        "cache": "new Python process and temporary GDAL inputs; operating-system page cache left intact",
+        "centroid_control_invocations": 2,
+        "child_parser_peak_rss_kib": 63488,
+        "native_geospatial_layer_opens": 2,
+        "pdf_pages": 174,
+        "pdf_parses": 6,
+        "python_peak_rss_kib": 46288,
+        "seconds": 2.478469
+      }
+    ]
+  },
+  "schema": "forecast-and-geographic-context-verification-v1",
+  "sqlite_statements_executed_by_shadow_job": 0,
+  "status": "PASS",
+  "workflow_cost": "NOT_RUN"
+}
