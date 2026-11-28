@@ -213,6 +213,8 @@ class RealResearchWebTests(unittest.TestCase):
     def test_fixed_real_research_values_and_rankings_preserved(self):
         build = Path(os.environ["AU_REE_WEB_RESEARCH_BUILD"])
         profile = Path(os.environ.get("AU_REE_WEB_RESEARCH_PROFILE", PROFILE))
+        settings = load_profile(profile)
+        attribute_bindings = settings.attribute_bindings_path
         receipt = _read(build / "build_receipt.json")
         release_id = os.environ.get("AU_REE_WEB_RELEASE_ID", receipt["observation_release_id"])
         release_root = os.environ.get("AU_REE_WEB_RELEASE_ROOT")
@@ -224,10 +226,10 @@ class RealResearchWebTests(unittest.TestCase):
             self.assertEqual(verify_web_release(target, expected_release_id=release_id), manifest)
             self.assertEqual((target / "census.csv").read_bytes(), (build / "census/census.csv").read_bytes())
             coverage = _read(target / "coverage.json")
-            self.assertIn(receipt["scientific_output_count"], {12, 16, 18})
+            scientific_cells = receipt["scientific_output_count"]
             derived = coverage["formal_derived_cells"]
-            self.assertEqual(coverage["formal_direct_cells"] + derived, receipt["scientific_output_count"])
-            self.assertEqual(derived, 2 if receipt["scientific_output_count"] == 18 else 0)
+            self.assertIn((scientific_cells, derived), {(12, 0), (16, 0), (18, 2), (19, 3)})
+            self.assertEqual(coverage["formal_direct_cells"] + derived, scientific_cells)
             self.assertEqual(coverage["comparable_project_criteria"], 6)
             self.assertEqual((coverage["projects"], coverage["columns"], coverage["present_source_count"]), (93, 51, 144))
             real_results = _read(build / "decision/mcda_results.json")["panels"]
@@ -246,13 +248,24 @@ class RealResearchWebTests(unittest.TestCase):
                 rows = tuple(csv.DictReader(stream))
             reference_rows = [row for row in rows if row["value_origin"] == "EVIDENCE_REFERENCE"]
             attributes = [row for row in rows if row.get("evidence_state") == "VALIDATED_DESCRIPTIVE"]
-            self.assertEqual(len(attributes), 5 if profile.name == "au_ree_census_attributes_v1.json" else 0)
+            attribute_counts = {None: 0, "census_attribute_bindings_v1.json": 5, "census_attribute_bindings_v2.json": 11}
+            self.assertEqual(len(attributes), attribute_counts[attribute_bindings.name if attribute_bindings else None])
             for row in attributes:
                 cell = projects[row["project_id"]][columns[row["column"]]]
                 anchor = evidence[cell["lineage_id"]]
                 self.assertEqual((cell["value"], anchor["source_sha256"]), (row["value"], row["source_sha256"]))
                 self.assertEqual(anchor["evidence_state"], "VALIDATED_DESCRIPTIVE")
                 self.assertIn(anchor["metadata"]["attribute_role"], {"CONFIRMED_DEPOSIT_TYPE", "COMPLETED"})
+            if attribute_bindings and attribute_bindings.name == "census_attribute_bindings_v2.json":
+                prospectus = "af0a8ff9a1b194a45f16dc56dd3b71c04c5f426f15dd23d0511de087f9ec8ac5"
+                for project, page, token in (("AU-329908ab8d4c1d1d3e03", 46, "2021"),
+                                             ("AU-fe65cb1bd28eacb7a67f", 47, "January 2024")):
+                    cell = projects[project][columns["開發階段代碼"]]
+                    anchor = evidence[cell["lineage_id"]]
+                    self.assertEqual((cell["value"], anchor["source_sha256"], anchor["physical_page"]),
+                                     ("DFS", prospectus, page))
+                    self.assertEqual((anchor["metadata"]["publication_date"], anchor["metadata"]["event_date_token"]),
+                                     ("2026-03", token))
             self.assertEqual(coverage["evidence_reference_cells"], len(reference_rows))
             self.assertEqual(coverage["other_present_cells"], 0)
             if reference_rows:
