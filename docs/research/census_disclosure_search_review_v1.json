@@ -1,0 +1,105 @@
+{
+  "schema": "census-disclosure-review-v1",
+  "source_manifest_sha256": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a",
+  "cutoff": "2026-11-28",
+  "cases": [
+    {
+      "case_id": "mount-ridley-global-inferred-resource-totals",
+      "project_id": "AU-3651cf8448b9227adcf5",
+      "source_sha256": "245f282102453bf6dc97056eba1ac4b889f8d506d07b5515bc354caec94ab170",
+      "field_ids": [
+        "ore_mt",
+        "treo_grade_pct",
+        "contained_treo_kt",
+        "magnet_oxide_kt"
+      ],
+      "disclosure_reason": "DISCLOSED_NOT_EXTRACTED",
+      "subreason": "ORIGINAL_INFERRED_TOTAL_LOCATED_NO_TYPED_BASELINE_OBSERVATION",
+      "review_scope": "Mount Ridley issuer 2026-03-24 ASX PDF p6 Tables 1–2, exact Inferred total resources >300 ppm TREO. Printed rows reviewed. Formal applicability and comparable acceptance stay independent.",
+      "physical_pages_reviewed": [
+        6
+      ],
+      "witnesses": [
+        {
+          "physical_page": 6,
+          "quote": "Table 1 - Mount Ridley Global Rare Earth Oxide Deposits Inferred Mineral Resource Estimate by Blocks (using a >300 ppm TREO cut-off)"
+        },
+        {
+          "physical_page": 6,
+          "quote": "Total Inferred 1.82 122,546,251 889 364 525 233"
+        },
+        {
+          "physical_page": 6,
+          "quote": "Table 2 - Mount Ridley Global Rare Earth Oxide Deposits Inferred Mineral Resource Estimate by TREO, HREO, LREO & MREO (using a >300 ppm TREO cut-off)"
+        },
+        {
+          "physical_page": 6,
+          "quote": "Total Inferred 108,954 44,610 64,344 28,533"
+        }
+      ]
+    },
+    {
+      "case_id": "mt-weld-original-resource-magnetic-group-disclosure",
+      "project_id": "AU-efff91a06cf344122d88",
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "field_ids": [
+        "magnet_oxide_kt",
+        "recalculated_magnet_oxide_kt"
+      ],
+      "disclosure_reason": "SEARCHED_NOT_DISCLOSED",
+      "subreason": "REVIEWED_RESOURCE_TABLES_DO_NOT_EXPRESS_MATCHING_MAGNET_OXIDE_TOTAL",
+      "review_scope": "Lynas 2024 Mineral Resource and Ore Reserve Update physical pages 2, 9, 23. Search limited to same-date 2.5% TREO in-situ Mineral Resource Tables 1 and 4. Table 7 checked as different reserve-use comparator.",
+      "physical_pages_reviewed": [
+        2,
+        9,
+        23
+      ],
+      "witnesses": [
+        {
+          "physical_page": 2,
+          "quote": "Table 1: Mt Weld Rare Earth Deposit Mineral Resource summary June 2024 at 2.5% TREO cut-off grade"
+        },
+        {
+          "physical_page": 2,
+          "quote": "JORC Classification Million Tonnes TREO* (%) TREO* (‘000 tonnes)"
+        },
+        {
+          "physical_page": 9,
+          "quote": "Domain Tonnes (Mt) TREO* % TREO* (Tonnes)"
+        },
+        {
+          "physical_page": 23,
+          "quote": "Table 7: Mt Weld Rare Earth Deposit Ore Reserve June 2024 at 2.8% TREO* cut-off grade"
+        }
+      ]
+    },
+    {
+      "case_id": "wudinna-paired-dytb-is-partial-hree8",
+      "project_id": "AU-0098e17a63e7c05c213f",
+      "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+      "field_ids": [
+        "hree8_kt"
+      ],
+      "disclosure_reason": "PARTIAL_DISCLOSURE",
+      "subreason": "SAME_STATEMENT_DYTB_PAIR_DOES_NOT_BIND_FULL_HREE8",
+      "review_scope": "Cobra 2026-10-26 issuer PDF p3 Table 1, combined Garford/Pidinga Indicated+Inferred at 200 ppm TREO-Ce. The original discloses DyTb as a group; eight species are not established in the checked table.",
+      "physical_pages_reviewed": [
+        3
+      ],
+      "witnesses": [
+        {
+          "physical_page": 3,
+          "quote": "Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce"
+        },
+        {
+          "physical_page": 3,
+          "quote": "Total 150 470 101 10 112"
+        },
+        {
+          "physical_page": 3,
+          "quote": "DyTb= Dy2O3 + Tb4O7"
+        }
+      ]
+    }
+  ]
+}
