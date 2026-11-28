@@ -281,6 +281,16 @@ class WebReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(web_release.WebsiteReleaseError, "undeclared"):
             web_release.verify_site(site=self.formal, mode="formal")
 
+    def test_static_assets_allow_legacy_site_and_require_imported_display_module(self):
+        module = self.frontend / "assets/display.mjs"
+        module.unlink()
+        web_release.build_empty_formal_site(frontend=self.frontend, site=self.formal)
+        result = web_release.verify_site(site=self.formal, mode="formal")
+        self.assertNotIn("assets/display.mjs", result["files"])
+        (self.formal / "assets/app.js").write_text('import "./display.mjs";', encoding="utf-8")
+        with self.assertRaisesRegex(web_release.WebsiteReleaseError, "undeclared or missing files"):
+            web_release.verify_site(site=self.formal, mode="formal")
+
     def test_formal_upload_refuses_tampered_frontend(self):
         self._published_fixture(self.first, self.existing, None)
         self._sync(self.first)
