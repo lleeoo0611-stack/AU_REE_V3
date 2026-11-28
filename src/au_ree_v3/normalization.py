@@ -18,9 +18,9 @@ _WEIGHTS = {"O": ("15.999", "0.001"), "Nd": ("144.24", "0.01"), "Pr": ("140.91",
 _OXIDES = {"Nd2O3": ("Nd", 2, 3), "Pr6O11": ("Pr", 6, 11), "Dy2O3": ("Dy", 2, 3), "Tb4O7": ("Tb", 4, 7)}
 # Powers of ten relative to the reference t or the dimensionless mass fraction.
 _UNITS = {
-    "t": ("MASS", 0), "kg": ("MASS", -3), "kt": ("MASS", 3), "Mt": ("MASS", 6),
+    "t": ("MASS", 0), "kg": ("MASS", -3), "kt": ("MASS", 3), "Mt": ("MASS", 6), "Bt": ("MASS", 9),
     "million tonnes": ("MASS", 6), "kt TREO": ("MASS", 3), "‘000 tonnes": ("MASS", 3),
-    "%": ("MASS_FRACTION", -2), "ppm": ("MASS_FRACTION", -6),
+    "%": ("MASS_FRACTION", -2), "ppm": ("MASS_FRACTION", -6), "kg/t": ("MASS_FRACTION", -3),
 }
 _MASS_KINDS = {"ORE_MASS", "CONTAINED_OXIDE_MASS"}
 _FRACTION_KINDS = {"GRADE", "OXIDE_COMPOSITION"}
@@ -38,12 +38,25 @@ def _shift(value: Decimal, power: int) -> Decimal:
     return Decimal((sign, digits, exponent + power))
 
 
-def reported_interval(token: str) -> tuple[Decimal, Decimal, Decimal]:
+def exact_unit_exponent(source_unit: str, target_unit: str) -> int:
+    """Resolve a lossless decimal power for physically equivalent unit dimensions."""
+    if source_unit not in _UNITS or target_unit not in _UNITS or _UNITS[source_unit][0] != _UNITS[target_unit][0]:
+        raise ValueError("Unit transform is unsupported or dimensionally inconsistent")
+    return _UNITS[source_unit][1] - _UNITS[target_unit][1]
+
+
+def reported_interval(token: str, *, significant_figures: int | None = None) -> tuple[Decimal, Decimal, Decimal]:
     """Return central value and physical endpoints at the last printed digit."""
     if not isinstance(token, str) or not _TOKEN.fullmatch(token):
         raise ValueError("unsupported or non-numeric reported value")
     point = Decimal(token.replace(",", ""))
-    half = Decimal((0, (5,), point.as_tuple().exponent - 1))
+    exponent = point.as_tuple().exponent - 1
+    if significant_figures is not None:
+        if type(significant_figures) is not int or not 1 <= significant_figures <= 12:
+            raise ValueError("unsupported publisher significant-figures policy")
+        if point:
+            exponent = max(exponent, point.adjusted() - significant_figures)
+    half = Decimal((0, (5,), exponent))
     with localcontext() as context:
         context.prec = len(point.as_tuple().digits) + 3
         return point, max(Decimal(0), point - half), point + half
@@ -115,6 +128,7 @@ def normalize_measurement(
     source_context: SemanticContext, target_context: SemanticContext | None = None,
     observation_id: str, source_sha256: str, evidence_anchor_id: str,
     context_evidence: tuple[dict, ...] = (), target_species_evidence_anchor_id: str | None = None,
+    reported_significant_figures: int | None = None,
 ) -> NormalizationResult:
     """Apply only a dimensionally and chemically evidenced measurement transform."""
     source_context = replace(source_context, unit=source_unit) if source_context.unit is None else source_context
@@ -181,20 +195,23 @@ def normalize_measurement(
     if kind != "ORE_MASS" and not members and not explicit_species:
         return result("INSUFFICIENT_CONTEXT", "CHEMICAL_SPECIES_OR_TREO_MEMBERS_UNKNOWN")
     try:
-        point, low, high = reported_interval(token)
+        point, low, high = reported_interval(token, significant_figures=reported_significant_figures)
     except (InvalidOperation, ValueError):
         return result("INSUFFICIENT_CONTEXT", "UNSUPPORTED_REPORTED_NUMBER_TOKEN")
     if required == "MASS_FRACTION":
         if _shift(point, source_power) > 1:
             return result("SCIENTIFIC_CONFLICT", "MASS_FRACTION_OUTSIDE_PHYSICAL_RANGE")
         high = min(high, _shift(Decimal(1), -source_power))
-    exponent = source_power - target_power
+    exponent = exact_unit_exponent(source_unit, target_unit)
     unit_factor = _shift(Decimal(1), exponent)
     point, low, high = (_shift(value, exponent) for value in (point, low, high))
     transform = {"policy_version": UNIT_POLICY, "factor": str(unit_factor),
                  "formula": "reported_token × exact_unit_factor", "dimension": required,
                  "source_precision": "last-printed-digit ±0.5; nonnegative physical bounds",
                  "value_state": "MEASURED_ZERO" if point.is_zero() else "PRESENT"}
+    if reported_significant_figures is not None:
+        transform["reported_significant_figures"] = reported_significant_figures
+        transform["source_precision"] = "publisher significant figures subject to original printed resolution"
     if before != after:
         stoich = _stoichiometry(before[0], after[0]) if len(before) == len(after) == 1 and not members else None
         if stoich is None or kind == "ORE_MASS":

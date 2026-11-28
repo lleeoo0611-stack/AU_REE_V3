@@ -86,6 +86,9 @@ def main(argv: list[str] | None = None) -> int:
     route = research_commands.add_parser("route-source-work", help="Reread pinned discovery leads in exact V3 originals")
     for argument in ("profile", "queue", "recovery-receipt", "sources", "assets", "bindings", "out"):
         route.add_argument(f"--{argument}", type=Path, required=True)
+    native = research_commands.add_parser("bind-native-tables", help="Bind exact native PDF table quantities as candidates")
+    for argument in ("profile", "inventory", "inventory-receipt", "sources", "assets", "out"):
+        native.add_argument(f"--{argument}", type=Path, required=True)
     build = research_commands.add_parser("build", help="Build the fresh Census and decision inputs")
     build.add_argument("--profile", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
@@ -267,6 +270,12 @@ def _run_research(args) -> dict:
 
         return route_source_work(profile=args.profile, queue=args.queue, recovery_receipt=args.recovery_receipt,
                                  sources=args.sources, assets=args.assets, bindings=args.bindings, out=args.out)
+    if args.operation == "bind-native-tables":
+        from .resource_table_binding import bind_source_inventory
+
+        return bind_source_inventory(profile=args.profile, inventory=args.inventory,
+                                     inventory_receipt=args.inventory_receipt, sources=args.sources,
+                                     assets=args.assets, out=args.out)
     if args.operation == "extract":
         from .fresh_observations import extract_sources
 
