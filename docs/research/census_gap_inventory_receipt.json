@@ -1,0 +1,168 @@
+{
+  "F0_to_F5": {
+    "F0": "PASS",
+    "F1": "PASS",
+    "F2": "PASS",
+    "F3": "PASS",
+    "F4": "PASS",
+    "F5": "BLOCKED"
+  },
+  "S3-0": "PASS",
+  "analysis_limits": [
+    "cold processes share the local storage fault domain",
+    "no formal value selection",
+    "CI billing and peak RSS not measured in A"
+  ],
+  "baseline_receipt_sha256": "39c93d6dc12685005f5ba4db2fb6334a396bb94a295c21958819280ad5740b94",
+  "baseline_rules_sha256": "2253754a3736492e0293b8e84bb7acf6433cb322c4648528f87b0790eddbc2a5",
+  "build_inputs": {
+    "bindings": "cb4f92a8cc50c03decb2c1923e04818b9d3e87848f05d39625be680273bdd17c",
+    "profile": "f1e82f3ad5c31938acdd80e803db75ece2bccadc99ecc8085adc357667b93ff0",
+    "sources": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+  },
+  "code_commit": "2fc644dc3fadca64cf9cb75db921bd728ea4160a",
+  "cold_stage2_replay": {
+    "artifacts_per_run": 8,
+    "runs": 2,
+    "status": "PASS"
+  },
+  "counts": {
+    "candidate_count": 42,
+    "cells": 4743,
+    "columns": 51,
+    "comparable_keys": {
+      "R1": 4,
+      "S1": 2
+    },
+    "complete_r1_s1_projects": 2,
+    "descriptive_cells": 5,
+    "formal_derived_cells": 2,
+    "formal_direct_cells": 16,
+    "independent_attributes": 2,
+    "present_cells": 1115,
+    "projects": 93,
+    "selected_count": 21,
+    "validated_count": 27
+  },
+  "distinct_fixed_and_historical_queue_items": {
+    "BLOCKED": 4,
+    "READY": 55
+  },
+  "formula_registry_sha256": "d4e62e21483385eff64ef429938589a055fda86db39affc6da1843dd603ae9a5",
+  "fresh_public_attempts": "NOT_RUN",
+  "gap_classes": {
+    "AFFIRMATIVE_NOT_APPLICABLE": 0,
+    "ALREADY_PRESENT": 1115,
+    "CHEMICAL_OR_MATERIAL_CONFLICT": 1,
+    "HEADER_OR_UNIT_UNBOUND": 132,
+    "NOT_REPORTED": 0,
+    "ROW_STRUCTURE_MISSING": 328,
+    "SOURCE_EDITION_MISSING": 32,
+    "SOURCE_NOT_INDEXED": 3034,
+    "STATEMENT_SCOPE_UNBOUND": 91,
+    "TEMPORAL_EVIDENCE_MISSING": 5,
+    "VALIDATED_BUT_NO_APPROVED_USE": 5
+  },
+  "historical_O2": "FAIL",
+  "local_readback_seconds_parallel": {
+    "baseline": 5.849,
+    "cold_a": 11.206,
+    "cold_b": 12.912
+  },
+  "main_build_receipt_sha256": "79a5ce17eb3574717bc7fb2ba8a1f6056869562c8d580aaa550adb3c9a65d1be",
+  "main_vs_stage2_census": {
+    "PROVENANCE_RECEIPT_CHANGED": 27,
+    "UNCHANGED": 4716
+  },
+  "mcda_policy_sha256": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+  "mcda_unchanged": [
+    "policy",
+    "criterion_value_and_scientific_context",
+    "cohort",
+    "weights",
+    "ranks",
+    "sensitivity"
+  ],
+  "new_formal_census_cells": 0,
+  "outputs_sha256": {
+    "census_gap_queue.jsonl": "df390ceaec2f5e398e4c72a5f6b52b0c5180883f786276264b34f4f3d61d51cf",
+    "evidence_conversion_funnel.json": "44653bd2723928d5f884095997caa16362268c07bf67058553eb558b51603d7c",
+    "gap_funnel.csv": "167634505c7997b895f8d263d2d718b30addd4c3785f96965b008e57afc46cd7",
+    "source_edition_recovery.csv": "714404c7f94fb3672f80a45ee4cff16a0bb002f580ad93bb27424d65361f7bda"
+  },
+  "prior_receipts_sha256": {
+    "docs/research/census_project_attribute_verification.json": "03423eed961407914b9b45b4f141ebfe7c2709e2550e9129ecd3359fa6216979",
+    "docs/research/census_stage2_baseline_receipt.json": "4406716a33adb79e3fafbaff96b21c59b566b08b8316992c423c06d6ec627673",
+    "docs/research/census_stage2_verification.json": "1ef5db2f32bc36a5328a13d63682235eaf44274f79a21bf7bf8ff77757e20c97",
+    "docs/research/census_treo_derivations_receipt.json": "09e8fb193dc2157bbf0ee1210fc0e7cc08b6b19f6249337fbd36cb86e918b8e8",
+    "docs/research/census_v2_rule_inventory.json": "c763961c5dc4ac78bd3d62b97e72b225e37d1ff91a882aae042fcfefe62c1c59",
+    "docs/research/forecast_and_geographic_context_receipt.json": "e7985b509dc96df36ad5c7723836117b5015958304b682fba09af14d367c3db6",
+    "docs/research/native_extraction_refactor_receipt.json": "3793a99584d57af9364ffe4da63b7880c72e6814356ebbac7e12c61250b363b6",
+    "docs/research/native_value_recovery_verification.json": "11431ee9eee0721d33741e7274785c4769e7124618362895019731c2be681c22",
+    "docs/research/scientific_value_admission_receipt.json": "c07d56fdceb5df173724813c6b9e19d9650f0d3d7b08d00a3622235e0ea39169",
+    "work/census-stage2/binding-benchmark/candidate-1/table_binding_receipt.json": "870460207dc4e27b281b8f419305a977f009a0f2fe1452a3b073e0a69196c1f7",
+    "work/scientific-admission/inventory-verified-a/source_case_inventory_receipt.json": "83376a17b7c6bd4dd1e543283dee29cc2d580fc41abcdf5355535c1513402ed0"
+  },
+  "projection_policy_sha256": "68d0d3739a9ab73bce108f9fe37831c4874703467d57f2f9b2d32a079acddcba",
+  "release_only_comparable_lineage_changes": 6,
+  "research_cutoff": "2026-11-28",
+  "routing": {
+    "native_originals_redecoded_by_queue": 0,
+    "original_number_positions": 298,
+    "queue_items_by_kind": {
+      "HISTORICAL_EDITION_GAP": 4,
+      "ORIGINAL_TABLE": 36,
+      "UNRECOGNIZED_SOURCE_PROJECT": 19
+    },
+    "resolved_original_number_positions": 167,
+    "unbound_reasons": {
+      "HEADER_OR_UNIT_UNBOUND": 141,
+      "NATIVE_TOKEN_NOT_A_UNIQUE_NUMERIC_CELL": 2
+    },
+    "unbound_scoped_sightings": 143,
+    "unbound_unique_original_positions": 131,
+    "unrecognized_source_project_items": 19
+  },
+  "schema": "census-gap-inventory-v1",
+  "scientific_artifacts_sha256": {
+    "census/cell_status.csv": "44059813e65c618478affc0a93903d09fae0114a81d4d19da8515b45f48d7a48",
+    "census/census.csv": "d5e71a450532a313840fb521c6c593d412550193e598aee8260e10b70b04494c",
+    "census/census_receipt.json": "cb651f3f3d800abdfa24b5109805661214129f40f494aa37eb93e715bad2a0f8",
+    "decision/decision_receipt.json": "807e220384a004e9f4b74caf9289ad7d17f1b9ccf7983042b6fb5c637fe8df0a",
+    "decision/mcda_inputs.json": "4c4acd37596a711c62cb9f8c05922006931f2c0996de765d64f7f2019ce4f8ad",
+    "decision/mcda_results.json": "d0f4d25f2d758c9d8ece3fcf83f3afdd003ee4ef0d3cbfb8a37bf2f4e5155e09",
+    "observations/extraction.json": "d3a40ccf22fb22de2a1793f7882fafa9eb191a420b6bdac483b4a1be54880579",
+    "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+  },
+  "source_verification": {
+    "captures_verified": 148,
+    "manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "original_sha256_verified": 144
+  },
+  "stage2_build_receipt_sha256": "24b107fe9222fbc86422f0da5311cd77cdf46f55b15db6c10bf0406aa91031dd",
+  "stage2_candidate": "b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da",
+  "stage2_code_commit": "22f85657ef7ef79abe651c1ba3485302dafd2d1a",
+  "stage2_holdout_annotation_sha256": {
+    "raw-binding-10": "840cf4ce2cc3330af8772d2b8593c050fab50e59069b694610c9ee5e2a77705c",
+    "raw-binding-31": "ad27468ea501eb060e37cc0370e7861110477b074149864305a91176f1ca26e2"
+  },
+  "stage2_scientific_artifacts_sha256": {
+    "census/cell_status.csv": "c3aa8cb871a89f1e04fd9f4e312051ebf1fc6fcba66600086df3ad556351e968",
+    "census/census.csv": "d5e71a450532a313840fb521c6c593d412550193e598aee8260e10b70b04494c",
+    "census/census_receipt.json": "9e5b9c929effdbd2b9992e2c6c68329ee47c43c4932b84790f708566b463f256",
+    "decision/decision_receipt.json": "c1bd9a8dcc29dd061617f250321859a459c3be289bcaa81f108744775f859393",
+    "decision/mcda_inputs.json": "066c48f7f552b141bd6fe49531412a1759c77be90f0970542881445e710208f4",
+    "decision/mcda_results.json": "e6a4e46b49fb51d1fdfd23f62dae0614eb73f614bfe0ba7b1f0829e039f43f8a",
+    "observations/extraction.json": "17dcc0f00b8526d607ef00e4f2b148c0f548c9d8d2dab7ce7807273edceaa81f",
+    "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+  },
+  "status": "PASS",
+  "study_profile_sha256": "8ccc8d042c4b8ce16177acf3f1e583d09d373459adeb930651a317ce4ff59c93",
+  "timezone": "Asia/Taipei",
+  "v2_reference": {
+    "commit": "2af6f611e51eb4ac9dda73419d1afeba70d1307e",
+    "field_provenance_file": "results/ree-project-census/coverage-locked-20261125/field_provenance.csv",
+    "field_provenance_sha256": "f0a963ef1479f53546c614205c251be0c365adc748ce446fd659c4d57d033c6d",
+    "use": "RETRIEVAL_HINT_ONLY"
+  }
+}
