@@ -21,7 +21,23 @@
       },
       "deposit_name": "Mt Weld",
       "scope_name": "Mt Weld Mineral Resource",
-      "page": 2
+      "page": 2,
+      "display_date_link": {
+        "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+        "cover_footnote": "1",
+        "cover": {
+          "page": 1,
+          "quote": "92% increase in Mineral Resources from 55.4 Mt to 106.6 Mt at 4.12% Total Rare Earth Oxide (TREO) from 30 June 2018 to 30 June 20241."
+        },
+        "statement": {
+          "page": 2,
+          "quote": "The Mt Weld Rare Earth Mineral Resources estimate is now 106.6 million tonnes at an average grade of 4.12% Total Rare Earth Oxide (TREO) for a total of 4.39 million tonnes of contained TREO. A Mineral Resource cut-off grade of 2.5% TREO was applied."
+        },
+        "cutoff_footnote": {
+          "page": 1,
+          "quote": "1 Mineral Resource cut-off grade of 2.5% TREO applied"
+        }
+      }
     },
     {
       "case_id": "wolverine-deposit-total",
