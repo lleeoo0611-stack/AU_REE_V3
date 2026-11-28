@@ -805,6 +805,8 @@ def _check_census(manifest, census, evidence, csv_payload):
             ):
                 raise WebPublicationError("Unsafe or unbound public composition selection")
             _allowed_public_evidence(entry)
+            if variable == "mreo_ppm":
+                direct[(project_id, entry["observation_id"])] = entry
             used.add(lineage_id)
     _check_evidence_references(references, direct)
     _check_derived_references(derived, direct)
@@ -816,25 +818,26 @@ def _check_census(manifest, census, evidence, csv_payload):
 def _check_derived_references(derived, direct):
     if not derived:
         return
-    from .derivations import FORMULA_REGISTRY_SHA256, registered_formula
+    from .census_derivations import FORMULA_INPUT_CHEMISTRY, FORMULA_INPUT_COLUMNS, registered_projection_formula
 
     fields = ("source_sha256", "scope_id", "statement_id", "effective_date", "category", "temporal_decision_id")
     for entry in derived:
         ids = _id_list(entry.get("input_observation_ids"))
         inputs = [direct.get((entry["project_id"], observation)) for observation in ids]
-        formula = registered_formula(entry.get("formula_id"))
+        headings = FORMULA_INPUT_COLUMNS.get(entry["column_id"], ())
+        formula, registry = registered_projection_formula(entry["column_id"], entry.get("formula_id"))
         if (
-            entry["column_id"] != "總TREO蘊藏量_kt" or entry["evidence_state"] != "FORMAL_DERIVED"
-            or len(set(ids)) != 2 or len(inputs) != 2 or not all(inputs)
+            not headings or entry["evidence_state"] != "FORMAL_DERIVED"
+            or len(set(ids)) != len(headings) or len(inputs) != len(headings) or not all(inputs)
             or any(not _sha(entry.get(key)) for key in (
                 "formula_sha256", "formula_registry_sha256", "assessment_id", "derived_value_id",
                 "source_sha256", "temporal_decision_id",
-            )) or formula is None or entry.get("formula") != formula.expression
-            or entry.get("formula_sha256") != formula.sha256
-            or entry.get("formula_registry_sha256") != FORMULA_REGISTRY_SHA256 or entry.get("raw_value")
-            or tuple(item["column_id"] for item in inputs) != ("礦石蘊藏量_Mt", "TREO品位_pct")
+            )) or formula is None or entry.get("formula") != formula["expression"]
+            or entry.get("formula_sha256") != formula["sha256"]
+            or entry.get("formula_registry_sha256") != registry or entry.get("raw_value")
+            or tuple(item["column_id"] for item in inputs) != headings
             or any(not entry.get(key) or item.get(key) != entry[key] for item in inputs for key in fields)
-            or any(item.get("material_basis") != "WHOLE_ORE" or item.get("chemical_basis") != "TREO" for item in inputs)
+            or any(item.get("material_basis") != "WHOLE_ORE" or item.get("chemical_basis") != FORMULA_INPUT_CHEMISTRY[item["column_id"]] for item in inputs)
         ):
             raise WebPublicationError("Formal derived Census cell lacks matching scoped inputs or approved formula evidence")
 

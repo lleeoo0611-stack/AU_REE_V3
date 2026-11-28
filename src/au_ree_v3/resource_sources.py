@@ -130,11 +130,14 @@ def describe_document_error(case: dict, error: DocumentError) -> None:
 class ResourceSourceReader:
     """Reuse exact bytes and each decoded PDF while checking proofs per edition."""
 
-    def __init__(self, assets: Path, plan: SourcePlan, cache: DocumentCache) -> None:
+    def __init__(self, assets: Path, plan: SourcePlan, cache: DocumentCache, *, required_pages: dict[str, int] | None = None) -> None:
         self._cutoff = plan.cutoff
         self._timezone = ZoneInfo(plan.spec["timezone"])
         self._content = ContentStore(assets)
         self._last_pages = _last_pages(plan.matches)
+        for source_sha, required in (required_pages or {}).items():
+            if source_sha in self._last_pages:
+                self._last_pages[source_sha] = max(self._last_pages[source_sha], required)
         self._cache = cache
         self.originals: dict[str, bytes] = {}
         self.documents: dict[str, PDFDocument] = {}

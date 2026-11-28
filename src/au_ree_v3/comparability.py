@@ -257,9 +257,10 @@ def _reported_aggregate_compatible(item: ResearchInput) -> bool:
     )
 
 
-def _verified_aggregate_units(
+def verify_reported_mreo_units(
     item: ResearchInput, ore: ResearchInput, grade: ResearchInput, denominator_ppm: Decimal,
 ) -> dict | None:
+    """Validate native ppm evidence for the reported group and its companion estimate."""
     if item.raw.raw_value and re.search(
         rf"\bMREO\s*[:=]?\s*{re.escape(item.raw.raw_value)}\s*ppm\b",
         item.anchor.quote or "", flags=re.I,
@@ -418,7 +419,7 @@ def composition_comparison(by_variable, resource: Comparison, rule: dict) -> Com
             denominator *= 10000
             denominator_half *= 10000
         if reported_aggregate:
-            unit_evidence = _verified_aggregate_units(parts["MREO"], ore, grade, denominator)
+            unit_evidence = verify_reported_mreo_units(parts["MREO"], ore, grade, denominator)
             if unit_evidence is None:
                 return Comparison("MREO_UNIT_OR_COMPANION_CONTEXT_UNBOUND", inputs=input_rows)
         numerator = sum(value for value, _ in quantities.values())

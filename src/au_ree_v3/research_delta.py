@@ -139,6 +139,32 @@ def _same_census_quantity(cell, observation) -> bool:
     )
 
 
+def _census_formula_evidence(science, artifacts, receipt):
+    from .census_derivations import DERIVED_COLUMN_FOR_VARIABLE, registered_projection_formula
+
+    assessments = science.get("formal_derivations", ())
+    if not assessments:
+        return {}, {}
+    extraction = _object(artifacts["observations/extraction.json"], "extraction.json")
+    by_cell = {}
+    has_composition = False
+    for record in assessments:
+        variable = record["variable"]
+        column = DERIVED_COLUMN_FOR_VARIABLE.get(variable)
+        key = record["project_id"], column
+        formula, registry = registered_projection_formula(column, record["assessment"]["formula_id"])
+        is_composition = variable == "mreo_kt"
+        field = "census_oxide_derivation_registry_sha256" if is_composition else "census_derivation_registry_sha256"
+        if key in by_cell or formula is None or any(item.get(field) != registry for item in (receipt, extraction)):
+            raise ValueError("Census derivation requires a unique cell and the release-pinned Formula Registry")
+        by_cell[key] = record
+        has_composition |= is_composition
+    composition = {
+        item["observation_id"]: item for statement in science["resource_statements"] for item in statement["observations"]
+    } if has_composition else {}
+    return by_cell, composition
+
+
 def _check_display_metadata(cell, definition, receipt, census_receipt):
     origin = cell["value_origin"]
     if cell["evidence_state"] == "VALIDATED_DESCRIPTIVE":
@@ -206,16 +232,7 @@ def _census(artifacts, receipt, observations):
     definitions = policy.by_name if policy else {}
     tabular = {(row[PROJECT_ID_COLUMN], column): row[column] for row in table for column in columns}
     ledger = {(cell["project_id"], cell["column"]): cell for cell in cells}
-    assessments = census_receipt.get("science_views", {}).get("formal_derivations", [])
-    if assessments:
-        from .derivations import FORMULA_REGISTRY_SHA256
-
-        extraction = _object(artifacts["observations/extraction.json"], "extraction.json")
-        if any(item.get("census_derivation_registry_sha256") != FORMULA_REGISTRY_SHA256 for item in (receipt, extraction)):
-            raise ValueError("Census derivations require the release-pinned Formula Registry")
-    by_project = {record["project_id"]: record for record in assessments}
-    if len(by_project) != len(assessments):
-        raise ValueError("Duplicate per-project authorized Census derivation")
+    derivations, composition = _census_formula_evidence(census_receipt.get("science_views", {}), artifacts, receipt)
     result = {}
     formal = 0
     derived = 0
@@ -243,9 +260,10 @@ def _census(artifacts, receipt, observations):
         elif state == "PRESENT" and policy and origin == "FORMAL_DERIVED":
             from .census_derivations import verify_census_derivation
 
-            if census_receipt["release_mode"] != "FORMAL" or key[0] not in by_project:
+            if census_receipt["release_mode"] != "FORMAL" or key not in derivations:
                 raise ValueError(f"Census value has no authorized derivation: {key}")
-            verify_census_derivation(cell, by_project.pop(key[0]), observations, ledger, receipt["observation_release_id"])
+            verify_census_derivation(cell, derivations.pop(key), observations, ledger, receipt["observation_release_id"],
+                                     composition=composition)
             formal += 1
             derived += 1
         elif state == "PRESENT":
@@ -272,7 +290,7 @@ def _census(artifacts, receipt, observations):
             raise ValueError("Census attribute count differs from its validated text ledger")
     if census_receipt["formal_scientific_cells"] != formal or receipt["scientific_output_count"] != formal:
         raise ValueError("Formal Census value count differs from its exact evidence rows")
-    if by_project or census_receipt.get("formal_derived_cells", 0) != derived:
+    if derivations or census_receipt.get("formal_derived_cells", 0) != derived:
         raise ValueError("Formal Census derivation count differs from its exact records")
     return result, projects, columns
 

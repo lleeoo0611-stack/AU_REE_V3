@@ -336,14 +336,18 @@ def validate_projected_cell(cell, definition):
         ):
             raise ValueError("direct Census cell requires formal selection lineage")
         if cell["evidence_state"] == "FORMAL_DERIVED":
+            from .census_derivations import FORMULA_INPUT_COLUMNS
+
             inputs = json.loads(cell["input_observation_ids"] or "[]")
+            required = FORMULA_INPUT_COLUMNS.get(cell["column"])
             if (
                 cell["value_origin"] != "FORMAL_DERIVED" or cell["comparable"] != "NO"
                 or not cell["formula_id"] or not SHA256.fullmatch(cell["formula_sha256"])
-                or not isinstance(inputs, list) or len(inputs) != 2 or len(set(inputs)) != 2
-                or any(not SHA256.fullmatch(item) for item in inputs) or not cell["precision"]
+                or required is None or not isinstance(inputs, list) or len(inputs) != len(required)
+                or any(not isinstance(item, str) or not SHA256.fullmatch(item) for item in inputs)
+                or len(set(inputs)) != len(required) or not cell["precision"]
             ):
-                raise ValueError("derived Census cell requires an approved formula and two distinct inputs")
+                raise ValueError("derived Census cell requires an approved formula and distinct governed inputs")
     elif not cell["metadata_evidence"]:
         raise ValueError("display Census cell requires its bounded metadata evidence")
 

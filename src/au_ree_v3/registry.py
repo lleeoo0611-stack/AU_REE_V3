@@ -55,6 +55,7 @@ class ResearchProfile:
     sha256: str
     attribute_bindings_path: Path | None = None
     attribute_milestones_path: Path | None = None
+    oxide_derivation_policy_path: Path | None = None
 
 
 def _read(path: Path, version: str) -> tuple[dict, str]:
@@ -106,6 +107,8 @@ def load_profile(path: Path | str) -> ResearchProfile:
         if "attribute_bindings" in inputs else None,
         attribute_milestones_path=_pinned_profile_path(path.parent, inputs["attribute_milestones"])
         if "attribute_milestones" in inputs else None,
+        oxide_derivation_policy_path=_pinned_profile_path(path.parent, inputs["oxide_derivation_policy"])
+        if "oxide_derivation_policy" in inputs else None,
     )
 
 
