@@ -1,0 +1,2 @@
+# Preserve the uploaded versioned governance document byte for byte.
+docs/development/au_ree_development_governance_v3.0.txt -text whitespace=cr-at-eol
