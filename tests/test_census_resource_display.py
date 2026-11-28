@@ -1,6 +1,7 @@
 """Original issuer documents and counterexamples for Census-only resource display."""
 
 from copy import deepcopy
+import csv
 from dataclasses import replace
 from hashlib import sha256
 import json
@@ -12,11 +13,13 @@ import unittest
 from types import SimpleNamespace
 
 from au_ree_v3.census_resource_display import (
-    _Phrase, _cutoff, _effective_date, _linked_effective_date, reported_resource_facts,
+    _Phrase, _cohort_table_context, _cutoff, _effective_date, _linked_effective_date, _scope_phrase,
+    historical_cohort_display, reported_resource_facts,
 )
 from au_ree_v3.display_package import compile_display_package
 from au_ree_v3.documents import DocumentCache, PDFDocument
 from au_ree_v3.publication import _extract_code, load_release
+from au_ree_v3.registry import load_profile
 from au_ree_v3.resource_extraction import ResourceStatement
 from au_ree_v3.sources import ContentStore
 
@@ -89,6 +92,35 @@ class ResourceDisplayContextTests(unittest.TestCase):
         matched = _cutoff((_phrase("Mineral Resource cutoff 250 ppm TREO-CeO2."),), adjusted, {})
         self.assertEqual((matched.value, matched.token, matched.unit), ("250 ppm TREO-CeO2", "250", "ppm"))
 
+    def test_named_table_scope_requires_local_exact_name_and_preserves_reported_date_role(self):
+        cell = {"caption_anchors": [{"text": "Table 5: Wolverine Inferred Mineral Resource estimate at 15 January 2025",
+                                     "physical_page": 6, "locator": "PDF page 6, line 16"}],
+                "row_anchor": {"text": "Total Inferred       40      4.1", "locator": "PDF page 6, line 29"}}
+        project = SimpleNamespace(name="Browns Range Project — Wolverine scope")
+        phrase = _scope_phrase(cell, project)
+        self.assertEqual(phrase.locator, "PDF page 6, line 16")
+        self.assertIsNone(_scope_phrase(cell, SimpleNamespace(name="Browns Range Project — Wolverine South scope")))
+        self.assertIsNone(_scope_phrase(cell, SimpleNamespace(name="Browns Range Project")))
+        context = _cohort_table_context(cell, {"publication_date": "2025-01-15"}, phrase)
+        self.assertEqual(context["reported_resource_category"], "Inferred")
+        self.assertEqual(context["estimate_effective_date"], "2025-01-15")
+        self.assertNotIn("estimate_effective_date", _cohort_table_context(cell, {"publication_date": "2025-01-14"}, phrase))
+        self.assertNotIn("reported_resource_category", _cohort_table_context(
+            {**cell, "row_anchor": {**cell["row_anchor"], "text": "Total Measured     40     4.1"}},
+            {"publication_date": "2025-01-15"}, phrase))
+        mixed = deepcopy(cell)
+        mixed["caption_anchors"][0]["text"] += " and Exploration Target"
+        self.assertIsNone(_scope_phrase(mixed, project))
+
+    def test_cohort_display_refuses_substituted_sqlite_before_reopening(self):
+        profile = load_profile(ROOT / "config/research_profiles/au_ree_census_evidence_fill_v1.json")
+        receipt = {"schema": "historical-resource-cohort-recovery-v1", "status": "PASS", "profile_sha256": profile.sha256,
+                   "cutoff": "2026-11-28", "timezone": "Asia/Taipei", "source_manifest_sha256": "a" * 64,
+                   "database_sha256": sha256(b"original sqlite bytes").hexdigest()}
+        with self.assertRaisesRegex(ValueError, "exact recovery receipt, database"):
+            historical_cohort_display(receipt, b"substituted sqlite bytes", settings=profile, registry=None, editions=None,
+                                      manifest_sha="a" * 64, content=None, cache=None, archived=[])
+
 
 @unittest.skipUnless(os.environ.get("AU_REE_REPORTED_RESOURCE_WORKSPACE"), "sealed Census Fill candidate required")
 class AsReportedResourceTests(unittest.TestCase):
@@ -146,6 +178,48 @@ class HistoricalResourceReviewTests(unittest.TestCase):
         oxide = [record for record in records if record["context"]["quantity_role"].endswith("_ppm")]
         self.assertEqual(len(oxide), 31)
         self.assertTrue(all("census_column_id" not in record["context"] for record in oxide))
+
+
+@unittest.skipUnless(os.environ.get("AU_REE_HISTORICAL_COHORT_FIXTURE") and os.environ.get("AU_REE_REPORTED_RESOURCE_WORKSPACE"),
+                     "sealed historical cohort SQLite and evidence-fill candidate required")
+class HistoricalCohortDisplayTests(unittest.TestCase):
+    def test_exact_native_values_fill_three_review_only_core_cells(self):
+        workspace = Path(os.environ["AU_REE_REPORTED_RESOURCE_WORKSPACE"])
+        fixture = Path(os.environ["AU_REE_HISTORICAL_COHORT_FIXTURE"])
+        candidate = workspace / "work/census-source-paths/cohort-science-final"
+        release = json.loads((candidate / "archive.json").read_bytes())["release_id"]
+        profile = _archived_profile(self, candidate, release)
+        package = compile_display_package(
+            profile=profile / "au_ree_census_evidence_fill_v1.json",
+            columns_path=profile / "census_display_columns_v2.json",
+            build_directory=candidate / "build", release_root=candidate / "archive",
+            release_id=release, assets=candidate / "cas", bindings=profile / "resource_bindings_v6.json",
+            sources=workspace / "work/census-stage6/additional-sources/combined/source_manifest.json",
+            include_reported_resources=True, historical_cohort=(fixture / "recovery-a.json", fixture / "candidates-a.sqlite"),
+        )
+        records = [record for record in json.loads(package.public_view)["review_only"]
+                   if record["context"].get("recovery_rule") == "historical-resource-cohort-recovery-v1"]
+        expected = {
+            ("AU-ad64122c217f0dbfabc8", "ore_mt", "40 Mt"): ("189", "Barkly", "d77611858d"),
+            ("AU-2a3a86a4d971e9f9838d", "ore_mt", "41.6 Mt"): ("14", "Brockman", "a861c5b108"),
+            ("AU-2a3a86a4d971e9f9838d", "treo_grade_pct", "0.20 %"): ("14", "Brockman", "a861c5b108"),
+        }
+        with (candidate / "build/census/cell_status.csv").open() as stream:
+            archived = {(row["project_id"], row["column_id"]): row["value_state"] for row in csv.DictReader(stream)}
+        for identity, (page, native_scope, original_sha) in expected.items():
+            project, column, literal = identity
+            matches = [row for row in records if row["project_id"] == project and row["context"].get("census_column_id") == column
+                       and row["context"]["display_value"] == literal]
+            self.assertEqual(archived[project, column], "UNKNOWN")
+            self.assertTrue(matches)
+            for row in matches:
+                context = row["context"]
+                self.assertEqual((row["state"], context["scope_status"]), ("CANDIDATE", "NAMED_REPORTED_TABLE"))
+                self.assertIn(native_scope, row["scope"])
+                self.assertIn(context["raw_token"], row["quote"])
+                self.assertTrue(row["locator"].startswith(f"PDF page {page}, line "))
+                self.assertTrue(row["source_sha256"].startswith(original_sha))
+                self.assertRegex(context["candidate_id"], "^[a-f0-9]{64}$")
 
 
 @unittest.skipUnless(all(os.environ.get(key) for key in (

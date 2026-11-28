@@ -388,6 +388,10 @@ _NON_BULK = re.compile(r"\b(?:heavy\s+mineral|concentrat(?:e|es|ion)|wet\s+tonna
 _CONTEXT_DATE_ROLE = re.compile(r"\b(?:as\s+at|as\s+of|effective(?:\s+date)?|(?:mineral\s+resources?|estimate)\s+at)\b", re.I)
 _CLASSIFICATIONS = ("MEASURED", "INDICATED", "INFERRED")
 _OXIDE_NAMES = {species.upper(): species for species in KNOWN_OXIDE_SPECIES}
+_TREO_DEFINITION = re.compile(
+    r"TREO(?:\s*\(Total Rare Earth Oxides?\))?\s*=\s*"
+    r"(?:Total Rare Earth Oxides?\s*(?:[–—-]\s*)?)?(.*)", re.I,
+)
 
 
 def _native_quote(pages, page, quote):
@@ -423,7 +427,7 @@ def _chemical_species(quotes):
                 ):
                     definitions.append(tuple(sorted(_OXIDE_NAMES[label.upper()] for label in labels)))
     for quote in quotes:
-        match = re.fullmatch(r"TREO\s*=\s*(?:Total Rare Earth Oxides\s*)?(.*)", quote.rstrip("."), re.I)
+        match = _TREO_DEFINITION.fullmatch(quote.rstrip("."))
         if not match:
             continue
         labels = [part.strip().upper() for part in re.split(r"[, +]+", match[1].strip("() "))]

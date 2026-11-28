@@ -1,6 +1,7 @@
 """Reread pinned source inventory and close candidate-only table review work."""
 
 from collections import Counter, defaultdict
+from contextlib import closing
 import csv
 from decimal import Decimal
 from hashlib import sha256
@@ -8,6 +9,7 @@ from io import StringIO
 import json
 from pathlib import Path
 import re
+import sqlite3
 from tempfile import TemporaryDirectory
 from zoneinfo import ZoneInfo
 
@@ -663,6 +665,37 @@ def _write_cohort_store(database, registry, records, store, historical_assets):
         return output.integrity()
 
 
+def recovered_cohort_records(sqlite_bytes):
+    """Read the pinned snapshot in memory and verify each persisted provenance join."""
+    query = """SELECT raw.payload, anchor.payload FROM raw_observations AS raw
+               JOIN anchors AS anchor ON anchor.anchor_id = raw.anchor_id
+                 AND anchor.source_key = raw.source_key AND anchor.source_sha = raw.source_sha
+               JOIN verified_sources AS verified ON verified.source_key = raw.source_key
+                 AND verified.sha256 = raw.source_sha
+               ORDER BY raw.observation_id"""
+    with closing(sqlite3.connect(":memory:")) as connection:
+        connection.deserialize(sqlite_bytes)
+        connection.execute("PRAGMA trusted_schema=OFF")
+        connection.execute("PRAGMA query_only=ON")
+        rows = connection.execute(query).fetchall()
+        if len(rows) != connection.execute("SELECT count(*) FROM raw_observations").fetchone()[0]:
+            raise ValueError("Historical cohort SQLite is missing an exact source or anchor join")
+    for raw_json, anchor_json in rows:
+        raw, anchor = json.loads(raw_json), json.loads(anchor_json)
+        cell = json.loads(raw["original_payload"])
+        position = cell["value_anchor"]
+        candidate = _digest(canonical_json([cell["project_id"], cell["source_sha256"], position["locator"]]).encode())
+        if (candidate != cell["candidate_id"] or not cell["candidate_only"] or cell["formal_admission"]
+                or raw["status"] != "CANDIDATE" or raw["observation_id"] != candidate
+                or raw["anchor_id"] != anchor["anchor_id"] or anchor["anchor_id"] != candidate
+                or raw["project_id"] != cell["project_id"] or raw["source_sha"] != cell["source_sha256"]
+                or raw["variable"] != cell["variable"] or raw["raw_unit"] != cell["native_unit"]
+                or raw["raw_value"] != position["text"] or anchor["quote"] != position["text"]
+                or anchor["page"] != cell["physical_page"] or anchor["locator"] != position["locator"]):
+            raise ValueError("Historical cohort raw observation differs from its evidence anchor")
+        yield cell
+
+
 def _cohort_cells(provenance, inventory, observations, text, government):
     recovered = defaultdict(set)
     for record in observations.values():
@@ -715,9 +748,27 @@ def _cohort_quote_anchors(document, source_key, page, quotes):
     return [bind_native_quote(document, source_key, page, blocks[0].text, "ARCHIVED_TEXT_COLOCATED_QUOTE")]
 
 
-def _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, cutoff, views):
+def _cohort_text_captures(store, editions, sha, cutoff, timezone):
+    if not editions or not store.path(sha).is_file():
+        return {}
+    checked = _CheckedBody(store, sha, store.read(sha))
+    captures = {}
+    for edition in sorted(editions, key=lambda row: (row["acquired_at"], row["edition_id"])):
+        proof = _verify_edition(edition, checked, cutoff, timezone)
+        if proof["status"] == "ELIGIBLE":
+            for project in edition["project_ids"]:
+                captures.setdefault(project, edition)
+    return captures
+
+
+def _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, manifest, views):
     records = {}
     holds = Counter()
+    cutoff, timezone = manifest["cutoff"], ZoneInfo(manifest["timezone"])
+    editions = defaultdict(list)
+    for edition in manifest["editions"]:
+        if edition["kind"] == "pdf":
+            editions[edition["sha256"]].append(edition)
     for sha, entries in _text_hints(claims, provenance).items():
         source = _historical_source(catalog[sha], sha, historical_assets, cutoff)
         if source is None:
@@ -733,17 +784,27 @@ def _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, c
         except (DocumentError, IntegrityError, OSError) as error:
             holds[str(error)] += len(entries)
             continue
+        try:
+            captures = _cohort_text_captures(store, editions[sha], sha, cutoff, timezone)
+        except (IntegrityError, OSError):
+            captures = {}
         for (project, column, _, _), page, quotes in entries:
+            edition = captures.get(project)
             try:
                 anchors = _cohort_quote_anchors(document, source["source"].source_key, page, quotes)
             except DocumentError as error:
                 holds[str(error)] += 1
                 continue
-            records[project, column] = {
+            evidence = {
                 "state": "CANDIDATE", "source_sha256": sha, "source_url": source["source"].url,
                 "anchors": [anchor.to_dict() for anchor in anchors], "scope_status": "UNBOUND",
                 "temporal_decision": source["edition"]["temporal_decision"],
             }
+            if edition is not None:
+                evidence.update(source_capture_sha256=edition["receipt_sha256"],
+                                source_edition_id=edition["edition_id"], source_url=edition["url"],
+                                temporal_decision=edition["temporal_decision"])
+            records[project, column] = evidence
     reused = holds.pop("PDF_VIEW_REUSED", 0)
     return records, holds, reused
 
@@ -804,7 +865,7 @@ def recover_historical_cohort(*, v2_root, profile, sources, assets, historical_a
     store, inventory = ContentStore(assets), {}
     records, holds, documents, views = _cohort_lanes(hints, catalog, manifest, store, historical_assets, inventory)
     _verify_cohort_bytes(historical_assets, store, catalog, provenance, inventory)
-    text, text_holds, reused = _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, manifest["cutoff"], views)
+    text, text_holds, reused = _rebind_cohort_text(claims, provenance, store, historical_assets, catalog, manifest, views)
     government, government_receipt = _replay_cohort_government(v2_root, geography)
     cells = _cohort_cells(provenance, inventory, records, text, government)
     calculations = _cohort_formula_checks(records)

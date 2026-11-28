@@ -249,6 +249,10 @@ def _row_panel(db, panel, split, origin, captures, cas, cache, timezone, documen
                 anchors = [probe["caption"], *probe["headers"]]
                 if any(view.locate(page, line=a["line"]).text != a["positioned_text"] for a in [row, *anchors]):
                     raise ValueError("Original resource row annotation differs from its native locator")
+                for field in probe.get("expected_fields", ()):
+                    token = view.locate(page, line=line, column=field["start_column"], end_column=field["end_column"])
+                    if token.text != field["literal"]:
+                        raise ValueError("Original held measurement differs from its exact positional annotation")
                 context = "\n".join(a["positioned_text"] for a in anchors)
                 label = probe["target_resource_row"]
             family = item.get("report_family") or item["family"]
@@ -325,14 +329,23 @@ def _dataset(args, db):
     cas, timezone, documents = ContentStore(args.store), ZoneInfo(manifest["timezone"]), {}
     panels = [("train", "annotations", args.train_rows), ("train", "assay", args.assay_negatives)]
     panels.extend(("held", f"holdout_{i}", item) for i, item in enumerate(args.holdout, 1))
+    holdout_fields = {}
     for split, origin, reference in panels:
         panel = _checked_json(*reference)
         _row_panel(db, panel, split, origin, captures, cas, cache, timezone, documents)
+        if split == "held":
+            for item in panel["cases"]:
+                for probe in item["probes"]:
+                    key = item["source_sha256"], probe["physical_page"], probe["row"]["line"]
+                    holdout_fields[key] = probe
     query = "SELECT * FROM nlp_rows ORDER BY split,origin,family,source,page,line"
     baseline = db.execute(query).fetchall()
     if args.recovered_sqlite:
         proof["recovered_training"] = _recovered_training(db, baseline, args.recovered_sqlite, args.recovery_registry)
-    return db.execute(query).fetchall(), proof, documents, baseline
+    prior = db.execute(query).fetchall() if args.recovered_sqlite else baseline
+    if args.v2_claims:
+        proof["historical_claims"] = _claim_training(db, prior, args, manifest, cas)
+    return db.execute(query).fetchall(), proof, documents, baseline, prior, holdout_fields
 
 
 def _recovery_row(payload, evidence, row_source, project_metadata):
@@ -403,6 +416,98 @@ def _recovered_training(db, baseline, reference, registry_ref):
     return {"sqlite_sha256": pin, "registry_sha256": registry_ref[1], "counts": dict(counts)}
 
 
+def _claim_training(db, prior, args, manifest, cas):
+    if __package__:
+        from .historical_claim_rows import rebind_historical_claims
+    else:
+        from historical_claim_rows import rebind_historical_claims
+
+    known_projects = {row["project_id"]: row for row in _checked_json(*args.recovery_registry)["projects"]}
+    proof, claims = rebind_historical_claims(*args.v2_claims, known_projects, manifest, cas, args.historical_assets)
+    held = [row for row in prior if row["split"] == "held"]
+    keys = ("family", "project", "source")
+    held_groups = {key: {row[key] for row in held if row[key]} for key in keys}
+    issuer_alias = lambda name: re.sub(r"\s+(?:limited|ltd|nl|inc|plc)$", "", name)
+    held_issuers = {issuer_alias(row["issuer"]) for row in held if row["issuer"]}
+    held_features = {_features(row) for row in held}
+    seen = {(row["source"], row["page"], row["line"]) for row in prior}
+    editions = {}
+    for entry in manifest["editions"]:
+        editions.setdefault(entry["sha256"], []).append(entry)
+    candidates = {}
+    for candidate in claims:
+        key = candidate["source"], candidate["page"], candidate["line"]
+        issuer = _issuer(known_projects[candidate["project"]].get("developer") or "")
+        candidate.update(issuer=issuer, family=f"{issuer}/historical_claims" if issuer else "")
+        candidates.setdefault(key, []).append(candidate)
+    counts, dispositions = Counter(), {}
+    for (source, page, line), original in sorted(candidates.items()):
+        key = source, page, line
+        publishers = {_issuer(entry.get("publisher") or "") for entry in editions.get(source, ())}
+        if key in seen:
+            disposition = "original_row_already_counted"
+        elif len({row["label"] for row in original}) != 1:
+            disposition = "conflicting_original_row_labels_excluded"
+        elif any(not row["issuer"] for row in original):
+            disposition = "unknown_issuer_excluded"
+        elif (any(issuer_alias(name) in held_issuers for name in publishers | {row["issuer"] for row in original})
+              or any(any(row[group] in held_groups[group] for group in keys)
+                     or _features(row) in held_features for row in original)):
+            disposition = "held_group_or_text_overlap_excluded"
+        else:
+            row = min(original, key=lambda row: (row["project"], row["origin"]))
+            _insert_row(db, "train", row["origin"], row["family"], row["issuer"], row["project"], source, page,
+                        line, row["label"], row["context"], row["row_text"])
+            disposition = "included_positive_rows" if row["label"] else "included_negative_rows"
+        dispositions[key] = disposition
+        counts[disposition] += 1
+    for claim in proof["claims"]:
+        if claim["status"] in {"BOUND_POSITIVE", "BOUND_NEGATIVE"}:
+            claim["training_disposition"] = dispositions[claim["source_sha256"], claim["physical_page"], claim["line"]]
+    proof.update(registry_sha256=args.recovery_registry[1], distinct_bound_rows=len(candidates), training_rows=dict(counts))
+    return proof
+
+
+def _native_cell_scores(held, predictions, discovered, probes):
+    """Score exact numeric positions within the annotated holdout windows."""
+    counts = Counter()
+    scope = Counter()
+    for row, keep in zip(held, predictions, strict=True):
+        source, page, line = row["source"], row["page"], row["line"]
+        probe = probes[source, page, line]
+        expected = {(item["variable"], item["unit"], item["literal"], item["start_column"], item["end_column"])
+                    for item in probe["expected_fields"]}
+        annotated = {item[0] for item in expected}
+        forbidden = {(item["variable"], item["literal"]) for item in probe["forbidden_bindings"]}
+        seen = set()
+        for native in discovered[source, page] if keep else ():
+            if native.row_line != line:
+                continue
+            for cell in native.cells:
+                if cell.variable and cell.unit and cell.value.physical_page == page:
+                    value = cell.variable, cell.unit, cell.value.text, cell.value.start_column, cell.value.end_column
+                    if not row["label"] or cell.variable in annotated or (cell.variable, cell.value.text) in forbidden:
+                        seen.add(value)
+                    else:
+                        scope["unscored_nonannotated_fields"] += 1
+        counts.update(TP=len(seen & expected), FP=len(seen - expected), FN=len(expected - seen))
+        scope["annotated_rows"] += 1
+    return {**_measures(counts), **scope, "TN": "UNMEASURED"}
+
+
+def _page_features(documents, discovered):
+    addresses, rows = [], []
+    for (source, page), entries in sorted(discovered.items()):
+        for entry in entries:
+            addresses.append((source, page, entry.row_line))
+            context = [documents[source].locate(page, line=entry.caption_line).text]
+            context.extend(cell.header.text for cell in entry.cells if cell.header)
+            context.extend(cell.unit_label.text for cell in entry.cells if cell.unit_label)
+            rows.append({"context": "\n".join(dict.fromkeys(context)),
+                         "row_text": documents[source].locate(page, line=entry.row_line).text})
+    return addresses, rows
+
+
 def _grouped_report(args):
     from au_ree_v3.native_table_discovery import discover_page_rows
 
@@ -420,7 +525,7 @@ def _grouped_report(args):
         db.execute("""CREATE TEMP TABLE nlp_rows(split TEXT, origin TEXT, family TEXT, issuer TEXT, project TEXT, source TEXT,
                       page INTEGER, line INTEGER, label INTEGER, context TEXT, row_text TEXT, UNIQUE(source,page,line))""")
         db.row_factory = sqlite3.Row
-        rows, proof, documents, baseline = _dataset(args, db)
+        rows, proof, documents, baseline, prior, holdout_fields = _dataset(args, db)
     training, held = ([row for row in rows if row["split"] == phase] for phase in ("train", "held"))
     for key in ("family", "issuer", "project", "source"):
         if ({row[key] for row in training} - {""}) & ({row[key] for row in held} - {""}):
@@ -428,7 +533,14 @@ def _grouped_report(args):
     if not training or {row["label"] for row in held} != {0, 1} or {_features(r) for r in training} & {_features(r) for r in held}:
         raise ValueError("Missing reviewed positive/negative rows or duplicate model inputs across the split")
     loaded = perf_counter()
-    probabilities, vocabulary = _learn_probabilities(training, held)
+    discovered = {(source, page): discover_page_rows(documents[source], page=page)
+                  for source, page in sorted({(row["source"], row["page"]) for row in held})}
+    locator = {address: {entry.row_line for entry in entries} for address, entries in discovered.items()}
+    addresses, page_features = _page_features(documents, discovered) if args.v2_claims else ([], [])
+    page_seconds = perf_counter() - loaded
+    model_start = perf_counter()
+    all_scores, vocabulary = _learn_probabilities(training, [*held, *page_features])
+    probabilities = all_scores[:len(held)]
     fitted = perf_counter()
     comparison = None
     if args.recovered_sqlite:
@@ -438,8 +550,14 @@ def _grouped_report(args):
         comparison = {"training_rows": len(original),
                       "model": _classification_metrics(held, [p >= .5 for p in old_predictions]),
                       "fit_predict_seconds": perf_counter() - baseline_start}
-    locator = {(source, page): {entry.row_line for entry in discover_page_rows(documents[source], page=page)}
-               for source, page in {(r["source"], r["page"]) for r in held}}
+    without_claims = None
+    if args.v2_claims:
+        old = [row for row in prior if row["split"] == "train"]
+        baseline_start = perf_counter()
+        old_predictions, _ = _learn_probabilities(old, held)
+        without_claims = {"training_rows": len(old),
+                          "model": _classification_metrics(held, [probability >= .5 for probability in old_predictions]),
+                          "fit_predict_seconds": perf_counter() - baseline_start}
     metrics = {}
     for cohort in sorted({row["origin"] for row in held}) + ["all"]:
         panel = [(r, p) for r, p in zip(held, probabilities, strict=True) if cohort == "all" or r["origin"] == cohort]
@@ -456,8 +574,27 @@ def _grouped_report(args):
     model, base = (metrics["all"][key] for key in ("model", "lexical_rule"))
     qualifies = all(isinstance(model[key], float) and isinstance(base[key], float) and model[key] >= base[key]
                     for key in ("precision", "recall"))
+    endpoints = {}
+    if args.v2_claims:
+        resource_keyword = set(address for address, row in zip(addresses, page_features, strict=True) if _keyword_row(row))
+        resource_model = set(address for address, probability in zip(addresses, all_scores[len(held):], strict=True)
+                             if probability >= .5)
+        annotated_rows = [(row["source"], row["page"], row["line"]) for row in held]
+        for strategy, selected in (
+            ("native_unfiltered", [True] * len(held)),
+            ("native_lexical_filter", [address in resource_keyword for address in annotated_rows]),
+            ("native_model_filter", [address in resource_model for address in annotated_rows]),
+        ):
+            endpoints[strategy] = _native_cell_scores(held, selected, discovered, holdout_fields)
+        endpoints["search_pages"] = len(discovered)
+        endpoints["automatically_located_rows"] = len(addresses)
+        endpoints["located_rows_outside_annotations"] = len(set(addresses) - set(annotated_rows))
+        endpoints["scope"] = ("Native page search and filters use decoded original context without held row or "
+                              "caption hints. Exact bound values are scored in independently annotated rows and fields. "
+                              "Outside those windows precision and whole-corpus extraction are unmeasured.")
     return {
-        "schema": "grouped-resource-row-nlp-evaluation-v1", "status": "PASS", "code_commit": args.code_commit,
+        "schema": "grouped-resource-row-nlp-evaluation-v2" if args.v2_claims else "grouped-resource-row-nlp-evaluation-v1",
+        "status": "PASS", "code_commit": args.code_commit,
         "input_sha256": {"source_manifest": args.manifest[1], "sqlite": pin, "bindings": args.bindings[1],
                          "training_panels": [args.train_rows[1], args.assay_negatives[1]],
                          "holdout_panels": [row[1] for row in args.holdout]},
@@ -470,11 +607,13 @@ def _grouped_report(args):
                   "iterations": 150, "threshold": 0.5},
         "holdout": metrics, "formal_admission": "UNMEASURED", "scientific_admissions": 0,
         **({"without_recovered_sqlite": comparison} if comparison else {}),
+        **({"without_historical_claims": without_claims, "holdout_native_value_extraction": endpoints} if endpoints else {}),
         "candidate_use_gate": {"status": "PASS" if qualifies else "FAIL",
                                "reason": None if qualifies else "HYPOTHESIS_NOT_SUPPORTED",
                                "criterion": "Exact original and archive proof, holdout precision and recall at least the lexical baseline"},
         "scope": "Classification on located review rows. Automatic locator is reported separately. No model/row write or formal release use.",
-        "timing_seconds": {"read_and_verify": loaded-begin, "fit_and_predict": fitted-loaded, "total": perf_counter()-begin},
+        "timing_seconds": {"read_and_verify": loaded-begin, "fit_and_predict": fitted-model_start, "total": perf_counter()-begin,
+                           **({"holdout_page_extraction": page_seconds} if endpoints else {})},
     }
 
 
@@ -487,9 +626,13 @@ def grouped_nlp(argv):
     parser.add_argument("--holdout", required=True, action="append", nargs=2, metavar=("PATH", "SHA256"))
     for argument in ("recovered-sqlite", "recovery-registry"):
         parser.add_argument(f"--{argument}", nargs=2, metavar=("PATH", "SHA256"))
+    parser.add_argument("--v2-claims", nargs=2, metavar=("V2_REPO", "CLAIMS_SHA256"))
+    parser.add_argument("--historical-assets", type=Path)
     args = parser.parse_args(argv)
-    if bool(args.recovered_sqlite) != bool(args.recovery_registry):
-        parser.error("The recovered SQLite and its exact registry are required together")
+    if bool(args.recovered_sqlite or args.v2_claims) != bool(args.recovery_registry):
+        parser.error("The recovered SQLite or pinned V2 claims require the exact registry")
+    if bool(args.v2_claims) != bool(args.historical_assets):
+        parser.error("Pinned V2 claims and the historical exact asset directory are required together")
     print(json.dumps(_grouped_report(args), sort_keys=True, indent=2))
 
 

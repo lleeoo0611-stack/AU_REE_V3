@@ -6,12 +6,17 @@ from bisect import bisect_right
 from collections import defaultdict
 from dataclasses import dataclass, replace
 from datetime import date
+from hashlib import sha256
 import json
 import re
+import unicodedata
 from typing import TYPE_CHECKING
 
 from .census_display import DisplayFact
+from .contracts import canonical_json
+from .development import calendar_precedes, reported_calendar_date
 from .documents import DocumentCache
+from .native_table_discovery import discover_page_rows
 from .normalization import reported_interval
 from .observations import NUMBER, digest, exact_value
 from .resource_context import BoundStatement, Measurement, bind_context
@@ -45,6 +50,13 @@ _CHEMISTRY = re.compile(r"\b(?:In[ -]Situ\s+)?TREO(?:\s*(?:[+\-−]|including|ex
 _DEFINITION = re.compile(r"\bTREO\s*(?:=|(?:means|includes|is|and\s+MREO\s+estimates?\s+were)\b)", re.I)
 _PAGE_WATERMARK = "for personal use only"
 _ANALYTE_CONTINUATION = re.compile(r"\s*(?:[+−-]\s*\w|including\b|excluding\b)", re.I)
+_REGISTRY_QUALIFIER = re.compile(r"\s+(?:rare earths?|niobium|ree|project)\b.*", re.I)
+_ESTIMATE_DATE = re.compile(
+    r"\b(?:effective(?:\s+as of)?|as at|as of|estimate at)\s+((?:[1-9]|[12]\d|3[01])\s+[A-Za-z]+,?\s+20\d{2})\b"
+    r"|\bMineral Resource Estimate\s*\(([A-Za-z]+\s+20\d{2})\)", re.I,
+)
+_CAPTION_CLASS = re.compile(r"\b(Measured|Indicated|Inferred)\s+Mineral Resources?\b", re.I)
+_ROW_CLASS = re.compile(r"^\s*(?:Total\s+)?(Measured|Indicated|Inferred)\s{2,}", re.I)
 
 
 @dataclass(frozen=True, slots=True)
@@ -449,14 +461,112 @@ def historical_resource_reviews(replayed, editions, archived):
             context["census_column_id"] = _CORE_REPORT_COLUMNS[variable]
         if cell["caption_anchors"]:
             context["original_table_caption"] = " ".join(anchor["text"] for anchor in cell["caption_anchors"])
+        context.update(cell.get("display_context", {}))
+        named = cell["scope_status"] == "NAMED_REPORTED_TABLE"
         yield {
             "project_id": cell["project_id"], "data_role": ROLE, "state": "CANDIDATE",
-            "label": f"{cell['header_anchor']['text']} · {label}", "reason": "ORIGINAL_TABLE_VALUE_SCOPE_UNBOUND",
+            "label": f"{cell['header_anchor']['text']} · {label}",
+            "reason": "ORIGINAL_TABLE_VALUE_NAMED_SCOPE_DISPLAY_ONLY" if named else "ORIGINAL_TABLE_VALUE_SCOPE_UNBOUND",
             "source_sha256": edition["sha256"], "source_capture_sha256": edition["receipt_sha256"],
             "source_url": edition["url"], "publication_date": edition["publication_date"] or "",
             "locator": cell["value_anchor"]["locator"], "quote": cell["row_anchor"]["text"],
-            "scope": UNKNOWN, "context": context,
+            "scope": cell.get("display_scope", UNKNOWN), "context": context,
         }
+
+
+def _scope_phrase(cell, project):
+    anchors = cell["caption_anchors"]
+    caption = " ".join(part["text"] for part in anchors)
+    if not _SCOPE.search(caption) or _NON_RESOURCE.search(caption):
+        return None
+    base, separator, specific = project.name.partition(" — ")
+    name = re.sub(r"\s+(?:resource )?scope\b$", "", specific, flags=re.I) if separator else _REGISTRY_QUALIFIER.sub("", base)
+    target = _scope_words(name)
+    if not target or f" {target} " not in f" {_scope_words(caption)} ":
+        return None
+    locators = "; ".join(part["locator"] for part in anchors)
+    return _Phrase(anchors[0]["physical_page"], locators, caption)
+
+
+def _scope_words(text):
+    return " ".join(re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", text).casefold()))
+
+
+def _cohort_table_context(cell, edition, scope):
+    if scope is None:
+        return {}
+    row = cell["row_anchor"]
+    context = {"reported_table_locator": scope.locator}
+    printed_class = _CAPTION_CLASS.search(scope.text)
+    row_class = _ROW_CLASS.search(row["text"])
+    if row_class and (not printed_class or row_class[1].casefold() == printed_class[1].casefold()):
+        context.update(reported_resource_category=row_class[1], reported_category_locator=row["locator"])
+    if printed_class and not row_class:
+        context.update(reported_resource_category=printed_class[1], reported_category_locator=scope.locator)
+    days = {token for match in _ESTIMATE_DATE.finditer(scope.text) for token in match.groups() if token}
+    if len(days) == 1:
+        token, = days
+        try:
+            estimate = reported_calendar_date(token)
+        except ValueError:
+            estimate = None
+        proven_public = edition["publication_date"] or edition["temporal_decision"]["earliest_proven_public_date"]
+        if estimate and proven_public and (proven_public.startswith(estimate) or calendar_precedes(estimate, proven_public)):
+            context.update(estimate_effective_date=estimate, estimate_date_token=token, estimate_date_locator=scope.locator)
+    return context
+
+
+def _rechecked_cohort_cell(cell, edition, group, document, project):
+    if (edition is None or cell["source_edition_id"] != edition["edition_id"]
+            or cell["project_id"] not in edition["project_ids"] or cell["source_sha256"] != edition["sha256"]
+            or cell["source_url"] != edition["url"] or edition["temporal_decision"]["status"] != "ELIGIBLE"
+            or cell["temporal_decision_id"] != edition["temporal_decision"]["decision_id"]):
+        raise ValueError("Historical cohort capture differs from the governed source edition")
+    page = cell["physical_page"]
+    position = cell["value_anchor"]["locator"]
+    matches = [(row, bound) for row in group for bound in row.cells if bound.value.locator == position
+               and all(canonical_json(cell.get(key)) == canonical_json(value) for key, value in bound.to_dict().items())]
+    unique = {(row.row_locator, tuple(row.context_anchors)): row for row, _ in matches}
+    if len(unique) != 1:
+        raise ValueError("Historical cohort column and unit did not replay uniquely against the original")
+    row, = unique.values()
+    line = document.locate(page, line=row.row_line)
+    if (cell["row_anchor"] != {"locator": line.locator, "text": line.text}
+            or cell["context_anchors"] != [anchor.to_dict() for anchor in row.context_anchors]):
+        raise ValueError("Historical cohort table row did not replay against the original")
+    scope = _scope_phrase(cell, project)
+    return {**cell, "scope_status": "NAMED_REPORTED_TABLE" if scope else "UNBOUND",
+            "display_scope": scope.text if scope else UNKNOWN,
+            "display_context": _cohort_table_context(cell, edition, scope)}
+
+
+def historical_cohort_display(receipt, sqlite_bytes, *, settings, registry, editions, manifest_sha, content, cache,
+                              archived):
+    """Reuse original native table roles and authenticate the exact candidate display provenance."""
+    from .native_table_work import COHORT_RECOVERY_SCHEMA, recovered_cohort_records
+
+    if (receipt["schema"] != COHORT_RECOVERY_SCHEMA or receipt["status"] != "PASS"
+            or receipt["profile_sha256"] != settings.sha256 or receipt["source_manifest_sha256"] != manifest_sha
+            or receipt["cutoff"] != settings.research_cutoff.isoformat() or receipt["timezone"] != settings.timezone.key
+            or receipt["database_sha256"] != sha256(sqlite_bytes).hexdigest()):
+        raise ValueError("Historical cohort display requires the exact recovery receipt, database, profile and manifest")
+    records = tuple(recovered_cohort_records(sqlite_bytes))
+    if len(records) != receipt["counts"]["candidate_positions"]:
+        raise ValueError("Historical cohort display observations differ from the pinned count")
+    projects = {project.project_id: project for project in registry.projects}
+    by_source = defaultdict(list)
+    for cell in records:
+        if cell["source_capture_sha256"] is not None:
+            by_source[cell["source_sha256"]].append(cell)
+    enriched = []
+    for sha, group in sorted(by_source.items()):
+        document = cache.pdf(content.read(sha), sha)
+        pages = {page: discover_page_rows(document, page=page) for page in {cell["physical_page"] for cell in group}}
+        for cell in group:
+            enriched.append(_rechecked_cohort_cell(cell, editions.get(cell["source_capture_sha256"]),
+                                                   pages[cell["physical_page"]], document, projects[cell["project_id"]]))
+    replayed = {"observations": enriched, "schema": COHORT_RECOVERY_SCHEMA}
+    return tuple(historical_resource_reviews(replayed, editions, archived))
 
 
 def _facts_for(project, bound, measured, capture, edition, binding, diagnostics):
