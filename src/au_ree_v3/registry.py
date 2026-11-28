@@ -56,6 +56,7 @@ class ResearchProfile:
     attribute_bindings_path: Path | None = None
     attribute_milestones_path: Path | None = None
     oxide_derivation_policy_path: Path | None = None
+    attribute_batches_path: Path | None = None
 
 
 def _read(path: Path, version: str) -> tuple[dict, str]:
@@ -93,7 +94,9 @@ def load_profile(path: Path | str) -> ResearchProfile:
     if not isinstance(profile_id, str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]*", profile_id):
         raise ValueError("Profile ID must be a stable lowercase identifier")
     attribute_inputs = {"attribute_bindings", "attribute_milestones"}
-    if attribute_inputs.intersection(inputs) not in (set(), attribute_inputs):
+    if attribute_inputs.intersection(inputs) not in (set(), attribute_inputs) or (
+        "attribute_batches" in inputs and not attribute_inputs.issubset(inputs)
+    ):
         raise ValueError("Profile attribute bindings and milestone inputs must be pinned together")
     return ResearchProfile(
         profile_id=profile_id,
@@ -109,6 +112,8 @@ def load_profile(path: Path | str) -> ResearchProfile:
         if "attribute_milestones" in inputs else None,
         oxide_derivation_policy_path=_pinned_profile_path(path.parent, inputs["oxide_derivation_policy"])
         if "oxide_derivation_policy" in inputs else None,
+        attribute_batches_path=_pinned_profile_path(path.parent, inputs["attribute_batches"])
+        if "attribute_batches" in inputs else None,
     )
 
 
