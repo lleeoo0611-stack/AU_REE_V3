@@ -12,6 +12,7 @@ from tempfile import TemporaryDirectory
 
 from .contracts import canonical_json
 from .documents import DocumentCache, DocumentError
+from .oxide_table_search import METHOD as OXIDE_TABLE_METHOD, oxide_table_rows
 from .sources import ContentStore, IntegrityError, SCHEMA as SOURCE_MANIFEST
 
 SCHEMA = "candidate-evidence-index-v1"
@@ -33,6 +34,7 @@ TOKEN = re.compile(r"[^\W_]+", re.UNICODE)
 SHA = re.compile(r"[0-9a-f]{64}")
 MAX_BODY_BYTES = 64 * 1024 * 1024
 DEFAULT_LIMIT = 20
+SEARCH_STRATEGIES = ("bm25", "oxide-table")
 
 DDL = """
 CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);
@@ -242,34 +244,44 @@ def _expression(purpose: str, query: str | None) -> str:
     return " AND ".join(f'"{token}"' for token in terms)
 
 
+def _bm25_rows(connection, expression, project_id, limit):
+    query_sql = """
+        SELECT spans.*, bm25(spans_fts) AS bm25
+          FROM spans_fts
+          JOIN spans ON spans.rowid = spans_fts.rowid
+         WHERE spans_fts MATCH ?
+           AND (? IS NULL OR EXISTS (
+               SELECT 1 FROM source_projects p
+                WHERE p.source_sha256 = spans.source_sha256 AND p.project_id = ?
+           ))
+         ORDER BY bm25, spans.source_sha256, spans.locator, spans.span_id
+         LIMIT ?
+    """
+    return connection.execute(query_sql, (expression, project_id, project_id, limit))
+
+
 def search_candidates(index: Path, purpose: str, out: Path, *, query: str | None = None,
-                      project_id: str | None = None, limit: int = DEFAULT_LIMIT) -> dict:
+                      project_id: str | None = None, limit: int = DEFAULT_LIMIT, strategy: str = "bm25") -> dict:
     """Rank review leads without turning retrieval scores into formal observations."""
     index, out = Path(index), Path(out)
     if type(limit) is not int or not 1 <= limit <= 200:
         raise ValueError("Candidate result limit must be 1 to 200")
-    expression = _expression(purpose, query)
+    if strategy not in SEARCH_STRATEGIES:
+        raise ValueError(f"Unknown candidate search strategy: {strategy}")
+    if strategy == "oxide-table" and (purpose != "S1" or query is not None):
+        raise ValueError("Oxide table search requires S1 and uses its own fixed layout query")
+    expression = _expression(purpose, query) if strategy == "bm25" else None
     with closing(sqlite3.connect(index.resolve().as_uri() + "?mode=ro&immutable=1", uri=True)) as connection:
         connection.row_factory = sqlite3.Row
         metadata = {row["key"]: json.loads(row["value"]) for row in connection.execute("SELECT * FROM metadata")}
         if metadata.get("schema") != SCHEMA or metadata.get("purpose_policy_sha256") != PURPOSE_POLICY_SHA:
             raise ValueError("Candidate index has a different schema or purpose policy; rebuild")
-        query_sql = """
-            SELECT spans.*, bm25(spans_fts) AS bm25
-              FROM spans_fts
-              JOIN spans ON spans.rowid = spans_fts.rowid
-             WHERE spans_fts MATCH ?
-               AND (? IS NULL OR EXISTS (
-                   SELECT 1 FROM source_projects p
-                    WHERE p.source_sha256 = spans.source_sha256 AND p.project_id = ?
-               ))
-             ORDER BY bm25, spans.source_sha256, spans.locator, spans.span_id
-             LIMIT ?
-        """
+        rows = (_bm25_rows(connection, expression, project_id, limit) if strategy == "bm25"
+                else oxide_table_rows(connection, project_id, limit))
         hits = []
-        for rank, row in enumerate(connection.execute(query_sql, (expression, project_id, project_id, limit)), start=1):
+        for rank, row in enumerate(rows, start=1):
             record = dict(row)
-            record.pop("rowid")
+            record.pop("rowid", None)
             projects = [item[0] for item in connection.execute(
                 "SELECT project_id FROM source_projects WHERE source_sha256=? ORDER BY project_id",
                 (record["source_sha256"],),
@@ -279,7 +291,8 @@ def search_candidates(index: Path, purpose: str, out: Path, *, query: str | None
         **metadata, "schema": SEARCH_SCHEMA, "status": "PASS", "purpose": purpose,
         "index_sha256": _file_sha256(index),
         "query": query, "fts5_expression": expression, "project_filter": project_id,
-        "limit": limit, "retrieval_method": "SQLite FTS5 BM25", "matches": hits,
+        "limit": limit, "retrieval_method": "SQLite FTS5 BM25" if strategy == "bm25" else OXIDE_TABLE_METHOD,
+        "matches": hits,
         "scientific_admissions": 0,
     }
     out.mkdir(parents=True, exist_ok=True)

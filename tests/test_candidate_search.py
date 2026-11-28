@@ -6,8 +6,9 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from au_ree_v3.candidate_search import build_candidate_index, search_candidates
+from au_ree_v3.candidate_search import DECODERS, TextSpan, build_candidate_index, search_candidates
 from au_ree_v3.sources import ContentStore, SCHEMA
 
 from test_document_views import _example_pdf
@@ -90,6 +91,48 @@ class CandidateSearchTests(unittest.TestCase):
         self.assertEqual(receipt["index_statuses"], {"FAIL": 1, "INDEXED": 1})
         results = search_candidates(db, "D1", self.root / "partial")
         self.assertEqual([row["source_sha256"] for row in results["matches"]], [available])
+
+    def test_oxide_layout_keeps_exact_columns_and_bounded_row_on_same_page(self):
+        digest = self.store.put(b"synthetic positioned PDF decoder fixture")
+        header = "Sample   Nd₂O₃    Pr₆O₁₁    Pr₆O₁₁     Tb₄O₇     Dy₂O₃"
+        row = "Location-1   22   18   16.1   <0.5   1.03"
+        spans = (
+            TextSpan("PDF page 2, lines 4-5", header + "\n              ppm      ppm      ppm      ppm      ppm", 2, 4, 5),
+            TextSpan("PDF page 2, lines 7-7", row, 2, 7, 7),
+        )
+        with patch.dict(DECODERS, {"pdf": lambda *args: ("synthetic-decoder", spans)}):
+            _, db = self._build(self._source(digest, "pdf", "P1"))
+        result = search_candidates(db, "S1", self.root / "oxide", strategy="oxide-table", project_id="P1")
+        hit, = result["matches"]
+        self.assertEqual((hit["source_sha256"], hit["page"], hit["line_start"]), (digest, 2, 4))
+        self.assertEqual(hit["nearby_numeric_row"]["text"], row)
+        anchors = hit["oxide_header_anchors"]
+        self.assertEqual([anchor["species"] for anchor in anchors],
+                         ["Nd2O3", "Pr6O11", "Pr6O11", "Tb4O7", "Dy2O3"])
+        self.assertEqual([header[anchor["column"] - 1:anchor["end_column"]] for anchor in anchors],
+                         [anchor["token"] for anchor in anchors])
+        self.assertEqual(result["scientific_admissions"], 0)
+        self.assertEqual(hit["interpretation"], "PRINTED_HEADERS_ONLY")
+        excluded = search_candidates(db, "S1", self.root / "other-project",
+                                     strategy="oxide-table", project_id="P2")
+        self.assertEqual(excluded["matches"], [])
+
+    def test_oxide_layout_does_not_splice_definitions_alternates_or_other_pages(self):
+        digest = self.store.put(b"synthetic off-target formula fixture")
+        spans = (
+            TextSpan("PDF page 1, lines 3-4", "TREO   Nd2O3 + Pr6O11 + Tb4O7 + Dy2O3 %\nSample  2   3   4   5", 1, 3, 4),
+            TextSpan("PDF page 2, lines 3-4", "Sample   Nd2O3%   Pr2O3%  Tb2O3%  Dy2O3%\nSample  2   3   4   5", 2, 3, 4),
+            TextSpan("PDF page 3, lines 3-3", "Sample   Nd2O3%   Pr6O11%  Tb4O7%  Dy2O3%", 3, 3, 3),
+            TextSpan("PDF page 4, lines 1-1", "Sample  2   3   4   5", 4, 1, 1),
+            TextSpan("PDF page 4, lines 5-5", "Sample  Nd2O3%   Pr6O11%  Tb4O7%   Dy2O3%", 4, 5, 5),
+            TextSpan("PDF page 4, lines 15-15", "Sample  2   3   4   5", 4, 15, 15),
+        )
+        with patch.dict(DECODERS, {"pdf": lambda *args: ("synthetic-decoder", spans)}):
+            _, db = self._build(self._source(digest, "pdf", "P1"))
+        result = search_candidates(db, "S1", self.root / "oxide", strategy="oxide-table")
+        self.assertEqual(result["matches"], [])
+        with self.assertRaisesRegex(ValueError, "requires S1"):
+            search_candidates(db, "R1", self.root / "oxide", strategy="oxide-table")
 
     @unittest.skipUnless(shutil.which("pdftotext"), "Poppler unavailable")
     def test_pdf_hit_uses_physical_page_and_original_text_span(self):
