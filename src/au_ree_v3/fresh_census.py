@@ -16,12 +16,13 @@ from .census_science import project_science_views, resource_presence_cells
 from .comparability import census_quantity, resource_context, resource_observation_compatible
 from .contracts import ContractViolation, ResearchRelease, canonical_json
 from .registry import PROJECT_ID_COLUMN, load_census_columns, load_profile, load_registry
-from .research_inputs import ResearchInput, checked_research_inputs
+from .research_inputs import CENSUS_RESOURCE_RULE, CENSUS_RESOURCE_USE, ResearchInput, checked_research_inputs
 from .store import Store
 
 SCHEMA = "fresh-census-v1"
 PROJECTION_SCHEMA = "fresh-census-v2"
 IDENTITY_COLUMN = PROJECT_ID_COLUMN
+_CENSUS_ONLY_REASON = "GOVERNED_CENSUS_RESOURCE_OBSERVATION"
 STATUS_FIELDS_V1 = (
     "project_id", "column", "value", "value_state", "reason", "value_origin", "source_search_status",
     "registry_sha256", "release_id", "selection_id", "validation_id", "candidate_id", "observation_id",
@@ -73,16 +74,18 @@ def _sha(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
 
 
-def _accepted_cell(entry: ResearchInput) -> dict:
+def _accepted_cell(entry: ResearchInput, *, enriched=False) -> dict:
     raw, candidate, source = entry.raw, entry.candidate, entry.source
     anchor = entry.anchor
     lineage, trace = entry.lineage(), entry.temporal_trace
     value, unit = census_quantity(raw.variable, candidate.value, candidate.unit)
     lineage.pop("temporal_decision")
     lineage.pop("project_id")
-    return {
+    reason = "GOVERNED_SELECTION" if unit == candidate.unit else "GOVERNED_SELECTION_EXACT_UNIT_CONVERSION"
+    census_only = entry.accepted.reason == CENSUS_RESOURCE_RULE
+    cell = {
         **lineage, "value": value, "value_state": "PRESENT",
-        "reason": "GOVERNED_SELECTION" if unit == candidate.unit else "GOVERNED_SELECTION_EXACT_UNIT_CONVERSION",
+        "reason": _CENSUS_ONLY_REASON if census_only else reason,
         "value_origin": "FORMAL_SELECTION",
         "source_url": source.url, "locator": anchor.locator, "physical_page": anchor.page,
         "source_table": anchor.table, "source_row": anchor.row, "source_column": anchor.column,
@@ -92,8 +95,16 @@ def _accepted_cell(entry: ResearchInput) -> dict:
         "chemical_basis": candidate.chemical_basis, "denominator_basis": candidate.denominator_basis,
         "rules_sha256": entry.validation.rules_sha, "temporal_policy_version": trace["policy_version"],
         "temporal_status": trace["status"], "temporal_decision_id": trace["decision_id"],
-        "temporal_evidence_ids": canonical_json(trace["matching_evidence_ids"]), "comparable": "YES",
+        "temporal_evidence_ids": canonical_json(trace["matching_evidence_ids"]), "comparable": "NO" if census_only else "YES",
     }
+    if census_only and enriched:
+        bound = json.loads(raw.original_payload)["native_table_binding"]
+        precision = {"mode": "EXACT_SOURCE_TOKEN", "token": raw.raw_value, "unit": raw.raw_unit,
+                     "rounding_interval": bound["raw_rounding_interval"]}
+        if bound["reported_significant_figures"] is not None:
+            precision["significant_figures"] = bound["reported_significant_figures"]
+        cell["precision"] = canonical_json(precision)
+    return cell
 
 
 def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxes, *, science=False):
@@ -137,7 +148,7 @@ def _selection_rows(store: Store | None, release_id: str | None, axes: CensusAxe
             elif not alternatives:
                 projected[key] = {"reason": "NOT_COMPARABLE_FOR_CENSUS_COLUMN"}
             else:
-                projected[key] = _accepted_cell(alternatives[0])
+                projected[key] = _accepted_cell(alternatives[0], enriched=science)
 
     scientific_views = project_science_views(release_inputs, release, axes.columns) if science else None
     if scientific_views is not None:
@@ -215,7 +226,10 @@ def _enrich_cell(row, definition, metadata, has_resource):
         row.update(supplied)
     if row["value_origin"] == "FORMAL_SELECTION":
         row["evidence_state"] = "FORMAL_DIRECT"
-        row["precision"] = canonical_json({
+        if row["reason"] == _CENSUS_ONLY_REASON:
+            row["metadata_evidence"] = canonical_json({"research_use": CENSUS_RESOURCE_USE,
+                                                        "admission_policy": CENSUS_RESOURCE_RULE})
+        row["precision"] = row["precision"] or canonical_json({
             "mode": "EXACT_SOURCE_TOKEN", "token": row["raw_value"], "unit": row["raw_unit"],
         })
     if row["value_state"] == "PRESENT":
