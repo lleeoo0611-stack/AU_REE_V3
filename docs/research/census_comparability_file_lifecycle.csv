@@ -1,0 +1,52 @@
+處置,路徑,理由
+ADD,config/research_profiles/composition_source_editions_v1.json,保存三案 S1 原件獨立擴充鎖定
+ADD,config/research_profiles/resource_bindings_v6.json,版本化 Nolans 同版 JORC 原件綁定
+ADD,config/research_profiles/resource_comparability_challenge_v1.json,固定跨發行方 R1 矛盾原件
+ADD,config/research_profiles/resource_original_edition_candidates_v1.json,保存 Nolans／Dubbo 原始擷取通路與版次
+ADD,config/research_profiles/yangibana_resource_source_routes_v1.json,獨立鎖定 Yangibana 公開版次取得路徑
+ADD,config/research_profiles/yin_resource_source_routes_v1.json,獨立鎖定 Yin 公開版次取得路徑
+ADD,docs/research/census_comparability_file_lifecycle.csv,記錄變更路徑與處置理由
+ADD,docs/research/census_comparability_results.md,記錄科學結果、試驗成本、驗收及剩餘缺口
+ADD,docs/research/census_comparability_verification.json,固定版本、來源、逐格差異、重播及測試收據
+ADD,docs/research/census_comparable_cohorts.md,說明固定與擴大科學比較收據
+ADD,docs/research/census_criterion_evidence.md,盤點 186 個正式用途及其原件缺口
+ADD,docs/research/census_criterion_evidence_receipt.json,固定基準與逐鍵驗證收據
+ADD,docs/research/criterion_original_evidence_v1.json,固定 6 份原件的獨立核對定位
+ADD,docs/research/native_resource_context_binding.md,原生版面、材料用途與留出評估
+ADD,docs/research/native_resource_context_binding_verification.json,保存原生待辦、同範圍成本及科學等價驗證
+ADD,docs/research/nolans_resource_annex_evidence.md,保存原報值、衍生值與不可比較範圍
+ADD,docs/research/resource_comparability_challenge.md,核對 Yin、Yangibana 及 North Stanmore
+ADD,docs/research/resource_comparability_challenge_verification.json,封存案例、計量及 R1 排除判斷
+ADD,docs/research/resource_composition_evidence.md,查核同聲明全礦或 THM、Reserve 角色及原報精度
+ADD,tests/fixtures/resource_composition_review_v1.json,固定 9 件原件與獨立 S1 計算依據
+ADD,tests/test_census_criterion_evidence.py,回歸測試 census_criterion_evidence
+ADD,tests/test_resource_comparability_challenge.py,回歸測試 resource_comparability_challenge
+ADD,tests/test_resource_composition_audit.py,回歸測試 resource_composition_audit
+ADD,tests/test_scoped_resource_evidence.py,回歸測試 scoped_resource_evidence
+ADD,tools/audit_resource_composition.py,離線查驗 9 份原件及既有 S1
+ADD,tools/census_criterion_evidence.py,盤點 186 個正式用途及其原件缺口
+ADD,tools/prepare_expanded_source_profile.py,固定原擷取保持一致才更新描述層輸入指紋
+ADD,tools/verify_panel_cohorts.py,獨立讀回逐格科學輸出及 Decimal 計算
+ARCHIVE,work/census-stage6/verified/archive,新候選、輸入、程式、保留原件及核准科學輸出
+ARCHIVE,work/census-stage6/verified/census-stage6-preview.zip,同時可讀取 Stage 5 與 Stage 6 候選的網站
+ARCHIVE,"work/census-stage6/{additional-sources,s1,r1}",擴充原件與分開的擷取收據及 CAS
+ARCHIVE,"work/census-stage6/{baseline,independent}",基準逐鍵與盲評重播收據
+KEEP,/workspace/AU_REE_V2_reference,唯讀的遷移原件線索與歷史紀錄
+KEEP,config/research_profiles/resource_bindings_v5.json,保存已存在的 Stage 5 凍結綁定
+KEEP,src/au_ree_v3/fresh_decision_policy_v1.json,保存 R1／S1 科學用途、權重及樣本政策
+KEEP,work/census-stage5/final/archive,保存 Stage 5 歷史候選及其輸入指紋
+KEEP,work/research-yield/source-inputs/source_manifest.json,保留固定的 144 個原件及 148 筆擷取
+REFACTOR,src/au_ree_v3/cli.py,傳遞 expanded candidate 附帶的獨立官方地理基準
+REFACTOR,src/au_ree_v3/display_package.py,保留精確固定清冊綁定的地理影子證據
+REFACTOR,src/au_ree_v3/native_table_discovery.py,處理有真實門檻標籤的原生報告結構
+REFACTOR,src/au_ree_v3/native_table_work.py,保留表格證據及原始角色
+REFACTOR,src/au_ree_v3/research_delta.py,區別完整與固定 MCDA 母體、科學或血緣差異
+REFACTOR,src/au_ree_v3/resource_extraction.py,確認同日期附錄明示引用、化學成員和乾全礦
+REFACTOR,src/au_ree_v3/resource_table_binding.py,明確區隔原位 THM 百分比及全礦基準
+REFACTOR,src/au_ree_v3/sources.py,共用精確 source manifest 父清冊及已取得擷取驗證
+REFACTOR,tests/test_native_resource_positives.py,回歸測試 native_resource_positives
+REFACTOR,tests/test_native_table_discovery.py,回歸測試 native_table_discovery
+REFACTOR,tests/test_research_delta.py,回歸測試 research_delta
+REFACTOR,tools/audit_resource_statement_holds.py,新增明示的 R1 hold 科學簽章與反例
+REFACTOR,tools/verify_scientific_yield.py,驗證既有百分比衍生公式、原報精度及選值 ID
+REFACTOR,web/tests/browser.mjs,以實際二版預覽驗證新值到原件的血緣及回滾
