@@ -1,0 +1,989 @@
+{
+  "artifacts": [
+    {
+      "path": "work/census-stage2/stage2-final-a/stage2_baseline.json",
+      "sha256": "fa1c4d1387931ee17cc86df7d454568301b01f901431084bc0fad20accf875c6"
+    },
+    {
+      "path": "work/census-stage2/stage2-final-a/census_gain_funnel.csv",
+      "sha256": "39cec1b97b4644e096e8761da77ab6e2f38d420aaa6c79da38dba9b00388e626"
+    },
+    {
+      "path": "work/census-stage2/holdout_binding_comparison.json",
+      "sha256": "62e379110cfbcb5c8216c6529b091356a93f13e7bdd204c924e504b1b40fcf59"
+    },
+    {
+      "path": "work/census-stage2/binding-benchmark/engineering_benchmark.json",
+      "sha256": "595ede955734580413d3be912af72a8178d29d0b4b785b0e83b05d1d4584f158"
+    },
+    {
+      "path": "work/census-stage2/engineering-cd/default/engineering_comparison.json",
+      "sha256": "d386047f6a850ed544b8168c0be30f8100df403640d287dd2e0be94bae3e6a67"
+    },
+    {
+      "path": "work/census-stage2/engineering-cd/optional-exact/optional_attribute_workload.json",
+      "sha256": "fd6c2677870a4021046062b726f400e694a7f029ff24d83848a0d7ba259bcdc0"
+    },
+    {
+      "path": "work/census-stage2/engineering-cd/cache/cd-opt-in/cache_telemetry.json",
+      "sha256": "eaa991672e7cf2102aa9bdd03d2496f9b452adb09f4a26e8a4e0b9f7d11b9f48"
+    },
+    {
+      "path": "work/census-stage2/final-census-delta/census_delta.csv",
+      "sha256": "0a2ce00f922f8933458dcc551dd618a1a88c6b01dfcde062951d801e2d2d1839"
+    },
+    {
+      "path": "work/census-stage2/final-census-delta/comparison_receipt.json",
+      "sha256": "3aae0f756f019c94032aac83fdb4fb323103b09f7ceb1bbd58164eff84995f0b"
+    },
+    {
+      "path": "work/census-stage2/final-census-delta/comparability_delta.json",
+      "sha256": "736984605befd04970390e358da0746acd00d6efd861986fd9ac82ebeeae76ff"
+    },
+    {
+      "path": "work/census-stage2/final-census-delta/cohort_and_mcda.json",
+      "sha256": "24650c6db70ba0834fb39b8fce5e982baab4cb6ac87cab926c23b18c8155f33d"
+    },
+    {
+      "path": "work/census-stage2/census-stage2-candidate.zip",
+      "sha256": "d6042feb29358de99123ed187da05ea8ac1215b0621c2b6579cbbf917633502e"
+    },
+    {
+      "path": "work/census-stage2/preview-dist-verification/site_verification.json",
+      "sha256": "cc4bcbb282a28cca0b15065280403fabe04cff12cca3340193d2df97e91030a8"
+    },
+    {
+      "path": "work/census-stage2/full-final-suite.log",
+      "sha256": "dd6f61ae2511c4e83c2b2dcccc4b5e9d66d6233c433e8e0ee7ec30a8dae74781"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb/oracle.json",
+      "sha256": "1e65e330fed9027a2be1cac0556e5dbacc56f241723259a6f9201516f98f3d62"
+    },
+    {
+      "path": "work/census-stage2/typed-attributes-22f8565/attribute-oracle.json",
+      "sha256": "21bd7ba8120f7ac2429cad0112bfe9848d598d63aebf26cff9a92e256141b8e9"
+    },
+    {
+      "path": "work/census-stage2/derived-census-00e33cb-faults/candidate_faults_receipt.json",
+      "sha256": "db7d83cd14b440269d579759c293423192deaa177c26865f036d0b1c10eedcbb"
+    },
+    {
+      "path": "work/census-stage2/typed-attributes-22f8565-faults/candidate_faults_receipt.json",
+      "sha256": "10903bed51d9ee6f53a85ed3727049184c60b0dfcf00caeb83bfda33d236699d"
+    },
+    {
+      "path": "work/census-stage2/context-integrated-a/context_shadow_replay.json",
+      "sha256": "9687ad73628753e76cee47ed2d4bb781c39ce5627a7ba4e6e06a82a38054d333"
+    },
+    {
+      "path": "work/census-stage2/context-integrated-a/government_geography_role_shadow.json",
+      "sha256": "861651896f58731107956f5357c90682acc7834204165f1caec36a3e2e31d852"
+    },
+    {
+      "path": "work/census-stage2/context-integrated-a/production_forecast_shadow.json",
+      "sha256": "977b06e6e237f65f9e2cc2d6354c18b2caf86a52c7be09cc9d6c7c4c96e9cb6c"
+    },
+    {
+      "path": "work/census-stage2/context-integrated-a/infrastructure_compatibility.json",
+      "sha256": "b9da3e493e727defe8d77ff6fea2dbd4c345e13fc43a7255c341945510a44cbd"
+    },
+    {
+      "path": "work/census-stage2/context-integrated-a/tenements.json",
+      "sha256": "e681ca38c488385ba6dc7d5713d4f5bcb3e1f106ccc86add4a933583c4811bb4"
+    }
+  ],
+  "baseline": {
+    "code": "074e00daf69360cd71cab2554f651b4b6e76a668",
+    "comparison": {
+      "F4": "PASS",
+      "F5": "BLOCKED",
+      "after_comparable_project_criteria": 6,
+      "after_formal_census_cells": 18,
+      "before_comparable_project_criteria": 6,
+      "before_formal_census_cells": 16,
+      "census_change_counts": {
+        "FORMAL_DERIVED_ADDED": 2,
+        "PROVENANCE_RECEIPT_CHANGED": 20,
+        "UNCHANGED": 4716,
+        "VALIDATED_ATTRIBUTE_ADDED": 5
+      },
+      "compared_census_cells": 4743,
+      "net_comparable_project_criteria": 0,
+      "observation_counts": {
+        "after": {
+          "candidate_count": 42,
+          "selected_count": 21,
+          "validated_count": 27
+        },
+        "before": {
+          "candidate_count": 42,
+          "selected_count": 21,
+          "validated_count": 27
+        }
+      },
+      "outputs_sha256": {
+        "census_delta.csv": "0a2ce00f922f8933458dcc551dd618a1a88c6b01dfcde062951d801e2d2d1839",
+        "cohort_and_mcda.json": "24650c6db70ba0834fb39b8fce5e982baab4cb6ac87cab926c23b18c8155f33d",
+        "comparability_delta.json": "736984605befd04970390e358da0746acd00d6efd861986fd9ac82ebeeae76ff",
+        "release_and_replay.json": "304a616891521a4673e809dddecb9883002260f6f7c9a6b929bb348ad5a94761"
+      },
+      "panels": {
+        "issuer_resource_composition": {
+          "after_eligible_count": 2,
+          "after_status": "PASS"
+        },
+        "issuer_resource_infrastructure": {
+          "after_eligible_count": 0,
+          "after_status": "INSUFFICIENT_COHORT"
+        },
+        "issuer_resource_study": {
+          "after_eligible_count": 0,
+          "after_status": "INSUFFICIENT_COHORT"
+        },
+        "resource_infrastructure_pilot": {
+          "after_eligible_count": 0,
+          "after_status": "INSUFFICIENT_COHORT"
+        },
+        "six_domain": {
+          "after_eligible_count": 0,
+          "after_status": "INSUFFICIENT_COHORT"
+        }
+      },
+      "profile_id": "au-ree-2026-11-28",
+      "research_cutoff": "2026-11-28",
+      "schema": "research-delta-v1",
+      "status": "PASS",
+      "target_status": "EVIDENCE_INSUFFICIENT"
+    },
+    "fields": 51,
+    "fixed_projects": 93,
+    "prior_archive": "de50379f50e49fdd74ac536deb51b8b03dade8f442565644564c5cef1f2a17ef",
+    "prior_formal_derived": 0,
+    "public_capture_events": 148,
+    "sha_editions": 144
+  },
+  "cutoff": "2026-11-28",
+  "engineering_comparison": {
+    "OS_page_cache": "UNCONTROLLED",
+    "billed_CI_cost": "UNMEASURED",
+    "context_retest_code": "994a3b520021906790358b6684a39a26ba01b0c2",
+    "local_suite": {
+      "pass": 313,
+      "skip": 0,
+      "wall_seconds": 48.98
+    },
+    "same_D_code_default_active_rss_kib": [
+      92288,
+      93092
+    ],
+    "same_D_code_default_active_wall_seconds": [
+      3.127,
+      4.564
+    ],
+    "same_D_default_active_cold_pdf_pages": [
+      [
+        8,
+        224
+      ],
+      [
+        12,
+        645
+      ]
+    ],
+    "same_D_default_active_sql_statements": [
+      4053,
+      4053
+    ],
+    "same_D_default_active_warm_pdf_pages": [
+      [
+        0,
+        0
+      ],
+      [
+        4,
+        421
+      ]
+    ],
+    "same_v4_B_duplicate_groups": [
+      1,
+      1
+    ],
+    "same_v4_B_extraction_ast_max_p90": [
+      [
+        119,
+        43
+      ],
+      [
+        25,
+        13
+      ]
+    ],
+    "same_v4_B_full_ast_max_p90": [
+      [
+        119,
+        20
+      ],
+      [
+        61,
+        20
+      ]
+    ],
+    "same_v4_B_rss_kib": [
+      93548,
+      93220
+    ],
+    "same_v4_B_runtime_edges": [
+      64,
+      78
+    ],
+    "same_v4_B_static_cycle_groups": [
+      1,
+      1
+    ],
+    "same_v4_B_static_edges": [
+      87,
+      112
+    ],
+    "same_v4_B_wall_seconds": [
+      2.999,
+      2.822
+    ]
+  },
+  "file_lifecycle": {
+    "archived_candidates": [
+      "0410d7e7fe21a409645abe2c62cb3741abd1afa04d1e339f5f6028f888374de1",
+      "b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da"
+    ],
+    "kept": [
+      "V2 read-only original history",
+      "existing research archives and direct observations",
+      "SQLite schema v3",
+      "existing HTML shell",
+      "MCDA decision policy"
+    ],
+    "merged_files": [],
+    "removed_files": [],
+    "tracked": [
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "config/research_profiles/au_ree_census_attributes_v1.json",
+        "reason": "Pin exact evidence recipes and explicitly opt in to defined research use."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "config/research_profiles/census_attribute_bindings_v1.json",
+        "reason": "Pin exact evidence recipes and explicitly opt in to defined research use."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "config/research_profiles/production_forecast_bindings_v1.json",
+        "reason": "Pin exact evidence recipes and explicitly opt in to defined research use."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_project_attribute_verification.json",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_project_attributes.md",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_stage2_baseline.md",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_stage2_baseline_receipt.json",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_stage2_results.md",
+        "reason": "Report cross-unit verified outcomes and artifact fingerprints."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_stage2_verification.json",
+        "reason": "Report cross-unit verified outcomes and artifact fingerprints."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_treo_derivations.md",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/census_treo_derivations_receipt.json",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/forecast_and_geographic_context.md",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/forecast_and_geographic_context_receipt.json",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/native_extraction_refactor.md",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "docs/research/native_extraction_refactor_receipt.json",
+        "reason": "Record exact source, science, engineering or replay evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/census_derivations.py",
+        "reason": "Connect a checked existing DerivedValue to Census and its input observations."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/census_metadata.py",
+        "reason": "Project original descriptive attributes using existing Census metadata."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/contracts/__init__.py",
+        "reason": "Preserve the versioned scientific contract and its compatibility."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/derivations.py",
+        "reason": "Assess exact scope, denominator, versioned formula and numeric precision."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/development.py",
+        "reason": "Share exact native text and date/claim interpretation with typed source use."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/forecast.py",
+        "reason": "Retain measured study-specific roles in an isolated forecast shadow."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/fresh_census.py",
+        "reason": "Project governed values and validate direct, derived and descriptive evidence."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/fresh_observations.py",
+        "reason": "Orchestrate exact evidence and pin the authorized release calculation registry."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/fresh_research.py",
+        "reason": "Connect exact-source evidence, derivation transaction and Census output."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/project_attributes.py",
+        "reason": "Interpret, validate and store release-scoped typed original assertions."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/registry.py",
+        "reason": "Pin the optional existing release profile input for attribute evidence."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/research_delta.py",
+        "reason": "Compare and verify provenance for formal derivations and typed source attributes."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/resource_audit.py",
+        "reason": "Emit original observation and selection audit evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/resource_context.py",
+        "reason": "Bind statement context and construct immutable original observation evidence."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/resource_selection.py",
+        "reason": "Build governed selection proposals using existing scope policies."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "src/au_ree_v3/resource_sources.py",
+        "reason": "Verify eligible editions and share the native document cache."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/resource_table_binding.py",
+        "reason": "Recover measured row and column roles without bypassing source or scientific proof."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/store.py",
+        "reason": "Recompute formal derivation authorization before an existing table write."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "src/au_ree_v3/web_publication.py",
+        "reason": "Verify public Census lineage without changing the website shell or release pointer."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tests/test_census_stage2_baseline.py",
+        "reason": "Verify this capability, input controls, retained behavior or Candidate identity."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tests/test_context_shadows.py",
+        "reason": "Verify this capability, input controls, retained behavior or Candidate identity."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tests/test_derivations.py",
+        "reason": "Verify this capability, input controls, retained behavior or Candidate identity."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "tests/test_native_resource_positives.py",
+        "reason": "Verify this capability, input controls, retained behavior or Candidate identity."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tests/test_project_attributes.py",
+        "reason": "Verify this capability, input controls, retained behavior or Candidate identity."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "tests/test_resource_table_binding.py",
+        "reason": "Verify this capability, input controls, retained behavior or Candidate identity."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "tests/test_web_publication.py",
+        "reason": "Verify this capability, input controls, retained behavior or Candidate identity."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tools/census_stage2_baseline.py",
+        "reason": "Run independent research diagnostics, original-source checks or replay."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tools/review_context_shadows.py",
+        "reason": "Run independent research diagnostics, original-source checks or replay."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tools/verify_census_attributes.py",
+        "reason": "Run independent research diagnostics, original-source checks or replay."
+      },
+      {
+        "change": "ADDED",
+        "lifecycle": "ADD",
+        "path": "tools/verify_census_derivations.py",
+        "reason": "Run independent research diagnostics, original-source checks or replay."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "web/assets/labels.mjs",
+        "reason": "Show the typed attribute evidence in the existing fixed frontend."
+      },
+      {
+        "change": "MODIFIED",
+        "lifecycle": "REFACTOR",
+        "path": "web/assets/views.mjs",
+        "reason": "Show the typed attribute evidence in the existing fixed frontend."
+      }
+    ]
+  },
+  "merges_and_ci": [
+    {
+      "branch_head": "524758e951bd12927c0de2520b4b6baa248a3557",
+      "ci_run": 46092889227,
+      "ci_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46092889227",
+      "exact_original_seconds": 82,
+      "frozen_reference_ci_job": "NOT_RUN",
+      "pr": 30,
+      "pr_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/30",
+      "result": "PASS",
+      "static_seconds": 24,
+      "unit": "A"
+    },
+    {
+      "branch_head": "8c8bbd66b8ec0135d139ba63ef638a4198b0021f",
+      "ci_run": 46093168408,
+      "ci_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46093168408",
+      "exact_original_seconds": 66,
+      "frozen_reference_ci_job": "NOT_RUN",
+      "pr": 31,
+      "pr_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/31",
+      "result": "PASS",
+      "static_seconds": 25,
+      "unit": "B"
+    },
+    {
+      "branch_head": "c0ae25b05ea882bd0198dfb42bd0391589665c0c",
+      "browser_ci_run": 46093663946,
+      "browser_ci_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46093663946",
+      "ci_run": 46093663941,
+      "ci_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46093663941",
+      "exact_original_seconds": 46,
+      "frozen_reference_ci_job": "NOT_RUN",
+      "pr": 32,
+      "pr_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/32",
+      "result": "PASS",
+      "static_seconds": 24,
+      "unit": "C"
+    },
+    {
+      "branch_head": "ddcef7c4b49ac23d56a50c14d9c35f1ffd060202",
+      "browser_ci_run": 46094042125,
+      "browser_ci_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46094042125",
+      "ci_run": 46094042051,
+      "ci_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/actions/runs/46094042051",
+      "exact_original_seconds": 56,
+      "frozen_reference_ci_job": "NOT_RUN",
+      "pr": 33,
+      "pr_url": "https://github.com/lleeoo0611-stack/AU_REE_V3/pull/33",
+      "result": "PASS",
+      "static_seconds": 13,
+      "unit": "D"
+    }
+  ],
+  "remaining_bottlenecks": {
+    "CODE_ERROR": {
+      "detail": "Use shared public quote and date anchors in the integrated E import.",
+      "status": "RESOLVED"
+    },
+    "EVIDENCE_INSUFFICIENT": {
+      "detail": "143 raw scoped hits without unique column/unit proof; 19 work items without recovered row structure; scope/date evidence for held attributes.",
+      "status": "CANDIDATE"
+    },
+    "HYPOTHESIS_NOT_SUPPORTED": {
+      "detail": "Tested tenure centroids do not qualify as mine or deposit points; no new MCDA cohort.",
+      "status": "EVIDENCE_INSUFFICIENT"
+    },
+    "REPLAY_ENVIRONMENT_MISMATCH": {
+      "detail": "Sealed matching environments passed; portability to other parser runtimes was UNMEASURED.",
+      "status": "NOT_OBSERVED"
+    },
+    "SCIENTIFIC_CONFLICT": {
+      "detail": "Wolverine companion Dy2O3 precision ranges are disjoint.",
+      "status": "SHADOW"
+    },
+    "SOURCE_UNAVAILABLE": {
+      "detail": "Two previously missing historical exact editions and the independent backup failure domain.",
+      "status": "BLOCKED"
+    },
+    "formal_use_holdout_precision_recall": {
+      "status": "UNMEASURED"
+    }
+  },
+  "replay_and_web": {
+    "E_shadow_replay": {
+      "forecast": {
+        "receipt_sha256": "977b06e6e237f65f9e2cc2d6354c18b2caf86a52c7be09cc9d6c7c4c96e9cb6c",
+        "status": "PASS"
+      },
+      "formal_census_cells": 0,
+      "formal_mcda_criteria": 0,
+      "formal_selections": 0,
+      "geography": {
+        "receipt_sha256": "861651896f58731107956f5357c90682acc7834204165f1caec36a3e2e31d852",
+        "status": "PASS"
+      },
+      "schema": "census-context-shadow-replay-v1",
+      "scope": "SHADOW",
+      "source_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+    },
+    "derivation_candidate": {
+      "browser": {
+        "browser_history_load_wall_ms": 219,
+        "browser_js_heap_used_bytes": 8669692,
+        "browser_load_census_wall_ms": 475,
+        "exact_derived_evidence_dialogs": 2,
+        "formal_pointer_rejects_candidate": "PASS",
+        "history_csv_update_link": "PASS",
+        "map_ree_mcda_language": "PASS",
+        "mixed_cache_missing_atomic": "PASS",
+        "mobile": "PASS",
+        "no_formal_pointer": "PASS",
+        "rehashed_unqualified_pin_rank_lineage": "PASS",
+        "search_filter_sort_columns_evidence": "PASS",
+        "xss_and_source_link": "PASS"
+      },
+      "candidate_id": "0410d7e7fe21a409645abe2c62cb3741abd1afa04d1e339f5f6028f888374de1",
+      "code_commit": "00e33cb9720b46a97023bfae022f58f11b750dab",
+      "gate_status": {
+        "F0": "PASS",
+        "F1": "PASS",
+        "F2": "PASS",
+        "F3": "PASS",
+        "F4": "PASS",
+        "F5": "BLOCKED"
+      },
+      "output_fingerprints": {
+        "census/cell_status.csv": "221e854bbe305892a5cad5a3b611d1cd93d0c71e55dbd18a67cf87ffba5e9efe",
+        "census/census.csv": "0ae26fdea76cdb91e3aeae601550fa418fd53b222f57047d215da6e826b0a6eb",
+        "census/census_receipt.json": "d971e128ea5b02270aaff0d337094bb51dd1d50a8591b17fb6948a0e61715843",
+        "decision/decision_receipt.json": "0b7cfb1e5dac9a0f7b1119d26e27b312340ee586483e5bddf31f1cf1fe759cbb",
+        "decision/mcda_inputs.json": "89dabd973f23b7c0ea9945dc96500233453eeb2665230897b0f30be3d5467caf",
+        "decision/mcda_results.json": "75ab97428674e3ebbc64a0a503496d6dce5840ba7cf55047e7388b11134b6af6",
+        "observations/extraction.json": "69056dba4e94a02baac9d21132b27cc6be8173a94981008fd314443f0ffbb76d",
+        "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+      },
+      "profile_sha256": "8ccc8d042c4b8ce16177acf3f1e583d09d373459adeb930651a317ce4ff59c93",
+      "replay_evidence": [
+        {
+          "elapsed_seconds": 6.2894826299998385,
+          "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+          "receipt_sha256": "0ad8a46e4cd617ef109b9a02409a0e97bd697228a77c4def63d23d182de512ee",
+          "reported_F4": "PASS",
+          "status": "PASS",
+          "verified_output_count": 8,
+          "verified_outputs": {
+            "census/cell_status.csv": "221e854bbe305892a5cad5a3b611d1cd93d0c71e55dbd18a67cf87ffba5e9efe",
+            "census/census.csv": "0ae26fdea76cdb91e3aeae601550fa418fd53b222f57047d215da6e826b0a6eb",
+            "census/census_receipt.json": "d971e128ea5b02270aaff0d337094bb51dd1d50a8591b17fb6948a0e61715843",
+            "decision/decision_receipt.json": "0b7cfb1e5dac9a0f7b1119d26e27b312340ee586483e5bddf31f1cf1fe759cbb",
+            "decision/mcda_inputs.json": "89dabd973f23b7c0ea9945dc96500233453eeb2665230897b0f30be3d5467caf",
+            "decision/mcda_results.json": "75ab97428674e3ebbc64a0a503496d6dce5840ba7cf55047e7388b11134b6af6",
+            "observations/extraction.json": "69056dba4e94a02baac9d21132b27cc6be8173a94981008fd314443f0ffbb76d",
+            "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+          }
+        },
+        {
+          "elapsed_seconds": 6.353108269002405,
+          "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+          "receipt_sha256": "08b28bbc8fd46e33a4b63521309a8c86824c4fbfdc358567f27777a8cd3a81ea",
+          "reported_F4": "PASS",
+          "status": "PASS",
+          "verified_output_count": 8,
+          "verified_outputs": {
+            "census/cell_status.csv": "221e854bbe305892a5cad5a3b611d1cd93d0c71e55dbd18a67cf87ffba5e9efe",
+            "census/census.csv": "0ae26fdea76cdb91e3aeae601550fa418fd53b222f57047d215da6e826b0a6eb",
+            "census/census_receipt.json": "d971e128ea5b02270aaff0d337094bb51dd1d50a8591b17fb6948a0e61715843",
+            "decision/decision_receipt.json": "0b7cfb1e5dac9a0f7b1119d26e27b312340ee586483e5bddf31f1cf1fe759cbb",
+            "decision/mcda_inputs.json": "89dabd973f23b7c0ea9945dc96500233453eeb2665230897b0f30be3d5467caf",
+            "decision/mcda_results.json": "75ab97428674e3ebbc64a0a503496d6dce5840ba7cf55047e7388b11134b6af6",
+            "observations/extraction.json": "69056dba4e94a02baac9d21132b27cc6be8173a94981008fd314443f0ffbb76d",
+            "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+          }
+        }
+      ],
+      "source_input_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+    },
+    "formal_pointer": "PRESERVED",
+    "formal_release_status": "BLOCKED",
+    "integrated_candidate": {
+      "browser": {
+        "browser_history_load_wall_ms": 269,
+        "browser_js_heap_used_bytes": 8616440,
+        "browser_load_census_wall_ms": 600,
+        "exact_derived_evidence_dialogs": 2,
+        "formal_pointer_rejects_candidate": "PASS",
+        "history_csv_update_link": "PASS",
+        "map_ree_mcda_language": "PASS",
+        "mixed_cache_missing_atomic": "PASS",
+        "mobile": "PASS",
+        "no_formal_pointer": "PASS",
+        "rehashed_unqualified_pin_rank_lineage": "PASS",
+        "search_filter_sort_columns_evidence": "PASS",
+        "typed_attribute_evidence_dialogs": 5,
+        "xss_and_source_link": "PASS"
+      },
+      "candidate_id": "b0f1389f395c7eff4a239c0214c0bb518f2ba504f84c71f3be948404debec1da",
+      "code_commit": "22f85657ef7ef79abe651c1ba3485302dafd2d1a",
+      "gate_status": {
+        "F0": "PASS",
+        "F1": "PASS",
+        "F2": "PASS",
+        "F3": "PASS",
+        "F4": "PASS",
+        "F5": "BLOCKED"
+      },
+      "output_fingerprints": {
+        "census/cell_status.csv": "c3aa8cb871a89f1e04fd9f4e312051ebf1fc6fcba66600086df3ad556351e968",
+        "census/census.csv": "d5e71a450532a313840fb521c6c593d412550193e598aee8260e10b70b04494c",
+        "census/census_receipt.json": "9e5b9c929effdbd2b9992e2c6c68329ee47c43c4932b84790f708566b463f256",
+        "decision/decision_receipt.json": "c1bd9a8dcc29dd061617f250321859a459c3be289bcaa81f108744775f859393",
+        "decision/mcda_inputs.json": "066c48f7f552b141bd6fe49531412a1759c77be90f0970542881445e710208f4",
+        "decision/mcda_results.json": "e6a4e46b49fb51d1fdfd23f62dae0614eb73f614bfe0ba7b1f0829e039f43f8a",
+        "observations/extraction.json": "17dcc0f00b8526d607ef00e4f2b148c0f548c9d8d2dab7ce7807273edceaa81f",
+        "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+      },
+      "profile_sha256": "f1e82f3ad5c31938acdd80e803db75ece2bccadc99ecc8085adc357667b93ff0",
+      "replay_evidence": [
+        {
+          "elapsed_seconds": 9.729274675999477,
+          "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+          "receipt_sha256": "42879b9715913834489da4b64413177e201aead34e6864e5c184e5cc6245fbb3",
+          "reported_F4": "PASS",
+          "status": "PASS",
+          "verified_output_count": 8,
+          "verified_outputs": {
+            "census/cell_status.csv": "c3aa8cb871a89f1e04fd9f4e312051ebf1fc6fcba66600086df3ad556351e968",
+            "census/census.csv": "d5e71a450532a313840fb521c6c593d412550193e598aee8260e10b70b04494c",
+            "census/census_receipt.json": "9e5b9c929effdbd2b9992e2c6c68329ee47c43c4932b84790f708566b463f256",
+            "decision/decision_receipt.json": "c1bd9a8dcc29dd061617f250321859a459c3be289bcaa81f108744775f859393",
+            "decision/mcda_inputs.json": "066c48f7f552b141bd6fe49531412a1759c77be90f0970542881445e710208f4",
+            "decision/mcda_results.json": "e6a4e46b49fb51d1fdfd23f62dae0614eb73f614bfe0ba7b1f0829e039f43f8a",
+            "observations/extraction.json": "17dcc0f00b8526d607ef00e4f2b148c0f548c9d8d2dab7ce7807273edceaa81f",
+            "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+          }
+        },
+        {
+          "elapsed_seconds": 8.743142253002588,
+          "reason": "COLD_SCIENTIFIC_ARTIFACTS_MATCH",
+          "receipt_sha256": "fd48bf54b8dd728e7e4951ae428fbc038e730584576ae62dca80fdcde5a65e8e",
+          "reported_F4": "PASS",
+          "status": "PASS",
+          "verified_output_count": 8,
+          "verified_outputs": {
+            "census/cell_status.csv": "c3aa8cb871a89f1e04fd9f4e312051ebf1fc6fcba66600086df3ad556351e968",
+            "census/census.csv": "d5e71a450532a313840fb521c6c593d412550193e598aee8260e10b70b04494c",
+            "census/census_receipt.json": "9e5b9c929effdbd2b9992e2c6c68329ee47c43c4932b84790f708566b463f256",
+            "decision/decision_receipt.json": "c1bd9a8dcc29dd061617f250321859a459c3be289bcaa81f108744775f859393",
+            "decision/mcda_inputs.json": "066c48f7f552b141bd6fe49531412a1759c77be90f0970542881445e710208f4",
+            "decision/mcda_results.json": "e6a4e46b49fb51d1fdfd23f62dae0614eb73f614bfe0ba7b1f0829e039f43f8a",
+            "observations/extraction.json": "17dcc0f00b8526d607ef00e4f2b148c0f548c9d8d2dab7ce7807273edceaa81f",
+            "observations/observations.jsonl": "ef8d71f70e89f458907647ca89d81d1927f3c2ddd14683efc1811a3f4e165fa1"
+          }
+        }
+      ],
+      "source_input_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd"
+    }
+  },
+  "schema": "census-stage2-verification-v1",
+  "scientific_delta": {
+    "all_census_changes": {
+      "FORMAL_DERIVED_ADDED": 2,
+      "PROVENANCE_RECEIPT_CHANGED": 20,
+      "UNCHANGED": 4716,
+      "VALIDATED_ATTRIBUTE_ADDED": 5
+    },
+    "complete_cohort": 2,
+    "descriptive_attributes": 2,
+    "descriptive_projected_cells": 5,
+    "direct_existing": 16,
+    "formal_derived": 2,
+    "historical_O2": "FAIL",
+    "new_geographic_or_forecast_formal_selections": 0,
+    "new_original_observations": 0,
+    "present": [
+      1108,
+      1115
+    ],
+    "r1": 4,
+    "ranks_or_sensitivity_changed": false,
+    "s1": 2
+  },
+  "source_to_admission_funnel": {
+    "header_or_unit_unbound_final": 141,
+    "holdouts": {
+      "artifact_sha256": {
+        "blinded-binding-074e00d/raw-binding-10.json": "4df82ff8017765773484c9b5e911f7c03d95cef0d57793f15e7daa5a38434bf3",
+        "blinded-binding-074e00d/raw-binding-31-performance.json": "ab72f732a71f3992ae0207c72c8ba1d8b9be83637152ccbbcaa44e710b6fe54d",
+        "blinded-binding-074e00d/raw-binding-31.json": "647ff97007f9cb41177dc2b6edf4df46ac48a50e8d6767ab15ff9d0ad478901e",
+        "blinded-binding-fc48f81/raw-binding-10.json": "20121fde7b9af68263e7b67879c88a19bfd98094a2a6c998484e2bf1d747c87c",
+        "blinded-binding-fc48f81/raw-binding-31-performance.json": "2a76b2533159671a07f16d4d38df4049257bafb055e67e661b7c37bb96238395",
+        "blinded-binding-fc48f81/raw-binding-31.json": "efc290255f899a8c5cbe601f1f681ca01abbacc71311a0a37b9546201dec3e45"
+      },
+      "baseline_commit": "074e00daf69360cd71cab2554f651b4b6e76a668",
+      "detector_commit": "fc48f814b56372a13f811169469b2dfdc27289c7",
+      "formal_precision_recall": "UNMEASURED",
+      "formal_use": "NOT_RUN",
+      "input_annotation_sha256": {
+        "raw-binding-10": "840cf4ce2cc3330af8772d2b8593c050fab50e59069b694610c9ee5e2a77705c",
+        "raw-binding-31": "ad27468ea501eb060e37cc0370e7861110477b074149864305a91176f1ca26e2"
+      },
+      "limits": "Operator supplies original table and row locators. Two sets overlap by family and must not be summed. Metrics do not measure automatic retrieval or formal adoption. RAM is the process high-water and OS filesystem cache was not controlled.",
+      "old_positive_tokens_preserved_per_set": [
+        1,
+        1
+      ],
+      "schema": "census-stage2-blinded-binding-comparison-v1",
+      "scores": {
+        "raw-binding-10": {
+          "baseline": {
+            "confusion": {
+              "fn": 9,
+              "fp": 0,
+              "independent_negative_probes": 11,
+              "positive_eligible": 10,
+              "precision": 1.0,
+              "recall": 0.1,
+              "tn": 11,
+              "tp": 1
+            },
+            "performance": {
+              "cold_document_cache": {
+                "child_peak_rss_kib": 34648,
+                "decoded_physical_pages": 11,
+                "pdf_opens": 3,
+                "process_peak_rss_kib": 34648,
+                "seconds": 0.25462946399784414,
+                "sqlite_queries": 0
+              },
+              "limitations": "OS filesystem cache was not flushed. Process RSS is cumulative high-water.",
+              "warm_document_cache": {
+                "child_peak_rss_kib": 34648,
+                "decoded_physical_pages": 0,
+                "pdf_opens": 0,
+                "process_peak_rss_kib": 39512,
+                "seconds": 0.043669115999364294,
+                "sqlite_queries": 0
+              }
+            }
+          },
+          "detector": {
+            "confusion": {
+              "fn": 8,
+              "fp": 0,
+              "independent_negative_probes": 11,
+              "positive_eligible": 10,
+              "precision": 1.0,
+              "recall": 0.2,
+              "tn": 11,
+              "tp": 2
+            },
+            "performance": {
+              "cold_document_cache": {
+                "child_peak_rss_kib": 36220,
+                "decoded_physical_pages": 11,
+                "pdf_opens": 3,
+                "process_peak_rss_kib": 36220,
+                "seconds": 0.25152368700219085,
+                "sqlite_queries": 0
+              },
+              "limitations": "OS filesystem cache was not flushed. Process RSS is cumulative high-water.",
+              "warm_document_cache": {
+                "child_peak_rss_kib": 36220,
+                "decoded_physical_pages": 0,
+                "pdf_opens": 0,
+                "process_peak_rss_kib": 41212,
+                "seconds": 0.05724514200119302,
+                "sqlite_queries": 0
+              }
+            }
+          }
+        },
+        "raw-binding-31": {
+          "baseline": {
+            "confusion": {
+              "FN": 30,
+              "FP": 0,
+              "TP": 1,
+              "precision": 1.0,
+              "recall": 0.03225806451612903,
+              "status": "MEASURED"
+            },
+            "performance": {
+              "child_peak_rss_kib": 31224,
+              "elapsed_seconds": 2.5543520329993044,
+              "os_filesystem_cache": "NOT_CONTROLLED",
+              "process_peak_rss_kib": 31224
+            }
+          },
+          "detector": {
+            "confusion": {
+              "FN": 29,
+              "FP": 0,
+              "TP": 2,
+              "precision": 1.0,
+              "recall": 0.06451612903225806,
+              "status": "MEASURED"
+            },
+            "performance": {
+              "child_peak_rss_kib": 31936,
+              "elapsed_seconds": 2.053161014999205,
+              "os_filesystem_cache": "NOT_CONTROLLED",
+              "process_peak_rss_kib": 31936
+            }
+          }
+        }
+      }
+    },
+    "native_total_positions": 298,
+    "non_unique_native_final": 2,
+    "numeric_observations": {
+      "after": {
+        "candidate_count": 42,
+        "selected_count": 21,
+        "validated_count": 27
+      },
+      "before": {
+        "candidate_count": 42,
+        "selected_count": 21,
+        "validated_count": 27
+      }
+    },
+    "typed_physical_positions": [
+      103,
+      167
+    ],
+    "typed_scoped_sightings": [
+      112,
+      194
+    ],
+    "unbound": [
+      225,
+      143
+    ],
+    "unrecognized_source_project_final": 19
+  },
+  "timezone": "Asia/Taipei"
+}
