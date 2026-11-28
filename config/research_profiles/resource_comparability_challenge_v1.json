@@ -1,0 +1,501 @@
+{
+  "schema": "resource-comparability-challenge-v1",
+  "manifest_sha256": {
+    "fixed": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+    "yin": "0581c8b94a231b467b5f6d53b12beb01881c62769fb3df9c243acf4a4f3edf41",
+    "yangibana": "8f43eb977bd54b34af7b1124d2c81ddd2f0b5919b3c9c10e1b528f14dd1f8b81"
+  },
+  "policy_sha256": "b8dd516b6f6a765f3a656630d91315061ff0a27bf2c57bef41c92a2dc80abf19",
+  "cases": [
+    {
+      "case_id": "mangaroon-yin-primary-inventory-conflict",
+      "project_id": "AU-8f3fe174a998d20ee4cf",
+      "criterion": "R1",
+      "state": "SCIENTIFIC_CONFLICT",
+      "blockers": [
+        "COMPETING_CONTAINED_MASSES_AT_IDENTICAL_CUTOFF",
+        "ESTIMATE_EFFECTIVE_DATE_UNVERIFIED",
+        "REISSUE_WITHOUT_FORMAL_CORRECTION"
+      ],
+      "scope": "Mangaroon Yin Ironstone Complex at 0.20% TREO: Yin, Yin South, Y2 and Sabre",
+      "estimate_effective_date": null,
+      "precision_basis": "Sensitivity envelope of ±0.05 kt around both printed hundreds of tonnes; source declares potential sums due to rounding.",
+      "editions": [
+        {
+          "input": "fixed",
+          "source_sha256": "eb484b6f7118d7319173b4f3637b2b66e9058abdf69bf6d5cc1cf358306190e5",
+          "capture_sha256": "c2829ba8c609d8190bb580926f25e072c82fae06e1b450a962d02d4cd43b62d1",
+          "publication_date": "2023-11-30",
+          "statement_role": "PRIMARY_MINERAL_RESOURCE",
+          "witnesses": [
+            {
+              "id": "yin-cover",
+              "page": 1,
+              "quote": "ASX ANNOUNCEMENT 30 NOVEMBER 2023"
+            },
+            {
+              "id": "yin-title",
+              "page": 1,
+              "quote": "Large, High Confidence Yin Ironstone Resource - Mangaroon (100%)"
+            },
+            {
+              "id": "yin-summary-header",
+              "page": 1,
+              "quote": "Table 1: Yin Resource as adjusted for different cut-off grades."
+            },
+            {
+              "id": "yin-summary-row",
+              "page": 1,
+              "quote": "0.20 29.98 1.04 29% 311,800 89,900"
+            },
+            {
+              "id": "yin-detail-header",
+              "page": 11,
+              "quote": "Table 4: Summary of Yin Resources at 0.20% TREO Cut-off."
+            },
+            {
+              "id": "yin-detail-row",
+              "page": 11,
+              "quote": "TOTAL 29.98 1.04 29 312,300 89,300"
+            },
+            {
+              "id": "yin-dry",
+              "page": 50,
+              "quote": "Tonnages are estimated on a dry basis."
+            },
+            {
+              "id": "yin-summary-units",
+              "page": 1,
+              "quote": "(%TREO) (Mt) (%) (%) (t) (t)"
+            },
+            {
+              "id": "yin-detail-units",
+              "page": 11,
+              "quote": "Table 4: Summary of Yin Resources at 0.20% TREO Cut-off. Resource Tonnes TREO NdPr:TREO Contained Contained Geology Classification (Mt) (%) Ratio (%) TREO (t) Nd2O3+Pr6O11 (t)"
+            }
+          ]
+        },
+        {
+          "input": "yin",
+          "source_sha256": "2feb8b4356d6a5c1aa2634384cc97a6b01a03c9ed7d68ba57638b2364688c91e",
+          "capture_sha256": "1809541ad2f3f251326e4e3b361ccebe24e0502c001036131627528ba3b1b3f6",
+          "publication_date": "2026-11-27",
+          "statement_role": "REPRINT_OF_PRIMARY_MINERAL_RESOURCE",
+          "witnesses": [
+            {
+              "id": "yin-reprint-title",
+              "page": 31,
+              "quote": "Yin Ironstone Complex – Yin, Yin South, Y2, Sabre Measured, Indicated and Inferred Resources (ASX 30 November 2023)"
+            },
+            {
+              "id": "yin-reprint-cutoff",
+              "page": 31,
+              "quote": "Summary of Yin Resources at 0.20% TREO cut-off."
+            },
+            {
+              "id": "yin-reprint-row",
+              "page": 31,
+              "quote": "27.6 29.98 1.04 312.3 29"
+            },
+            {
+              "id": "yin-reprint-units",
+              "page": 31,
+              "quote": "Summary of Yin Resources at 0.20% TREO cut-off. Measured Indicated Inferred Total Tonnes TREO TREO Tonnes TREO TREO Tonnes TREO TREO Tonnes TREO TREO NdPr:TREO Ratio Type (Mt) (%) (kt) (Mt) (%) (kt) (Mt) (%) (kt) (Mt) (%) (kt) (%)"
+            }
+          ]
+        }
+      ],
+      "decimal_checks": [
+        {
+          "id": "yin-source-masses-conflict",
+          "kind": "REPORTED_MASS_INTERSECTION",
+          "expected_intersection": false,
+          "inputs": [
+            {
+              "id": "summary_mass",
+              "witness": "yin-summary-row",
+              "token": "311,800",
+              "unit": "t",
+              "printed_step": "100",
+              "unit_witness": "yin-summary-units",
+              "native_unit_token": "t"
+            },
+            {
+              "id": "detail_mass",
+              "witness": "yin-detail-row",
+              "token": "312,300",
+              "unit": "t",
+              "printed_step": "100",
+              "unit_witness": "yin-detail-units",
+              "native_unit_token": "t"
+            }
+          ]
+        },
+        {
+          "id": "yin-detailed-and-reprinted-mass-agree",
+          "kind": "REPORTED_MASS_INTERSECTION",
+          "expected_intersection": true,
+          "inputs": [
+            {
+              "id": "detail_mass",
+              "witness": "yin-detail-row",
+              "token": "312,300",
+              "unit": "t",
+              "printed_step": "100",
+              "unit_witness": "yin-detail-units",
+              "native_unit_token": "t"
+            },
+            {
+              "id": "reprinted_mass",
+              "witness": "yin-reprint-row",
+              "token": "312.3",
+              "unit": "kt",
+              "printed_step": "0.1",
+              "unit_witness": "yin-reprint-units",
+              "native_unit_token": "kt"
+            }
+          ]
+        },
+        {
+          "id": "yin-summary-compatible-with-rounded-grade",
+          "kind": "ORE_GRADE_MASS_INTERSECTION",
+          "expected_intersection": true,
+          "inputs": [
+            {
+              "id": "ore",
+              "witness": "yin-detail-row",
+              "token": "29.98",
+              "unit": "Mt",
+              "printed_step": "0.01",
+              "unit_witness": "yin-detail-units",
+              "native_unit_token": "Mt"
+            },
+            {
+              "id": "grade",
+              "witness": "yin-detail-row",
+              "token": "1.04",
+              "unit": "%",
+              "printed_step": "0.01",
+              "unit_witness": "yin-detail-units",
+              "native_unit_token": "%"
+            },
+            {
+              "id": "summary_mass",
+              "witness": "yin-summary-row",
+              "token": "311,800",
+              "unit": "t",
+              "printed_step": "100",
+              "unit_witness": "yin-summary-units",
+              "native_unit_token": "t"
+            }
+          ]
+        },
+        {
+          "id": "yin-detail-compatible-with-rounded-grade",
+          "kind": "ORE_GRADE_MASS_INTERSECTION",
+          "expected_intersection": true,
+          "inputs": [
+            {
+              "id": "ore",
+              "witness": "yin-detail-row",
+              "token": "29.98",
+              "unit": "Mt",
+              "printed_step": "0.01",
+              "unit_witness": "yin-detail-units",
+              "native_unit_token": "Mt"
+            },
+            {
+              "id": "grade",
+              "witness": "yin-detail-row",
+              "token": "1.04",
+              "unit": "%",
+              "printed_step": "0.01",
+              "unit_witness": "yin-detail-units",
+              "native_unit_token": "%"
+            },
+            {
+              "id": "detail_mass",
+              "witness": "yin-detail-row",
+              "token": "312,300",
+              "unit": "t",
+              "printed_step": "100",
+              "unit_witness": "yin-detail-units",
+              "native_unit_token": "t"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "yangibana-mixed-cutoff-and-reprint",
+      "project_id": "AU-908fd6f4461622e89548",
+      "criterion": "R1",
+      "state": "SCIENTIFIC_CONFLICT",
+      "blockers": [
+        "ALL_DEPOSIT_TOTAL_COMBINES_TREO_AND_NDPR_CUTOFFS",
+        "REPRINT_HAS_RESERVE_LABEL_AND_DIFFERENT_INFERRED_MASS"
+      ],
+      "scope": "Yangibana all-deposit October 2022 Resource, distinct from the narrower six Project deposits",
+      "estimate_effective_date": "2022-10-11",
+      "editions": [
+        {
+          "input": "yangibana",
+          "source_sha256": "fac1ad3e47308a2f68e73e2a41951c7069de7e56d40d876ed90ad657b2c99c20",
+          "capture_sha256": "229cc4b9849b9e085bfb2bc77502f5aa62c414cbe3b101137a042a31d73f8932",
+          "publication_date": "2022-10-11",
+          "statement_role": "PRIMARY_MINERAL_RESOURCE",
+          "witnesses": [
+            {
+              "id": "yangibana-original-row",
+              "page": 2,
+              "quote": "TOTAL 29.93 0.93 0.32 276,955"
+            },
+            {
+              "id": "yangibana-original-inferred",
+              "page": 2,
+              "quote": "Inferred 5.45 1.05 0.31 57,298"
+            },
+            {
+              "id": "yangibana-first-cutoff",
+              "page": 2,
+              "quote": "at a cut-off grade of 0.24% total rare earth oxides (TREO)."
+            },
+            {
+              "id": "yangibana-second-cutoff",
+              "page": 2,
+              "quote": "Reporting of Mineral Resources for all other deposits is at 0.2% Nd2O3+Pr6O11 cut-off grade."
+            },
+            {
+              "id": "yangibana-original-dry",
+              "page": 19,
+              "quote": "Tonnages are estimated on a dry basis."
+            },
+            {
+              "id": "yangibana-original-units",
+              "page": 2,
+              "quote": "Table 1: Total (all 10 deposits) JORC (2012) Mineral Resources October 2022 Category M Tonnes %TREO %Nd2O3+Pr6O11 TREO t"
+            }
+          ]
+        },
+        {
+          "input": "yangibana",
+          "source_sha256": "f22255aade55553234342ebf41d0b4ef05f182cfad3d0e5c2086eaf5179de098",
+          "capture_sha256": "733dcd2afb0f31317c5b5942f3dd3c3299eb14136bfe3f9e0527d1e5fda5e601",
+          "publication_date": "2023-02-06",
+          "statement_role": "ISSUER_RESOURCE_AS_OF_CROSS_REFERENCE",
+          "witnesses": [
+            {
+              "id": "yangibana-date",
+              "page": 3,
+              "quote": "The Mineral Resources as of 11th of October 2022"
+            },
+            {
+              "id": "yangibana-crossref-caption",
+              "page": 3,
+              "quote": "Table 3: Total JORC (2012) Mineral Resources October 2022"
+            },
+            {
+              "id": "yangibana-crossref-row",
+              "page": 3,
+              "quote": "TOTAL 29.93 0.93 0.32 276,955"
+            }
+          ]
+        },
+        {
+          "input": "yangibana",
+          "source_sha256": "99233befa81a1e193848122f00dfaa25079d0b2adbc2f19ef96326ca63c38f2a",
+          "capture_sha256": "d4ce2d613a18ffb537a3fa8cb1b71d41df32b532f7f3d9a7984142cb171c74ee",
+          "publication_date": "2026-07-13",
+          "statement_role": "DFS_REPRINT_WITH_CONFLICTING_ROLE_LABEL",
+          "witnesses": [
+            {
+              "id": "yangibana-mislabeled-caption",
+              "page": 7,
+              "quote": "Table 5: Total JORC (2012) Ore Reserves by deposit"
+            },
+            {
+              "id": "yangibana-reprint-inferred",
+              "page": 7,
+              "quote": "Inferred 5.45 1.05 0.31 51,298"
+            },
+            {
+              "id": "yangibana-reprint-total",
+              "page": 7,
+              "quote": "TOTAL 29.93 0.93 0.32 276,955"
+            },
+            {
+              "id": "yangibana-six-deposit-cutoff",
+              "page": 32,
+              "quote": "The MRE uses a 0.24% TREO cut-off grade for the six main deposits."
+            },
+            {
+              "id": "yangibana-four-deposit-cutoff",
+              "page": 32,
+              "quote": "have been reported at a 0.20% NdPr cut-off grade"
+            },
+            {
+              "id": "yangibana-six-deposit-total",
+              "page": 33,
+              "quote": "TOTAL 4.96 0.96 19.52 0.88 3.63 0.90 28.12 0.90 0.32"
+            },
+            {
+              "id": "yangibana-four-deposit-total",
+              "page": 33,
+              "quote": "TOTAL - - - - 1.82 1.39 1.82 1.39 0.34"
+            },
+            {
+              "id": "yangibana-reprint-units",
+              "page": 7,
+              "quote": "Table 5: Total JORC (2012) Ore Reserves by deposit Category Tonnes (Mt) % TREO %Nd 2 O 3 +Pr6 O 11 TREO (t)"
+            }
+          ]
+        }
+      ],
+      "decimal_checks": [
+        {
+          "id": "yangibana-combined-arithmetic-compatible",
+          "kind": "ORE_GRADE_MASS_INTERSECTION",
+          "expected_intersection": true,
+          "inputs": [
+            {
+              "id": "ore",
+              "witness": "yangibana-original-row",
+              "token": "29.93",
+              "unit": "Mt",
+              "printed_step": "0.01",
+              "unit_witness": "yangibana-original-units",
+              "native_unit_token": "M Tonnes"
+            },
+            {
+              "id": "grade",
+              "witness": "yangibana-original-row",
+              "token": "0.93",
+              "unit": "%",
+              "printed_step": "0.01",
+              "unit_witness": "yangibana-original-units",
+              "native_unit_token": "%TREO"
+            },
+            {
+              "id": "reported-mass",
+              "witness": "yangibana-original-row",
+              "token": "276,955",
+              "unit": "t",
+              "printed_step": "1",
+              "unit_witness": "yangibana-original-units",
+              "native_unit_token": "t"
+            }
+          ]
+        },
+        {
+          "id": "yangibana-inferred-reprint-conflict",
+          "kind": "REPORTED_MASS_INTERSECTION",
+          "expected_intersection": false,
+          "inputs": [
+            {
+              "id": "primary-inferred-mass",
+              "witness": "yangibana-original-inferred",
+              "token": "57,298",
+              "unit": "t",
+              "printed_step": "1",
+              "unit_witness": "yangibana-original-units",
+              "native_unit_token": "t"
+            },
+            {
+              "id": "reprinted-inferred-mass",
+              "witness": "yangibana-reprint-inferred",
+              "token": "51,298",
+              "unit": "t",
+              "printed_step": "1",
+              "unit_witness": "yangibana-reprint-units",
+              "native_unit_token": "t"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "north-stanmore-same-cutoff-distinct-ore-reserve",
+      "project_id": "AU-216d0983f6892f9b58f9",
+      "criterion": "R1",
+      "state": "EVIDENCE_INSUFFICIENT",
+      "blockers": [
+        "ORE_RESERVE_CONTAINED_MASS_HAS_DIFFERENT_REPORTING_ROLE",
+        "RESOURCE_ROW_MISSING_DIRECT_CONTAINED_MASS"
+      ],
+      "scope": "North Stanmore August 2026 Mineral Resource, distinct from its maiden Probable Ore Reserve",
+      "estimate_effective_date": "2026-08",
+      "editions": [
+        {
+          "input": "fixed",
+          "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+          "capture_sha256": "dde11af00a8949056b31dce3a44023ed4c887ab20882bf2f9356a216f3568322",
+          "publication_date": "2026-08-18",
+          "statement_role": "DISTINCT_MINERAL_RESOURCE_AND_ORE_RESERVE",
+          "witnesses": [
+            {
+              "id": "north-reserve-title",
+              "page": 9,
+              "quote": "MAIDEN ORE RESERVE AND PRODUCTION TARGET"
+            },
+            {
+              "id": "north-reserve-row",
+              "page": 9,
+              "quote": "Total 47.0 692 248 6.4 32.6 11.6"
+            },
+            {
+              "id": "north-resource-cutoff",
+              "page": 97,
+              "quote": "The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO"
+            },
+            {
+              "id": "north-resource-row",
+              "page": 97,
+              "quote": "Total 278.80 482.64 171.40 311.24 7.04"
+            },
+            {
+              "id": "north-reserve-units",
+              "page": 9,
+              "quote": "(Mt) (ppm) (ppm) (ppm) (kt) (kt)"
+            }
+          ]
+        }
+      ],
+      "decimal_checks": [
+        {
+          "id": "north-reserve-mass-compatible-own-scope",
+          "kind": "ORE_GRADE_MASS_INTERSECTION",
+          "expected_intersection": true,
+          "inputs": [
+            {
+              "id": "ore",
+              "witness": "north-reserve-row",
+              "token": "47.0",
+              "unit": "Mt",
+              "printed_step": "0.1",
+              "unit_witness": "north-reserve-units",
+              "native_unit_token": "Mt"
+            },
+            {
+              "id": "grade",
+              "witness": "north-reserve-row",
+              "token": "692",
+              "unit": "ppm",
+              "printed_step": "1",
+              "unit_witness": "north-reserve-units",
+              "native_unit_token": "ppm"
+            },
+            {
+              "id": "reported-mass",
+              "witness": "north-reserve-row",
+              "token": "32.6",
+              "unit": "kt",
+              "printed_step": "0.1",
+              "unit_witness": "north-reserve-units",
+              "native_unit_token": "kt"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

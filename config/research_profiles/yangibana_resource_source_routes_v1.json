@@ -1,0 +1,48 @@
+{
+  "schema": "public-source-version-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "yangibana-october-primary",
+      "project_id": "AU-908fd6f4461622e89548",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "45g43n16ywv3wf",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://announcements.asx.com.au/asxpdf/20221011/pdf/45g43n16ywv3wf.pdf",
+          "publisher": "Hastings Technology Metals Limited"
+        }
+      ]
+    },
+    {
+      "case_id": "yangibana-revised-dfs",
+      "project_id": "AU-908fd6f4461622e89548",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "071n8v54p9pdql",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://announcements.asx.com.au/asxpdf/20260713/pdf/071n8v54p9pdql.pdf",
+          "publisher": "Hastings Technology Metals Limited"
+        }
+      ]
+    },
+    {
+      "case_id": "yangibana-reserve-cross-reference",
+      "project_id": "AU-908fd6f4461622e89548",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "45l9yjck4pk40g",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://announcements.asx.com.au/asxpdf/20230206/pdf/45l9yjck4pk40g.pdf",
+          "publisher": "Hastings Technology Metals Limited"
+        }
+      ]
+    }
+  ]
+}

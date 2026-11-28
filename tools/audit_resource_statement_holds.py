@@ -1,9 +1,11 @@
 """Recheck manually annotated resource statement holds on exact published bytes."""
 
 import argparse
+from decimal import Decimal
 from hashlib import sha256
 import json
 from pathlib import Path
+import re
 
 from au_ree_v3.census_resource_display import _original_phrase
 from au_ree_v3.documents import DocumentCache
@@ -48,12 +50,126 @@ def audit(profile, manifest, assets, build):
             "cases": checked}
 
 
+def _checked_pdf(case, files, project, profile, cache):
+    manifest, events, content = files[case["input"]]
+    digest, capture = case["source_sha256"], case["capture_sha256"]
+    edition, = (item for item in manifest["editions"]
+                if item["sha256"] == digest and item["receipt_sha256"] == capture
+                and project in item["project_ids"] and item["kind"] == "pdf")
+    temporal = _verified_edition(profile, edition, events[capture], content)
+    if temporal.status != "ELIGIBLE":
+        raise ValueError("Scoped resource witness lacks exact public evidence by cutoff")
+    pdf = cache.pdf(content.read(digest), digest, max(row["page"] for row in case["witnesses"]))
+    anchors = []
+    for row in case["witnesses"]:
+        anchor = _original_phrase(pdf, row["page"], row["quote"])
+        if anchor is None:
+            raise ValueError(f"Scoped resource witness absent: {row['id']}, physical page {row['page']}")
+        anchors.append({"id": row["id"], "physical_page": anchor.page, "locator": anchor.locator, "quote": anchor.text})
+    return {"source_sha256": digest, "capture_sha256": capture, "source_url": edition["url"],
+            "source_kind": edition["kind"], "publication_date": case["publication_date"],
+            "statement_role": case["statement_role"], "temporal_decision": temporal.to_dict(),
+            "witnesses": anchors, "pages_decoded": len(pdf.pages)}
+
+
+def _decimal_bounds(annotation, quotes):
+    token = annotation["token"]
+    unit_token = annotation["native_unit_token"]
+    if not re.search(rf"(?<![0-9.,]){re.escape(token)}(?![0-9.,])", quotes[annotation["witness"]]):
+        raise ValueError("Decimal comparison token is absent from its exact native witness")
+    if not re.search(rf"(?<![A-Za-z]){re.escape(unit_token)}(?![A-Za-z])", quotes[annotation["unit_witness"]]):
+        raise ValueError("Decimal comparison unit is absent from its exact native header")
+    scale = {"t": Decimal("0.001"), "kt": Decimal(1), "Mt": Decimal(1),
+             "%": Decimal(1), "ppm": Decimal("0.0001")}[annotation["unit"]]
+    center = Decimal(token.replace(",", ""))
+    step = Decimal(annotation["printed_step"])
+    if not (center.is_finite() and center > 0 and step.is_finite() and step > 0):
+        raise ValueError("Decimal comparison requires positive finite source precision")
+    return (center - step / 2) * scale, (center + step / 2) * scale
+
+
+def _arithmetic(case, quotes):
+    results = []
+    for check in case["decimal_checks"]:
+        units = tuple(item["unit"] for item in check["inputs"])
+        values = [_decimal_bounds(item, quotes) for item in check["inputs"]]
+        if check["kind"] == "REPORTED_MASS_INTERSECTION" and len(units) == 2 and set(units) <= {"t", "kt"}:
+            left, right = values
+        elif (check["kind"] == "ORE_GRADE_MASS_INTERSECTION" and len(units) == 3
+              and units[0] == "Mt" and units[1] in {"%", "ppm"} and units[2] in {"t", "kt"}):
+            ore, grade, right = values
+            left = ore[0] * grade[0] * 10, ore[1] * grade[1] * 10
+        else:
+            raise ValueError("Unknown independent resource arithmetic check")
+        intersects = max(left[0], right[0]) <= min(left[1], right[1])
+        if intersects != check["expected_intersection"]:
+            raise ValueError("Independent resource rounding result differs from the reviewed oracle")
+        results.append({**check, "left_bounds_kt": [format(value, "f") for value in left],
+                        "right_bounds_kt": [format(value, "f") for value in right], "intersects": intersects})
+    return results
+
+
+def audit_comparability(profile_path, manifest, assets, build, challenge, annexes):
+    """Replay fixed and independently captured scoped negatives against the locked R1 policy."""
+    profile = load_profile(profile_path)
+    spec = json.loads(challenge.read_bytes())
+    if spec["schema"] != "resource-comparability-challenge-v1":
+        raise ValueError("Unknown resource comparability challenge schema")
+    files = {}
+    for label, path, store in [("fixed", manifest, assets), *annexes]:
+        raw = Path(path).read_bytes()
+        payload = json.loads(raw)
+        if (label in files or sha256(raw).hexdigest() != spec["manifest_sha256"][label]
+                or label != "fixed" and payload.get("base_manifest_sha256") != spec["manifest_sha256"]["fixed"]):
+            raise ValueError("Resource challenge requires its exact source manifest scope")
+        events = {row["receipt_sha256"]: row for row in payload["events"] if row["status"] == "PUBLIC_CAPTURED"}
+        files[label] = payload, events, ContentStore(Path(store))
+    if files.keys() != spec["manifest_sha256"].keys():
+        raise ValueError("Missing required resource challenge source manifests")
+    inputs = (build / "decision/mcda_inputs.json").read_bytes()
+    table = json.loads(inputs)
+    report = json.loads((build / "build_receipt.json").read_bytes())
+    inputs_sha = sha256(inputs).hexdigest()
+    if (report["mcda_inputs_hash"] != inputs_sha or report["input_artifacts"]["sources"] != spec["manifest_sha256"]["fixed"]
+            or table["policy_sha256"] != spec["policy_sha256"] or table["research_cutoff"] != profile.research_cutoff.isoformat()
+            or table["research_timezone"] != profile.timezone.key):
+        raise ValueError("Resource challenge requires the locked R1 method and date")
+    cache, results = DocumentCache(), []
+    for case in spec["cases"]:
+        project = case["project_id"]
+        criterion = table["criteria_by_project"][project]["R1"]
+        documents = [_checked_pdf(edition, files, project, profile, cache) for edition in case["editions"]]
+        held_shas = {document["source_sha256"] for document in documents}
+        if any(row["source_sha256"] in held_shas for row in criterion["lineage"]):
+            raise ValueError("A held original edition has entered formal R1 lineage")
+        anchors = [row for document in documents for row in document["witnesses"]]
+        quotes = {row["id"]: row["quote"] for row in anchors}
+        if len(quotes) != len(anchors):
+            raise ValueError("Scoped resource witness identities must be unique within a case")
+        results.append({**{key: value for key, value in case.items() if key not in {"editions", "decimal_checks"}},
+                        "editions": documents, "decimal_checks": _arithmetic(case, quotes),
+                        "current_r1_state": criterion["state"], "current_r1_reason": criterion["reason"],
+                        "formal_admission": False})
+    return {"schema": spec["schema"], "status": "PASS", "scope": "NAMED_ORIGINAL_NEGATIVES_ONLY",
+            "challenges_sha256": sha256(challenge.read_bytes()).hexdigest(), "manifest_sha256": spec["manifest_sha256"],
+            "policy_sha256": table["policy_sha256"], "mcda_inputs_sha256": inputs_sha,
+            "known_scope_negative_count": len(results), "formal_admission_false_positives": 0,
+            "pdf_decodes": sum(len(row["editions"]) for row in results),
+            "pdf_pages_decoded": sum(e["pages_decoded"] for row in results for e in row["editions"]),
+            "generalized_admission_precision_recall": "UNMEASURED", "cases": results}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("profile", "manifest", "assets", "build", "out"):
         parser.add_argument(f"--{name}", type=Path, required=True)
+    parser.add_argument("--challenge", type=Path, help="Replay a scoped resource comparability challenge")
+    parser.add_argument("--annex", nargs=3, action="append", default=[], metavar=("LABEL", "MANIFEST", "CAS"))
     args = parser.parse_args()
-    result = audit(args.profile, args.manifest, args.assets, args.build)
+    if args.challenge:
+        result = audit_comparability(args.profile, args.manifest, args.assets, args.build, args.challenge, args.annex)
+    else:
+        result = audit(args.profile, args.manifest, args.assets, args.build)
     with args.out.open("x", encoding="utf-8") as stream:
         json.dump(result, stream, ensure_ascii=False, indent=2)
         stream.write("\n")
