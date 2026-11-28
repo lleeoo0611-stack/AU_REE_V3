@@ -132,6 +132,10 @@ jobs:
           get_fixture 'https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf' bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e
           get_fixture 'https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf' 452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491
           AU_REE_NATIVE_RESOURCE_ASSETS="$directory" python -m unittest discover -s tests -p 'test_native_resource_positives.py' -v
+          circle_sha=259ebe012c6b6e2048ca2f50f5b47e4c91d9a56e520c97f6deee554d069a54ad
+          get_fixture 'https://announcements.asx.com.au/asxpdf/20230614/pdf/05qml2ywjd3z1v.pdf' "$circle_sha"
+          AU_REE_COHORT_CIRCLE_VALLEY_PDF="$directory/$circle_sha" \
+            python -m unittest discover -s tests -p 'test_resource_comparability_challenge.py' -v
       - name: Verify native technical measurement and process anchors
         run: |
           source="$RUNNER_TEMP/resource-fixture/wolverine-dfs.pdf"

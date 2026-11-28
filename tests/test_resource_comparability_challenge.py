@@ -128,8 +128,8 @@ _COHORT_INPUTS = (
 )
 
 
-@unittest.skipUnless(all(os.environ.get(name) for name in _COHORT_INPUTS), "original fixed cohort bytes required")
 class ExactRecoveredResourceStatementTest(unittest.TestCase):
+    @unittest.skipUnless(all(os.environ.get(name) for name in _COHORT_INPUTS), "original fixed cohort bytes required")
     def test_eleven_sources_original_statement_roles_and_conflicts(self):
         audit = runpy.run_path(str(SCRIPT))["audit_recovered_statements"]
         profiles = PROFILES / "au_ree_census_evidence_fill_v1.json"
@@ -148,12 +148,17 @@ class ExactRecoveredResourceStatementTest(unittest.TestCase):
         self.assertEqual(yttrium["governed_matches"][0]["outcome"], "SCIENTIFIC_CONFLICT")
         self.assertIs(yttrium["governed_matches"][0]["selected_for_census"], False)
 
+    @unittest.skipUnless(os.environ.get("AU_REE_COHORT_REVIEW_ASSETS") or os.environ.get("AU_REE_COHORT_CIRCLE_VALLEY_PDF"),
+                         "original Circle Valley PDF required")
     def test_circle_valley_exact_rebind_keeps_its_inferred_only_category(self):
         case = next(row for row in json.loads(COHORT.read_bytes())["records"]
                     if row["case_id"] == "circle-valley-primary-inferred-resource")
         digest = case["source_sha256"]
-        content = ContentStore(Path(os.environ["AU_REE_COHORT_REVIEW_ASSETS"]))
-        pdf = DocumentCache().pdf(content.read(digest), digest, 2)
+        if original := os.environ.get("AU_REE_COHORT_CIRCLE_VALLEY_PDF"):
+            body = Path(original).read_bytes()
+        else:
+            body = ContentStore(Path(os.environ["AU_REE_COHORT_REVIEW_ASSETS"])).read(digest)
+        pdf = DocumentCache().pdf(body, digest, 2)
         heading = "Classification Tonnes TREO TREO-CeO2 NdPr Sc2O3"
         witnesses = case["witnesses"]
         binding = {
