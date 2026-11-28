@@ -14,6 +14,7 @@ from types import SimpleNamespace
 from au_ree_v3.census_resource_display import (
     _Phrase, _cutoff, _effective_date, _linked_effective_date, reported_resource_facts,
 )
+from au_ree_v3.display_package import compile_display_package
 from au_ree_v3.documents import DocumentCache, PDFDocument
 from au_ree_v3.resource_extraction import ResourceStatement
 
@@ -75,6 +76,37 @@ class ResourceDisplayContextTests(unittest.TestCase):
         adjusted = replace(estimate, cutoff_analyte="TREO-CeO2")
         matched = _cutoff((_phrase("Mineral Resource cutoff 250 ppm TREO-CeO2."),), adjusted, {})
         self.assertEqual((matched.value, matched.token, matched.unit), ("250 ppm TREO-CeO2", "250", "ppm"))
+
+
+@unittest.skipUnless(os.environ.get("AU_REE_REPORTED_RESOURCE_WORKSPACE"), "sealed Census Fill candidate required")
+class AsReportedResourceTests(unittest.TestCase):
+    def test_raw_candidate_and_conflicting_originals_keep_their_roles(self):
+        workspace = Path(os.environ["AU_REE_REPORTED_RESOURCE_WORKSPACE"])
+        candidate = workspace / "work/census-fill/verified"
+        release = json.loads((candidate / "archive.json").read_text())["release_id"]
+        profile = ROOT / "config/research_profiles"
+        package = compile_display_package(
+            profile=profile / "au_ree_census_evidence_fill_v1.json",
+            columns_path=profile / "census_display_columns_v2.json",
+            build_directory=candidate / "build", release_root=candidate / "archive",
+            release_id=release, assets=candidate / "cas", bindings=profile / "resource_bindings_v6.json",
+            sources=workspace / "work/census-stage6/additional-sources/combined/source_manifest.json",
+            include_reported_resources=True,
+        )
+        records = [record for record in json.loads(package.public_view)["review_only"]
+                   if record["context"].get("display_rule") == "as-reported-resource-review-v1"]
+        self.assertEqual(len(records), 21)
+        self.assertEqual(len({record["context"]["observation_id"] for record in records}), 21)
+        for record in records:
+            self.assertIn(record["context"]["raw_token"], record["quote"])
+        yangibana = [record for record in records if record["project_id"] == "AU-908fd6f4461622e89548"]
+        self.assertEqual({record["context"]["display_value"] for record in yangibana}, {"29.93 Mt", "0.93 %", "276,955 t"})
+        self.assertTrue(all(record["state"] == "CANDIDATE" and record["publication_date"] == ""
+                            and record["context"]["first_proven_public_date"] == "2026-11-28" for record in yangibana))
+        yin = [record for record in records if record["project_id"] == "AU-8f3fe174a998d20ee4cf"
+               and record["state"] == "SCIENTIFIC_CONFLICT" and record["context"]["reported_cutoff"] == "0.20 % TREO"]
+        self.assertEqual({(record["context"]["raw_token"], record["context"]["physical_page"]) for record in yin},
+                         {("311,800", "1"), ("312,300", "11")})
 
 
 @unittest.skipUnless(all(os.environ.get(key) for key in (

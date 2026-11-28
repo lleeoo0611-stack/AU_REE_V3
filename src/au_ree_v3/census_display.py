@@ -105,10 +105,15 @@ def _evidence(record, *, review: bool = False) -> bool:
     context = record["context"]
     if not _context(context):
         return False
-    known_date = _calendar(publication) or (
-        review and publication == "" and context.get("feature_effective_date") == "UNKNOWN_CONTEXT"
-        and len(context.get("capture_date", "")) == 10 and _calendar(context["capture_date"])
-    )
+    captured_date = ""
+    if review and publication == "":
+        if context.get("feature_effective_date") == "UNKNOWN_CONTEXT":
+            captured_date = context.get("capture_date", "")
+        if (record["data_role"] == "REPORTED_RESOURCE"
+                and context.get("display_rule") == "as-reported-resource-review-v1"
+                and context.get("publication_date_status") == "UNKNOWN_CONTEXT"):
+            captured_date = context.get("first_proven_public_date", "")
+    known_date = _calendar(publication) or (len(captured_date) == 10 and _calendar(captured_date))
     return (all(_text(record[key]) for key in ("locator", "quote", "scope"))
             and all(_sha(record[key]) for key in ("source_sha256", "source_capture_sha256"))
             and public_source_url(record["source_url"]) is not None

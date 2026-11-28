@@ -1,5 +1,5 @@
 import {readPointer, readVersion, ReleaseError} from "./release.mjs";
-import {reportedQuantity} from "./display.mjs";
+import {reportedCoreCell, reportedCoreCells, reportedQuantity} from "./display.mjs";
 import {en, zh, columnLabels, panelLabels} from "./labels.mjs";
 import {displayEvidence, evidenceDetails, node, options, renderDecision, renderMap, tableRows} from "./views.mjs";
 
@@ -22,7 +22,7 @@ const current = {
   pointer: null, data: null, request: null, checked: null, next: null, message: null,
   tab: "census", project: null, selectedColumns: new Set(defaultColumns),
   page: 0, sort: null, ascending: true, outline: null, csvUrl: null, evidenceTarget: null,
-  showDisplay: false, displayCsvUrl: null,
+  showDisplay: false, displayCsvUrl: null, reportedCensus: new Map(),
 };
 const t = key => (current.language === "en" ? en : zh)[key] ?? key;
 const number = value => new Intl.NumberFormat(current.language === "en" ? "en-AU" : "zh-TW").format(value);
@@ -34,6 +34,7 @@ const projects = () => current.data.census.projects;
 const displayIndex = id => current.data.display?.byColumn.get(id);
 const column = id => current.data.display?.columns[displayIndex(id)] ?? current.data.census.columns[current.data.columnIds.indexOf(id)];
 const cell = (project, id) => current.data.display?.projects.get(project?.id)?.[displayIndex(id)] ?? project?.cells[current.data.columnIds.indexOf(id)];
+const explorerCell = (project, id) => reportedCoreCell(current.reportedCensus, project.id, column(id).column_id, cell(project, id));
 const explorerColumns = () => current.showDisplay && current.data.display
   ? [...current.data.columnIds, ...current.data.display.columns.map(item => item.id)] : current.data.columnIds;
 const name = id => cell(projects().find(p => p.id === id), keys.name)?.value || id;
@@ -188,7 +189,9 @@ function filterOptions() {
     options(input, [["", t("all")], ["__unknown", t("missing")], ...values.sort().map(value => [value, value])], input.value);
   }
   const dataFilter = byId("data-filter");
-  options(dataFilter, [["", t("all")], ["UNKNOWN", t("missing")], ["NOT_APPLICABLE", t("na")], ["PRESENT", t("present")]], dataFilter.value);
+  const reported = current.reportedCensus.size ? [["REPORTED_PREVIEW", t("reportedPreviewBadge")]] : [];
+  options(dataFilter, [["", t("all")], ["UNKNOWN", t("missing")], ["NOT_APPLICABLE", t("na")],
+    ["PRESENT", t(reported.length ? "displayedValues" : "present")], ...reported], dataFilter.value);
 }
 
 function renderDisplaySettings() {
@@ -268,14 +271,17 @@ function selectRows(visible) {
   const core = visible.filter(id => displayIndex(id) === undefined);
   const filtered = projects().filter(project => {
     if (q && ![keys.project, keys.name, keys.developer, "ASX代碼"].some(id =>
-      cell(project, id).value?.toLocaleLowerCase().includes(q))) return false;
+      explorerCell(project, id).value?.toLocaleLowerCase().includes(q))) return false;
     for (const [input, id] of Object.entries(filters)) {
       const filter = byId(input).value;
-      const item = cell(project, id);
+      const item = explorerCell(project, id);
       const actual = item.state === "UNKNOWN" ? "__unknown" : item.value;
       if (filter && filter !== actual) return false;
     }
-    return matchesDisplay(project) && (!state || (core.length ? core : current.data.columnIds).some(id => cell(project, id).state === state));
+    return matchesDisplay(project) && (!state || (core.length ? core : current.data.columnIds).some(id => {
+      const item = explorerCell(project, id);
+      return state === "REPORTED_PREVIEW" ? !!item.reported : item.state === state;
+    }));
   });
   if (!current.sort) return filtered;
   const collator = new Intl.Collator(current.language === "en" ? "en" : "zh-Hant", {numeric: true, sensitivity: "base"});
@@ -285,7 +291,7 @@ function selectRows(visible) {
   const numericType = !sortColumn?.definition && (["number", "numeric", "decimal", "integer"].includes(sortColumn?.data_type?.toLowerCase())
     || [keys.ore, keys.grade, keys.contained].includes(current.sort));
   return filtered.sort((left, right) => {
-    const l = cell(left, current.sort), r = cell(right, current.sort);
+    const l = explorerCell(left, current.sort), r = explorerCell(right, current.sort);
     const a = l.value, b = r.value;
     if (a === null || b === null) return a !== b ? (a === null ? 1 : -1) : collator.compare(left.id, right.id);
     let order = collator.compare(a, b);
@@ -293,8 +299,12 @@ function selectRows(visible) {
       const x = reportedQuantity(l, display.facts), y = reportedQuantity(r, display.facts);
       if (x && y) order = collator.compare(x.unit, y.unit) || x.amount - y.amount;
       else if (Boolean(x) !== Boolean(y)) order = x ? -1 : 1;
-    } else if (numericType && Number.isFinite(Number(a)) && Number.isFinite(Number(b))) {
-      order = Number(a) - Number(b);
+    } else if (numericType) {
+      const x = l.reported ? l.sortAmount : Number(a);
+      const y = r.reported ? r.sortAmount : Number(b);
+      if (Number.isFinite(x) && Number.isFinite(y)) order = x - y;
+      else if (Number.isFinite(x) !== Number.isFinite(y)) return Number.isFinite(x) ? -1 : 1;
+      else if (l.reported || r.reported) return collator.compare(left.id, right.id);
     }
     return (current.ascending ? order : -order) || collator.compare(left.id, right.id);
   });
@@ -304,9 +314,10 @@ function cellButton(projectId, col, item) {
   const trigger = node("button", item.value ?? displayState(item.state), item.state === "PRESENT" ? "cell-button" : "cell-button missing");
   trigger.type = "button";
   const display = col.definition && item.state === "PRESENT";
-  const hint = display ? ` · ${t("SOURCE_REPORTED_DISPLAY")}` : "";
-  trigger.setAttribute("aria-label", `${label(col)} · ${item.value ?? displayState(item.state)}${hint}`);
-  if (display) trigger.title = t("SOURCE_REPORTED_DISPLAY");
+  const hint = item.reported ? t("reportedPreviewBadge") : (display ? t("SOURCE_REPORTED_DISPLAY") : "");
+  trigger.setAttribute("aria-label", [label(col), item.value ?? displayState(item.state), hint].filter(Boolean).join(" · "));
+  if (hint) trigger.title = hint;
+  if (item.reported) trigger.append(node("span", hint, "reported-census-badge"));
   trigger.addEventListener("click", () => openEvidence(projectId, col, item));
   return trigger;
 }
@@ -319,7 +330,7 @@ function renderTable() {
   const start = current.page * pageSize;
   const table = byId("census-table");
   tableRows(table, visible.map(id => label(column(id))), rows.slice(start, start + pageSize).map(project =>
-    visible.map(id => cellButton(project.id, column(id), cell(project, id))),
+    visible.map(id => cellButton(project.id, column(id), explorerCell(project, id))),
   ));
   if (!rows.length) {
     const empty = node("tr");
@@ -373,10 +384,20 @@ function openEvidence(id, col, item, review = null) {
   byId("evidence-title").textContent = `${name(id)} · ${label(col)}`;
   const display = current.data.display;
   const status = review ? t(item.state) : displayState(item.state);
-  const details = col.definition || review
-    ? displayEvidence(review ? [review] : item.fact_ids.map(key => display.facts[key]), item, col, t, status, display.contractSha)
-    : evidenceDetails(current.data.evidence.entries[item.lineage_id], item, t, status);
-  byId("evidence-detail").replaceChildren(details);
+  const target = byId("evidence-detail");
+  if (item.reported) {
+    const archived = cell(projects().find(project => project.id === id), col.id);
+    target.replaceChildren(
+      displayEvidence(item.reported, {...item, origin: t("reportedPreviewBadge")}, col, t, t("reportedPreviewBadge"), display.contractSha),
+      node("h3", t("archivedCensusCell")),
+      evidenceDetails(current.data.evidence.entries[archived.lineage_id], archived, t, displayState(archived.state)),
+    );
+  } else {
+    const details = col.definition || review
+      ? displayEvidence(review ? [review] : item.fact_ids.map(key => display.facts[key]), item, col, t, status, display.contractSha)
+      : evidenceDetails(current.data.evidence.entries[item.lineage_id], item, t, status);
+    target.replaceChildren(details);
+  }
   if (!byId("evidence").open) byId("evidence").showModal();
   deepLink();
 }
@@ -514,6 +535,7 @@ async function changeVersion(id, pointer, push = false) {
       current.selectedColumns.add(keys.project);
     }
     current.data = result;
+    current.reportedCensus = reportedCoreCells(preview ? result.display : null);
     current.pointer = pointer;
     current.page = 0;
     current.message = null;

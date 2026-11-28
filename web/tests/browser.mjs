@@ -348,6 +348,114 @@ async function checkDisplay(page) {
   metrics.extended_review_only_records = json.review_only.length;
 }
 
+async function checkReportedCensus(page) {
+  assert(!synthetic && extended, "Reported Census regressions require an exact display candidate");
+  const doc = JSON.parse(served.get(art(leadId, displayName)));
+  const leadFacts = Object.values(doc.facts), priorDisplay = served.get(art(priorId, displayName));
+  const priorFacts = priorDisplay ? Object.values(JSON.parse(priorDisplay).facts) : [];
+  const jupiter = "AU-dac3c8e40326b8244cdb", dubbo = "AU-2cfeb25aefee0c4f95fb";
+  const north = "AU-216d0983f6892f9b58f9", treo = "預估年產TREO_t_per_year", ndpr = "預估年產NdPr_t_per_year";
+  const product = "產品/產出";
+  const body = page.locator("#census-table tbody");
+  const find = heading => body.getByRole("button", {name: new RegExp(`^${heading} ·`)});
+  const original = (project, heading) => newCensus.projects.find(row => row.id === project)
+    .cells[newCensus.columns.findIndex(column => column.id === heading)];
+  const verify = async (project, heading, value) => {
+    assert.equal(original(project, heading).state, "UNKNOWN");
+    await page.fill("#search", project);
+    await expectText(page, "#table-count", /^1 \/ 93/);
+    const cell = find(heading);
+    assert.match(await cell.textContent(), value);
+    assert.equal(await cell.locator(".reported-census-badge").textContent(), "原報值 · 未納入研究");
+    return cell;
+  };
+  await page.click("#columns summary");
+  await page.getByRole("button", {name: "顯示全部 51 欄"}).click();
+  await page.click("#columns summary");
+  assert.equal(await page.locator("#census-table th").count(), 51);
+  assert.equal(await page.locator("#show-display").isChecked(), false);
+
+  const jupiterCell = await verify(jupiter, treo, /8,300/);
+  assert.doesNotMatch(await jupiterCell.textContent(), /9,300/);
+  await verify(north, product, /flotation concentrate \(wet\)/);
+  assert.equal((await find(treo).textContent()).trim(), "未知");
+  await verify(jupiter, product, /Contained TREO in MREC/);
+  await verify(nolansId, product, /NdPr oxide/);
+  await verify(dubbo, product, /NdPr oxide/);
+  const nolans = await verify(nolansId, ndpr, /4,357/);
+  await nolans.click();
+  const facts = leadFacts.filter(fact => fact.field_id === "forecast_annual_rate_as_reported");
+  const witness = facts.find(fact => fact.project_id === nolansId && fact.raw_token === "4,357");
+  const dialog = page.locator("#evidence-detail");
+  for (const value of [witness.quote, witness.source_sha256, witness.source_capture_sha256, "封存 Census 格"]) {
+    assert((await dialog.textContent()).includes(value));
+  }
+  await page.keyboard.press("Escape");
+  const dubboCell = await verify(dubbo, ndpr, /1,157.*1,037|1,037.*1,157/);
+  assert.match(await dubboCell.textContent(), /years 3–15/);
+  assert.match(await dubboCell.textContent(), /Life-of-mine/);
+  await dubboCell.click();
+  const text = await dialog.textContent();
+  assert.match(text, /ANNUAL_TARGET_YEARS_3_15/);
+  assert.match(text, /LIFE_OF_MINE_ANNUAL_TARGET/);
+  await page.keyboard.press("Escape");
+
+  const resources = doc.review_only.filter(row => row.data_role === "REPORTED_RESOURCE"
+    && row.context.display_rule === "as-reported-resource-review-v1" && row.context.display_value
+    && row.context.raw_unit && row.context.census_column_id);
+  const resourceCells = new Set();
+  for (const report of resources) {
+    const col = newCensus.columns.find(column => column.column_id === report.context.census_column_id);
+    assert(col);
+    const archived = original(report.project_id, col.id);
+    if (archived.state !== "UNKNOWN") {
+      await page.fill("#search", report.project_id);
+      assert.equal(await find(col.id).locator(".reported-census-badge").count(), 0);
+      continue;
+    }
+    resourceCells.add(`${report.project_id}:${col.id}`);
+    const cell = await verify(report.project_id, col.id, /\d/);
+    assert((await cell.textContent()).includes(report.context.display_value));
+    await cell.click();
+    assert((await dialog.textContent()).includes(report.source_capture_sha256));
+    assert((await dialog.textContent()).includes(report.context.raw_unit));
+    await page.keyboard.press("Escape");
+  }
+
+  if (flags.includes("--reported-resources")) assert(resourceCells.size > 0, "Expected original resource cells in the candidate");
+  await page.selectOption("#data-filter", "REPORTED_PREVIEW");
+  await page.fill("#search", nolansId);
+  await expectText(page, "#table-count", /^1 \/ 93/);
+  await page.fill("#search", "");
+  const heading = page.locator("#census-table th").filter({hasText: ndpr});
+  await heading.getByRole("button").click();
+  assert.equal(await heading.getAttribute("aria-sort"), "ascending");
+  assert.match(await body.locator("tr").first().textContent(), /4,357/);
+  await page.selectOption("#data-filter", "");
+
+  const downloadEvent = page.waitForEvent("download");
+  await page.click("#download");
+  const download = await downloadEvent;
+  assert.equal(digest(await readFile(await download.path())), digest(served.get(art(leadId, "census.csv"))));
+
+  await page.fill("#search", nolansId);
+  await version(page, priorId);
+  const priorNolans = priorFacts.find(fact => fact.project_id === nolansId
+    && fact.field_id === "forecast_annual_rate_as_reported" && fact.raw_token === "4,357");
+  assert.equal((await find(ndpr).textContent()).includes("4,357"), Boolean(priorNolans));
+  await version(page, leadId);
+  await verify(nolansId, ndpr, /4,357/);
+  await page.fill("#search", "");
+  await page.click("#columns summary");
+  await page.getByRole("button", {name: "恢復預設欄位"}).click();
+  await page.click("#columns summary");
+  metrics.reported_core_census_forecasts_products = "PASS";
+  metrics.reported_core_census_canonical_csv = "PASS";
+  metrics.reported_core_census_version_isolation = "PASS";
+  metrics.reported_core_census_resource_records = resources.length;
+  metrics.reported_core_census_resource_cells = resourceCells.size;
+}
+
 try {
   const page = await browser.newPage({acceptDownloads:true,viewport:{width:1440,height:985}});
   await instrument(page);
@@ -401,6 +509,7 @@ try {
   }
   metrics.search_filter_sort_columns_evidence="PASS";
   if (extended) await checkDisplay(page);
+  if (flags.includes("--reported-census")) await checkReportedCensus(page);
   if (flags.includes("--census-fill")) {
     assert(!synthetic, "Census Fill regressions require the exact original candidate and baseline");
     const project = "AU-9bd8e5ed8408cd84d876", heading = "四項磁性元素皆公布";

@@ -4,6 +4,7 @@ export const DISPLAY_JSON = "census_display.json";
 export const DISPLAY_CSV = "census_display_extended.csv";
 export const DISPLAY_SCHEMA = "web-census-display-v2";
 const roles = new Set(["REPORTED_RESOURCE", "COMPLETED_STUDY", "FORECAST", "ENGINEERING_PLAN"]);
+const coreResourceRule = "as-reported-resource-review-v1";
 const reviewStates = new Set(["CANDIDATE", "SHADOW", "SCIENTIFIC_CONFLICT", "EVIDENCE_INSUFFICIENT"]);
 const groups = new Set(["resource", "study", "forecast", "geology", "location"]);
 const types = new Set(["TEXT", "PARTIAL_DATE", "REPORTED_QUANTITY"]);
@@ -43,9 +44,14 @@ const provenanceFields = ["project_id", "data_role", "source_sha256", "source_ca
 const factFields = [...provenanceFields, "field_id", "value", "raw_token", "raw_unit", "subject_id"];
 const reviewFields = [...provenanceFields, "state", "label", "reason"];
 
-function sourceOkay(entry, ids, sourceURL, review = false) {
-  const undated = review && entry.publication_date === "" && entry.context?.capture_date?.length === 10 && calendar(entry.context.capture_date)
-    && entry.context?.feature_effective_date === "UNKNOWN_CONTEXT";
+function sourceOkay(entry, ids, sourceURL, review = false, cutoff) {
+  const context = entry.context;
+  const undatedGeography = context?.capture_date?.length === 10 && calendar(context.capture_date)
+    && context.feature_effective_date === "UNKNOWN_CONTEXT";
+  const undatedResource = entry.data_role === "REPORTED_RESOURCE" && context?.display_rule === coreResourceRule
+    && context.publication_date_status === "UNKNOWN_CONTEXT" && context.first_proven_public_date?.length === 10
+    && calendar(context.first_proven_public_date) && calendar(cutoff) && context.first_proven_public_date <= cutoff;
+  const undated = review && entry.publication_date === "" && (undatedGeography || undatedResource);
   return ids.has(entry.project_id) && hex.test(entry.source_sha256) && hex.test(entry.source_capture_sha256)
     && (calendar(entry.publication_date) || undated)
     && strings(entry, ["locator", "quote", "scope", "data_role"]) && !!sourceURL(entry.source_url)
@@ -148,7 +154,7 @@ function checkCells(data, census, byField, check) {
   return {projects, csv};
 }
 
-export async function readExtendedDisplay(data, csv, census, {check, sourceURL}) {
+export async function readExtendedDisplay(data, csv, census, {check, sourceURL, cutoff}) {
   check(keysAre(data, envelopeFields) && hex.test(data.contract_sha256));
   const byField = columnDefinitions(data.columns, census, check);
   check(await digest({schema_version: "census-display-columns-v2", columns: data.columns}) === data.contract_sha256);
@@ -160,7 +166,7 @@ export async function readExtendedDisplay(data, csv, census, {check, sourceURL})
   check(Array.isArray(data.review_only));
   for (const entry of data.review_only) {
     check(keysAre(entry, reviewFields) && reviewStates.has(entry.state) && strings(entry, ["label", "reason"])
-      && sourceOkay(entry, ids, sourceURL, true));
+      && sourceOkay(entry, ids, sourceURL, true, cutoff));
   }
   const columns = data.columns.map(definition => ({
     id: `display:${definition.field_id}`, label: definition.label_zh, label_en: definition.label_en,
@@ -175,4 +181,65 @@ export function reportedQuantity(cell, facts) {
   const fact = facts[cell.fact_ids[0]];
   const amount = Number(fact.raw_token.replaceAll(",", ""));
   return Number.isFinite(amount) ? {unit: fact.raw_unit, amount} : null;
+}
+
+const coreResourceColumns = new Set(["ore_mt", "treo_grade_pct", "contained_treo_kt"]);
+const annualRateUnits = new Set(["tonnes per annum", "tpa"]);
+const subjectKey = fact => [fact.project_id, fact.source_sha256, fact.subject_id].join(":");
+const cellKey = (project, column) => `${project}:${column}`;
+
+function annualRateColumn(fact) {
+  if (fact.data_role !== "FORECAST" || !annualRateUnits.has(fact.raw_unit)) return null;
+  const {material_basis: material, chemical_basis: chemistry} = fact.context;
+  if (material === "MREC" && chemistry === "TREO") return "forecast_treo_t_per_year";
+  if (material === "NDPR_OXIDE" && chemistry === "NDPR_OXIDE") return "forecast_ndpr_t_per_year";
+  return null;
+}
+
+/** Compose Census-only previews from display facts already checked by readExtendedDisplay. */
+export function reportedCoreCells(display) {
+  const cells = new Map();
+  if (!display) return cells;
+  const facts = Object.values(display.facts);
+  const periods = new Map(facts.filter(fact => fact.field_id === "forecast_scenario_or_period")
+    .map(fact => [subjectKey(fact), fact.value]));
+  const add = (column, record, amount, period = null) => {
+    const key = cellKey(record.project_id, column);
+    if (!cells.has(key)) cells.set(key, []);
+    cells.get(key).push({record, amount, period});
+  };
+  for (const fact of facts) {
+    if (fact.field_id === "forecast_product_and_basis") {
+      add("product_output", fact, null);
+    } else if (fact.field_id === "forecast_annual_rate_as_reported") {
+      const column = annualRateColumn(fact);
+      if (column) add(column, fact, fact.raw_token, periods.get(subjectKey(fact)));
+    }
+  }
+  for (const fact of display.review) {
+    const {census_column_id: column, display_value: value, raw_unit: rawUnit,
+      raw_token: rawToken, raw_value: rawValue} = fact.context;
+    const token = rawToken ?? rawValue;
+    if (fact.data_role === "REPORTED_RESOURCE" && coreResourceColumns.has(column)
+        && fact.context.display_rule === coreResourceRule && rawUnit && signedNumber.test(token)
+        && value === `${token} ${rawUnit}`) {
+      add(column, {...fact, value, raw_unit: rawUnit, raw_token: token}, null);
+    }
+  }
+  for (const [key, claims] of cells) {
+    const values = new Set(claims.map(({record, period}) => claims.length > 1 && period
+      ? `${record.value} (${period})` : record.value));
+    const amount = claims.length === 1 && claims[0].amount;
+    cells.set(key, {
+      state: "PRESENT", value: [...values].join(" | "),
+      reported: claims.map(({record}) => record),
+      sortAmount: amount && signedNumber.test(amount) ? Number(amount.replaceAll(",", "")) : null,
+    });
+  }
+  return cells;
+}
+
+export function reportedCoreCell(cells, project, column, archived) {
+  if (archived?.state !== "UNKNOWN") return archived;
+  return cells.get(cellKey(project, column)) ?? archived;
 }
