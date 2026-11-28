@@ -20,7 +20,7 @@ from .native_table_discovery import discover_page_rows
 from .normalization import reported_interval
 from .observations import NUMBER, digest, exact_value
 from .resource_context import BoundStatement, Measurement, bind_context
-from .resource_extraction import _chemical_species, _date_present, _flatten
+from .resource_extraction import _chemical_species, _date_present, _flatten, reported_table_cutoff
 from .resource_sources import ResourceSourceReader, plan_source_editions
 
 if TYPE_CHECKING:
@@ -206,9 +206,17 @@ def _class_rows(pdf, cell, expected):
         return None
     last = int(located.locator.rsplit(" ", 1)[-1])
     native = pdf.locate(page).text.splitlines()
+    known, first = _preceding_class_rows(native, last)
+    if len(known) != len(expected) or set(_printed_classes(" ".join(known))) != set(expected):
+        return None
+    phrase = _Phrase(page, f"PDF page {page}, lines {first}-{last}", "\n".join(native[first - 1:last]))
+    return _Reported(" + ".join(known) + f" ({total['label']})", total["label"], phrase)
+
+
+def _preceding_class_rows(native, last, floor=0):
     known = []
     first = last
-    for line in range(last - 1, max(0, last - 14), -1):
+    for line in range(last - 1, max(floor, last - 14), -1):
         row = native[line - 1]
         if not row.strip() or row.strip().casefold() == _PAGE_WATERMARK:
             continue
@@ -216,10 +224,7 @@ def _class_rows(pdf, cell, expected):
             break
         known.append(match[1])
         first = line
-    if len(known) != len(expected) or set(_printed_classes(" ".join(known))) != set(expected):
-        return None
-    phrase = _Phrase(page, f"PDF page {page}, lines {first}-{last}", "\n".join(native[first - 1:last]))
-    return _Reported(" + ".join(reversed(known)) + f" ({total['label']})", total["label"], phrase)
+    return tuple(reversed(known)), first
 
 
 def _resource_class(phrases, pdf, measured, expected):
@@ -492,7 +497,7 @@ def _scope_words(text):
     return " ".join(re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", text).casefold()))
 
 
-def _cohort_table_context(cell, edition, scope):
+def _cohort_table_context(cell, edition, scope, document, caption, row_line):
     if scope is None:
         return {}
     row = cell["row_anchor"]
@@ -503,6 +508,16 @@ def _cohort_table_context(cell, edition, scope):
         context.update(reported_resource_category=row_class[1], reported_category_locator=row["locator"])
     if printed_class and not row_class:
         context.update(reported_resource_category=printed_class[1], reported_category_locator=scope.locator)
+    page = cell["physical_page"]
+    if not (row_class or printed_class) and _PRINTED_TOTAL.match(row["text"]) and caption[-1].physical_page == page:
+        native = document.locate(page).text.splitlines()
+        known, first = _preceding_class_rows(native, row_line, floor=caption[-1].line)
+        if known and len(set(_printed_classes(" ".join(known)))) == len(known):
+            context.update(reported_resource_category=" + ".join(known),
+                           reported_category_locator=f"PDF page {page}, lines {first}-{row_line}")
+    row_label = re.split(r"\s{2,}", row["text"].strip(), maxsplit=1)[0]
+    if cutoff := reported_table_cutoff(document.pages, caption, row_label):
+        context.update(reported_cutoff=cutoff[0], reported_cutoff_locator=cutoff[1])
     days = {token for match in _ESTIMATE_DATE.finditer(scope.text) for token in match.groups() if token}
     if len(days) == 1:
         token, = days
@@ -535,9 +550,10 @@ def _rechecked_cohort_cell(cell, edition, group, document, project):
             or cell["context_anchors"] != [anchor.to_dict() for anchor in row.context_anchors]):
         raise ValueError("Historical cohort table row did not replay against the original")
     scope = _scope_phrase(cell, project)
+    caption = matches[0][1].caption
     return {**cell, "scope_status": "NAMED_REPORTED_TABLE" if scope else "UNBOUND",
             "display_scope": scope.text if scope else UNKNOWN,
-            "display_context": _cohort_table_context(cell, edition, scope)}
+            "display_context": _cohort_table_context(cell, edition, scope, document, caption, row.row_line)}
 
 
 def historical_cohort_display(receipt, sqlite_bytes, *, settings, registry, editions, manifest_sha, content, cache,

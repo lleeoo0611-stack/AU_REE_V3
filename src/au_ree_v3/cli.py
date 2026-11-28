@@ -129,6 +129,8 @@ def main(argv: list[str] | None = None) -> int:
     display.add_argument("--historical-tables", type=Path, metavar="V2_ROOT", help="Include original historical table candidates")
     display.add_argument("--historical-cohort", type=Path, nargs=2, metavar=("RECEIPT", "SQLITE"),
                          help="Include exact native resource values reread across the historical Census")
+    display.add_argument("--table-geometry-review", type=Path,
+                         help="Replay reviewed exact PDF geometry as candidate quantities")
     display.add_argument("--geography", type=Path, nargs=3, metavar=("BINDINGS", "MANIFEST", "STORE"))
     display.add_argument("--geography-base", type=Path, help="Exact parent source manifest for an expanded candidate")
     display.add_argument("--web-out", type=Path, help="Write an immutable candidate web release with the same verified display")
@@ -354,6 +356,7 @@ def _run_research(args) -> dict:
             assets=args.assets, bindings=args.bindings, forecast=args.forecast, geography=args.geography,
             geography_base=args.geography_base, include_reported_resources=args.reported_resources,
             historical_tables=args.historical_tables, historical_cohort=args.historical_cohort,
+            table_geometry_review=args.table_geometry_review,
         )
         receipt = write_display_package(bundle, args.out)
         if args.web_out is not None:

@@ -1,0 +1,19 @@
+{
+  "schema": "resource-table-geometry-review-v1",
+  "source_manifest_sha256": "4ed939586a90708da79e95072eef363905e568e1463cb79a1c546ac379feff6a",
+  "method": "pymupdf",
+  "runtime": "1.26.6",
+  "cases": [
+    {
+      "project_id": "AU-a8258e4989c7bd95b7af",
+      "capture_sha256": "c3fc3e9b277a29f86c11e222b1b01ebf3103780bcc7844994e8f89f1493dca46",
+      "physical_page": 7,
+      "caption": "Tower Mineral Resource Summary",
+      "row_label": "Total(1)",
+      "cells": [
+        {"role": "ore_mt", "header": "Tonnes", "unit": "Mt"},
+        {"role": "grade", "header": "TREO", "unit": "ppm"}
+      ]
+    }
+  ]
+}

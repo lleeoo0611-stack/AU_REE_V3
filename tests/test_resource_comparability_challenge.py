@@ -11,9 +11,9 @@ import unittest
 
 from au_ree_v3.comparability import TOTAL_REO_15
 from au_ree_v3.documents import DocumentCache, DocumentError, PDFDocument
-from au_ree_v3.resource_extraction import _chemical_species, native_resource_table
+from au_ree_v3.resource_extraction import _chemical_species, native_resource_table, reported_table_cutoff
 from au_ree_v3.resource_selection import _statement_issue
-from au_ree_v3.resource_table_binding import reviewed_table_rows
+from au_ree_v3.resource_table_binding import Span, reviewed_table_rows
 from au_ree_v3.sources import ContentStore
 
 
@@ -30,6 +30,19 @@ def _reviewed_grade_column():
 
 
 class ResourceComparisonMathTest(unittest.TestCase):
+    def test_numbered_notes_keep_table_and_row_scope(self):
+        title = "Table 1 Sample Mineral Resource Summary"
+        page = "\n".join((title, "Notes:", "(1) Above 100 ppm TREO-CeO2 cut-off.",
+                          "(2) Above 200 ppm TREO cut-off.", "", "Table 2 A different resource",
+                          "Notes:", "(1) Above 300 ppm TREO cut-off."))
+        anchors = (Span(1, 1, 1, len(title), title),)
+        self.assertIsNone(reported_table_cutoff((page,), anchors))
+        self.assertEqual(reported_table_cutoff((page,), anchors, "Total(1)"),
+                         ("100 ppm TREO-CeO2", "PDF page 1, line 3"))
+        self.assertEqual(reported_table_cutoff((page,), anchors, "Total(2)"),
+                         ("200 ppm TREO", "PDF page 1, line 4"))
+        self.assertIsNone(reported_table_cutoff((page,), anchors, "Total(3)"))
+
     def test_treo_definition_requires_exact_species_in_original_print_formats(self):
         terms = " + ".join(TOTAL_REO_15)
         parenthetical = f"TREO (Total Rare Earth Oxide) = {terms}"
@@ -129,6 +142,18 @@ _COHORT_INPUTS = (
 
 
 class ExactRecoveredResourceStatementTest(unittest.TestCase):
+    @unittest.skipUnless(os.environ.get("AU_REE_COHORT_REVIEW_ASSETS"), "original Tower report required")
+    def test_tower_reports_its_numbered_modified_treo_cutoff(self):
+        sha = "0ae98cfd93d554b8d948267a50f9c821761fee97c5a230440055c06029fc9d63"
+        document = DocumentCache().pdf(ContentStore(Path(os.environ["AU_REE_COHORT_REVIEW_ASSETS"])).read(sha), sha, 7)
+        title = "Tower Mineral Resource Summary"
+        line = document.pages[6].splitlines()[5]
+        self.assertEqual(line.strip(), title)
+        anchors = (Span(7, 6, len(line) - len(line.lstrip()) + 1, len(line.rstrip()), title),)
+        self.assertEqual(reported_table_cutoff(document.pages, anchors, "Total(1)"),
+                         ("300 ppm TREO-CeO2", "PDF page 7, lines 13-17"))
+        self.assertIsNone(reported_table_cutoff(document.pages, anchors, "Total(2)"))
+
     @unittest.skipUnless(all(os.environ.get(name) for name in _COHORT_INPUTS), "original fixed cohort bytes required")
     def test_eleven_sources_original_statement_roles_and_conflicts(self):
         audit = runpy.run_path(str(SCRIPT))["audit_recovered_statements"]
@@ -181,8 +206,11 @@ class ExactRecoveredResourceStatementTest(unittest.TestCase):
             ],
         }
         statement, = native_resource_table(pdf.pages, binding, "2023-06-14")
-        # The existing strict geometry still holds the offset 98 Mt lane. The
-        # source-only cohort receipt independently records its candidate position.
-        self.assertEqual({item.variable: item.token for item in statement.measurements}, {"grade": "890"})
+        self.assertEqual({item.variable: (item.token, item.raw_unit) for item in statement.measurements},
+                         {"grade": ("890", "ppm"), "ore_mt": ("98", "Mt")})
+        self.assertEqual((statement.cutoff, statement.cutoff_unit, statement.cutoff_analyte),
+                         ("430", "ppm", "TREO-CeO2"))
+        layout, = tuple(reviewed_table_rows(pdf, binding))
+        self.assertEqual(reported_table_cutoff(pdf.pages, layout[2]), ("430 ppm TREO-CeO2", "PDF page 2, lines 38-39"))
         self.assertEqual(set(statement.treo_members), set(TOTAL_REO_15))
         self.assertEqual(_statement_issue(statement), ("REJECTED", "APPROVED_PROJECT_RESOURCE_CATEGORY_REQUIRED"))

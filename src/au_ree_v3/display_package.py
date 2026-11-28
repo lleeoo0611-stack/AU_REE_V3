@@ -163,6 +163,7 @@ def compile_display_package(
     include_reported_resources: bool = False,
     historical_tables: Path | None = None,
     historical_cohort: tuple[Path, Path] | None = None,
+    table_geometry_review: Path | None = None,
 ) -> DisplayPackage:
     """Rebind display evidence to raw frozen bytes with no Store or decision write path."""
     from .census_resource_display import historical_cohort_display, historical_resource_reviews, reported_resource_facts
@@ -193,7 +194,8 @@ def compile_display_package(
     resource_diagnostics = []
     reported_reviews = [] if include_reported_resources else None
     observations = _display_observations(build, build_directory,
-                                         include_reported_resources or historical_tables is not None or historical_cohort is not None)
+                                         include_reported_resources or historical_tables is not None
+                                         or historical_cohort is not None or table_geometry_review is not None)
     resources = reported_resource_facts(
         census_receipt, observations, source_manifest, assets=assets, cache=cache,
         diagnostics=resource_diagnostics, bindings=binding_spec, manifest_sha=source_sha,
@@ -223,6 +225,18 @@ def compile_display_package(
                                               if item["context"]["candidate_id"] not in candidate_ids))
         context_pins.update(historical_cohort_recovery=recovery_sha, historical_cohort_sqlite=recovery["database_sha256"])
     review = (*resource_review, *(reported_reviews or ()), *historical_review, *region_review)
+    if table_geometry_review is not None:
+        from .table_geometry_review import geometry_resource_reviews
+
+        spec, review_sha = _read(table_geometry_review)
+        geometric = geometry_resource_reviews(
+            spec, editions=editions, registry=registry,
+            manifest_sha=source_sha, content=content, cache=cache, archived=observations,
+        )
+        present = {(item["project_id"], item["context"].get("census_column_id")) for item in review}
+        review += tuple(item for item in geometric
+                        if (item["project_id"], item["context"].get("census_column_id")) not in present)
+        context_pins["table_geometry_review"] = review_sha
     if reported_reviews is not None:
         if any(entry["source_capture_sha256"] not in editions for entry in reported_reviews):
             raise ValueError("Reported resource review requires a verified source capture")

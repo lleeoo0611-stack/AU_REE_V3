@@ -8,7 +8,7 @@ import unicodedata
 
 from .documents import DocumentError, PDFDocument
 from .normalization import KNOWN_OXIDE_SPECIES, exact_unit_exponent, reported_interval
-from .resource_table_binding import reviewed_table_rows
+from .resource_table_binding import _CAPTION, reviewed_table_rows
 from .observations import CATEGORY, NUMBER, exact_value, half_width, read_resource
 
 VARIABLES = ("ore_mt", "grade", "contained_treo_kt")
@@ -387,6 +387,16 @@ _BULK_MATERIAL = re.compile(
 _NON_BULK = re.compile(r"\b(?:heavy\s+mineral|concentrat(?:e|es|ion)|wet\s+tonnage)\b", re.I)
 _CONTEXT_DATE_ROLE = re.compile(r"\b(?:as\s+at|as\s+of|effective(?:\s+date)?|(?:mineral\s+resources?|estimate)\s+at)\b", re.I)
 _CLASSIFICATIONS = ("MEASURED", "INDICATED", "INFERRED")
+_ORIGINAL_CLASS_ROW = re.compile(r"^\s*(Measured|Indicated|Inferred)\s{2,}(?=[0-9-]|[–—])", re.I)
+_CUTOFF_TERM = r"cut[\s\-−–]?off\b(?:\s+grade\b)?"
+_CUTOFF_CONTINUATION = re.compile(r"\s*(?:[+\-−–]\s*\w|including\b|excluding\b|plus\b|minus\b)", re.I)
+_CUTOFF_ANALYTE = r"TREO(?:\s*[+\-−–]\s*(?:Ce(?:O2)?|Y(?:2O3)?|Sc(?:2O3)?))?|Nb2O5|P2O5|NdPr|THM"
+_CUTOFF_LITERAL = rf"(?<![\w.,\-−–])(?P<amount>{NUMBER})\s*(?P<unit>ppm\b|%)\s+(?P<analyte>{_CUTOFF_ANALYTE})(?!\w)"
+_CUTOFF_BEFORE = re.compile(rf"\b{_CUTOFF_TERM}\s*(?:of|at|=|:)?\s*{_CUTOFF_LITERAL}", re.I)
+_CUTOFF_AFTER = re.compile(rf"{_CUTOFF_LITERAL}\s+(?:(?:lower|upper)\s+)?{_CUTOFF_TERM}", re.I)
+_CUTOFF_NOTES = re.compile(r"^\s*notes?\s*:", re.I)
+_NUMBERED_NOTE = re.compile(r"^\s*(?:\((\d{1,2})\)|(\d{1,2})[.)]|([*†‡]))\s+\S")
+_ROW_NOTE = re.compile(r"\s*(?:\((\d{1,2})\)|([*†‡]))\s*$")
 _OXIDE_NAMES = {species.upper(): species for species in KNOWN_OXIDE_SPECIES}
 _TREO_DEFINITION = re.compile(
     r"TREO(?:\s*\(Total Rare Earth Oxides?\))?\s*=\s*"
@@ -498,6 +508,73 @@ def _native_link(binding, page, caption, quote, sections):
                 and reference.casefold() in heading.casefold() and reference.casefold() in quote.casefold())
 
 
+def _cutoff_region(pages, caption):
+    first = caption[0]
+    lines = pages[first.physical_page - 1].splitlines()
+    end = next((index for index in range(caption[-1].line, len(lines)) if _CAPTION.match(lines[index])), len(lines))
+    return tuple(lines[first.line - 1:end])
+
+
+def _reported_cutoff_matches(cutoff, quotes):
+    """Verify the literal value, unit and named analyte as one original phrase."""
+    fields = ("value", "unit", "analyte", "reported")
+    if not all(isinstance(cutoff.get(field), str) and cutoff[field].strip() for field in fields):
+        return False
+    unit, analyte, reported, expected = (unicodedata.normalize("NFKC", cutoff[field])
+                                        for field in ("unit", "analyte", "reported", "value"))
+    literal = rf"(?<![\w.,\-−–])(?P<amount>{NUMBER})\s*{re.escape(unit)}\s+{re.escape(analyte)}(?!\w)"
+    match = re.fullmatch(literal, reported, re.I)
+    if match is None or not re.fullmatch(NUMBER, expected) or exact_value(match["amount"]) != exact_value(expected):
+        return False
+    witness = rf"(?P<threshold>(?<![\w.,\-−–]){re.escape(reported)}(?!\w))"
+    patterns = (re.compile(rf"\b{_CUTOFF_TERM}\s*(?:of|at|=|:)?\s*{witness}", re.I),
+                re.compile(rf"{witness}\s+(?:(?:lower|upper)\s+)?{_CUTOFF_TERM}", re.I))
+    for quote in quotes:
+        normalized = unicodedata.normalize("NFKC", quote)
+        if any(not _CUTOFF_CONTINUATION.match(normalized, item.end("threshold"))
+               for pattern in patterns for item in pattern.finditer(normalized)):
+            return True
+    return False
+
+
+def reported_table_cutoff(pages, caption, row_label=""):
+    """Read a unique cutoff from a caption or a numbered table-local note."""
+    first = caption[0].line
+    lines = _cutoff_region(pages, caption)
+    citation = _ROW_NOTE.search(row_label)
+    marker = next((group for group in citation.groups() if group is not None), None) if citation else None
+    groups = [(0, len(caption)), *_cutoff_note_groups(lines, caption, marker)]
+    found = {}
+    for start, end in groups:
+        quote = unicodedata.normalize("NFKC", _flatten(" ".join(lines[start:end])))
+        for pattern in (_CUTOFF_BEFORE, _CUTOFF_AFTER):
+            for match in pattern.finditer(quote):
+                if _CUTOFF_CONTINUATION.match(quote, match.end("analyte")):
+                    continue
+                analyte = re.sub(r"\s+", "", match["analyte"].upper()).translate(str.maketrans("−–", "--"))
+                key = exact_value(match["amount"]), match["unit"].lower(), analyte
+                first_line, last_line = first + start, first + end - 1
+                locator = f"PDF page {caption[0].physical_page}, "
+                locator += f"line {first_line}" if first_line == last_line else f"lines {first_line}-{last_line}"
+                found.setdefault(key, (f"{match['amount']} {match['unit']} {match['analyte']}", locator))
+    return next(iter(found.values())) if len(found) == 1 else None
+
+
+def _cutoff_note_groups(lines, caption, marker):
+    starts = [index for index in range(len(caption), len(lines)) if _CUTOFF_NOTES.match(lines[index])]
+    if len(starts) != 1:
+        return
+    section, = starts
+    if marker is None and lines[section].partition(":")[2].strip():
+        yield section, section + 1
+    boundary = next((index for index in range(section + 1, len(lines)) if not lines[index].strip()), len(lines))
+    notes = {index: next(group for group in entry.groups() if group is not None)
+             for index in range(section + 1, boundary) if (entry := _NUMBERED_NOTE.match(lines[index]))}
+    for start, end in zip(notes, (*tuple(notes)[1:], boundary)):
+        if (marker is None or notes[start] == marker) and end - start <= 6:
+            yield start, end
+
+
 def _native_context(pages, binding, caption):
     context = []
     roles = {}
@@ -509,7 +586,10 @@ def _native_context(pages, binding, caption):
         if role not in _NATIVE_CONTEXT_ROLES or quote is None:
             continue
         context.append((page, quote))
-        if role in {"PUBLICATION_DATE", "JORC"} or _native_link(binding, page, caption, quote, sections):
+        linked = _native_link(binding, page, caption, quote, sections)
+        if role == "CUTOFF" and page == caption[0].physical_page:
+            linked = quote.casefold() in _flatten(" ".join(_cutoff_region(pages, caption))).casefold()
+        if role in {"PUBLICATION_DATE", "JORC"} or linked:
             roles.setdefault(role, []).append(quote)
         else:
             disconnected.append({"role": role, "physical_page": page, "quote": quote})
@@ -526,13 +606,7 @@ def _native_context(pages, binding, caption):
         material = "HEAVY_MINERAL_OR_CONCENTRATE"
     treo_members = _chemical_species(roles.get("CHEMICAL_DEFINITION", ()))
     cutoff = binding.get("cutoff") or {}
-    reported = cutoff.get("reported", "")
-    found = list(re.finditer(NUMBER, reported))
-    cutoff_bound = (reported and len(found) == 1
-                    and cutoff.get("unit") and cutoff["unit"].casefold() in reported.casefold()
-                    and cutoff.get("analyte") and cutoff["analyte"].casefold() in reported.casefold()
-                    and exact_value(found[0][0]) == exact_value(cutoff.get("value", ""))
-                    and any(reported.casefold() in quote.casefold() for quote in roles.get("CUTOFF", ())))
+    cutoff_bound = _reported_cutoff_matches(cutoff, roles.get("CUTOFF", ()))
     issues = [
         reason for ready, reason in (
             (jorc, "JORC_2012_UNBOUND"), (date_ok, "ESTIMATE_DATE_EVIDENCE_UNBOUND"),
@@ -552,8 +626,7 @@ def _category_from_original(label, earlier, caption):
         return "MEASURED_ONLY"
     if direct == {"INDICATED"}:
         return "INDICATED_ONLY"
-    source_rows = " ".join(line for line in earlier if re.search(r"\d", line))
-    observed = {word for word in _CLASSIFICATIONS if re.search(rf"\b{word}\b", source_rows, re.I)}
+    observed = {row[1].upper() for line in earlier if (row := _ORIGINAL_CLASS_ROW.match(line))}
     if not observed:
         heading = " ".join(span.text for span in caption)
         observed = {word for word in _CLASSIFICATIONS if re.search(rf"\b{word}\b", heading, re.I)}
@@ -563,6 +636,8 @@ def _category_from_original(label, earlier, caption):
         frozenset({"INDICATED", "INFERRED"}): "INDICATED_INFERRED_TOTAL",
         frozenset({"INFERRED"}): "INFERRED_ONLY",
     }
+    if direct:
+        return aggregates.get(frozenset(direct)) if not observed or direct == observed else None
     return aggregates.get(frozenset(observed))
 
 
