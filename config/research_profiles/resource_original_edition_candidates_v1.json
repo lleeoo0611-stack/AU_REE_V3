@@ -1,0 +1,62 @@
+{
+  "schema": "public-source-version-targets-v1",
+  "fixed_manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "cases": [
+    {
+      "case_id": "nolans-2015",
+      "project_id": "AU-1345edd8165c10930e94",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "432kn4l4vvx4n8",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://announcements.asx.com.au/asxpdf/20151030/pdf/432kn4l4vvx4n8.pdf",
+          "publisher": "Arafura Resources Limited"
+        }
+      ]
+    },
+    {
+      "case_id": "nolans-2017",
+      "project_id": "AU-1345edd8165c10930e94",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "43jsp1xldvw6rk",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://announcements.asx.com.au/asxpdf/20170607/pdf/43jsp1xldvw6rk.pdf",
+          "publisher": "Arafura Resources Limited"
+        }
+      ]
+    },
+    {
+      "case_id": "dubbo-2018",
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "43zmg28pb600f1",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://announcements.asx.com.au/asxpdf/20181025/pdf/43zmg28pb600f1.pdf",
+          "publisher": "Alkane Resources Limited"
+        }
+      ]
+    },
+    {
+      "case_id": "dubbo-2025",
+      "project_id": "AU-2cfeb25aefee0c4f95fb",
+      "native_namespace": "ASX_ASXPDF_DOCUMENT",
+      "native_id": "06lq7vsvvk6yms",
+      "access_basis": "PUBLIC_ANONYMOUS",
+      "kind": "pdf",
+      "routes": [
+        {
+          "url": "https://announcements.asx.com.au/asxpdf/20250711/pdf/06lq7vsvvk6yms.pdf",
+          "publisher": "Australian Strategic Materials Limited"
+        }
+      ]
+    }
+  ]
+}

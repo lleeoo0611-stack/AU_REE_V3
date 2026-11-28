@@ -375,7 +375,11 @@ _NATIVE_CONTEXT_ROLES = {
     "EFFECTIVE_DATE", "PUBLICATION_DATE", "CUTOFF", "JORC", "MATERIAL_BASIS", "CHEMICAL_DEFINITION",
     "SCOPE", "PRECISION",
 }
-_JORC_2012 = re.compile(r"\b(?:JORC(?:\s+Code)?[^.;]{0,30}2012|2012[^.;]{0,35}JORC(?:\s+Code)?)\b", re.I)
+_JORC_2012 = re.compile(
+    r"\b(?:JORC(?:\s+Code)?[^.;]{0,30}2012|2012[^.;]{0,35}JORC(?:\s+Code)?|"
+    r"2012 Edition of the Australasian Code for Reporting of Exploration Results, Mineral Resources and Ore Reserves)\b",
+    re.I,
+)
 _BULK_MATERIAL = re.compile(
     r"\b(?:whole[- ]ore|(?:dry|undiluted|in[- ]situ)\s+(?:ore|tonnage|tonnes|resource)|"
     r"tonnages?[^.]{0,48}dry\s+basis|dry\s+tonnage\s+basis|contained\s*\(in[- ]situ\)\s+resources)\b", re.I,
@@ -401,7 +405,7 @@ def _date_present(quote, expected, *, effective):
     month_year = rf"\b{parsed:%B},?\s+{parsed.year}\b"
     if len(expected) == 7:
         return bool(re.search(month_year, quote, re.I) and (not effective or "resourc" in quote.casefold()))
-    return bool(re.search(rf"\b{parsed.day}\s+{month_year}", quote, re.I)
+    return bool(re.search(rf"\b{parsed.day:02d}\s+{month_year}|\b{parsed.day}\s+{month_year}", quote, re.I)
                 and (not effective or _CONTEXT_DATE_ROLE.search(quote)))
 
 
@@ -429,6 +433,28 @@ def _chemical_species(quotes):
     return definitions[0] if definitions and len(set(definitions)) == 1 else ()
 
 
+def _dated_jorc_annex(pages, caption, binding, link, first, last):
+    """Require a citation from the statement and one continuous dated JORC annex."""
+    heading = " ".join(span.text for span in caption)
+    same_page = caption[0].physical_page
+    start, end = link["start"]["page"], link["end"]["page"]
+    reference = link.get("reference", {})
+    citation = _native_quote(pages, reference.get("page"), reference.get("quote"))
+    scope = link["scope_reference"].casefold()
+    marker = re.match(r"(?:table|figure)\s+\d+\b", heading, re.I)
+    dated_title = "JORC TABLE 1 ASSESSMENT CRITERIA FOR "
+    if (not marker or not citation or reference["page"] != same_page or start <= same_page
+            or not re.search(rf"\b{re.escape(marker[0])}\s+and\s+(?:the\s+)?attached JORC Table 1\b", citation, re.I)
+            or not first.upper().startswith(dated_title) or scope not in first.casefold() or scope not in last.casefold()):
+        return False
+    effective = binding.get("effective_date")
+    if not (_date_present(heading, effective, effective=True) and _date_present(first, effective, effective=True)):
+        return False
+    if sum(page.upper().count(dated_title) for page in pages) != 1:
+        return False
+    return all("JORC TABLE 1 ASSESSMENT CRITERIA" in _flatten(page).upper() for page in pages[start - 1:end])
+
+
 def _native_sections(pages, binding, caption):
     heading = " ".join(span.text for span in caption)
     routes = []
@@ -437,9 +463,14 @@ def _native_sections(pages, binding, caption):
         start, end = link.get("start", {}), link.get("end", {})
         first = _native_quote(pages, start.get("page"), start.get("quote"))
         last = _native_quote(pages, end.get("page"), end.get("quote"))
-        if not first or not last or len(phrase.split()) < 3 or phrase.casefold() not in heading.casefold():
+        dated = link.get("kind") == "dated-jorc-annex-v1"
+        if not first or not last or len(phrase.split()) < (2 if dated else 3) or phrase.casefold() not in heading.casefold():
             continue
         if not 1 <= start["page"] <= end["page"] <= len(pages):
+            continue
+        if dated:
+            if _dated_jorc_annex(pages, caption, binding, link, first, last):
+                routes.append((start["page"], end["page"]))
             continue
         bounded_statement = all(phrase.casefold() in item.casefold() for item in (first, last))
         reference = link.get("reference", {})
