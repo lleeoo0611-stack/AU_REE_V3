@@ -1,0 +1,517 @@
+{
+  "comparison_status": "NOT_RUN_ON_NEW_ADAPTER_AT_ANNOTATION",
+  "independence": "Manual exact PDF readback and native token reconciliation without consulting the new adapter, fixtures or output.",
+  "manifest_sha256": "2cbb412fec60d43048321142b4baf242a8bae91739b6f7f2b1771eb1765629cd",
+  "rows": [
+    {
+      "case_id": "wudinna-statement",
+      "expected": {
+        "class": [
+          "Indicated",
+          "Inferred"
+        ],
+        "contained": [
+          "70,400",
+          "tonnes"
+        ],
+        "cutoff": [
+          "200",
+          "ppm",
+          "TREO-Ce"
+        ],
+        "cutoff_role": "OPEN_PITTABLE",
+        "effective_date": "2026-10-22",
+        "ore": [
+          "150",
+          "Mt"
+        ],
+        "publication_date": "2026-10-26",
+        "scope": "Wudinna Garford and Pidinga, total",
+        "treo": [
+          "470",
+          "ppm"
+        ]
+      },
+      "judgment": "DIRECT_REPORTED_SCOPE",
+      "must_refuse": [
+        "Do not drop Ce from the analyte label.",
+        "Do not equate Group MREO with all TREO.",
+        "Do not substitute publication date."
+      ],
+      "project_ids": [
+        "AU-0098e17a63e7c05c213f"
+      ],
+      "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+      "source_urls": [
+        "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 89,
+          "folded_start": 0,
+          "page": 3,
+          "pdftotext_sha256": "789e4c5defc2e7c77be83019918d147c500f913b876724718400b78916498306",
+          "quote": "Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce"
+        },
+        {
+          "folded_end": 1317,
+          "folded_start": 1259,
+          "page": 3,
+          "pdftotext_sha256": "789e4c5defc2e7c77be83019918d147c500f913b876724718400b78916498306",
+          "quote": "Mineral Resources are classified as Indicated and Inferred"
+        },
+        {
+          "folded_end": 1394,
+          "folded_start": 1320,
+          "page": 3,
+          "pdftotext_sha256": "789e4c5defc2e7c77be83019918d147c500f913b876724718400b78916498306",
+          "quote": "Mineral Resources are reported with an Effective Date of 22 October, 2026."
+        },
+        {
+          "folded_end": 1343,
+          "folded_start": 1251,
+          "page": 1,
+          "pdftotext_sha256": "e48b5479a871b73d90454af56653785bf79cb755f001dd0a2a3f2d786fd1da58",
+          "quote": "150 Mt grading 470 ppm Total Rare Earth Oxides (\"TREO\") for 70,400 tonnes of contained TREO."
+        },
+        {
+          "folded_end": 1726,
+          "folded_start": 1654,
+          "page": 1,
+          "pdftotext_sha256": "e48b5479a871b73d90454af56653785bf79cb755f001dd0a2a3f2d786fd1da58",
+          "quote": "Open pittable cutoff grade of 200 ppm TREO excluding cerium (\"TREO-Ce\")."
+        }
+      ]
+    },
+    {
+      "case_id": "north-main-statement",
+      "expected": {
+        "class": [
+          "Measured",
+          "Indicated",
+          "Inferred"
+        ],
+        "cutoff": [
+          "300",
+          "ppm",
+          "TREO"
+        ],
+        "estimate_vintage": "2026-08",
+        "mass_basis": "dry",
+        "ore": [
+          "278.80",
+          "Mt"
+        ],
+        "publication_date": "2026-08-18",
+        "treo": [
+          "482.64",
+          "ppm"
+        ]
+      },
+      "judgment": "DIRECT_REPORTED_SCOPE",
+      "must_refuse": [
+        "Do not infer a day-level estimate from 18 August release.",
+        "Do not present derived contained TREO as a direct source token."
+      ],
+      "project_ids": [
+        "AU-216d0983f6892f9b58f9"
+      ],
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "source_urls": [
+        "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 477,
+          "folded_start": 374,
+          "page": 97,
+          "pdftotext_sha256": "701b16b7295f9a3386dcb82540c4dacd8cd1082a46c43c3ef28151a6c7152344",
+          "quote": "The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO"
+        },
+        {
+          "folded_end": 749,
+          "folded_start": 711,
+          "page": 97,
+          "pdftotext_sha256": "701b16b7295f9a3386dcb82540c4dacd8cd1082a46c43c3ef28151a6c7152344",
+          "quote": "Total 278.80 482.64 171.40 311.24 7.04"
+        },
+        {
+          "folded_end": 930,
+          "folded_start": 862,
+          "page": 97,
+          "pdftotext_sha256": "701b16b7295f9a3386dcb82540c4dacd8cd1082a46c43c3ef28151a6c7152344",
+          "quote": "Mineral Resource tonnages are estimated and reported on a dry basis."
+        },
+        {
+          "folded_end": 26,
+          "folded_start": 0,
+          "page": 1,
+          "pdftotext_sha256": "c7beafa634463871331812c13808fedfb00a8c6c6b7083c07c363895a819bff6",
+          "quote": "ASX RELEASE 18 AUGUST 2026"
+        }
+      ]
+    },
+    {
+      "case_id": "north-higher-grade-subset",
+      "expected": {
+        "cutoff": [
+          "600",
+          "ppm",
+          "TREO"
+        ],
+        "ore": [
+          "53,338,000",
+          "Tonnes"
+        ],
+        "relationship": "subset of 300 ppm total, not additional",
+        "treo": [
+          "1,023.62",
+          "ppm"
+        ]
+      },
+      "judgment": "DISTINCT_NESTED_STATEMENT",
+      "must_refuse": [
+        "Do not add or substitute the subset, even for the same estimate month and reporting categories."
+      ],
+      "project_ids": [
+        "AU-216d0983f6892f9b58f9"
+      ],
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "source_urls": [
+        "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 1773,
+          "folded_start": 1729,
+          "page": 97,
+          "pdftotext_sha256": "701b16b7295f9a3386dcb82540c4dacd8cd1082a46c43c3ef28151a6c7152344",
+          "quote": "Total 53,338,000 1,023.62 331.85 691.78 6.58"
+        },
+        {
+          "folded_end": 1447,
+          "folded_start": 1323,
+          "page": 97,
+          "pdftotext_sha256": "701b16b7295f9a3386dcb82540c4dacd8cd1082a46c43c3ef28151a6c7152344",
+          "quote": "This higher-grade inventory forms part of, and is not additional to, the total Mineral Resource reported above 300 ppm TREO."
+        }
+      ]
+    },
+    {
+      "case_id": "jupiter-current-statement",
+      "expected": {
+        "class": [
+          "Indicated",
+          "Inferred"
+        ],
+        "cutoff": [
+          "1,000",
+          "ppm",
+          "TREO"
+        ],
+        "estimate_vintage": "2026-09",
+        "ore": [
+          "1.7",
+          "Bt"
+        ],
+        "publication_date": "2026-10-12",
+        "scope": "Jupiter, within Brothers",
+        "treo": [
+          "1,700",
+          "ppm"
+        ]
+      },
+      "judgment": "DIRECT_REPORTED_SCOPE",
+      "must_refuse": [
+        "Do not use the release date for estimate effective date.",
+        "Do not call 1,700 Mt an exact source token.",
+        "Do not add p19 category rows to replace the directly printed rounded total."
+      ],
+      "project_ids": [
+        "AU-dac3c8e40326b8244cdb"
+      ],
+      "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "source_urls": [
+        "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 534,
+          "folded_start": 492,
+          "page": 4,
+          "pdftotext_sha256": "2fd2fc3afa4b1646cb001473b448720be0007e6be3687ee1a7891ce55b65d341",
+          "quote": "Total 1,000 ppm 1.8 Bt 1,700* 1.7 Bt 1,700"
+        },
+        {
+          "folded_end": 823,
+          "folded_start": 779,
+          "page": 4,
+          "pdftotext_sha256": "2fd2fc3afa4b1646cb001473b448720be0007e6be3687ee1a7891ce55b65d341",
+          "quote": "The February 2025 MRE was entirely Inferred."
+        },
+        {
+          "folded_end": 99,
+          "folded_start": 0,
+          "page": 19,
+          "pdftotext_sha256": "5f8991c1416ed5ef7363e753b76b91c90e7af31ebe84605652fe3dec53817955",
+          "quote": "Table 8 | Jupiter Mineral Resource tonnages and key element grades by TREO cut-offs September 2026."
+        },
+        {
+          "folded_end": 43,
+          "folded_start": 17,
+          "page": 1,
+          "pdftotext_sha256": "2c88aca51015cc489fb559cca367d6818f39d1e14d4318a74a629bdf2ac5d009",
+          "quote": "12 October 2026 | ASX: CRI"
+        }
+      ]
+    },
+    {
+      "case_id": "jupiter-historical-statement",
+      "expected": {
+        "class": [
+          "Inferred"
+        ],
+        "cutoff": [
+          "1,000",
+          "ppm",
+          "TREO"
+        ],
+        "estimate_vintage": "2025-02",
+        "ore": [
+          "1.8",
+          "Bt"
+        ],
+        "treo": [
+          "1,700",
+          "ppm"
+        ]
+      },
+      "judgment": "DISTINCT_HISTORICAL_ESTIMATE",
+      "must_refuse": [
+        "Do not select the historical column for the 2026 estimate or give February 2025 an Indicated category."
+      ],
+      "project_ids": [
+        "AU-dac3c8e40326b8244cdb"
+      ],
+      "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "source_urls": [
+        "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 311,
+          "folded_start": 195,
+          "page": 4,
+          "pdftotext_sha256": "2fd2fc3afa4b1646cb001473b448720be0007e6be3687ee1a7891ce55b65d341",
+          "quote": "Table 2 | Comparison of February 2025 and updated Jupiter Mineral Resource Estimates at 1,000 ppm TREO cut-off grade"
+        },
+        {
+          "folded_end": 534,
+          "folded_start": 492,
+          "page": 4,
+          "pdftotext_sha256": "2fd2fc3afa4b1646cb001473b448720be0007e6be3687ee1a7891ce55b65d341",
+          "quote": "Total 1,000 ppm 1.8 Bt 1,700* 1.7 Bt 1,700"
+        },
+        {
+          "folded_end": 823,
+          "folded_start": 779,
+          "page": 4,
+          "pdftotext_sha256": "2fd2fc3afa4b1646cb001473b448720be0007e6be3687ee1a7891ce55b65d341",
+          "quote": "The February 2025 MRE was entirely Inferred."
+        }
+      ]
+    },
+    {
+      "case_id": "mt-weld-resource-statement",
+      "expected": {
+        "class": [
+          "Measured",
+          "Indicated",
+          "Inferred"
+        ],
+        "contained_table": [
+          "4,389",
+          "‘000 tonnes"
+        ],
+        "cutoff": [
+          "2.5",
+          "%",
+          "TREO"
+        ],
+        "grade_summary": [
+          "4.12",
+          "% TREO"
+        ],
+        "grade_table": [
+          "4.1",
+          "% TREO"
+        ],
+        "ore": [
+          "106.6",
+          "Million Tonnes"
+        ],
+        "publication_date": "2024-08-05",
+        "same_statement_cover_date": [
+          "30 June 2024",
+          "DAY"
+        ],
+        "table_date_precision": [
+          "June 2024",
+          "MONTH"
+        ]
+      },
+      "judgment": "DIRECT_REPORTED_SCOPE",
+      "must_refuse": [
+        "Do not derive day precision from the table caption alone.",
+        "Do not make the rounded table grade identical to the literal narrative token."
+      ],
+      "project_ids": [
+        "AU-efff91a06cf344122d88"
+      ],
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "source_urls": [
+        "https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 2806,
+          "folded_start": 2709,
+          "page": 2,
+          "pdftotext_sha256": "5aac61fb1e160f6386e7f141e362d72094c7542019c6f824b8342f258fbf4fba",
+          "quote": "Table 1: Mt Weld Rare Earth Deposit Mineral Resource summary June 2024 at 2.5% TREO cut-off grade"
+        },
+        {
+          "folded_end": 2964,
+          "folded_start": 2943,
+          "page": 2,
+          "pdftotext_sha256": "5aac61fb1e160f6386e7f141e362d72094c7542019c6f824b8342f258fbf4fba",
+          "quote": "Total 106.6 4.1 4,389"
+        },
+        {
+          "folded_end": 364,
+          "folded_start": 329,
+          "page": 1,
+          "pdftotext_sha256": "02797e903cf410276c7462e2143bbf9b488eedae98eb61bca29f729f9c5f27b6",
+          "quote": "from 30 June 2018 to 30 June 20241."
+        },
+        {
+          "folded_end": 13,
+          "folded_start": 0,
+          "page": 1,
+          "pdftotext_sha256": "02797e903cf410276c7462e2143bbf9b488eedae98eb61bca29f729f9c5f27b6",
+          "quote": "5 August 2024"
+        }
+      ]
+    },
+    {
+      "case_id": "mt-weld-reserve-counterexample",
+      "expected": {
+        "class": [
+          "Proved",
+          "Probable"
+        ],
+        "cutoff": [
+          "2.8",
+          "%",
+          "TREO"
+        ],
+        "role": "ORE_RESERVE"
+      },
+      "judgment": "DISTINCT_RESERVE_ROLE",
+      "must_refuse": [
+        "Do not use the reserve cutoff or reserve summary as a resource value."
+      ],
+      "project_ids": [
+        "AU-efff91a06cf344122d88"
+      ],
+      "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+      "source_urls": [
+        "https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 2331,
+          "folded_start": 2239,
+          "page": 3,
+          "pdftotext_sha256": "4bd87f20991159965901be7fe1296e7c53d9ef0474d4388e7ea0ca666bdb0d94",
+          "quote": "Table 2: Mt Weld Rare Earth Deposit Ore Reserve summary June 2024 at 2.8% TREO cut-off grade"
+        }
+      ]
+    },
+    {
+      "case_id": "goschen-area-one-statement-and-conflict",
+      "expected": {
+        "canonical_category": null,
+        "contained": [
+          "74,000",
+          "t In-Situ TREO + Y2O3"
+        ],
+        "cutoff": [
+          "1",
+          "%",
+          "THM"
+        ],
+        "effective_date": "2025-10-15",
+        "literal_lower_table_category": "M+Ind+Inf",
+        "narrative_category": [
+          "Measured",
+          "Indicated"
+        ],
+        "ore": [
+          "94,200,000",
+          "t"
+        ],
+        "scope": "Area 1",
+        "treo": [
+          "0.08",
+          "% In-Situ TREO + Y2O3"
+        ]
+      },
+      "judgment": "DIRECT_TOKENS_WITH_UNRESOLVED_CATEGORY",
+      "must_refuse": [
+        "Do not adopt either category as a harmonized canonical category.",
+        "Do not use the 1% THM cutoff as 1% TREO.",
+        "Do not promote global inventory or the adjacent THM concentrate assay to Area 1 in-situ bulk TREO."
+      ],
+      "project_ids": [
+        "AU-6d807eb7caec9db0f35e"
+      ],
+      "source_sha256": "5f8f642b6c9b561ca0f397fee0990e52786d85af3e67d53756def87b5cde2cd0",
+      "source_urls": [
+        "https://announcements.asx.com.au/asxpdf/20251015/pdf/06qkvvhp20rxx2.pdf"
+      ],
+      "witnesses": [
+        {
+          "folded_end": 63,
+          "folded_start": 0,
+          "page": 12,
+          "pdftotext_sha256": "0564b22cd5d41558e14204a911a35aa683872ea5bdffde3aa23b675f2b28c3b8",
+          "quote": "Table 8: Area 1Mineral Resource Statement as of 15 October 2025"
+        },
+        {
+          "folded_end": 1142,
+          "folded_start": 1084,
+          "page": 12,
+          "pdftotext_sha256": "0564b22cd5d41558e14204a911a35aa683872ea5bdffde3aa23b675f2b28c3b8",
+          "quote": "Area 1 Mineral Resource (M+Ind+Inf) 94,200,000 0.08 74,000"
+        },
+        {
+          "folded_end": 1262,
+          "folded_start": 1207,
+          "page": 12,
+          "pdftotext_sha256": "0564b22cd5d41558e14204a911a35aa683872ea5bdffde3aa23b675f2b28c3b8",
+          "quote": "Mineral resources reported at a cut-off grade of 1% THM"
+        },
+        {
+          "folded_end": 1565,
+          "folded_start": 1503,
+          "page": 2,
+          "pdftotext_sha256": "301279f06928c3956d97a6926256c87a1183a6738824576ea2aa5eb545038aab",
+          "quote": "a revised Measured and Indicated Resource of 94 Mt at 2.8% THM"
+        }
+      ]
+    }
+  ],
+  "schema": "independent-resource-original-oracle-v1",
+  "scope": "Named known cases for scientific regression. Generalization on unseen issuer families is unmeasured by this sample."
+}
