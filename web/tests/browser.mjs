@@ -156,7 +156,11 @@ function stage() {
       manifest_path:`releases/${id}/manifest.json`,manifest_sha256:digest(manifest)});
   }
   const hasDisplay = entry => Number(inputs.get(entry.release_id).has(displayName));
-  entries.sort((left,right)=>(flags.includes("--stage4") ? hasDisplay(right) - hasDisplay(left) : 0)
+  const requested = process.env.AU_REE_CANDIDATE_RELEASE_ID;
+  if (requested) assert(entries.some(entry => entry.release_id === requested), "Requested candidate is absent");
+  const priority = entry => Number(entry.release_id === requested);
+  entries.sort((left,right)=>priority(right) - priority(left)
+    || (flags.includes("--stage4") ? hasDisplay(right) - hasDisplay(left) : 0)
     || coverageExpected.get(right.release_id)-coverageExpected.get(left.release_id));
   return entries;
 }
@@ -169,7 +173,8 @@ const [lead, prior] = entries;
 const leadId=lead.release_id, priorId=prior.release_id;
 const extended = inputs.get(leadId).has(displayName);
 if (flags.includes("--stage4")) assert(extended, "The newer candidate must include the exact Stage 4 display artifacts");
-if (extended) assert(!inputs.get(priorId).has(displayName), "The prior candidate must retain its original core-only layout");
+const priorHasDisplay = inputs.get(priorId).has(displayName);
+if (flags.includes("--stage4")) assert(!priorHasDisplay, "The Stage 3 version must retain its core-only layout");
 const pointerKey = "data/preview.json";
 const writePointer = (active = lead, history = entries) => served.set(pointerKey, buffer({
   schema_version:"web-release-pointer-v1",...active,previous_release_id:priorId,releases:history,
@@ -177,6 +182,19 @@ const writePointer = (active = lead, history = entries) => served.set(pointerKey
 writePointer();
 const art = (id,file) => `data/releases/${id}/${file}`;
 const oldCsv = served.get(art(priorId,"census.csv"));
+if (flags.includes("--stage5")) {
+  assert(extended && priorHasDisplay && process.env.AU_REE_CANDIDATE_RELEASE_ID === leadId);
+  assert.equal(digest(served.get(art(leadId,"census.csv"))), digest(oldCsv));
+  const [current, previous] = [leadId, priorId].map(id => JSON.parse(served.get(art(id, displayName))));
+  const dateColumn = doc => doc.columns.findIndex(col => col.field_id === "resource_estimate_effective_date");
+  const weldDate = doc => doc.projects.find(row => row.id === "AU-efff91a06cf344122d88").cells[dateColumn(doc)];
+  assert.equal(weldDate(previous).state, "UNKNOWN");
+  assert.equal(weldDate(current).value, "2024-06-30");
+  const link = current.facts[weldDate(current).fact_ids[0]];
+  assert.equal(link.context.effective_date_role, "SAME_EDITION_LINKED_ESTIMATE_DATE");
+  assert.match(link.context.date_link_statement_locator, /^PDF page 2/);
+}
+
 const newCensus = JSON.parse(served.get(art(leadId,"census.json")));
 const populated = newCensus.projects.find(p=>p.cells[15].value !== null);
 assert(populated);
@@ -494,8 +512,18 @@ try {
   assert.equal(download.suggestedFilename(),`census-${priorId}.csv`);
   assert.equal(digest(await readFile(await download.path())),digest(oldCsv));
   assert(new URL(page.url()).searchParams.get("release")===priorId);
-  assert(await page.locator("#show-display").isHidden());
-  assert.equal(await page.locator("#download-display").getAttribute("href"), null);
+  if (priorHasDisplay) {
+    await page.locator("#show-display").check();
+    const downloading = page.waitForEvent("download");
+    await page.locator("#download-display").click();
+    const extension = await downloading;
+    assert.equal(extension.suggestedFilename(), `census-display-extended-${priorId}.csv`);
+    assert.equal(digest(await readFile(await extension.path())), digest(served.get(art(priorId, displayCsvName))));
+  } else {
+    assert(await page.locator("#show-display").isHidden());
+    assert.equal(await page.locator("#download-display").getAttribute("href"), null);
+  }
+  const priorDisplayHref = await page.locator("#download-display").getAttribute("href");
   await page.click("#refresh");
   await page.locator(".update-button").waitFor();
   assert.equal(await page.locator("#footer-release").textContent(),priorId);
@@ -524,7 +552,8 @@ try {
       assert.equal(await page.locator("#footer-release").textContent(), priorId);
       assert.equal(await page.locator("#version").inputValue(), priorId);
       assert.equal(await page.locator("#download").getAttribute("href"), download);
-      assert(await page.locator("#show-display").isHidden());
+      assert.equal(await page.locator("#show-display").isHidden(), !priorHasDisplay);
+      assert.equal(await page.locator("#download-display").getAttribute("href"), priorDisplayHref);
     }
     fault = null;
     metrics.extended_missing_corrupt_keeps_prior_version = "PASS";
