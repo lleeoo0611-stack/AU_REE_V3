@@ -15,6 +15,7 @@ from .derivations import FORMULA_REGISTRY_SHA256, RELEASE_REGISTRY_PIN, persist_
 from .fresh_census import build_census
 from .fresh_decision import build_decision
 from .fresh_observations import extract_sources
+from .oxide_derivations import OXIDE_FORMULA_REGISTRY_SHA256, OXIDE_RELEASE_PIN, load_oxide_derivation_policy, persist_census_oxide
 from .research_artifacts import ARTIFACTS
 from .research_environment import environment_lock
 from .registry import load_census_columns, load_profile, load_registry
@@ -163,9 +164,14 @@ def _research_projections(
         )
     with Store(database, trusted_temporal_evidence_ids=observation_receipt["trusted_temporal_evidence_ids"]) as store:
         release = store.get(ResearchRelease, release_id)
-        if release.result_fingerprints.get(RELEASE_REGISTRY_PIN) == FORMULA_REGISTRY_SHA256:
+        treo = release.result_fingerprints.get(RELEASE_REGISTRY_PIN) == FORMULA_REGISTRY_SHA256
+        composition = release.result_fingerprints.get(OXIDE_RELEASE_PIN) == OXIDE_FORMULA_REGISTRY_SHA256
+        if treo or composition:
             with store.transaction():
-                persist_census_treo(store, release)
+                if treo:
+                    persist_census_treo(store, release)
+                if composition:
+                    persist_census_oxide(store, release)
         return (
             build_census(
                 profile, out / "census", store=store, release_id=release_id,
@@ -185,6 +191,9 @@ def build_research(
     if any(out.iterdir()):
         raise ValueError("research build requires an empty output directory")
     settings = load_profile(profile)
+    oxide_registry = None
+    if settings.oxide_derivation_policy_path is not None:
+        oxide_registry = load_oxide_derivation_policy(settings.oxide_derivation_policy_path)["formula_registry_sha256"]
     registry = load_registry(settings.registry_path)
     columns = load_census_columns(settings.census_columns_path)
     if len(registry.projects) != settings.project_count or len(columns) != settings.census_column_count:
@@ -205,6 +214,7 @@ def build_research(
     extraction = extract_sources(
         bindings, extraction_sources, assets, db, out / "observations", code_commit=code_commit,
         census_derivation_registry_sha256=FORMULA_REGISTRY_SHA256,
+        census_oxide_derivation_registry_sha256=oxide_registry,
     )
     if _sha(sources) != source_sha:
         raise ValueError("source manifest changed during research build")
@@ -234,7 +244,8 @@ def build_research(
         "observation_release_id": extraction["release_id"],
         "observation_counts": {name: extraction[name] for name in ("candidate_count", "validated_count", "selected_count")},
     }
-    if "census_derivation_registry_sha256" in extraction:
-        result["census_derivation_registry_sha256"] = extraction["census_derivation_registry_sha256"]
+    for key in ("census_derivation_registry_sha256", "census_oxide_derivation_registry_sha256"):
+        if key in extraction:
+            result[key] = extraction[key]
     (out / "build_receipt.json").write_text(canonical_json(result) + "\n", encoding="utf-8")
     return result

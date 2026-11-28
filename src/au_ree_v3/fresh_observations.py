@@ -7,6 +7,7 @@ from .contracts.temporal import TEMPORAL_POLICY_VERSION
 from .documents import DocumentCache
 from .derivations import RELEASE_REGISTRY_PIN
 from .observations import digest
+from .oxide_derivations import OXIDE_FORMULA_REGISTRY_SHA256, OXIDE_RELEASE_PIN, REVIEW, verify_reviewed_mreo_document
 from .research_inputs import CENSUS_RESOURCE_USE, RESOURCE_RULE as RULE, checked_research_inputs
 from .resource_audit import complete_report, prepare_report, write_report
 from .resource_context import BoundStatement, Measurement, bind_context
@@ -16,19 +17,37 @@ from .resource_sources import SCHEMA, ResourceSourceReader, SourcePlan, matched_
 from .store import Store
 
 
+def _oxide_registry_pin(requested, documents, result):
+    if requested is None:
+        return None
+    if requested != OXIDE_FORMULA_REGISTRY_SHA256:
+        raise ValueError("Unknown Census oxide formula registry")
+    source = REVIEW["source_sha256"]
+    document = documents.get(source)
+    reviewed = document is not None and verify_reviewed_mreo_document(document)
+    result["census_oxide_source_review"] = {
+        "source_sha256": source,
+        "status": "EXACT_NATIVE_CONTEXT" if reviewed else "SOURCE_UNAVAILABLE" if document is None else "EVIDENCE_INSUFFICIENT",
+    }
+    return requested if reviewed else None
+
+
 def _persist_release(
     database: Path, plan: SourcePlan, statements: list[BoundStatement], proposal: SelectionProposal,
     originals: dict[str, bytes], fingerprint: str, code_commit: str,
     *, census_derivation_registry_sha256: str | None = None,
+    census_oxide_derivation_registry_sha256: str | None = None,
 ) -> tuple[ResearchRelease, dict]:
     selected = proposal.selected
     decisions = tuple(sorted({item.validation.temporal_decision_id for item in selected.values()}))
     proofs = tuple(sorted({proof.evidence_id for item in selected.values() for proof in item.validation.temporal_evidence}))
     identity = [SCHEMA, code_commit, plan.rules_sha, plan.manifest_sha, fingerprint]
     fingerprints = {"admission_plan": fingerprint}
-    if census_derivation_registry_sha256 is not None:
-        fingerprints[RELEASE_REGISTRY_PIN] = census_derivation_registry_sha256
-        identity.append(census_derivation_registry_sha256)
+    for key, pin in ((RELEASE_REGISTRY_PIN, census_derivation_registry_sha256),
+                     (OXIDE_RELEASE_PIN, census_oxide_derivation_registry_sha256)):
+        if pin is not None:
+            fingerprints[key] = pin
+            identity.append(pin)
     release = ResearchRelease(
         release_id=digest(identity),
         input_sha=plan.manifest_sha, code_commit=code_commit, rules_sha=plan.rules_sha,
@@ -67,10 +86,14 @@ def _persist_release(
 def extract_sources(
     bindings: Path, receipt: Path, assets: Path, database: Path, out: Path, *, code_commit: str,
     census_derivation_registry_sha256: str | None = None,
+    census_oxide_derivation_registry_sha256: str | None = None,
 ) -> dict:
     """Rebuild typed observation and selection records from the V3 acquisition store."""
     plan = plan_sources(bindings, receipt, database, out)
-    reader = ResourceSourceReader(assets, plan, DocumentCache())
+    required_pages = None
+    if census_oxide_derivation_registry_sha256 is not None:
+        required_pages = {REVIEW["source_sha256"]: REVIEW["dry_basis"]["physical_page"]}
+    reader = ResourceSourceReader(assets, plan, DocumentCache(), required_pages=required_pages)
     cases = plan.unmatched_cases()
     statements = []
     for binding, edition, project in plan.matches:
@@ -82,14 +105,18 @@ def extract_sources(
     proposal = propose_selections(statements)
     result, rows = prepare_report(plan, reader, cases, statements, proposal)
     if rows:
+        oxide_pin = _oxide_registry_pin(census_oxide_derivation_registry_sha256, reader.documents, result)
         pin = census_derivation_registry_sha256 if any(
             binding.get("research_use") == CENSUS_RESOURCE_USE for binding in plan.native_bindings
         ) else None
         release, integrity = _persist_release(
             database, plan, statements, proposal, reader.originals, result["scientific_fingerprint"], code_commit,
             census_derivation_registry_sha256=pin,
+            census_oxide_derivation_registry_sha256=oxide_pin,
         )
         if pin is not None:
             result["census_derivation_registry_sha256"] = pin
+        if oxide_pin is not None:
+            result["census_oxide_derivation_registry_sha256"] = oxide_pin
         complete_report(result, plan, proposal, release, integrity)
     return write_report(out, result, rows)

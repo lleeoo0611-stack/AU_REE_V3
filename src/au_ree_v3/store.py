@@ -618,6 +618,11 @@ class Store:
         release = self._required(ResearchRelease, derived.release_id)
         if scope.project_id != derived.project_id or derived.project_id not in release.cohort:
             raise ContractViolation("derived value is outside its Project scope or release cohort")
+        if derived.variable == "mreo_kt" and (derived.assessment is not None or release.release_mode == "FORMAL"):
+            from .oxide_derivations import validate_census_oxide_derivation
+
+            validate_census_oxide_derivation(self, release, derived)
+            return
         if derived.assessment is not None or release.release_mode == "FORMAL":
             from .derivations import validate_census_derivation
 

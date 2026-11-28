@@ -368,7 +368,7 @@ def validate_census_derivation(store: Store, release: ResearchRelease, value: De
 def checked_census_derivations(store: Store, release: ResearchRelease) -> tuple[DerivedValue, ...]:
     """Read only Store-authorized rows with recomputed formula and exact input links."""
     records = store.derivations_for_release(release.release_id)
-    formal = tuple(value for value in records if value.assessment is not None)
+    formal = tuple(value for value in records if value.assessment is not None and value.variable == VARIABLE)
     if not formal:
         return ()
     _require_registry_pin(release)

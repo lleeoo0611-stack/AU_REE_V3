@@ -4,10 +4,30 @@ from decimal import Decimal
 import json
 
 from .census import COLUMNS
-from .contracts import DerivedValue, canonical_json
-from .derivations import checked_census_derivations, registered_formula, verify_derivation_assessment
+from .contracts import ContractViolation, DerivedValue, canonical_json
+from .derivations import FORMULA_REGISTRY_SHA256, checked_census_derivations, registered_formula, verify_derivation_assessment
+from .oxide_derivations import (
+    OXIDE_FORMULA_REGISTRY_SHA256, checked_census_oxide_derivations,
+    registered_oxide_formula, verify_oxide_derivation_assessment,
+)
 
 CONTAINED_COLUMN = COLUMNS["contained_treo_kt"]
+REPORTED_MREO_COLUMN = "磁鐵稀土氧化物蘊藏量_kt"
+DERIVED_COLUMN_FOR_VARIABLE = {"contained_treo_kt": CONTAINED_COLUMN, "mreo_kt": REPORTED_MREO_COLUMN}
+FORMULA_INPUT_COLUMNS = {
+    CONTAINED_COLUMN: (COLUMNS["ore_mt"], COLUMNS["grade"]),
+    REPORTED_MREO_COLUMN: (COLUMNS["ore_mt"], COLUMNS["grade"], "mreo_ppm"),
+}
+FORMULA_INPUT_CHEMISTRY = {COLUMNS["ore_mt"]: "TREO", COLUMNS["grade"]: "TREO", "mreo_ppm": "PrNdDyTb_REO"}
+
+
+def registered_projection_formula(column, formula_id):
+    if column == CONTAINED_COLUMN:
+        formula = registered_formula(formula_id)
+        return ({"expression": formula.expression, "sha256": formula.sha256} if formula else None), FORMULA_REGISTRY_SHA256
+    if column == REPORTED_MREO_COLUMN:
+        return registered_oxide_formula(formula_id), OXIDE_FORMULA_REGISTRY_SHA256
+    return None, None
 
 
 def _precision(assessment):
@@ -32,11 +52,14 @@ def governed_derived_projection(store, release, inputs):
     """Use exact release-approved values and retain the proof in the Census receipt."""
     selected = {row.raw.raw_record_id: row for row in inputs}
     cells, proofs = {}, []
-    for record in checked_census_derivations(store, release):
+    for record in (*checked_census_derivations(store, release), *checked_census_oxide_derivations(store, release)):
         assessment = record.assessment
-        grade = selected[record.input_observation_ids[1]]
+        grade = selected[record.input_observation_ids[-1]]
         trace, anchor = grade.temporal_trace, grade.anchor
-        cells[record.project_id, CONTAINED_COLUMN] = {
+        key = record.project_id, DERIVED_COLUMN_FOR_VARIABLE[record.variable]
+        if key in cells:
+            raise ContractViolation("Multiple formal formulas select one Census cell")
+        cells[key] = {
             "value": record.value, "unit": record.unit, "value_state": "PRESENT",
             "reason": assessment["purpose"], "value_origin": "FORMAL_DERIVED", "evidence_state": "FORMAL_DERIVED",
             "release_id": record.release_id, "source_key": grade.source.source_key,
@@ -88,17 +111,39 @@ def _check_input(proof, assessment, selected, ledger):
         raise ValueError("Census derivation input precision differs from its approved cell")
 
 
-def verify_census_derivation(cell, document, selected, ledger, release_id):
+def _check_oxide_input(proof, assessment, selected, composition):
+    source_fields = {key: assessment[key] for key in ("project_id", "source_sha256", "scope_id", "statement_id", "effective_date")}
+    observation = selected.get(proof["observation_id"], {})
+    linked = composition.get(proof["observation_id"], {})
+    proof_keys = ("observation_id", "raw_record_id", "selection_id", "validation_id", "candidate_id", "anchor_id",
+                  "raw_token", "raw_unit", "physical_page", "table", "row", "column")
+    quantity = proof["variable"]
+    chemistry = "PrNdDyTb_REO" if quantity == "mreo_ppm" else "TREO"
+    trace = linked.get("temporal_decision", {})
+    if not _match(observation, {
+        **source_fields, "publication_date": assessment["publication_date"], "variable": quantity,
+        "raw_value": proof["raw_token"], "raw_unit": proof["raw_unit"], "chemical_basis": chemistry,
+        "material_basis": "WHOLE_ORE",
+    }) or not _match(linked, {
+        **source_fields, **{key: proof[key] for key in proof_keys}, "release_id": assessment["release_id"],
+        "chemical_basis": chemistry, "material_basis": "WHOLE_ORE",
+    }) or trace.get("status") != "ELIGIBLE" or trace.get("decision_id") != proof["temporal_decision_id"]:
+        raise ValueError("Census MREO calculation lacks exact formal input and source lineage")
+
+
+def verify_census_derivation(cell, document, selected, ledger, release_id, *, composition):
     """Check the archived candidate using the formula registry and the direct evidence ledger."""
     record = DerivedValue.from_dict(document)
     proof = record.assessment
-    if not verify_derivation_assessment(proof):
+    oxide = cell["column"] == REPORTED_MREO_COLUMN
+    verify = verify_oxide_derivation_assessment if oxide else verify_derivation_assessment
+    if not verify(proof):
         raise ValueError("Census formula, precision or derivation assessment fingerprint differs")
-    formula = registered_formula(proof["formula_id"])
+    formula, registry = registered_projection_formula(cell["column"], proof["formula_id"])
     inputs = proof["inputs"]
-    grade = inputs[1]
+    grade = inputs[-1]
     if not _match(cell, {
-        "project_id": record.project_id, "column": CONTAINED_COLUMN, "release_id": release_id,
+        "project_id": record.project_id, "column": DERIVED_COLUMN_FOR_VARIABLE.get(record.variable), "release_id": release_id,
         "scope_id": record.scope_id, "source_sha256": proof["source_sha256"],
         "statement_id": proof["statement_id"], "source_key": proof["source_key"], "source_url": proof["source_url"],
         "effective_date": proof["effective_date"], "category": proof["resource_category"],
@@ -112,7 +157,8 @@ def verify_census_derivation(cell, document, selected, ledger, release_id):
         raise ValueError("Census derivation differs from its release-scoped record")
     if (
         record.input_observation_ids != tuple(item["raw_record_id"] for item in inputs)
-        or record.derived_id != proof["assessment_id"] or record.formula != formula.expression
+        or formula is None or record.derived_id != proof["assessment_id"] or record.formula != formula["expression"]
+        or proof["formula_registry_sha256"] != registry
         or json.loads(cell["input_observation_ids"]) != [item["observation_id"] for item in inputs]
         or json.loads(cell["precision"]) != _precision(proof)
         or json.loads(cell["metadata_evidence"]) != _evidence(record, proof)
@@ -121,4 +167,7 @@ def verify_census_derivation(cell, document, selected, ledger, release_id):
     ):
         raise ValueError("Census derived output or stored input links differ from their assessment")
     for entry in inputs:
-        _check_input(entry, proof, selected, ledger)
+        if oxide:
+            _check_oxide_input(entry, proof, selected, composition)
+        else:
+            _check_input(entry, proof, selected, ledger)
