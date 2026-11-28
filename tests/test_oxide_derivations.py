@@ -2,6 +2,7 @@
 
 from dataclasses import replace
 from copy import deepcopy
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
@@ -11,11 +12,12 @@ import unittest
 
 from au_ree_v3.census_derivations import REPORTED_MREO_COLUMN
 from au_ree_v3.contracts import ContractViolation, DerivedValue, ResearchRelease
+from au_ree_v3.documents import DocumentCache
 from au_ree_v3.observations import digest
 from au_ree_v3.oxide_derivations import (
-    FORMULA, OXIDE_FORMULA_REGISTRY_SHA256, OXIDE_RELEASE_PIN, OXIDE_VARIABLE,
+    FORMULA, OXIDE_FORMULA_REGISTRY_SHA256, OXIDE_RELEASE_PIN, OXIDE_VARIABLE, REVIEW,
     assess_reported_mreo, checked_census_oxide_derivations, load_oxide_derivation_policy, persist_census_oxide,
-    registered_oxide_formula, verify_oxide_derivation_assessment,
+    registered_oxide_formula, verify_oxide_derivation_assessment, verify_reviewed_mreo_document,
 )
 from au_ree_v3.research_inputs import checked_research_inputs
 from au_ree_v3.store import Store
@@ -69,6 +71,20 @@ class RegistryTests(unittest.TestCase):
                     _check_derived_references([entry], revised)
         with self.assertRaises(WebPublicationError):
             _check_derived_references([{**entry, "input_observation_ids": ids[:2]}], inputs)
+
+
+@unittest.skipUnless(os.environ.get("AU_REE_MREO_PDF_ASSETS") and shutil.which("pdftotext"),
+                     "exact Wudinna original and Poppler required")
+class OriginalMreoPdfTests(unittest.TestCase):
+    def test_exact_wudinna_original_has_reported_group_and_dry_basis(self):
+        source = REVIEW["source_sha256"]
+        assets = Path(os.environ["AU_REE_MREO_PDF_ASSETS"])
+        original = next(path for path in (assets / source, assets / "objects" / source) if path.is_file()).read_bytes()
+        self.assertEqual(sha256(original).hexdigest(), source)
+        full_context = DocumentCache().pdf(original, source, REVIEW["dry_basis"]["physical_page"])
+        self.assertTrue(verify_reviewed_mreo_document(full_context))
+        self.assertFalse(verify_reviewed_mreo_document(replace(full_context, pages=full_context.pages[:3])))
+        self.assertFalse(verify_reviewed_mreo_document(replace(full_context, source_sha256="f" * 64)))
 
 
 @unittest.skipUnless(os.environ.get("AU_REE_STAGE3_OXIDE_BASELINE"), "exact governed Stage 3 baseline SQLite required")

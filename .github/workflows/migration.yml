@@ -128,6 +128,7 @@ jobs:
           get_fixture 'https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7763164.pdf?v=63957978608' a861c5b1088895ecd45210d6d7d3e3a319deee81dd85853ebdc184fd4c1b8acb
           AU_REE_RESOURCE_YIELD_ASSETS="$directory" python -m unittest discover -s tests -p 'test_resource_yield.py' -v
           AU_REE_FRESH_ASSETS="$directory" python -m unittest discover -s tests -p 'test_composition_extraction.py' -v
+          AU_REE_MREO_PDF_ASSETS="$directory" python -m unittest discover -s tests -p 'test_oxide_derivations.py' -v
           get_fixture 'https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf' bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e
           get_fixture 'https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf' 452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491
           AU_REE_NATIVE_RESOURCE_ASSETS="$directory" python -m unittest discover -s tests -p 'test_native_resource_positives.py' -v
