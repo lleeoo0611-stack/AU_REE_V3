@@ -406,6 +406,8 @@ def _census_delta(baseline, current):
                 kind = "FORMAL_DERIVED_ADDED" if after["value_origin"] == "FORMAL_DERIVED" else "FORMAL_ADDED"
             elif formal_before and not formal_after:
                 kind = "FORMAL_RETURNED"
+            elif after.get("evidence_state") == "VALIDATED_DESCRIPTIVE" and before["value_state"] != "PRESENT":
+                kind = "VALIDATED_ATTRIBUTE_ADDED"
             elif not formal_before and not formal_after and before["value"] != after["value"]:
                 kind = "DISPLAY_VALUE_CHANGED"
             elif set(changed) & _SCIENCE_FIELDS:
