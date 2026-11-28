@@ -47,3 +47,13 @@ T7 的 18 項適用測試皆 PASS，涵蓋真實正例、前置工程、先前�
     done
 
 以基準 CAS 內 `dc50a0fe07adc957b05c8990a77b3b4c77d1a479bb6319d6a74296f5d5482dbd` profile 為輸入，替換 `attribute_bindings` 與 `attribute_milestones` 的路徑和實際 SHA。測試重建此組合並分別核對兩個 profile。CLI 建置沿用資源規則 `8194d0bf…` 和來源清冊 `4ed93958…`。用凍結版本依既有 `research build`、`archive`、兩次 `replay --offline`、`compare` 和 `build-display` 完成重跑。 [封存與候選展示完整命令](census_comparability_results.md)
+
+## Jupiter 結果公布原件
+
+V2 封存將 Jupiter 標示為 `B1`，日期為 2026-10-20。Critica 同日公告的實體第 1 頁明示發行人正在公布 Jupiter Scoping Study 的結果。原文使用 `outcomes`，新版本政策將它納入既有結果公布句型，沿用同頁發布日期、Project 範圍、原件 SHA、截日及來源收據等驗證。原 v1 規則及 SHA 保留。Greater Brothers 的開發階段格維持 `UNKNOWN`。 [Critica 公告原件](https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7794821.pdf?v=63959663947)
+
+已測提交 `2f94afd52b8435874138bd35c1ce802935d54b33`，候選 `1ec2dcccf9a64a987012b986b24e226988d3c3f0366a2c485b7a4315857829f3`。相較前一候選 `5e75f29274a7f8c307e3286652d6d200ad186f4e0b604e17f55a4900bba82ea7`，三格加入 Census 描述，63 格更新血緣收據，4,677 格無差異。核心 PRESENT 1,151→1,154／4,743，科學 22 格與 R1／S1 六個可比較鍵一致。研究完成日期延伸欄維持 6／93。公開候選的三格均查回源於同一原件第 1 頁的 `STUDY_RESULTS_RELEASED`。
+
+14 項開發及屬性測試 PASS，10 項網站發布測試 PASS，另外一個使用舊 144 來源組合的可選測試未執行。正式候選建置、封存、雙離線重播、逐格比較及候選靜態網站檢查均 PASS。不同重播路徑的展示產物逐一位元組相符。F5 BLOCKED。額外的本機 Chromium 互動測試受 Linux socket 權限阻擋。一次建置耗時 12.98 秒，峰值 RSS 93,776 KiB；雙離線冷重播分別耗時 16.93、15.31 秒。
+
+完整收據保存在 `work/census-nonquant/jupiter`。逐格比較收據 SHA-256 `f2fc3a011e5f2ca65ec1588dbee1d1fb2ad91792b4d680c5199f51818d0f53eb`。網站檢查收據 SHA-256 `c88c0517e586c7f6f293938517820de565a8e290191521f565c8b80330a338c7`。
