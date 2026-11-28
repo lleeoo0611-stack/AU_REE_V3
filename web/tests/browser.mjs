@@ -196,6 +196,27 @@ if (flags.includes("--stage5")) {
 }
 
 const newCensus = JSON.parse(served.get(art(leadId,"census.json")));
+const nolansId = "AU-1345edd8165c10930e94";
+const nolansSource = "5f72a08840640987e8d619c6d55ca047a2fe26c0194ffd1a46521f76eda7b06f";
+const nolansInventoryField = "總TREO蘊藏量_kt";
+if (flags.includes("--stage6")) {
+  assert(extended && priorHasDisplay && process.env.AU_REE_CANDIDATE_RELEASE_ID === leadId);
+  const archive = JSON.parse(served.get(art(priorId,"census.json")));
+  const current = newCensus.projects.find(project => project.id === nolansId);
+  const old = archive.projects.find(project => project.id === nolansId);
+  const evidence = JSON.parse(served.get(art(leadId,"census_evidence.json"))).entries;
+  for (const [name, value] of [["礦石蘊藏量_Mt",56],["TREO品位_pct",2.6],[nolansInventoryField,1456]]) {
+    const i = newCensus.columns.findIndex(column => column.id === name);
+    assert.equal(old.cells[i].value, null);
+    assert.equal(Number(current.cells[i].value), value);
+    const lineage = evidence[current.cells[i].lineage_id];
+    assert.equal(lineage.source_sha256, nolansSource);
+    if (name === nolansInventoryField) {
+      assert.equal(current.cells[i].origin, "FORMAL_DERIVED");
+      assert.equal(lineage.input_observation_ids.length, 2);
+    }
+  }
+}
 const populated = newCensus.projects.find(p=>p.cells[15].value !== null);
 assert(populated);
 const observationValue = populated.cells[15].value;
@@ -379,6 +400,17 @@ try {
     await page.selectOption("#state-filter","");
   }
   metrics.search_filter_sort_columns_evidence="PASS";
+  if (flags.includes("--stage6")) {
+    await page.click("#columns summary");
+    await page.getByRole("button",{name:"顯示全部 51 欄"}).click();
+    await page.fill("#search", nolansId);
+    await expectText(page,"#table-count",/^1 \/ 93/);
+    await page.locator("#census-table tbody").getByRole("button",{name:new RegExp(`^${nolansInventoryField}`)}).click();
+    await expectText(page,"#evidence-detail",new RegExp(nolansSource));
+    await page.keyboard.press("Escape");
+    await page.fill("#search", "");
+    metrics.nolans_source_and_derived_lineage = "PASS";
+  }
   if (extended) await checkDisplay(page);
   if (flags.includes("--stage3")) {
     assert(!synthetic, "Stage 3 regressions require exact archived candidate data");
