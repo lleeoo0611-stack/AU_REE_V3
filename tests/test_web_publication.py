@@ -9,8 +9,11 @@ import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
+from au_ree_v3.census_display import DisplayFact, display_csv, display_document, load_display_columns
 from au_ree_v3.contracts import canonical_json
+from au_ree_v3.display_package import DisplayPackage
 from au_ree_v3.fresh_census import build_census
 from au_ree_v3.fresh_decision import build_decision
 from au_ree_v3.fresh_research import BUILD_SCHEMA
@@ -109,6 +112,38 @@ class WebPublicationTests(unittest.TestCase):
         other = self.root / "another-run"
         self.assertEqual(self._export(other), manifest)
         self.assertEqual(_sha(self.target / "manifest.json"), _sha(other / "releases" / RELEASE / "manifest.json"))
+
+    def test_optional_display_is_archived_candidate_only_and_matches_exact_csv(self):
+        project_ids = tuple(project.project_id for project in load_registry(load_profile(PROFILE).registry_path).projects)
+        columns = load_display_columns(ROOT / "config/research_profiles/census_display_columns_v2.json")
+        record = DisplayFact(
+            project_ids[0], "forecast_annual_rate_as_reported", "8,300 tpa (LOM)", "8,300", "tpa",
+            "b" * 64, "c" * 64, "https://announcements.asx.com.au/forecast.pdf", "2026-10-20",
+            "PDF page 8", "8,300 tonnes per annum", "life of mine", "example-2026", "FORECAST",
+            {"source_kind": "pdf", "as_reported_at": "2026-10-20", "temporal_status": "ELIGIBLE"},
+        )
+        doc = display_document(release_id=RELEASE, columns=columns, project_ids=project_ids, facts=(record,))
+        receipt_sha = _sha(self.build / "build_receipt.json")
+        package = DisplayPackage(RELEASE, receipt_sha, (canonical_json(doc) + "\n").encode(), display_csv(doc), b"", {})
+        with self.assertRaisesRegex(WebPublicationError, "exact archived candidate"):
+            export_web(profile=PROFILE, research_build=self.build, release_id=RELEASE, out=self.out, display=package)
+
+        receipt = _read(self.build / "build_receipt.json")
+        archive = {"build_receipt_sha256": receipt_sha, "output_hashes": receipt["scientific_artifacts"],
+                   "cutoff": receipt["research_cutoff"]}
+        with patch("au_ree_v3.web_publication.load_release", return_value=archive):
+            export_web(profile=PROFILE, research_build=self.build, release_id=RELEASE, out=self.out,
+                       release_root=self.root / "archive", display=package)
+        manifest = verify_web_release(self.target, expected_release_id=RELEASE)
+        self.assertEqual(manifest["release_status"], CANDIDATE)
+        self.assertEqual(_read(self.target / "census_display.json"), doc)
+        self.assertEqual((self.target / "census.csv").read_bytes(), (self.build / "census/census.csv").read_bytes())
+
+        _rewrite_with_pin(self.target, "census_display.json", lambda value: value["facts"][record.fact_id].update(
+            data_role="OPERATING_ACTUAL"
+        ))
+        with self.assertRaisesRegex(WebPublicationError, "display fact"):
+            verify_web_release(self.target)
 
     def test_wrong_release_or_tampered_build_is_never_materialized(self):
         with self.assertRaisesRegex(WebPublicationError, "Release ID differs"):

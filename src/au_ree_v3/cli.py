@@ -104,6 +104,7 @@ def main(argv: list[str] | None = None) -> int:
     display.add_argument("--release-id", required=True)
     display.add_argument("--forecast", type=Path, nargs=2, metavar=("BINDINGS", "ORACLE"))
     display.add_argument("--geography", type=Path, nargs=3, metavar=("BINDINGS", "MANIFEST", "STORE"))
+    display.add_argument("--web-out", type=Path, help="Write an immutable candidate web release with the same verified display")
     export_web = research_commands.add_parser("export-web", help="Export immutable candidate web data")
     for argument in ("profile", "research-build", "out"):
         export_web.add_argument(f"--{argument}", type=Path, required=True)
@@ -270,7 +271,13 @@ def _run_research(args) -> dict:
             release_root=args.release_root, release_id=args.release_id, sources=args.sources,
             assets=args.assets, bindings=args.bindings, forecast=args.forecast, geography=args.geography,
         )
-        return write_display_package(bundle, args.out)
+        receipt = write_display_package(bundle, args.out)
+        if args.web_out is not None:
+            from .web_publication import export_web
+
+            export_web(profile=args.profile, research_build=args.research_build, release_id=args.release_id,
+                       out=args.web_out, release_root=args.release_root, display=bundle)
+        return receipt
     if args.operation in {"export-web", "verify-web"}:
         return _run_web_data(args)
     if args.operation == "compare":
