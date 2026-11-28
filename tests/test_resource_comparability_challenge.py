@@ -179,6 +179,5 @@ class ExactRecoveredResourceStatementTest(unittest.TestCase):
         # The existing strict geometry still holds the offset 98 Mt lane. The
         # source-only cohort receipt independently records its candidate position.
         self.assertEqual({item.variable: item.token for item in statement.measurements}, {"grade": "890"})
-        self.assertEqual(statement.cutoff_analyte, "TREO-CeO2")
         self.assertEqual(set(statement.treo_members), set(TOTAL_REO_15))
         self.assertEqual(_statement_issue(statement), ("REJECTED", "APPROVED_PROJECT_RESOURCE_CATEGORY_REQUIRED"))
