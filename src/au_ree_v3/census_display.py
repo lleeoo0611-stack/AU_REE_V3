@@ -100,11 +100,19 @@ def _context(value) -> bool:
     )
 
 
-def _evidence(record) -> bool:
+def _evidence(record, *, review: bool = False) -> bool:
+    publication = record["publication_date"]
+    context = record["context"]
+    if not _context(context):
+        return False
+    known_date = _calendar(publication) or (
+        review and publication == "" and context.get("feature_effective_date") == "UNKNOWN_CONTEXT"
+        and len(context.get("capture_date", "")) == 10 and _calendar(context["capture_date"])
+    )
     return (all(_text(record[key]) for key in ("locator", "quote", "scope"))
             and all(_sha(record[key]) for key in ("source_sha256", "source_capture_sha256"))
             and public_source_url(record["source_url"]) is not None
-            and _calendar(record["publication_date"]) and _context(record["context"]))
+            and known_date)
 
 
 def _valid_field(field: dict) -> bool:
@@ -202,7 +210,7 @@ def display_document(*, release_id: str, columns: list[dict], project_ids: tuple
     for record in review_only:
         if (not isinstance(record, dict) or set(record) != _REVIEW_KEYS or record["project_id"] not in projects
                 or record["state"] not in REVIEW_STATES or not all(_text(record[key]) for key in ("data_role", "label", "reason"))
-                or not _evidence(record)):
+                or not _evidence(record, review=True)):
             raise ValueError("Unverified review-only Census evidence")
     review = sorted(review_only, key=lambda item: (item["project_id"], item["state"], _hash(item)))
     if len({_hash(entry) for entry in review}) != len(review):
