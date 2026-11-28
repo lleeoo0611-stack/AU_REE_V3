@@ -1,0 +1,59 @@
+unit,action,path,reason
+A,ADD,config/research_profiles/census_display_columns_v2.json,Define an independent field and applicability contract
+A,ADD,docs/research/census_display_coverage_baseline.md,Describe exact baseline populations and display scope
+A,ADD,docs/research/census_display_coverage_baseline_receipt.json,Pin all verified baseline artifacts
+A,ADD,docs/research/census_display_field_contract.md,Explain what the nine optional fields add
+A,ADD,tests/test_census_display.py,Round-trip the independent display contract and failure cases
+A,ADD,tests/test_census_display_coverage.py,Verify all-cell coverage and explicitly bound source prioritization
+A,ADD,tools/census_display_coverage.py,Build the frozen all-cell role coverage and source queue
+A,KEEP,AU_REE_V2@2af6f611e51eb4ac9dda73419d1afeba70d1307e,Read-only discovery and comparison
+A,KEEP,config/research_profiles/au_ree_census_evidence_v1.json,Keep the exact Stage 3 research profile
+A,KEEP,config/research_profiles/census_columns_v1.json,Preserve the historical 51-column order
+A,KEEP,src/au_ree_v3/census_projection_policy_v1.json,Keep core projection semantics and types
+A,KEEP,work/census-stage3/final/archive,Preserve original research release bytes
+A,KEEP,work/research-yield/source-inputs/source_manifest.json,Preserve fixed 144-original universe
+A/B,ADD,src/au_ree_v3/census_display.py,"Validate typed display roles, stable facts, review separation, and matrix and CSV identity"
+B,ADD,config/research_profiles/au_ree_census_display_v1.json,Opt in to the next source-backed display profile
+B,ADD,config/research_profiles/census_attribute_batches_v1.json,Pin exact native parser routes and scoped source editions
+B,ADD,docs/research/census_native_attribute_batches.md,"Document source roles, measured gains and negative results"
+B,ADD,src/au_ree_v3/attribute_batches.py,Bind shared JORC and study native regions to existing typed attributes
+B,ADD,src/au_ree_v3/census_resource_display.py,Reopen approved resource statements and preserve native display context
+B,ADD,tests/test_attribute_batches.py,"Exercise exact native claims, refusals and source loss"
+B,ADD,tests/test_census_resource_display.py,"Protect role, exact capture and original resource context"
+B,ADD,tools/verify_census_attribute_batches.py,Independently re-read the exact original claims and contrasts
+B,REFACTOR,src/au_ree_v3/project_attributes.py,Route batch evidence through existing validation and selection
+B,REFACTOR,src/au_ree_v3/registry.py,Resolve and fingerprint optional batch input
+B,REFACTOR,src/au_ree_v3/resource_sources.py,Reuse the existing resource source plan in independent display readback
+B/C/D,ADD,src/au_ree_v3/display_package.py,Compile fixed-source display evidence separately from scientific writes
+B/C/D,REFACTOR,src/au_ree_v3/cli.py,Dispatch an opt-in display builder and candidate website output
+C,ADD,config/research_profiles/source_edition_recovery_v1.json,Pin the exact historical target editions and public routes
+C,ADD,docs/research/census_forecast_location_display.md,Record original annual-rate roles and independent source capture limits
+C,ADD,tests/test_census_context_display.py,"Validate exact annual scenarios, government point boundaries and offline captures"
+C,ADD,tools/recover_source_editions.py,Bound separate public recovery and verify new capture bytes offline
+C,REFACTOR,src/au_ree_v3/forecast.py,Reuse native and independent forecast checks to expose scoped engineering facts
+C,REFACTOR,src/au_ree_v3/official_geography.py,Reuse official point review to expose evidence without coordinates
+C,REFACTOR,tools/verify_context_expansion.py,Delegate shared independent forecast proof to the production reader
+D,ADD,docs/research/census_display_coverage_results.md,"Report measured coverage, performance, gates and candidate provenance"
+D,ADD,docs/research/census_display_coverage_verification.json,"Bind exact research, display, CI, browser and source receipts"
+D,ADD,docs/research/census_display_file_lifecycle.csv,Account for every changed and archived path
+D,ADD,docs/research/census_resource_display.md,Describe resource context readback results and remaining limits
+D,ADD,docs/research/census_resource_display_verification.json,Pin independent resource evidence and confusion counts
+D,ADD,tests/fixtures/census_resource_display_v2_oracle.json,Freeze independent source quotes and stated comparison expectations
+D,ADD,tools/verify_display_package.py,"Independently verify extension quotes, evidence, hashes and legacy public assets"
+D,ADD,tools/verify_display_research_equivalence.py,Independently verify exact core science and both archive restores
+D,ADD,web/assets/display.mjs,Validate and format optional display evidence and downloadable CSV
+D,ARCHIVE,work/census-stage4/final/archive,New immutable Stage 4 research candidate and exact rebuild closure
+D,ARCHIVE,work/census-stage4/final/census-stage4-candidate-preview.zip,Candidate preview holds both scientific versions
+D,ARCHIVE,work/census-stage4/final/census-stage4-source-recovery.zip,Separate sealed recovery attempts and CAS
+D,KEEP,src/au_ree_v3/fresh_decision_policy_v1.json,Keep criterion rules and weights
+D,KEEP,work/census-stage3/final/preview,"Preserve all candidate filenames, contents and pointers"
+D,REFACTOR,src/au_ree_v3/web_publication.py,Bind exact optional display CSV and JSON to the archived candidate
+D,REFACTOR,src/au_ree_v3/web_release.py,Package the new browser module while verifying legacy layouts
+D,REFACTOR,tests/test_web_publication.py,Reject mixed or unverified optional display assets
+D,REFACTOR,tests/test_web_release.py,Keep prior static layouts and require imported display code
+D,REFACTOR,web/assets/app.js,Integrate optional display views and filters into the existing Census explorer
+D,REFACTOR,web/assets/labels.mjs,Add bilingual labels for display views and independent roles
+D,REFACTOR,web/assets/release.mjs,Load the optional asset pair in the same verified release transaction
+D,REFACTOR,web/assets/styles.css,Keep optional controls responsive within the existing presentation
+D,REFACTOR,web/assets/views.mjs,Render expanded evidence and quarantine details apart from official values
+D,REFACTOR,web/tests/browser.mjs,"Test candidate role, optional schema, real-source links and atomic history"
