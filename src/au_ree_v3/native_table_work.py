@@ -72,7 +72,7 @@ def _load_prior(path, identity, hashes, cases):
     receipt = json.loads(content)
     if (receipt.get("schema") != RULE or receipt.get("candidate_only") is not True
             or receipt.get("formal_scientific_values_added") != 0 or receipt.get("status") != "PASS"
-            or receipt.get("detection_rule") != "native-resource-table-detection-v2"
+            or receipt.get("detection_rule") not in {"native-resource-table-detection-v2", "native-resource-table-detection-v3"}
             or receipt.get("inputs") != hashes or _identity(receipt) != identity):
         raise ValueError("Prior table binding does not match the exact same inventory, manifest and profile")
     ledgers = []
@@ -85,14 +85,19 @@ def _load_prior(path, identity, hashes, cases):
     inventory = {case["case_id"]: case for case in cases}
     expected = {case["case_id"] for case in cases if case["kind"] == _UNRECOGNIZED}
     missing = [row for row in lineage if row["status"] == "NO_TABLE_STRUCTURE"]
+    prior_structure = [row for row in lineage if row["status"] in {"NO_TABLE_STRUCTURE", "STRUCTURAL_CANDIDATE_LOCATED"}]
+    lineage_by_id = {row["case_id"]: row for row in lineage}
     issue_keys = ("project_id", "source_sha256", "edition_id", "source_position_id")
-    if ({row["case_id"] for row in missing} != expected or len(missing) != receipt["work_items_without_table_structure"]
+    if (set(lineage_by_id) != set(inventory) or len(lineage) != len(inventory)
+            or {row["case_id"] for row in prior_structure} != expected
+            or len(missing) != receipt["work_items_without_table_structure"]
             or len({row["case_id"] for row in unbound}) != receipt["unbound_candidate_sightings"]
             or len(unbound) != receipt["unbound_candidate_sightings"] or any(
                 row["case_id"] not in inventory or inventory[row["case_id"]]["kind"] != _NATIVE
+                or row != lineage_by_id[row["case_id"]]
                 for row in unbound) or any(
                     row.get(key) != inventory[row["case_id"]].get(key)
-                    for row in (*unbound, *missing) for key in issue_keys)):
+                    for row in (*unbound, *prior_structure) for key in issue_keys)):
         raise ValueError("Prior binding review cases do not match the fixed source inventory")
     return _digest(content), (*unbound, *missing)
 
@@ -203,6 +208,7 @@ def _structure_review(view, case, editions, page_cache, reviewed, used_positions
         "case_id": case["case_id"], "strategy": found.strategy, "row_locator": found.row_locator,
         "physical_page": found.physical_page, "caption_line": found.caption_line,
         "candidate_only": True, "formal_admission": False, "statement_scope_status": "UNBOUND",
+        **({"context_anchors": [anchor.to_dict() for anchor in found.context_anchors]} if found.context_anchors else {}),
         "cells": [_discovered_cell(view, {**case, "matched_editions": editions}, found, cell, reviewed, used_positions)
                   for cell in found.cells if cell.variable],
         "unbound_cells": [cell.to_dict() for cell in found.cells if cell.variable is None],

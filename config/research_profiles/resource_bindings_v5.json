@@ -1,0 +1,628 @@
+{
+  "schema": "fresh-resource-extraction-v1",
+  "profile_id": "au-ree-2026-11-28",
+  "cutoff": "2026-11-28",
+  "timezone": "Asia/Taipei",
+  "bindings": [
+    {
+      "case_id": "mt-weld-resource",
+      "strategy": "narrative-and-cited-table-v1",
+      "source_key": "mt_weld_2024",
+      "approved_urls": [
+        "https://wcsecure.weblink.com.au/pdf/LYC/02835257.pdf"
+      ],
+      "publication_date": "2024-08-05",
+      "effective_date": "2024-06-30",
+      "project": {
+        "entity_id": "AU-efff91a06cf344122d88",
+        "native_namespace": "project_registry_v1",
+        "native_id": "mt-weld",
+        "name": "Mt Weld Project"
+      },
+      "deposit_name": "Mt Weld",
+      "scope_name": "Mt Weld Mineral Resource",
+      "page": 2,
+      "display_date_link": {
+        "source_sha256": "fe26ac29c4773a5af95e909a1cd95ca1e9ad37c34560dfa72c1e9674e4c8a503",
+        "cover_footnote": "1",
+        "cover": {
+          "page": 1,
+          "quote": "92% increase in Mineral Resources from 55.4 Mt to 106.6 Mt at 4.12% Total Rare Earth Oxide (TREO) from 30 June 2018 to 30 June 20241."
+        },
+        "statement": {
+          "page": 2,
+          "quote": "The Mt Weld Rare Earth Mineral Resources estimate is now 106.6 million tonnes at an average grade of 4.12% Total Rare Earth Oxide (TREO) for a total of 4.39 million tonnes of contained TREO. A Mineral Resource cut-off grade of 2.5% TREO was applied."
+        },
+        "cutoff_footnote": {
+          "page": 1,
+          "quote": "1 Mineral Resource cut-off grade of 2.5% TREO applied"
+        }
+      }
+    },
+    {
+      "case_id": "wolverine-deposit-total",
+      "strategy": "classified-section-totals-v1",
+      "source_key": "asx_document_02904920",
+      "approved_urls": [
+        "https://announcements.asx.com.au/asxpdf/20250116/pdf/06dl60mwyl4f8n.pdf"
+      ],
+      "publication_date": "2025-01-16",
+      "effective_date": "2025-01-15",
+      "project": {
+        "entity_id": "AU-9bd8e5ed8408cd84d876",
+        "native_namespace": "project_registry_v1",
+        "native_id": "browns-range",
+        "name": "Browns Range Project — Wolverine scope"
+      },
+      "deposit_name": "Wolverine",
+      "scope_name": "Wolverine Total Mineral Resource",
+      "section": "Total",
+      "page": 5,
+      "composition_table": {
+        "page": 6,
+        "number": 5,
+        "reviewed_nonmagnetic_species": {
+          "source_sha256": "e29ab1305c8edb5bd1074806d5cf31c323c82cfd68c5c5b2e9b545137f09ccb0",
+          "species": [
+            "La2O3",
+            "CeO2",
+            "Sm2O3",
+            "Eu2O3",
+            "Gd2O3",
+            "Ho2O3",
+            "Er2O3",
+            "Tm2O3",
+            "Yb2O3",
+            "Lu2O3"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "yin-resource-cutoff-series",
+      "strategy": "cutoff-series-and-detail-tables-v1",
+      "source_key": "mangaroon_mre2023",
+      "approved_urls": [
+        "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/5449464.pdf?v=63941956896"
+      ],
+      "publication_date": "2023-11-30",
+      "project": {
+        "entity_id": "AU-8f3fe174a998d20ee4cf",
+        "native_namespace": "WA_DMPE_REE_2026_PROJECT",
+        "native_id": "mangaroon",
+        "name": "Mangaroon Project — Yin resource scope"
+      },
+      "deposit_name": "Yin",
+      "scope_name": "Yin Ironstone Complex Mineral Resource",
+      "primary_cutoff": "0.20",
+      "page": 1,
+      "details_page": 11
+    },
+    {
+      "case_id": "wudinna-maiden-estimate",
+      "strategy": "corroborated-ppm-narrative-total-v1",
+      "source_key": "seed-f09f74b43a7e20826fb9eda9",
+      "approved_urls": [
+        "https://hermes-cdn.investorhub.com/announcement-pdfs/lse/7804646.pdf?v=63960217384"
+      ],
+      "publication_date": "2026-10-26",
+      "effective_date": "2026-10-22",
+      "project": {
+        "entity_id": "AU-0098e17a63e7c05c213f",
+        "native_namespace": "SA_MINING_PROJECT_SITE_NO",
+        "native_id": "1123290",
+        "name": "Wudinna Rare Earths Project"
+      },
+      "scope_name": "Wudinna REE Project Mineral Resource, Garford and Pidinga total",
+      "page": 3,
+      "summary_page": 1,
+      "narrative_lead": "maiden Mineral Resource Estimate (\"MRE\") of",
+      "category": "INDICATED_INFERRED_TOTAL",
+      "cutoff": {
+        "value": "200",
+        "unit": "ppm",
+        "analyte": "TREO-CeO2",
+        "reported": "200 ppm TREO-Ce"
+      },
+      "reported_chemical_label": "TREO including Y2O3",
+      "table": {
+        "caption": "Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce",
+        "header": "Formation JORC Classification Mt TREO NdPr DyTb MREO"
+      },
+      "context": [
+        {
+          "page": 1,
+          "quote": "RNS Number : 4065A Cobra Resources PLC 26 October 2026"
+        },
+        {
+          "page": 1,
+          "quote": "maiden Mineral Resource Estimate (\"MRE\")"
+        },
+        {
+          "page": 1,
+          "quote": "For mineralisation within the Pidinga formation amenable to ISR, an economic cut-over of US$ 5.27/tonne has been applied."
+        },
+        {
+          "page": 1,
+          "quote": "Open pittable cutoff grade of 200 ppm TREO excluding cerium (\"TREO-Ce\")."
+        },
+        {
+          "page": 3,
+          "quote": "Mineral Resources are classified as Indicated and Inferred"
+        },
+        {
+          "page": 3,
+          "quote": "Mineral Resources are reported with an Effective Date of 22 October, 2026."
+        },
+        {
+          "page": 3,
+          "quote": "TREO = total rare earth oxides (CeO2, Dy2O3, Er2O3, Eu2O3, Gd2O3, Ho2O3, La2O3, Lu2O3, Nd2O3, Pr6O11, Sm2O3, Tb4O7, Tm2O3, Yb2O3, Y2O3)"
+        },
+        {
+          "page": 3,
+          "quote": "Table 1 Wudinna REE Project Mineral Resource Estimate at cut-off grade of 200 ppm TREO-Ce"
+        }
+      ],
+      "oxide_aggregate_review": {
+        "version": "fixed-original-combined-oxide-table-review-v1",
+        "source_sha256": "89467aedb62238c6a98902633fba1bcaf4ccd0f081beaa736facf71533ac3864",
+        "physical_page": 15,
+        "image_slot": 2,
+        "image_sha256": "f776a023a5a7f96c8ef90aeb52ce3a05427b609603a01064d4e100bd440447f0",
+        "locator": "Combined Estimate > Total > Indicated + Inferred > ISR & OP",
+        "scope": "Wudinna REE Project Mineral Resource, Garford and Pidinga total",
+        "effective_date": "2026-10-22",
+        "cutoff": [
+          "200",
+          "ppm",
+          "TREO-CeO2"
+        ],
+        "ore_token_mt": "149.92",
+        "grade_token_ppm": "470",
+        "grade_unit": "ppm",
+        "nd_pr_token_ppm": "101",
+        "dy_tb_token_ppm": "10.5",
+        "group_unit": "ppm"
+      }
+    },
+    {
+      "case_id": "goschen-area-one-bulk-oxides",
+      "strategy": "positioned-mineral-resource-total-v1",
+      "source_key": "seed-50ec7babc2038894a2904191",
+      "approved_urls": [
+        "https://announcements.asx.com.au/asxpdf/20251015/pdf/06qkvvhp20rxx2.pdf"
+      ],
+      "publication_date": "2025-10-15",
+      "effective_date": "2025-10-15",
+      "project": {
+        "entity_id": "AU-6d807eb7caec9db0f35e",
+        "native_namespace": "AUSTRADE_2026_REE_PROJECT",
+        "native_id": "goschen",
+        "name": "Goschen — Area 1 resource scope"
+      },
+      "scope_name": "Goschen Area 1 in-situ bulk Mineral Resource",
+      "page": 12,
+      "category": "MEASURED_INDICATED_TOTAL",
+      "cutoff": {
+        "value": "1",
+        "unit": "%",
+        "analyte": "THM",
+        "reported": "1% THM"
+      },
+      "reported_chemical_label": "In-Situ TREO + Y2O3",
+      "table": {
+        "caption": "Table 8: Area 1Mineral Resource Statement as of 15 October 2025",
+        "header": "Material In-Situ TREO + Y2O3 Grade(3) In-Situ TREO + Y2O3 Area (t) (%) (t)",
+        "row": "Area 1 Mineral Resource (M+Ind+Inf)",
+        "column_count": 3,
+        "columns": [
+          {
+            "index": 0,
+            "unit": "t",
+            "column": "Material"
+          },
+          {
+            "index": 1,
+            "unit": "%",
+            "column": "In-Situ TREO + Y2O3 Grade"
+          },
+          {
+            "index": 2,
+            "unit": "t",
+            "column": "In-Situ TREO + Y2O3"
+          }
+        ]
+      },
+      "context": [
+        {
+          "page": 1,
+          "quote": "ASX Release 15 October 2025 VHM Updates Global Resources and Reserves"
+        },
+        {
+          "page": 2,
+          "quote": "This work has resulted in a revised Measured and Indicated Resource of 94 Mt"
+        },
+        {
+          "page": 12,
+          "quote": "Table 8: Area 1Mineral Resource Statement as of 15 October 2025"
+        },
+        {
+          "page": 12,
+          "quote": "Mineral resources reported at a cut-off grade of 1% THM"
+        },
+        {
+          "page": 12,
+          "quote": "In-situ TREO + Y2O3 Grade is calculated by the THM Grade (2.8%) multiplied by TREO + Y2O3 Grade (2.8%)"
+        },
+        {
+          "page": 3,
+          "quote": "the JORC Code (2012) Table 1 is attached in Appendix A."
+        }
+      ]
+    },
+    {
+      "case_id": "yangibana-annual-reaffirmed-resource",
+      "strategy": "positioned-mineral-resource-total-v1",
+      "source_key": "seed-fa6915a2b1b494e356f2a3be",
+      "approved_urls": [
+        "https://hermes-cdn.investorhub.com/announcement-pdfs/asx/7763164.pdf?v=63957978608"
+      ],
+      "publication_date": null,
+      "effective_date": "2023-10",
+      "project": {
+        "entity_id": "AU-908fd6f4461622e89548",
+        "native_namespace": "WA_DMPE_REE_2026_PROJECT",
+        "native_id": "yangibana",
+        "name": "Yangibana Rare Earths and Niobium Project"
+      },
+      "scope_name": "Yangibana Project Total Mineral Resource 100% basis",
+      "page": 14,
+      "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+      "cutoff": {
+        "value": "0.24",
+        "unit": "%",
+        "analyte": "TREO",
+        "reported": "0.24% TREO"
+      },
+      "reported_chemical_label": "% TREO",
+      "requires_chemical_review": true,
+      "optional": true,
+      "table": {
+        "caption": "Table 2: Total Yangibana Project JORC Code (2012) Mineral Resource, October 2023.",
+        "header": "Category M Tonnes % TREO % Nd2O3+Pr6O11 TREO t",
+        "row": "TOTAL",
+        "column_count": 4,
+        "columns": [
+          {
+            "index": 0,
+            "unit": "Mt",
+            "column": "M Tonnes"
+          },
+          {
+            "index": 1,
+            "unit": "%",
+            "column": "% TREO"
+          },
+          {
+            "index": 3,
+            "unit": "t",
+            "column": "TREO t"
+          }
+        ]
+      },
+      "context": [
+        {
+          "page": 14,
+          "quote": "The Mineral Resources shown in Table 2 are presented on a 100% Yangibana Project basis."
+        },
+        {
+          "page": 14,
+          "quote": "Table 2: Total Yangibana Project JORC Code (2012) Mineral Resource, October 2023."
+        },
+        {
+          "page": 15,
+          "quote": "The current Mineral Resources for the Yangibana Project, including the Probable Ore Reserves, are as shown in Table 2."
+        },
+        {
+          "page": 15,
+          "quote": "Mineral Resources are reported at a 0.24% TREO cut-off grade."
+        }
+      ]
+    },
+    {
+      "case_id": "jupiter-september-2026-direct-resource",
+      "approved_urls": [
+        "https://announcements.asx.com.au/asxpdf/20261012/pdf/07560pwzkdgsrg.pdf"
+      ],
+      "source_key": "seed-03678827fc9d8c1e892c",
+      "project": {
+        "entity_id": "AU-dac3c8e40326b8244cdb",
+        "native_namespace": "project_registry_v1",
+        "native_id": "jupiter",
+        "name": "Jupiter development study within Brothers"
+      },
+      "strategy": "native-resource-table-v1",
+      "research_use": "CENSUS_RESOURCE_OBSERVATION",
+      "deposit_name": "Jupiter",
+      "source_sha256": "bc93c9d96bccf1d5badff0508915633117c723f7858ccddbfedb8a3be938ef7e",
+      "page": 4,
+      "scope_name": "Jupiter Mineral Resource September 2026 Total",
+      "publication_date": "2026-10-12",
+      "effective_date": "2026-09",
+      "cutoff": {
+        "unit": "ppm",
+        "value": "1000",
+        "analyte": "TREO",
+        "reported": "1,000 ppm TREO"
+      },
+      "table": {
+        "caption": "Table 2 | Comparison of February 2025 and updated Jupiter Mineral Resource Estimates at 1,000 ppm TREO cut-off grade",
+        "header_lines": [
+          "MRE Cut-off grade MRE - 2025 MRE - 2026",
+          "Classification (TREO) Tonnes TREO (ppm) Tonnes TREO (ppm)"
+        ],
+        "columns": [
+          {
+            "variable": "ore_mt",
+            "header": "Tonnes",
+            "header_line": 2,
+            "unit": "Bt",
+            "unit_inline": true,
+            "group_header": "MRE - 2026",
+            "group_line": 1
+          },
+          {
+            "variable": "grade",
+            "header": "TREO (ppm)",
+            "header_line": 2,
+            "unit": "ppm",
+            "unit_label": "ppm",
+            "unit_line": 2,
+            "group_header": "MRE - 2026",
+            "group_line": 1
+          }
+        ],
+        "rows": [
+          {
+            "label": "Total",
+            "category": "INDICATED_INFERRED_TOTAL",
+            "primary": true
+          }
+        ]
+      },
+      "context": [
+        {
+          "role": "EFFECTIVE_DATE",
+          "page": 19,
+          "quote": "Table 8 | Jupiter Mineral Resource tonnages and key element grades by TREO cut-offs September 2026."
+        },
+        {
+          "role": "JORC",
+          "page": 17,
+          "quote": "The Mineral Resource Estimate was classified in accordance with the JORC Code (2012)"
+        },
+        {
+          "role": "CUTOFF",
+          "page": 4,
+          "quote": "The February 2025 and updated Mineral Resource Estimates are compared at the same 1,000 ppm TREO lower cut-off grade."
+        },
+        {
+          "role": "MATERIAL_BASIS",
+          "page": 35,
+          "quote": "The resource estimates are expressed on a dry tonnage basis."
+        },
+        {
+          "role": "PUBLICATION_DATE",
+          "page": 1,
+          "quote": "ASX Announcement 12 October 2026 | ASX: CRI"
+        },
+        {
+          "role": "CHEMICAL_DEFINITION",
+          "page": 15,
+          "quote": "TREO, MREO, La2O3, CeO2, Pr6O11, Nd2O3, Sm2O3, Eu2O3, Gd2O3, Tb4O7, Dy2O3, Ho2O3, Er2O3, Tm2O3, Yb2O3, Lu2O3 and Y2O3."
+        },
+        {
+          "role": "CHEMICAL_DEFINITION",
+          "page": 15,
+          "quote": "The TREO and MREO estimates were derived by summing the individual kriged REO grades."
+        },
+        {
+          "role": "PRECISION",
+          "page": 19,
+          "quote": "Grades and tonnages are rounded to 2 significant figures in accordance with the JORC Code (2012 Edition)"
+        }
+      ],
+      "context_links": [
+        {
+          "scope_reference": "Jupiter Mineral Resource",
+          "start": {
+            "page": 13,
+            "quote": "The Jupiter Mineral Resource Estimate reported here was conducted by SRK Consulting (SRK)"
+          },
+          "end": {
+            "page": 19,
+            "quote": "Table 8 | Jupiter Mineral Resource tonnages and key element grades by TREO cut-offs September 2026."
+          }
+        },
+        {
+          "scope_reference": "Jupiter Mineral Resource",
+          "reference": {
+            "page": 2,
+            "quote": "The following provides a summary of the material information relating to the updated Jupiter Mineral Resource Estimate, consistent with the requirements of ASX Listing Rule 5.8.1. Further information is provided in JORC Code Table 1, included as Appendix A to this announcement."
+          },
+          "start": {
+            "page": 23,
+            "quote": "Appendix One: JORC Code, 2012 Edition"
+          },
+          "end": {
+            "page": 39,
+            "quote": "Source: SRK"
+          }
+        }
+      ],
+      "reported_chemical_label": "TREO"
+    },
+    {
+      "case_id": "north-stanmore-august-2026-direct-resource",
+      "strategy": "native-resource-table-v1",
+      "research_use": "CENSUS_RESOURCE_OBSERVATION",
+      "source_sha256": "452dabd702e88c0841c2d029af2127e215e52c2ae9d1144ebe6731f880cde491",
+      "approved_urls": [
+        "https://announcements.asx.com.au/asxpdf/20260818/pdf/072w8qbl7kfy0n.pdf"
+      ],
+      "source_key": "seed-af5b34575af9709d52d1",
+      "page": 97,
+      "scope_name": "North Stanmore August 2026 global Mineral Resource reported at 300 ppm TREO",
+      "statement_reference": "North Stanmore Mineral Resource Estimate",
+      "project": {
+        "entity_id": "AU-216d0983f6892f9b58f9",
+        "native_namespace": "WA_DMPE_REE_2026_PROJECT",
+        "native_id": "north-stanmore",
+        "name": "North Stanmore Heavy Rare Earth Project"
+      },
+      "effective_date": "2026-08",
+      "publication_date": "2026-08-18",
+      "cutoff": {
+        "value": "300",
+        "unit": "ppm",
+        "analyte": "TREO",
+        "reported": "300 ppm TREO"
+      },
+      "reported_chemical_label": "TREO",
+      "context": [
+        {
+          "page": 1,
+          "quote": "ASX RELEASE 18 AUGUST 2026",
+          "role": "PUBLICATION_DATE"
+        },
+        {
+          "page": 97,
+          "quote": "the accompanying JORC Code 2012 Table 1 disclosure.",
+          "role": "JORC"
+        },
+        {
+          "page": 97,
+          "quote": "The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO and comprises:",
+          "role": "EFFECTIVE_DATE"
+        },
+        {
+          "page": 97,
+          "quote": "The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO and comprises:",
+          "role": "CUTOFF"
+        },
+        {
+          "page": 97,
+          "quote": "Mineral Resource tonnages are estimated and reported on a dry basis.",
+          "role": "MATERIAL_BASIS"
+        },
+        {
+          "page": 97,
+          "quote": "The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO and comprises:",
+          "role": "SCOPE"
+        },
+        {
+          "page": 8,
+          "quote": "Table 4: MRE cutoff grade >=300 ppm TREO, excluding Sc.",
+          "role": "CHEMICAL_DEFINITION"
+        }
+      ],
+      "table": {
+        "caption": "Mineral Resource Estimate The August 2026 North Stanmore Mineral Resource Estimate is reported at a cut-off grade of 300 ppm TREO and comprises:",
+        "header_lines": [
+          "Classification Tonnes (Mt) TREO (ppm) HREO (ppm) LREO (ppm) HfO₂ (ppm)"
+        ],
+        "columns": [
+          {
+            "variable": "ore_mt",
+            "header": "Tonnes (Mt)",
+            "header_line": 1,
+            "unit": "Mt",
+            "unit_label": "(Mt)",
+            "unit_line": 1
+          },
+          {
+            "variable": "grade",
+            "header": "TREO (ppm)",
+            "header_line": 1,
+            "unit": "ppm",
+            "unit_label": "(ppm)",
+            "unit_line": 1
+          }
+        ],
+        "rows": [
+          {
+            "label": "Total",
+            "category": "MEASURED_INDICATED_INFERRED_TOTAL",
+            "primary": true
+          }
+        ],
+        "end_quote": "Numbers have been rounded to reflect the appropriate precision of the estimate and may not sum due to"
+      },
+      "treo_image_context": {
+        "physical_page": 136,
+        "scope": "North Stanmore August 2026 global Mineral Resource reported at 300 ppm TREO",
+        "effective_date": "2026-08",
+        "cutoff": [
+          "300",
+          "ppm",
+          "TREO"
+        ],
+        "statement_quote": "The current August 2026 MRE ≥300ppm for individual light rare earth elements and individual heavy rare earth elements is shown below –",
+        "definition_quote": "Values were calculated for HREO, LREO, and TREO by summing the respective REO estimated grades for each OBM block.",
+        "images": [
+          {
+            "slot": 3,
+            "sha256": "5cb735031f97069282f29305ad2c64ab3fa6bf410df04b05d7b4e59676d1428f",
+            "members": [
+              "La2O3",
+              "CeO2",
+              "Pr6O11",
+              "Nd2O3",
+              "Sm2O3"
+            ],
+            "total_tokens": [
+              "74.73",
+              "135.26",
+              "17.77",
+              "68.66",
+              "14.83"
+            ],
+            "unit": "ppm",
+            "row": "TOTAL"
+          },
+          {
+            "slot": 4,
+            "sha256": "b7abaa4d5e693e8ca281d722ff29f9b03a1cd5888d39c27452ea7086806ca4e6",
+            "members": [
+              "Y2O3",
+              "Eu2O3",
+              "Gd2O3",
+              "Tb4O7",
+              "Dy2O3",
+              "Ho2O3",
+              "Er2O3",
+              "Tm2O3",
+              "Yb2O3",
+              "Lu2O3"
+            ],
+            "total_tokens": [
+              "107.10",
+              "3.45",
+              "15.21",
+              "2.54",
+              "16.09",
+              "3.44",
+              "10.44",
+              "1.53",
+              "10.09",
+              "1.51"
+            ],
+            "unit": "ppm",
+            "row": "TOTAL"
+          }
+        ]
+      },
+      "deposit_name": "North Stanmore"
+    }
+  ]
+}

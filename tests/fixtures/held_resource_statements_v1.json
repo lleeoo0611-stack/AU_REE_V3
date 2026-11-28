@@ -1,0 +1,56 @@
+{
+  "schema": "held-resource-statements-v1",
+  "cases": [
+    {
+      "case": "splinter-rock-same-estimate-classification",
+      "project_id": "AU-2262a37ca19531f08da3",
+      "source_sha256": "56b1bb55bef057af81a1d31faa701e69bef70c9eb95fc7d46ffd1174f5186ca9",
+      "status": "SCIENTIFIC_CONFLICT",
+      "reason": "SAME_QUANTITIES_DIFFERENT_JORC_CLASSIFICATION",
+      "witnesses": [
+        [1, "cut-off grade (Indicated + Inferred) including:"],
+        [2, "by Prospect at 1,000ppm TREO cut off grade"],
+        [2, "Total 682 1,338 64 226 3 14 307 22.9%"],
+        [4, "Burnt Shirt endorses an Inferred Mineral Resource estimate for Splinter Rock of 682 million tonnes grading"],
+        [4, "1,338 ppm TREO. Splinter Rock mineralisation"]
+      ]
+    },
+    {
+      "case": "tower-reissued-modified-analyte",
+      "project_id": "AU-a8258e4989c7bd95b7af",
+      "source_sha256": "0ae98cfd93d554b8d948267a50f9c821761fee97c5a230440055c06029fc9d63",
+      "status": "SCIENTIFIC_CONFLICT",
+      "reason": "REISSUE_AND_TREO_MINUS_CERIUM_CUTOFF",
+      "witnesses": [
+        [7, "Tower Mineral Resource Summary"],
+        [7, "Total(1) 101 840 517 267 233 607 2 32"],
+        [7, "Mineral Resources previously reported to the ASX on 21 November 2022"],
+        [7, "300 ppm TREO-CeO2"]
+      ]
+    },
+    {
+      "case": "cummins-range-phosphate-resource-cutoff",
+      "project_id": "AU-9b667066e6eb66753005",
+      "source_sha256": "5c0fe372d968048482b4c5a1faf80fb8927fa377882ae3b745588d9d5b43bfd9",
+      "status": "SCIENTIFIC_CONFLICT",
+      "reason": "REPORTED_TOTAL_USES_PHOSPHATE_CUTOFF",
+      "witnesses": [
+        [2, "Total 524.3 4.6 3,120 190 520 150 580 70 50"],
+        [2, "Mineral Resource is reported from all blocks, classiﬁed as either Indicated or Inferred, where interpolated block grade is >2.5%P2O5"]
+      ]
+    },
+    {
+      "case": "aileron-nested-niobium-cutoffs",
+      "project_id": "AU-af44c2bd1173b453953f",
+      "source_sha256": "88dfed30776b41d3739253fefaa1e5972a0b9969ec4db39dc1130efa2164775a",
+      "status": "SCIENTIFIC_CONFLICT",
+      "reason": "NESTED_NIOBIUM_CUTOFFS_AND_INFERRED_ONLY",
+      "witnesses": [
+        [9, "Table 1 – Aileron Project Inferred Mineral Resource Estimate (April 2026)"],
+        [9, "Total 120 0.77 919 0.36 433 5.7 6,858"],
+        [9, "Total 26 1.7 430 0.56 146 8.4 2,173"],
+        [9, "The resource reported above a 1% Nb2O5 cut-off grade is a subset of the 0.25% Nb2O5 cut-off grade."]
+      ]
+    }
+  ]
+}

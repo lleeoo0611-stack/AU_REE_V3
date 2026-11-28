@@ -19,6 +19,28 @@ def document(*pages):
 
 
 class NativeTableDiscoveryTests(unittest.TestCase):
+    def test_explicit_single_class_below_a_printed_section_heading(self):
+        single_class = BODY[0].replace("Measured", "Inferred")
+        pdf = document(("3.2 Synthetic Mineral Resource Estimate (JORC 2012)", HEADER, single_class))
+        row, = discover_page_rows(pdf, page=1)
+        self.assertEqual(row.row_line, 3)
+        self.assertEqual({cell.variable for cell in row.cells}, {"ore_mt", "grade", "contained_treo_kt"})
+        reserve = document(("3.2 Synthetic Ore Reserve Estimate (JORC 2012)", HEADER, single_class))
+        self.assertEqual(discover_page_rows(reserve, page=1), ())
+
+    def test_earlier_grade_witness_requires_same_named_scope_and_analyte(self):
+        title = "Table 1 Example REE Project Mineral Resource Estimate"
+        header = HEADER.replace("TREO (ppm)", "TREO      ")
+        witness = 'Example Rare Earth Project’s maiden Mineral Resource Estimate ("MRE") of 45 Mt grading 1,100 ppm TREO.'
+        for printed, found in ((witness, True), (witness.replace("Example", "Other"), False),
+                               (witness.replace("TREO.", "TREO-Ce."), False)):
+            pdf = document((printed,), (), (title, header, *BODY))
+            cells = bind_page_row(pdf, page=3, row_line=4, caption_line=1)
+            grade = next((row for row in cells if row.variable == "grade"), None)
+            self.assertEqual(grade is not None, found)
+            if grade:
+                self.assertEqual((grade.value.text, grade.unit, grade.unit_label.physical_page), ("1,100", "ppm", 1))
+
     def test_unnumbered_resource_heading_anchors_exact_total_positions(self):
         pdf = document(("Mineral Resource Estimate", HEADER, *BODY))
         row, = discover_page_rows(pdf, page=1)

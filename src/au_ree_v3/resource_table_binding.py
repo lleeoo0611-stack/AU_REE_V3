@@ -11,7 +11,7 @@ from .normalization import KNOWN_OXIDE_SPECIES, reported_interval
 from .observations import NUMBER
 
 RULE = "native-resource-table-layout-v1"
-DETECTION_RULE = "native-resource-table-detection-v3"
+DETECTION_RULE = "native-resource-table-detection-v4"
 _CAPTION = re.compile(r"^\s*(?:table|figure)\s+[A-Z]?\d+(?:[.-]\d+)*\b", re.I)
 _RESOURCE = re.compile(r"\bmineral\s+resources?\b", re.I)
 _REVIEWED_RESOURCE_HEADING = re.compile(r"\s*mineral resource estimate\s*", re.I)
@@ -60,8 +60,17 @@ _UNIT_NOTE = re.compile(
     r"(?:is |are )?(?:reported|stated|expressed)\s+in\s+(?P<unit>ppm|kg/t|%|Mt|kt|Bt|t)\.?\s*$", re.I,
 )
 _NOTE_HEADER = re.compile(r"\s*(?:[:\-–—]\s*)?(?:notes?|units?)\s*[:.]?\s*", re.I)
+_THRESHOLD_HEADER = re.compile(r"\b(?:cut[ -]?off|threshold|COG)\b", re.I)
+_RESOURCE_MASS_HEADER = re.compile(r"(?:mineral )?resources?\s*\(?\s*(?:Bt|Mt|kt|t)\s*\)?", re.I)
+_MATERIAL_MASS = re.compile(r"material\s*\(?(?:Bt|Mt|kt|t)\)?", re.I)
+_IN_SITU = re.compile(r"\bin[- ]situ\b", re.I)
+_ADJACENT_QUANTITIES = re.compile(r"(?P<first>[^ ]+:TREO)[ \t]+(?P<second>Contained\s+TREO)", re.I)
+_PROJECT_TITLE = re.compile(
+    r"\b(?P<name>[\w'’.-]+(?:\s+[\w'’.-]+){0,3}?)\s+(?:REE|Rare Earths?)\s+Project\b", re.I,
+)
+_COMPANION_MODIFIER = re.compile(r'\s*(?:[+−-]|(?:including|excluding)\b|\((?!["“]?TREO["”]?\s*\)))', re.I)
 _PHYSICAL_HOLDS = (
-    (re.compile(r"\b(?:cut[ -]?off|threshold|COG)\b", re.I), "CUTOFF_THRESHOLD_IS_NOT_A_RESOURCE_GRADE"),
+    (_THRESHOLD_HEADER, "CUTOFF_THRESHOLD_IS_NOT_A_RESOURCE_GRADE"),
     (_TREO_MODIFIER, "CHEMICALLY_MODIFIED_TREO_IS_NOT_STANDARD_TREO"),
     (_RATIO_HEADER, "REPORTED_RATIO_IS_NOT_A_WHOLE_ORE_GRADE"),
     (_INCOMPATIBLE_PARENT, "NON_WHOLE_ORE_COLUMN_BASIS"),
@@ -204,6 +213,15 @@ def _numbers(line: str, page: int, index: int) -> tuple[Span, ...]:
     return tuple(span for span in _spans(line, page, index) if _VALUE.fullmatch(span.text))
 
 
+def _candidate_role(label: str, unit: str) -> tuple[str, str | None] | None:
+    label = _plain(label)
+    if _THRESHOLD_HEADER.search(label) or _ADJACENT_QUANTITIES.match(label):
+        return None
+    if unit in _MASS and _RESOURCE_MASS_HEADER.fullmatch(label):
+        return "ore_mt", None
+    return _role(label, unit)
+
+
 def _parsed_value(span: Span) -> tuple[Span, Span | None]:
     match = _VALUE.fullmatch(span.text)
     values = []
@@ -277,9 +295,10 @@ def _automatic_columns(lines, page, header_indices):
             continue
         header = aligned[0] if aligned else entry
         label = " ".join((header.text, entry.text)) if header != entry else entry.text
-        if not _role(label, unit):
+        role = _candidate_role(label, unit)
+        if not role:
             continue
-        variable, chemistry = _role(label, unit)
+        variable, chemistry = role
         columns.append(Column(variable, unit, header, entry, chemistry))
     return tuple(dict.fromkeys(columns))
 
@@ -330,8 +349,30 @@ def _footnote_unit(tiers, notes, label):
     return None
 
 
+def _header_cells(raw: str, page: int, index: int) -> tuple[Span, ...]:
+    separated = []
+    for span in _spans(raw, page, index):
+        match = _ADJACENT_QUANTITIES.fullmatch(span.text)
+        if match:
+            for name in ("first", "second"):
+                separated.append(Span(page, index, span.start_column + match.start(name),
+                                      span.start_column + match.end(name) - 1, match[name]))
+        else:
+            separated.append(span)
+    return tuple(separated)
+
+
+def _header_rail(span, rails, unit_tier):
+    hits = tuple(rail for rail in rails if _overlap(span, rail))
+    if not hits and unit_tier and _UNIT.fullmatch(_plain(span.text).strip("()[] ")):
+        nearby = tuple(rail for rail in rails if 0 < max(span.start_column - rail.end_column,
+                                                       rail.start_column - span.end_column) <= 2)
+        return nearby[0] if len(nearby) == 1 else None
+    return hits[0] if len(hits) == 1 else None
+
+
 def _layered_columns(lines, page, header_indices, *, notes=None):
-    rows = tuple(_spans(lines[index - 1], page, index) for index in header_indices)
+    rows = tuple(_header_cells(lines[index - 1], page, index) for index in header_indices)
     rows = tuple(row for row in rows if row)
     if not rows:
         return (), (), {}
@@ -345,12 +386,13 @@ def _layered_columns(lines, page, header_indices, *, notes=None):
     for row in rows:
         if row == rails or row == parents:
             continue
+        unit_tier = sum(_UNIT.fullmatch(_plain(span.text).strip("()[] ")) is not None for span in row) >= 2
         for span in row:
-            hits = [rail for rail in rails if _overlap(span, rail)]
-            if len(hits) == 1:
-                stacks[hits[0]].append(span)
+            if rail := _header_rail(span, rails, unit_tier):
+                stacks[rail].append(span)
     classified = any(_CLASSIFICATION.fullmatch(_plain(" ".join(span.text for span in sorted(group, key=lambda s: s.line))))
                      for group in stacks.values())
+    in_situ = any(_IN_SITU.search(span.text) for span in rails)
     columns = []
     for rail, entries in stacks.items():
         tiers = tuple(sorted(entries, key=lambda span: (span.line, span.start_column)))
@@ -359,8 +401,10 @@ def _layered_columns(lines, page, header_indices, *, notes=None):
         if not declared:
             continue
         unit, unit_span = declared
-        role = _role(label, unit)
+        role = _candidate_role(label, unit)
         if role is None and classified and possible_mass_lanes == 1 and _BULK_PLACEHOLDER.fullmatch(_plain(label)):
+            role = "ore_mt", None
+        if role is None and in_situ and unit in _MASS and _MATERIAL_MASS.fullmatch(_plain(label)):
             role = "ore_mt", None
         if not role:
             continue
@@ -423,6 +467,22 @@ def _witnessed_alignment(rails, row, witnesses):
         return None
     assignment, offsets = next(iter(candidates.items()))
     return assignment, tuple(offsets)
+
+
+def _fenced_lane(rails, row, witnesses):
+    """Use witnessed physical lanes when header labels have varying widths."""
+    if len(rails) < 3 or len(row) != len(rails) or len(witnesses) < 2:
+        return None
+    borders = tuple(left.end_column + right.start_column for left, right in zip(rails, rails[1:]))
+    # A short extension only on the actual edge lanes accommodates the native
+    # alignment of a shorter heading over a longer quantity token.
+    lower, upper = 2 * (rails[0].start_column - 8), 2 * (rails[-1].end_column + 8)
+    bounds = (lower, *borders, upper)
+    for values in (row, *witnesses):
+        for token, start, end in zip(values, bounds, bounds[1:]):
+            if not start < _center(token) < end:
+                return None
+    return tuple(range(len(rails))), ()
 
 
 def _layout_value(column, number, unit, caption, method, offsets=()):
@@ -497,7 +557,12 @@ def _layered_values(lines, page, row_line, first_header, first_data, caption, *,
         name, values = _body_cells(lines[line - 1], page, line)
         if name and name != label and len(values) == len(numeric_rails):
             measured.setdefault(name, values)
-    fit = _witnessed_alignment(numeric_rails, body, tuple(measured.values()))
+    witnesses = tuple(measured.values())
+    fit = _witnessed_alignment(numeric_rails, body, witnesses)
+    method = "TABLE_WIDE_ROW_ALIGNMENT"
+    if not fit:
+        fit = _fenced_lane(numeric_rails, body, witnesses)
+        method = "WITNESSED_NATIVE_COLUMN_LANES"
     if not fit:
         return direct, _layout_holds(rails, tiers, parsed)
     arrangement, offsets = fit
@@ -507,7 +572,7 @@ def _layered_values(lines, page, row_line, first_header, first_data, caption, *,
         if not column or not _CANDIDATE_VALUE.fullmatch(span.text):
             continue
         value, inline = _parsed_value(_strip_marker(span)[0])
-        item = _layout_value(column, value, inline, caption, "TABLE_WIDE_ROW_ALIGNMENT", offsets)
+        item = _layout_value(column, value, inline, caption, method, offsets)
         if item:
             direct[value.start_column] = item
     return direct, _layout_holds(numeric_rails, tiers, parsed, fit, body)
@@ -595,6 +660,54 @@ def _printed_unit_notes(document, lines, page, row_line, caption, header_uses_ma
     return grouped
 
 
+def _companion_unit(document, page, name, ore, grade):
+    title = re.escape(name)
+    scope = re.compile(rf"\b{title}\s+(?:REE|Rare Earths?)\s+Project(?:['’]s)?\s+(?:maiden |updated )?"
+                       rf"Mineral Resource Estimate(?:\s*\([^)]{{1,12}}\))?\s+of\s+{re.escape(ore.value.text)}\s+{re.escape(ore.unit)}\s*$", re.I)
+    measurement = re.compile(rf"(?<!\w)(?P<mass>{re.escape(ore.value.text)}\s+{re.escape(ore.unit)})\s+grading\s+"
+                             rf"{re.escape(grade.value.text)}\s+(?P<unit>ppm|%)\s+(?:Total Rare Earth Oxides?|TREO)(?![\w+-])", re.I)
+    matches = []
+    for physical_page in range(max(1, page - 2), page):
+        local = _lines(document, physical_page)
+        for line, raw in enumerate(local, start=1):
+            for found in measurement.finditer(raw):
+                preceding = " ".join(_plain(text) for text in (*local[max(0, line - 4):line - 1], raw[:found.end("mass")]))
+                if not scope.search(preceding) or _COMPANION_MODIFIER.match(raw, found.end()):
+                    continue
+                anchor = Span(physical_page, line, found.start("unit") + 1, found.end("unit"), found["unit"])
+                matches.append((anchor, _line_span(local, line, physical_page)))
+    return matches[0] if len(matches) == 1 else None
+
+
+def _companion_grade(document, page, lines, row_line, header, data, caption, cells):
+    """Bind an unmodified total TREO lane to a unique named narrative witness."""
+    if not re.match(r"^\s*(?:(?:grand|global|combined) )?total\b", lines[row_line - 1], re.I):
+        return cells
+    amounts = [item for item in cells if item.variable == "ore_mt"]
+    if len(amounts) != 1 or any(item.variable == "grade" for item in cells) or amounts[0].unit not in _MASS:
+        return cells
+    title = " ".join(item.text for item in caption)
+    marker = _CAPTION.match(title)
+    name = _PROJECT_TITLE.match(title[marker.end():].lstrip(". :—-")) if marker else None
+    if not name:
+        return cells
+    treo = [span for line in range(header, data) for span in _spans(lines[line - 1], page, line)
+            if _plain(span.text).casefold() == "treo"]
+    if len(treo) != 1:
+        return cells
+    eligible = [cell for cell in cells if cell.variable is None and cell.unit_label is None and _overlap(treo[0], cell.value)]
+    if len(eligible) != 1 or not (support := _companion_unit(document, page, name["name"], amounts[0], eligible[0])):
+        return cells
+    unit, quote = support
+    selected = eligible[0]
+    _, low, high = reported_interval(selected.value.text)
+    candidate = replace(selected, variable="grade", chemical_basis="TREO", unit=_unit_label(unit.text), header=treo[0],
+                        unit_label=unit, reason="ORIGINAL_HEADER_UNIT_AND_ROW_BOUND", header_tiers=(treo[0], quote),
+                        raw_rounding_interval=(format(low, "f"), format(high, "f")),
+                        layout_method="NAMED_SAME_EDITION_RESOURCE_COMPANION")
+    return tuple(candidate if cell == selected else cell for cell in cells)
+
+
 def bind_page_row(document: PDFDocument, *, page: int, row_line: int, caption_line: int) -> tuple[CellBinding, ...]:
     """Bind proven native heading tiers and value cells without research admission."""
     lines = _lines(document, page)
@@ -610,8 +723,9 @@ def bind_page_row(document: PDFDocument, *, page: int, row_line: int, caption_li
                     if continued and first_header == first_data else None)
     marked_header = any(any(mark in raw for mark in "*†‡") for raw in lines[first_header - 1:first_data - 1])
     notes = _printed_unit_notes(document, lines, page, row_line, caption, marked_header)
-    return _classify_layout_row(lines, page, row_line, first_header, first_data, caption,
-                                continued=continued, continuation=continuation, notes=notes)
+    cells = _classify_layout_row(lines, page, row_line, first_header, first_data, caption,
+                                 continued=continued, continuation=continuation, notes=notes)
+    return _companion_grade(document, page, lines, row_line, first_header, first_data, caption, cells)
 
 
 def _classify_layout_row(lines, page, row_line, first_header, first_data, caption, *,

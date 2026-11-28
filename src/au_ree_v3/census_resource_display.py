@@ -229,6 +229,48 @@ def _effective_date(phrases, effective):
     return None
 
 
+def _linked_effective_date(pdf, statement, measured, link):
+    """Use a reviewed cover date only for its exact re-read resource statement."""
+    effective = statement.effective_date
+    marker = str(link.get("cover_footnote", ""))
+    if (link.get("source_sha256") != pdf.source_sha256 or not effective or len(effective) != 10
+            or re.fullmatch(r"[1-9]", marker) is None
+            or statement.cutoff_analyte != "TREO" or not statement.cutoff or not statement.cutoff_unit):
+        return None
+    cover, table, footnote = (
+        _original_phrase(pdf, link.get(role, {}).get("page"), link.get(role, {}).get("quote"))
+        for role in ("cover", "statement", "cutoff_footnote")
+    )
+    if not all((cover, table, footnote)) or cover.page == table.page or footnote.page != cover.page:
+        return None
+    ore, grade = measured["ore_mt"], measured["grade"]
+    if {ore.anchor.page, grade.anchor.page} != {table.page} or grade.raw.raw_unit != "%":
+        return None
+    if ore.raw.raw_unit not in ("Mt", "million tonnes"):
+        return None
+    amount = re.escape(ore.raw.raw_value)
+    percentage = re.escape(grade.raw.raw_value)
+    cutoff = rf"{re.escape(statement.cutoff)}\s*{re.escape(statement.cutoff_unit)}\s+TREO"
+    roles = (cover.text, table.text, footnote.text)
+    if any(not _SCOPE.search(text) or _NON_RESOURCE.search(text) for text in roles):
+        return None
+    if (not re.search(rf"\bto\s+{amount}\s+Mt\s+at\s+{percentage}%\s+Total Rare Earth Oxide", cover.text, re.I)
+            or not re.search(rf"\b{amount}\s+million tonnes\s+at an average grade of\s+{percentage}%", table.text, re.I)
+            or not re.search(rf"cut[- ]off grade of\s+{cutoff}\b", table.text, re.I)
+            or not re.search(rf"^{marker}\s+Mineral Resource cut[- ]off grade of\s+{cutoff}\b", footnote.text, re.I)):
+        return None
+    parsed = date.fromisoformat(effective)
+    printed = rf"{parsed.day}\s+{parsed:%B}\s+{parsed.year}"
+    found = re.search(rf"\bfrom\s+\d{{1,2}}\s+[A-Za-z]+\s+\d{{4}}\s+to\s+(?P<date>{printed}){marker}\b", cover.text, re.I)
+    if found is None:
+        return None
+    return _Reported(effective, found["date"], cover), {
+        "effective_date": effective, "effective_date_precision": "DAY",
+        "effective_date_role": "SAME_EDITION_LINKED_ESTIMATE_DATE",
+        "date_link_statement_locator": table.locator, "date_link_cutoff_locator": footnote.locator,
+    }
+
+
 def _cutoff(phrases, statement, binding):
     if not (statement.cutoff and statement.cutoff_unit and statement.cutoff_analyte):
         return None
@@ -347,13 +389,16 @@ def _facts_for(project, bound, measured, capture, edition, binding, diagnostics)
     cutoff = _cutoff(phrases, statement, binding)
     effective = _effective_date(phrases, statement.effective_date)
     chemistry = _chemistry(phrases, capture.pdf, grade, statement.reported_chemical_label)
+    link = binding.get("display_date_link")
+    linked = _linked_effective_date(capture.pdf, statement, measured, link) if effective is None and link else None
     reported = (
         None if category_conflict else _resource_class(phrases, capture.pdf, measured, classes),
-        effective, cutoff, _scope(phrases, statement.effective_date), chemistry,
+        effective if linked is None else linked[0], cutoff, _scope(phrases, statement.effective_date), chemistry,
     )
     context = _fact_context(bound, measured, edition, grade, cutoff, source_row_class[0] if category_conflict else None,
                             effective, chemistry)
     for field_id, value in zip(_FIELDS, reported, strict=True):
+        field_context = {**context, **linked[1]} if linked is not None and field_id == _FIELDS[1] else context
         if value is None:
             conflict = category_conflict and field_id == _FIELDS[0]
             diagnostic = {"project_id": project, "statement_id": bound.statement_id, "field_id": field_id,
@@ -369,7 +414,7 @@ def _facts_for(project, bound, measured, capture, edition, binding, diagnostics)
             source_sha256=bound.source.sha256, source_capture_sha256=edition["receipt_sha256"],
             source_url=bound.source.url, publication_date=bound.source.publication_date,
             locator=value.phrase.locator, quote=value.phrase.text, scope=bound.scope.name,
-            subject_id=bound.statement_id, data_role=ROLE, context={**context, "physical_page": str(value.phrase.page)},
+            subject_id=bound.statement_id, data_role=ROLE, context={**field_context, "physical_page": str(value.phrase.page)},
         )
 
 

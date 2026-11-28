@@ -25,7 +25,7 @@ class Measurement:
     def science(self, payload: dict | None = None) -> dict:
         if payload is None:
             payload = json.loads(self.raw.original_payload)
-        return {
+        row = {
             "observation_id": self.raw.observation_id, "project_id": self.raw.project_id,
             "scope_id": self.raw.scope_id, "statement_id": self.raw.statement_id,
             "source_sha256": self.raw.source_sha, "variable": self.raw.variable,
@@ -40,6 +40,12 @@ class Measurement:
             "date_basis": payload["date_basis"], "method": payload["extraction_strategy"],
             "outcome": self.validation.outcome, "reason": self.validation.reason,
         }
+        if review := payload.get("reviewed_oxide_table"):
+            row.update(anchor_id=self.anchor.anchor_id, quote=self.anchor.quote,
+                       denominator_basis=self.raw.denominator_basis, reviewed_oxide_table=review)
+            if conflict := payload.get("same_statement_precision_conflict"):
+                row["same_statement_precision_conflict"] = conflict
+        return row
 
 
 @dataclass(frozen=True)
@@ -209,7 +215,7 @@ def _bind_composition(statement: ResourceStatement, binding: dict, capture: Capt
     from .composition_review import corroborated_aggregate
 
     try:
-        components = classified_total_oxides(capture.pdf.pages, binding, statement)
+        components = classified_total_oxides(capture.pdf.pages, binding, statement, source_sha256=capture.source.sha256)
         aggregate = corroborated_aggregate(capture.pdf.pages, binding, statement, capture.content, capture.source.sha256)
     except DocumentError as error:
         case["composition_extraction"] = {"outcome": error.outcome, "reason": str(error)}
